@@ -1,3 +1,68 @@
+      // Import Firebase SDK
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+      import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+    
+      // Cấu hình Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyBT6LriuMIAVKBhOUJX_3d-oVRwklvptDA",
+        authDomain: "mon-33182.firebaseapp.com",
+        databaseURL: "https://mon-33182-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "mon-33182",
+        storageBucket: "mon-33182.firebasestorage.app",
+        messagingSenderId: "1023827948484",
+        appId: "1:1023827948484:web:8bdde6dcb4454af42d2a91",
+        measurementId: "G-EF4J5XT43E"
+      };
+    
+      // Khởi tạo Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase(app);
+    
+      // 🔥 Hàm ghi dữ liệu lên Firebase
+      function writeUserData(userId, name, email) {
+        set(ref(db, "users/" + userId), {
+          username: name,
+          email: email,
+          online: true
+        }).then(() => {
+          console.log("🟢 Dữ liệu đã được lưu!");
+        }).catch((error) => {
+          console.error("❌ Lỗi khi lưu dữ liệu:", error);
+        });
+      }
+    
+      // 🔥 Hàm đọc dữ liệu từ Firebase
+      function readUserData(userId) {
+        const userRef = ref(db, "users/" + userId);
+    
+        get(userRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log("📄 Dữ liệu người dùng:", snapshot.val());
+          } else {
+            console.log("⚠️ Không tìm thấy dữ liệu!");
+          }
+        }).catch((error) => {
+          console.error("❌ Lỗi khi đọc dữ liệu:", error);
+        });
+      }
+    
+      // 🔥 Hàm theo dõi dữ liệu thay đổi (Realtime)
+      function listenForUserChanges(userId) {
+        const userRef = ref(db, "users/" + userId);
+    
+        onValue(userRef, (snapshot) => {
+          console.log("🔄 Cập nhật dữ liệu:", snapshot.val());
+        });
+      }
+    
+      // 📌 Gọi thử hàm để kiểm tra
+      writeUserData("user123", "Nguyễn Văn A", "nguyenvana@gmail.com"); // Ghi dữ liệu
+      readUserData("user123"); // Đọc dữ liệu
+      listenForUserChanges("user123"); // Theo dõi thay đổi
+
+
 //Biến cục bộ
   const firebaseUrl = "https://mon-33182-default-rtdb.asia-southeast1.firebasedatabase.app/";
   var allPets = [];
