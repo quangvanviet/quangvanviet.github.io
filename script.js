@@ -1,86 +1,84 @@
 //Hàm ghi dữ liệu lên Firebase
 function saveDataUserToFirebase() {
-      if (!isFinalLoadData) return;
+  if (!isFinalLoadData) return;
 
-      if (endGame) {
-            // Reset chỉ số trước khi lưu
-            [typeGameConquest.skillBattle, typeGameConquest.battlePetUseSlotRound].forEach((obj) => {
-              Object.values(obj).forEach((skill) => {
-                  skill.COOLDOWN[4] = 0;
-                  skill.DAME[3] = 0;
-                  skill.HEAL[3] = 0;
-                  skill.SHIELD[3] = 0;
-                  skill.BURN[3] = 0;
-                  skill.POISON[3] = 0;
-                  skill.CRIT[3] = 0;
-              });
-            });
-      }
-
-      let userPetIDs = userPet.map(item => item.ID);
-      if (userPetIDs.length < 1) {
-            userPetIDs = [""]
-      }
-      let battleUserPetIDs = typeGameConquest.battleUserPet.map(item => item.ID);
-      if (battleUserPetIDs.length < 1) {
-            battleUserPetIDs = [""]
-      }
-      
-      let battleUserPetRoundIDs = [...new Set(typeGameConquest.battleUserPetRound.map(item => item.ID))];
-      if (battleUserPetRoundIDs.length < 1) {
-            battleUserPetRoundIDs = [""]
-      }
-      
-      
-      console.log("battleUserPetRound", typeGameConquest.battleUserPetRound)
-      console.log("battleUserPetRoundIDs", typeGameConquest.battleUserPetRoundIDs)
-      console.log("battlePetInShop", typeGameConquest.battlePetInShop)
-      
-      let allBattleUsersData = {
-            typeGameConquest: {
-              ...typeGameConquest, // Sao chép dữ liệu Conquest gốc để tránh ảnh hưởng
-              battleUserPetRound: battleUserPetRoundIDs, // Cập nhật battleUserPetRound
-              battleUserPet: battleUserPetIDs // Cập nhật battleUserPet
-            },
-            typeGameSolo5Mon, // Giữ nguyên dữ liệu của typeGameSolo5Mon
-            typeGameGuess, // Giữ nguyên dữ liệu của typeGameGuess
-      };
-      
-      
-      const userData = {
-            passwordUser: password,
-            nameUser: nameUser,
-            activateUser: activateUser,
-            telUser: telUser,
-            pointRank: pointRank,
-            goldUser: goldUser,
-            diamondUser: diamondUser,
-            onGame: onGame,
-            infoStartGame: infoStartGame,
-            isOnlineUser: 0,
-            characterUser: characterUser,
-            userPet: userPetIDs,
-            battleData: allBattleUsersData,
-            isBan: isBan,
-            timeOnline: timeOnline,
-            weekOnline: weekOnline,
-            ticketsUser: ticketsUser,
-            vipTicket: vipTicket,
-            idSkillRND: idSkillRND,
-            todayCheckin: todayCheckin,
-            weekCheckin: weekCheckin,
-            giftCheckinComplete: giftCheckinComplete,
-            questDay: questDay,
-            questWeek: questWeek,
-            questWeekend: questWeekend,
-      };
-      
-      set(ref(db, "allUsers/" + username), userData)
-      .then(() => {
-        console.log("🟢 Dữ liệu đã được lưu!");
-      }).catch((error) => {
-        console.error("❌ Lỗi khi lưu dữ liệu:", error);
+  // Kiểm tra các giá trị khác
+  if (endGame) {
+    [typeGameConquest.skillBattle, typeGameConquest.battlePetUseSlotRound].forEach((obj) => {
+      Object.values(obj).forEach((skill) => {
+        skill.COOLDOWN[4] = 0;
+        skill.DAME[3] = 0;
+        skill.HEAL[3] = 0;
+        skill.SHIELD[3] = 0;
+        skill.BURN[3] = 0;
+        skill.POISON[3] = 0;
+        skill.CRIT[3] = 0;
       });
+    });
+  }
+
+  // Tạo dữ liệu người dùng
+  let userPetIDs = userPet.map(item => item.ID);
+  if (userPetIDs.length < 1) {
+    userPetIDs = [""];
+  }
+
+  let battleUserPetIDs = typeGameConquest.battleUserPet.map(item => item.ID);
+  if (battleUserPetIDs.length < 1) {
+    battleUserPetIDs = [""];
+  }
+
+  let battleUserPetRoundIDs = [...new Set(typeGameConquest.battleUserPetRound.map(item => item.ID))];
+  if (battleUserPetRoundIDs.length < 1) {
+    battleUserPetRoundIDs = [""];
+  }
+
+  let allBattleUsersData = {
+    typeGameConquest: {
+      ...typeGameConquest,
+      battleUserPetRound: battleUserPetRoundIDs,
+      battleUserPet: battleUserPetIDs
+    },
+    typeGameSolo5Mon,
+    typeGameGuess
+  };
+
+  const userData = {
+    passwordUser: password,
+    nameUser: nameUser,
+    activateUser: activateUser,
+    telUser: telUser,
+    pointRank: pointRank,
+    goldUser: goldUser,
+    diamondUser: diamondUser,
+    onGame: onGame,
+    infoStartGame: infoStartGame,
+    isOnlineUser: 0,
+    characterUser: characterUser,
+    userPet: userPetIDs,
+    battleData: allBattleUsersData,
+    isBan: isBan,
+    timeOnline: timeOnline,
+    weekOnline: weekOnline,
+    ticketsUser: ticketsUser,
+    vipTicket: vipTicket,
+    idSkillRND: idSkillRND,
+    todayCheckin: todayCheckin,
+    weekCheckin: weekCheckin,
+    giftCheckinComplete: giftCheckinComplete,
+    questDay: questDay,
+    questWeek: questWeek,
+    questWeekend: questWeekend
+  };
+
+  // Lưu dữ liệu vào Firebase
+  set(ref(db, "allUsers/" + username), userData)
+    .then(() => {
+      console.log("🟢 Dữ liệu đã được lưu!");
+    })
+    .catch((error) => {
+      console.error("❌ Lỗi khi lưu dữ liệu:", error);
+    });
 }
 
 // 🔥 Hàm đọc dữ liệu từ Firebase
