@@ -136,11 +136,6 @@ function listenForUserChanges() {
   });
 }
 
-// 📌 Gọi thử hàm để kiểm tra
-writeDataToFirebase("user123", "Nguyễn Văn A", "nguyenvana@gmail.com"); // Ghi dữ liệu
-readUserData("user123"); // Đọc dữ liệu
-listenForUserChanges("user123"); // Theo dõi thay đổi
-
 //Biến cục bộ
 const firebaseUrl = "https://mon-33182-default-rtdb.asia-southeast1.firebasedatabase.app/";
 var allPets = [];
