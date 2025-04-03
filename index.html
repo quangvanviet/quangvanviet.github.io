@@ -1744,6 +1744,7 @@
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
       const db = getDatabase(app);
+      window.db = db;
     </script>
     <script src="script.js"></script>
   </body>
