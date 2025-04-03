@@ -1,3 +1,5 @@
+const db = window.db;
+
 //Hàm ghi dữ liệu lên Firebase
 function saveDataUserToFirebase() {
   if (!isFinalLoadData) return;
