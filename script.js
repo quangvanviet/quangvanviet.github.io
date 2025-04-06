@@ -7988,7 +7988,7 @@ function showResultScreen(isWin) {
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (+${pointsThisRound})`;
 
         // Chuyển onclick thành hàm gọi endBattle với tham số "My"
-        if (typeGameConquest.winBattle >= winLoseDefault -1) {
+        if (typeGameConquest.winBattle >= winLoseDefault - 1) {
             buttonEndGame.onclick = () => finalGame("win", pointsThisRound);
         } else {
             buttonEndGame.onclick = () => endBattle("My", pointsThisRound);
@@ -8003,7 +8003,7 @@ function showResultScreen(isWin) {
         // Hiển thị điểm mới với điểm bị trừ
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (-${pointsThisRound})`;
 
-        if (typeGameConquest.loseBattle >= winLoseDefault -1) {
+        if (typeGameConquest.loseBattle >= winLoseDefault - 1) {
             buttonEndGame.onclick = () => finalGame("lose", pointsThisRound);
         } else {
             // Chuyển onclick thành hàm gọi endBattle với tham số "Comp"
@@ -8185,7 +8185,7 @@ function createNewComp(isWin) {
                     ratioWinComp = (comp.winUser / fullGame) * 100;
 
                     // Nếu tỷ lệ thắng < 25%, xóa Comp này khỏi Firebase
-                    if (ratioWinComp < ratioWinCheck) {
+                    if (ratioWinComp < ratioWinCheck && fullGame > 10) {
                         const compRef = ref(db, `allComps/${compKey}`);
                         remove(compRef)  // Xóa comp khỏi Firebase
                             .then(() => {
@@ -11362,3 +11362,4 @@ window.skipGuide = skipGuide;
 window.messageOpen = messageOpen;
 window.nextStepGuide = nextStepGuide;
 window.selectCharacterForUser = selectCharacterForUser;
+window.openFullscreen = openFullscreen;
