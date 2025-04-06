@@ -7988,7 +7988,7 @@ function showResultScreen(isWin) {
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (+${pointsThisRound})`;
 
         // Chuyển onclick thành hàm gọi endBattle với tham số "My"
-        if (typeGameConquest.winBattle >= winLoseDefault) {
+        if (typeGameConquest.winBattle >= winLoseDefault -1) {
             buttonEndGame.onclick = () => finalGame("win", pointsThisRound);
         } else {
             buttonEndGame.onclick = () => endBattle("My", pointsThisRound);
@@ -8003,7 +8003,7 @@ function showResultScreen(isWin) {
         // Hiển thị điểm mới với điểm bị trừ
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (-${pointsThisRound})`;
 
-        if (typeGameConquest.loseBattle >= winLoseDefault) {
+        if (typeGameConquest.loseBattle >= winLoseDefault -1) {
             buttonEndGame.onclick = () => finalGame("lose", pointsThisRound);
         } else {
             // Chuyển onclick thành hàm gọi endBattle với tham số "Comp"
