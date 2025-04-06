@@ -8038,9 +8038,9 @@ function finalGame(winOrLose, pointsThisRound) {
 
     let textWin = winOrLose === "win" ? 1 : 0
 
-    winFinalGameText.innerText = `${typeGameConquest.winBattle + textWin}`;
+    winFinalGameText.innerText = `${typeGameConquest.winBattle}`;
     let textLose = winOrLose === "lose" ? 1 : 0
-    loseFinalGameText.innerText = `${typeGameConquest.loseBattle + textLose}`;
+    loseFinalGameText.innerText = `${typeGameConquest.loseBattle}`;
 
     pointFinalGameText.innerText = `${typeGameConquest.pointBattle + pointsThisRound}`;
     goldFinalGameText.innerText = `0`;
