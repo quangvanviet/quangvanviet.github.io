@@ -6225,8 +6225,6 @@ function outGameRank() {
     startLoading();
     setTimeout(() => {
 
-        resetOutGame();
-
         //Cộng điểm rank & reset điểm trong game
         if (infoStartGame.roundGame <= 1) {
             pointRank -= 10;
@@ -6234,6 +6232,8 @@ function outGameRank() {
             pointRank += typeGameConquest.pointBattle;
         }
 
+        resetOutGame();
+        
         typeGameConquest.pointBattle = 0;
 
         // Xóa hết skill trong slot
