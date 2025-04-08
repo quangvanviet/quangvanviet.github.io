@@ -3092,30 +3092,42 @@ function loadEventSlotBattle() {
                     }
 
                 } else {
-
-
-                    //Thêm skill vào battlePetUseSlotRound
-                    typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
-
-
-                    typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
-
-
-                    typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
-
-
-                    //Chuyển slot mới thành đầy    
-                    slot.prepend(skill);
-                    slot.classList.add("occupied");
-                    slot.style.backgroundColor = "";
-                    highlightSkillLevel();
-                    updateSttForSkillAffter();
-
-                    typeGameConquest.starUser -= price5MonConquest
-                    typeGameConquest.selectSkillShop += 1
-                    price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
-                    document.getElementById("battleShopText").innerText = price5MonConquest;
-                    document.getElementById("starUser").innerText = typeGameConquest.starUser;
+                    // Lấy ID của pet chuẩn bị thêm vào
+                    const newPetID = typeGameConquest.battlePetInShop[skill.parentElement.id].ID;
+            
+                    // Kiểm tra xem đã tồn tại pet có cùng ID trong skillBattle chưa
+                    let isDuplicate = false;
+            
+                    //Kiểm tra slot 1 -> 9 xem đã có pet nào trùng ID chưa
+                    for (const key of Object.keys(typeGameConquest.skillBattle)) {
+                      if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
+                        isDuplicate = true;
+                        break;
+                      }
+                    }
+            
+                    // Nếu không bị trùng ID thì cho thêm
+                    if (!isDuplicate) {
+                      typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
+                      typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
+            
+                      typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
+            
+                      slot.prepend(skill);
+                      slot.classList.add("occupied");
+                      slot.style.backgroundColor = "";
+                      highlightSkillLevel();
+                      updateSttForSkillAffter();
+            
+                      typeGameConquest.starUser -= price5MonConquest;
+                      typeGameConquest.selectSkillShop += 1;
+                      price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon;
+                      document.getElementById("battleShopText").innerText = price5MonConquest;
+                      document.getElementById("starUser").innerText = typeGameConquest.starUser;
+                    } else {
+                      // Nếu trùng thì chỉ reset màu slot
+                      slot.style.backgroundColor = "";
+                    }
                 }
             } else if (parentSlot.parentElement.id == "battleInventory") {//Kéo từ tủ đồ xuống
                 console.log("Kéo từ tủ đồ 1")
@@ -3197,25 +3209,36 @@ function loadEventSlotBattle() {
 
                 } else {
                     console.log("Kéo từ tủ đồ 4")
-
-                    //Thêm skill vào battlePetUseSlotRound
-                    typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id]
-
-
-                    typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id]
-
-
-                    typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInInventory
-
-                    //Chuyển slot cũ thành trống
-                    parentSlot.classList.remove("occupied")
-
-                    //Chuyển slot mới thành đầy
-                    slot.prepend(skill);
-                    slot.classList.add("occupied");
-                    slot.style.backgroundColor = "";
-                    highlightSkillLevel();
-                    updateSttForSkillAffter();
+                    // Lấy ID của pet chuẩn bị thêm vào
+                    const newPetID = typeGameConquest.battlePetInInventory[skill.parentElement.id].ID;
+            
+                    // Kiểm tra xem đã tồn tại pet có cùng ID trong skillBattle chưa
+                    let isDuplicate = false;
+            
+                    //Kiểm tra slot 1 -> 9 xem đã có pet nào trùng ID chưa
+                    for (const key of Object.keys(typeGameConquest.skillBattle)) {
+                      if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
+                        isDuplicate = true;
+                        break;
+                      }
+                    }
+            
+                    // Nếu không bị trùng ID thì cho thêm
+                    if (!isDuplicate) {
+                      typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
+                      typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
+            
+                      typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon;
+            
+                      slot.prepend(skill);
+                      slot.classList.add("occupied");
+                      slot.style.backgroundColor = "";
+                      highlightSkillLevel();
+                      updateSttForSkillAffter();
+                    } else {
+                      // Nếu trùng thì chỉ reset màu slot
+                      slot.style.backgroundColor = "";
+                    }
                 }
 
             } else if (parentSlot.parentElement.id == "skillBarB") {
