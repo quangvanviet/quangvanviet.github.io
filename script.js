@@ -6871,7 +6871,7 @@ function updateHpbar() {
             }
         };
         updateShieldChange(nowShieldBattleComp)
-
+        updateSttForSkillAffter();
     }
 
     // Lấy team B
@@ -6921,6 +6921,7 @@ function updateHpbar() {
             }
         };
         updateShieldChange(nowShieldBattleMy)
+        updateSttForSkillAffter();
     }
 }
 
@@ -6968,6 +6969,7 @@ function checkWinOrLose() {
         endGame = true;
 
         updateHpbar();
+        updateSttForSkillAffter();
 
         if (typeGameConquest.winBattle < winLoseDefault) {
             randomSkillinShop();
@@ -6984,6 +6986,7 @@ function checkWinOrLose() {
         infoStartGame.winStreak = 0;
 
         updateHpbar();
+        updateSttForSkillAffter();
         if (typeGameConquest.loseBattle < winLoseDefault) {
             randomSkillinShop();
         }
