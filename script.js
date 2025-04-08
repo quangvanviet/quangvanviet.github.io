@@ -345,7 +345,9 @@ var nowBurnBattleComp = 0;
 var nowPoisonBattleComp = 0;
 
 let isLogin = false;
-
+var defaultSTT5Mon = {ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg:"",
+    LEVEL: 0, DAME: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    BURN: [0, 0, 0, 0, 0], POISON:[0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0],COOLDOWN: [0, 0, 0, 0, 0]};
 var price5MonConquest = 0;
 var typeGameGuess = {}
 var typeGameSolo5Mon = {}
@@ -376,212 +378,52 @@ var typeGameConquest = {
     maxHpBattle: 0,
     battleUserPetRound: [""],
     battlePetUseSlotRound: {
-        skill1B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        skill1B: defaultSTT5Mon,
+        skill2B: defaultSTT5Mon,
+        skill3B: defaultSTT5Mon,
+        skill4B: defaultSTT5Mon,
+        skill5B: defaultSTT5Mon,
+        skill6B: defaultSTT5Mon,
+        skill7B: defaultSTT5Mon,
+        skill8B: defaultSTT5Mon,
+        skill9B: defaultSTT5Mon,
     },
     battlePetInShop: {
-        battleShop1: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop2: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop3: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop4: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        battleShop1: defaultSTT5Mon,
+        battleShop2: defaultSTT5Mon,
+        battleShop3: defaultSTT5Mon,
+        battleShop4: defaultSTT5Mon,
     },
     battlePetInInventory: {
-        battleInv1: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv2: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv3: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv4: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv5: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv6: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv7: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv8: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv9: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        battleInv1: defaultSTT5Mon,
+        battleInv2: defaultSTT5Mon,
+        battleInv3: defaultSTT5Mon,
+        battleInv4: defaultSTT5Mon,
+        battleInv5: defaultSTT5Mon,
+        battleInv6: defaultSTT5Mon,
+        battleInv7: defaultSTT5Mon,
+        battleInv8: defaultSTT5Mon,
+        battleInv9: defaultSTT5Mon,
     },
     skillBattle: {
-        skill1A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill1B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        skill1A: defaultSTT5Mon,
+        skill2A: defaultSTT5Mon,
+        skill3A: defaultSTT5Mon,
+        skill4A: defaultSTT5Mon,
+        skill5A: defaultSTT5Mon,
+        skill6A: defaultSTT5Mon,
+        skill7A: defaultSTT5Mon,
+        skill8A: defaultSTT5Mon,
+        skill9A: defaultSTT5Mon,
+        skill1B: defaultSTT5Mon,
+        skill2B: defaultSTT5Mon,
+        skill3B: defaultSTT5Mon,
+        skill4B: defaultSTT5Mon,
+        skill5B: defaultSTT5Mon,
+        skill6B: defaultSTT5Mon,
+        skill7B: defaultSTT5Mon,
+        skill8B: defaultSTT5Mon,
+        skill9B: defaultSTT5Mon,
     },
 };
 
@@ -1954,72 +1796,28 @@ function skillUpCrit(skillKey, dameSkill, isComp, typeEffect) {
 //+++
 
 //Skill tăng chỉ số shield skill bằng shield đang được tạo hiện tại
-let saveNowShieldA = 0;
-let saveNowShieldB = 0;
 function skillUpShieldWithNowShield(isComp) {
-    if (endGame) {
-        saveNowShieldA = 0;
-        saveNowShieldB = 0;
-        saveShieldState = {};
-        return;
+  updateSttForSkillAffter();
+  let shieldNow = isComp ? nowShieldBattleComp : nowShieldBattleMy
+
+  // Tăng shield cho các skill có effect "UpShieldWithNowShield"
+  for (const skill in typeGameConquest.skillBattle) {
+    const isCorrectSkill = isComp ? skill.endsWith("A") : skill.endsWith("B");
+    const hasEffect = typeGameConquest.skillBattle[skill]?.EFFECT.includes("UpShieldWithNowShield");
+
+    if (isCorrectSkill && hasEffect) {
+      if (typeGameConquest.skillBattle[skill].EFFECT.includes("Attacking")) {
+        let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+        typeGameConquest.skillBattle[skill].DAME[4] = shieldNow + damePlus
+      }
+
+      if (typeGameConquest.skillBattle[skill].EFFECT.includes("Healing")) {
+        let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+        typeGameConquest.skillBattle[skill].HEAL[4] = shieldNow + damePlus
+      }
     }
-
-    let shieldNow = isComp ? nowShieldBattleComp : nowShieldBattleMy
-    let saveShield = isComp ? saveNowShieldA : saveNowShieldB
-    let newShield = shieldNow - saveShield
-
-    // Tăng shield cho các skill có effect "UpShieldWithNowShield"
-    for (const skill in typeGameConquest.skillBattle) {
-        const isCorrectSkill = isComp ? skill.endsWith("A") : skill.endsWith("B");
-        const hasEffect = typeGameConquest.skillBattle[skill]?.EFFECT.includes("UpShieldWithNowShield");
-        if (isCorrectSkill && hasEffect) {
-            let dame3 = Math.max(typeGameConquest.skillBattle[skill].SHIELD[3] += newShield, 0);
-            typeGameConquest.skillBattle[skill].SHIELD[3] = dame3
-        }
-    }
-
-    //Lưu nowshield hiện tại
-    if (isComp) {
-        saveNowShieldA = shieldNow
-    } else {
-        saveNowShieldB = shieldNow
-    }
-    skillUpPowerWithShield();
-    updateSttForSkillAffter();
-}
-// Lưu trạng thái shield riêng cho từng kỹ năng
-let saveShieldState = {};
-
-function skillUpPowerWithShield() {
-    if (endGame) {
-        saveShieldState = {};
-        return;
-    }
-
-    for (const skill in typeGameConquest.skillBattle) {
-        const skillData = typeGameConquest.skillBattle[skill];
-        const hasEffect = skillData?.EFFECT?.includes("UpPowerWithShield");
-
-        if (hasEffect) {
-            // Tổng shield hiện tại
-            const shieldNow = skillData.SHIELD.reduce((a, b) => a + b, 0);
-            const saveShield = saveShieldState[skill] || 0; // Giá trị trước đó hoặc mặc định là 0
-            const newShield = shieldNow - saveShield;
-
-            // Cập nhật sát thương hoặc hồi máu
-            if (skillData.EFFECT.includes("Attacking")) {
-                let dame3 = Math.max(skillData.DAME[3] += newShield, 0);
-                skillData.DAME[3] = dame3
-            }
-            if (skillData.EFFECT.includes("Healing")) {
-                let dame3 = Math.max(skillData.HEAL[3] += newShield, 0);
-                skillData.HEAL[3] = dame3
-            }
-
-            // Cập nhật giá trị shield hiện tại cho kỹ năng
-            saveShieldState[skill] = shieldNow;
-        }
-    }
+  }
+  updateSttForSkillAffter();
 }
 
 //Skill vô hiệu hóa (đóng băng) skill địch
@@ -3267,11 +3065,7 @@ function loadEventSlotBattle() {
 
 
                         // Xóa kỹ năng khỏi battlePetInShop
-                        typeGameConquest.battlePetInShop[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
+                        typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
 
 
                         // Xóa kỹ năng html shop (div skill Shop)
@@ -3307,11 +3101,7 @@ function loadEventSlotBattle() {
                     typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
 
 
-                    typeGameConquest.battlePetInShop[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetInShop
+                    typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
 
 
                     //Chuyển slot mới thành đầy    
@@ -3365,11 +3155,7 @@ function loadEventSlotBattle() {
 
 
                         // Xóa kỹ năng khỏi battlePetInInventory
-                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
+                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon;
 
 
                         //Chuyển slot cũ thành trống
@@ -3419,11 +3205,7 @@ function loadEventSlotBattle() {
                     typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id]
 
 
-                    typeGameConquest.battlePetInInventory[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetInInventory
+                    typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInInventory
 
                     //Chuyển slot cũ thành trống
                     parentSlot.classList.remove("occupied")
@@ -3471,16 +3253,8 @@ function loadEventSlotBattle() {
                         };
 
                         // Xóa kỹ năng khỏi typeGameConquest.skillBattle
-                        typeGameConquest.skillBattle[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
-                        typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        }; // Xóa kỹ năng khỏi battlePetUseSlotRound
+                        typeGameConquest.skillBattle[skill.parentElement.id] = defaultSTT5Mon;
+                        typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetUseSlotRound
 
 
                         //Chuyển slot cũ thành trống
@@ -3535,16 +3309,8 @@ function loadEventSlotBattle() {
                     typeGameConquest.skillBattle[slot.id] = typeGameConquest.skillBattle[skill.parentElement.id]
 
 
-                    typeGameConquest.skillBattle[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi typeGameConquest.skillBattle
-                    typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetUseSlotRound
+                    typeGameConquest.skillBattle[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi typeGameConquest.skillBattle
+                    typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetUseSlotRound
 
 
                     //Chuyển slot cũ thành trống
@@ -3641,11 +3407,7 @@ function loadEventSlotBattle() {
                         };
 
                         // Xóa kỹ năng khỏi battlePetInShop
-                        typeGameConquest.battlePetInShop[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
+                        typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
@@ -3672,11 +3434,7 @@ function loadEventSlotBattle() {
                     //Thêm skill vào battlePetUseSlotRound
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
 
-                    typeGameConquest.battlePetInShop[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetInShop
+                    typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
 
                     //Chuyển slot mới thành đầy    
                     slot.prepend(skill);
@@ -3715,11 +3473,7 @@ function loadEventSlotBattle() {
                         };
 
                         // Xóa kỹ năng khỏi battlePetInInventory
-                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
+                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon;
 
                         //Chuyển slot cũ thành trống
                         parentSlot.classList.remove("occupied")
@@ -3762,11 +3516,7 @@ function loadEventSlotBattle() {
                     //Thêm skill vào battlePetInInventory
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id]
 
-                    typeGameConquest.battlePetInInventory[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetInInventory
+                    typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInInventory
                     //Chuyển slot cũ thành trống
                     parentSlot.classList.remove("occupied")
 
@@ -3801,16 +3551,8 @@ function loadEventSlotBattle() {
                         };
 
                         // Xóa kỹ năng khỏi typeGameConquest.skillBattle
-                        typeGameConquest.skillBattle[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        };
-                        typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = {
-                            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                        }; // Xóa kỹ năng khỏi battlePetUseSlotRound
+                        typeGameConquest.skillBattle[skill.parentElement.id] = defaultSTT5Mon;
+                        typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetUseSlotRound
 
                         //Chuyển slot cũ thành trống
                         parentSlot.classList.remove("occupied")
@@ -3854,16 +3596,8 @@ function loadEventSlotBattle() {
                     //Thêm skill vào battlePetInInventory
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.skillBattle[skill.parentElement.id]
 
-                    typeGameConquest.skillBattle[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi typeGameConquest.skillBattle
-                    typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    }; // Xóa kỹ năng khỏi battlePetUseSlotRound
+                    typeGameConquest.skillBattle[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi typeGameConquest.skillBattle
+                    typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetUseSlotRound
 
                     //Chuyển slot cũ thành trống
                     parentSlot.classList.remove("occupied")
@@ -3899,10 +3633,7 @@ function loadEventSlotBattle() {
                 //Skill bán ở trong tủ đồ
                 if (skillElement.parentElement.parentElement.id === "battleInventory") {
                     let skillSell = typeGameConquest.battlePetInInventory[skillElement.parentElement.id]
-                    typeGameConquest.battlePetInInventory[skillElement.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "", LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    };
+                    typeGameConquest.battlePetInInventory[skillElement.parentElement.id] = defaultSTT5Mon;
                     //Cộng atk/heal/shield/burn/poison khi bán skill
                     skillSell.SELLUP.forEach(sellUpEffect => {
                         sellUpSkill(skillSell, sellUpEffect);
@@ -3912,10 +3643,7 @@ function loadEventSlotBattle() {
                 //Skill bán ở slot skill
                 if (skillElement.parentElement.parentElement.id === "skillBarB") {
                     let skillSell = typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id]
-                    typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id] = {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "", LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    };
+                    typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id] = defaultSTT5Mon;
 
                     typeGameConquest.skillBattle[skillElement.parentElement.id] = typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id]
                     //Cộng atk/heal/shield/burn/poison khi bán skill
@@ -5772,11 +5500,7 @@ function nextStepGame1() {
 
         //Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((skill) => {
-            typeGameConquest.battlePetInShop[skill] = {
-                ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-            }; // Xóa kỹ năng khỏi battlePetInShop
+            typeGameConquest.battlePetInShop[skill] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
         });
 
 
@@ -5923,9 +5647,6 @@ function endBattle(whoWin, pointsThisRound) {
     nowBurnBattleComp = 0;
     nowPoisonBattleComp = 0;
 
-    saveNowShieldA = 0;
-    saveNowShieldB = 0;
-    saveShieldState = {};
     skillsSleepA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
     skillsSleepB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
     skillsDeleteA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
@@ -6238,37 +5959,21 @@ function outGameRank() {
 
         // Xóa hết skill trong slot
         Object.keys(typeGameConquest.skillBattle).forEach((key) => {
-            typeGameConquest.skillBattle[key] = {
-                ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0],
-            };
+            typeGameConquest.skillBattle[key] = defaultSTT5Mon;
         });
 
         Object.keys(typeGameConquest.battlePetUseSlotRound).forEach((key) => {
-            typeGameConquest.battlePetUseSlotRound[key] = {
-                ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0],
-            };
+            typeGameConquest.battlePetUseSlotRound[key] = defaultSTT5Mon;
         });
 
         // Xóa hết skill trong inventory
         Object.keys(typeGameConquest.battlePetInInventory).forEach((key) => {
-            typeGameConquest.battlePetInInventory[key] = {
-                ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0],
-            };
+            typeGameConquest.battlePetInInventory[key] = defaultSTT5Mon;
         });
 
         // Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((key) => {
-            typeGameConquest.battlePetInShop[key] = {
-                ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0],
-            };
+            typeGameConquest.battlePetInShop[key] = defaultSTT5Mon;
         });
 
         //Xóa toàn bộ div skill
@@ -6354,26 +6059,10 @@ function randomSkillinShop() {
 
     let selectedSkills = [];  // Danh sách lưu trữ các ID kỹ năng đã chọn
     typeGameConquest.battlePetInShop = {
-        battleShop1: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop2: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop3: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop4: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        battleShop1: defaultSTT5Mon,
+        battleShop2: defaultSTT5Mon,
+        battleShop3: defaultSTT5Mon,
+        battleShop4: defaultSTT5Mon,
     };
 
     for (let i = 0; i < 4; i++) {
@@ -8409,213 +8098,53 @@ function register() {
                 }
 
                 var battlePetUseSlotRound = { //pet đang dùng tại slotskill
-                    skill1B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill2B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill3B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill4B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill5B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill6B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill7B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill8B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill9B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
+                    skill1B: defaultSTT5Mon,
+                    skill2B: defaultSTT5Mon,
+                    skill3B: defaultSTT5Mon,
+                    skill4B: defaultSTT5Mon,
+                    skill5B: defaultSTT5Mon,
+                    skill6B: defaultSTT5Mon,
+                    skill7B: defaultSTT5Mon,
+                    skill8B: defaultSTT5Mon,
+                    skill9B: defaultSTT5Mon,
                 };
                 var battlePetInInventory = {
-                    battleInv1: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv2: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv3: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv4: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv5: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv6: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv7: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv8: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleInv9: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
+                    battleInv1: defaultSTT5Mon,
+                    battleInv2: defaultSTT5Mon,
+                    battleInv3: defaultSTT5Mon,
+                    battleInv4: defaultSTT5Mon,
+                    battleInv5: defaultSTT5Mon,
+                    battleInv6: defaultSTT5Mon,
+                    battleInv7: defaultSTT5Mon,
+                    battleInv8: defaultSTT5Mon,
+                    battleInv9: defaultSTT5Mon,
                 }; //pet có trong slot tủ đồ
                 var skillBattle = { //Khay Pet sử dụng
-                    skill1A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill2A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill3A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill4A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill5A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill6A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill7A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill8A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill9A: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill1B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill2B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill3B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill4B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill5B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill6B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill7B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill8B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    skill9B: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
+                    skill1A: defaultSTT5Mon,
+                    skill2A: defaultSTT5Mon,
+                    skill3A: defaultSTT5Mon,
+                    skill4A: defaultSTT5Mon,
+                    skill5A: defaultSTT5Mon,
+                    skill6A: defaultSTT5Mon,
+                    skill7A: defaultSTT5Mon,
+                    skill8A: defaultSTT5Mon,
+                    skill9A: defaultSTT5Mon,
+                    skill1B: defaultSTT5Mon,
+                    skill2B: defaultSTT5Mon,
+                    skill3B: defaultSTT5Mon,
+                    skill4B: defaultSTT5Mon,
+                    skill5B: defaultSTT5Mon,
+                    skill6B: defaultSTT5Mon,
+                    skill7B: defaultSTT5Mon,
+                    skill8B: defaultSTT5Mon,
+                    skill9B: defaultSTT5Mon,
                 };
 
                 var battlePetInShop = {
-                    battleShop1: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleShop2: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleShop3: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
-                    battleShop4: {
-                        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-                        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-                        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-                    },
+                    battleShop1: defaultSTT5Mon,
+                    battleShop2: defaultSTT5Mon,
+                    battleShop3: defaultSTT5Mon,
+                    battleShop4: defaultSTT5Mon,
                 };
 
                 const typeGameConquest = {
@@ -9219,9 +8748,6 @@ function resetOutGame() {
     nowBurnBattleComp = 0;
     nowPoisonBattleComp = 0;
 
-    saveNowShieldA = 0;
-    saveNowShieldB = 0;
-    saveShieldState = {};
     skillsSleepA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
     skillsSleepB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
     skillsDeleteA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
@@ -9268,215 +8794,55 @@ function resetOutGame() {
     typeGameConquest.dameCritA = 0;
     typeGameConquest.upCooldownA = 0;
     typeGameConquest.skillBattle = { //Khay Pet sử dụng
-        skill1A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9A: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill1B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        skill1A: defaultSTT5Mon,
+        skill2A: defaultSTT5Mon,
+        skill3A: defaultSTT5Mon,
+        skill4A: defaultSTT5Mon,
+        skill5A: defaultSTT5Mon,
+        skill6A: defaultSTT5Mon,
+        skill7A: defaultSTT5Mon,
+        skill8A: defaultSTT5Mon,
+        skill9A: defaultSTT5Mon,
+        skill1B: defaultSTT5Mon,
+        skill2B: defaultSTT5Mon,
+        skill3B: defaultSTT5Mon,
+        skill4B: defaultSTT5Mon,
+        skill5B: defaultSTT5Mon,
+        skill6B: defaultSTT5Mon,
+        skill7B: defaultSTT5Mon,
+        skill8B: defaultSTT5Mon,
+        skill9B: defaultSTT5Mon,
     };
 
     typeGameConquest.battlePetUseSlotRound = { //pet đang dùng tại slotskill
-        skill1B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill6B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill7B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill8B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill9B: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        skill1B: defaultSTT5Mon,
+        skill2B: defaultSTT5Mon,
+        skill3B: defaultSTT5Mon,
+        skill4B: defaultSTT5Mon,
+        skill5B: defaultSTT5Mon,
+        skill6B: defaultSTT5Mon,
+        skill7B: defaultSTT5Mon,
+        skill8B: defaultSTT5Mon,
+        skill9B: defaultSTT5Mon,
     };
 
     typeGameConquest.battlePetInInventory = {
-        battleInv1: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv2: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv3: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv4: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv5: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv6: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv7: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv8: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleInv9: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        battleInv1: defaultSTT5Mon,
+        battleInv2: defaultSTT5Mon,
+        battleInv3: defaultSTT5Mon,
+        battleInv4: defaultSTT5Mon,
+        battleInv5: defaultSTT5Mon,
+        battleInv6: defaultSTT5Mon,
+        battleInv7: defaultSTT5Mon,
+        battleInv8: defaultSTT5Mon,
+        battleInv9: defaultSTT5Mon,
     }; //pet có trong slot tủ đồ
 
     typeGameConquest.battlePetInShop = {
-        battleShop1: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop2: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop3: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        battleShop4: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        battleShop1: defaultSTT5Mon,
+        battleShop2:defaultSTT5Mon,
+        battleShop3: defaultSTT5Mon,
+        battleShop4: defaultSTT5Mon,
     };
 }
 
@@ -10317,31 +9683,11 @@ function closePaymentGateway() {
 
 //Gacha Page
 var randomPet = {
-    skill1S: {
-        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-    },
-    skill2S: {
-        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-    },
-    skill3S: {
-        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-    },
-    skill4S: {
-        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-    },
-    skill5S: {
-        ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-        LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-        BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-    },
+    skill1S: defaultSTT5Mon,
+    skill2S: defaultSTT5Mon,
+    skill3S: defaultSTT5Mon,
+    skill4S: defaultSTT5Mon,
+    skill5S: defaultSTT5Mon,
 };
 
 function gacha(isX5) {
@@ -10388,31 +9734,11 @@ function gacha(isX5) {
 
     // Làm trống randomPet trước
     randomPet = {
-        skill1S: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill2S: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill3S: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill4S: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
-        skill5S: {
-            ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-            LEVEL: 0, DAME: [0, 0, 0, 0], HEAL: [0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-            BURN: [0, 0, 0, 0], POISON: [0, 0, 0, 0], CRIT: [0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
-        },
+        skill1S: defaultSTT5Mon,
+        skill2S: defaultSTT5Mon,
+        skill3S: defaultSTT5Mon,
+        skill4S: defaultSTT5Mon,
+        skill5S: defaultSTT5Mon,
     };
 
     for (let i = 0; i < 5; i++) {
