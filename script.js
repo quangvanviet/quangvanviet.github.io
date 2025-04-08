@@ -1807,13 +1807,13 @@ function skillUpShieldWithNowShield(isComp) {
 
     if (isCorrectSkill && hasEffect) {
       if (typeGameConquest.skillBattle[skill].EFFECT.includes("Attacking")) {
-        let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
-        typeGameConquest.skillBattle[skill].DAME[4] = shieldNow + damePlus
+        // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+        typeGameConquest.skillBattle[skill].DAME[4] = shieldNow
       }
 
       if (typeGameConquest.skillBattle[skill].EFFECT.includes("Healing")) {
-        let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
-        typeGameConquest.skillBattle[skill].HEAL[4] = shieldNow + damePlus
+        // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+        typeGameConquest.skillBattle[skill].HEAL[4] = shieldNow
       }
     }
   }
