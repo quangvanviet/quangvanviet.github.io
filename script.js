@@ -234,19 +234,23 @@ function saveDataUserToFirebase(isOut) {
 function setupAutoUpdate() {
     // Lắng nghe tất cả sự kiện input, change và click trong toàn bộ trang
     document.addEventListener('input', function () {
+        checkUserLogins();
         saveDataUserToFirebase("Save"); // Lắng nghe sự kiện input
     });
 
     document.addEventListener('change', function () {
+        checkUserLogins();
         saveDataUserToFirebase("Save"); // Lắng nghe sự kiện thay đổi (đối với các input select, checkbox...)
     });
 
     document.addEventListener('click', function () {
+        checkUserLogins();
         saveDataUserToFirebase("Save"); // Nếu bạn muốn theo dõi click (ví dụ như nút, checkbox...)
     });
 
     // Lắng nghe sự kiện kéo thả
     document.addEventListener('dragstart', function () {
+        checkUserLogins();
         saveDataUserToFirebase("Save"); // Khi bắt đầu kéo thả
     });
 
@@ -256,6 +260,7 @@ function setupAutoUpdate() {
 
     document.addEventListener('drop', function (event) {
         event.preventDefault(); // Ngừng hành động mặc định
+        checkUserLogins();
         saveDataUserToFirebase("Save"); // Khi thả đối tượng
     });
 }
