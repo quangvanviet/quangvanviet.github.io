@@ -44,6 +44,67 @@ var userDataOld = {};
 var userDataNew = {};
 let isFinalLoadData = false;
 
+var keyLogin = ""
+function checkUserLogins() {
+    const userDataRef = ref(db, 'allUsers/' + username);
+
+    get(userDataRef).then(snapshot => {
+        let data = snapshot.val();
+
+        if (data.keyLogin !== keyLogin) {
+            //Có người khác đăng nhập vào
+            //Out ra
+            const currentOnline = data.isOnlineUser || 0;
+
+            const finalUserData = {
+                isOnlineUser: Math.max(0, currentOnline - 1) // Đảm bảo không âm
+            };
+
+            update(userDataRef, finalUserData)
+            .then(() => {
+                console.log("cập nhật trạng thái offline!");
+            })
+            .catch((error) => {
+                console.error("❌ Lỗi cập nhật trạng thái offline!", error);
+            });
+
+            isOut = true;
+
+            //Tạo popup đếm ngược
+            const countdownPopup = document.createElement("div");
+            countdownPopup.id = "countdownPopup"; // Thêm ID để truy cập dễ dàng
+            countdownPopup.style.position = "fixed";
+            countdownPopup.style.top = "50%";
+            countdownPopup.style.left = "50%";
+            countdownPopup.style.transform = "translate(-50%, -50%)";
+            countdownPopup.style.padding = "20px";
+            countdownPopup.style.backgroundColor = "#ffcc00";
+            countdownPopup.style.color = "#000";
+            countdownPopup.style.borderRadius = "10px";
+            countdownPopup.style.fontSize = "24px";
+            countdownPopup.style.zIndex = "1000";
+            countdownPopup.style.textAlign = "center";
+            countdownPopup.innerHTML = "Có người đã đăng nhập. Bạn sẽ bị thoát trong <span id='countdown'>10</span> giây.";
+            document.body.appendChild(countdownPopup);
+
+            // 4️⃣ Chạy bộ đếm ngược từ 10 → 1
+            let countdown = 10;
+            const countdownInterval = setInterval(() => {
+                const countdownElement = document.getElementById("countdown");
+                if (countdownElement) {
+                    countdownElement.innerText = countdown;
+                }
+
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    window.location.reload();
+                }
+            }, 1000);
+        }
+    })
+}
+
 function saveDataUserToFirebase(isOut) {
     const userDataRef = ref(db, 'allUsers/' + username);
 
@@ -8214,6 +8275,7 @@ function register() {
                     telUser: tel,
                     activateUser: "Yes",
                     isOnlineUser: 0,
+                    keyLogin: 0,
                     pointRank: 0,
                     goldUser: 0,
                     diamondUser: 0,
@@ -8332,8 +8394,12 @@ function login(isTest) {
             }
 
             // ✅ Đăng nhập thành công, cập nhật trạng thái online
+            let newKey = Math.floor(1000000000 + Math.random() * 9000000000)
+            keyLogin = newKey;
+            
             set(firebaseUserRef, {
                 ...userData,
+                keyLogin: newKey,
                 isOnlineUser: 1 // Cập nhật trạng thái online
             })
                 .then(() => {
