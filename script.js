@@ -46,6 +46,8 @@ let isFinalLoadData = false;
 
 var keyLogin = ""
 function checkUserLogins() {
+    if (!isFinalLoadData) return;
+    
     const userDataRef = ref(db, 'allUsers/' + username);
 
     get(userDataRef).then(snapshot => {
