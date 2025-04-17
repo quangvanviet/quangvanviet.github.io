@@ -93,7 +93,7 @@ function checkUserLogins() {
     })
 }
 
-function saveDataUserToFirebase(isOut) {
+function saveDataUserToFirebase() {
     const userDataRef = ref(db, 'allUsers/' + username);
 
     if (!isFinalLoadData) return;
@@ -186,23 +186,23 @@ function setupAutoUpdate() {
     // Lắng nghe tất cả sự kiện input, change và click trong toàn bộ trang
     document.addEventListener('input', function () {
         checkUserLogins();
-        saveDataUserToFirebase("Save"); // Lắng nghe sự kiện input
+        saveDataUserToFirebase(); // Lắng nghe sự kiện input
     });
 
     document.addEventListener('change', function () {
         checkUserLogins();
-        saveDataUserToFirebase("Save"); // Lắng nghe sự kiện thay đổi (đối với các input select, checkbox...)
+        saveDataUserToFirebase(); // Lắng nghe sự kiện thay đổi (đối với các input select, checkbox...)
     });
 
     document.addEventListener('click', function () {
         checkUserLogins();
-        saveDataUserToFirebase("Save"); // Nếu bạn muốn theo dõi click (ví dụ như nút, checkbox...)
+        saveDataUserToFirebase(); // Nếu bạn muốn theo dõi click (ví dụ như nút, checkbox...)
     });
 
     // Lắng nghe sự kiện kéo thả
     document.addEventListener('dragstart', function () {
         checkUserLogins();
-        saveDataUserToFirebase("Save"); // Khi bắt đầu kéo thả
+        saveDataUserToFirebase(); // Khi bắt đầu kéo thả
     });
 
     document.addEventListener('dragover', function (event) {
@@ -212,7 +212,7 @@ function setupAutoUpdate() {
     document.addEventListener('drop', function (event) {
         event.preventDefault(); // Ngừng hành động mặc định
         checkUserLogins();
-        saveDataUserToFirebase("Save"); // Khi thả đối tượng
+        saveDataUserToFirebase(); // Khi thả đối tượng
     });
 }
 
@@ -7839,7 +7839,7 @@ let pauseBattle = false;
 document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
         if (isFinalLoadData && !isOut) {
-            saveDataUserToFirebase("Out");
+            saveDataUserToFirebase();
         }
         isLogin = false;
     } else {
@@ -9166,7 +9166,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
 //Check người dùng offline
 window.addEventListener("beforeunload", function (event) {
     if (isFinalLoadData && !isOut) {
-        saveDataUserToFirebase("Out");
+        saveDataUserToFirebase();
     }
 });
 
