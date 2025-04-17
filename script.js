@@ -45,6 +45,7 @@ var userDataNew = {};
 let isFinalLoadData = false;
 
 var keyLogin = ""
+let isOut = false;
 function checkUserLogins() {
     if (!isFinalLoadData) return;
     
@@ -55,23 +56,8 @@ function checkUserLogins() {
 
         if (data.keyLogin !== keyLogin) {
             //Có người khác đăng nhập vào
-            //Out ra
-            const currentOnline = data.isOnlineUser || 0;
-
-            const finalUserData = {
-                isOnlineUser: Math.max(0, currentOnline - 1) // Đảm bảo không âm
-            };
-
-            update(userDataRef, finalUserData)
-            .then(() => {
-                console.log("cập nhật trạng thái offline!");
-            })
-            .catch((error) => {
-                console.error("❌ Lỗi cập nhật trạng thái offline!", error);
-            });
-
+            console.log("Có người khác đã đăng nhập vào")
             isOut = true;
-
             //Tạo popup đếm ngược
             const countdownPopup = document.createElement("div");
             countdownPopup.id = "countdownPopup"; // Thêm ID để truy cập dễ dàng
@@ -86,7 +72,7 @@ function checkUserLogins() {
             countdownPopup.style.fontSize = "24px";
             countdownPopup.style.zIndex = "1000";
             countdownPopup.style.textAlign = "center";
-            countdownPopup.innerHTML = "Có người đã đăng nhập. Bạn sẽ bị thoát trong <span id='countdown'>10</span> giây.";
+            countdownPopup.innerHTML = "Có người đăng nhập vào. Bạn sẽ bị thoát trong <span id='countdown'>10</span> giây.";
             document.body.appendChild(countdownPopup);
 
             // 4️⃣ Chạy bộ đếm ngược từ 10 → 1
@@ -181,54 +167,17 @@ function saveDataUserToFirebase(isOut) {
         questWeekend: questWeekend
     };
 
-    // Nếu là 'Out', thêm isOnlineUser vào userDataNew
-    if (isOut === "Out") {
-        
-        get(userDataRef).then(snapshot => {
-            const currentData = snapshot.val();
-            const currentOnline = currentData?.isOnlineUser || 0;
-
-            // Cập nhật isOnlineUser và toàn bộ dữ liệu user
-            const finalUserData = {
-                isOnlineUser: Math.max(0, currentOnline - 1) // Đảm bảo không âm
-            };
-
-            update(userDataRef, finalUserData)
-                .then(() => {
-                    console.log("cập nhật trạng thái offline!");
-                })
-                .catch((error) => {
-                    console.error("❌ Lỗi cập nhật trạng thái offline!", error);
-                });
-        });
-
-        if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
-            // Lấy dữ liệu hiện tại để cập nhật isOnlineUser (giảm đi 1)
-            get(userDataRef).then(snapshot => {
-
-                update(userDataRef, userDataNew)
-                    .then(() => {
-                        console.log("🟢 Dữ liệu đã được lưu và cập nhật trạng thái offline!");
-                        userDataOld = { ...userDataNew }; // Cập nhật lại bản lưu cũ
-                    })
-                    .catch((error) => {
-                        console.error("❌ Lỗi khi lưu dữ liệu:", error);
-                    });
+    //Kiểm tra và lưu userDataNew
+    if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
+        // Lưu dữ liệu vào Firebase
+        update(userDataRef, userDataNew)
+            .then(() => {
+                console.log("🟢 Dữ liệu đã được lưu!");
+                userDataOld = { ...userDataNew }; // Cập nhật userDataOld sau khi lưu
+            })
+            .catch((error) => {
+                console.error("❌ Lỗi khi lưu dữ liệu:", error);
             });
-        }
-    } else {
-        // Nếu không phải 'Out', chỉ kiểm tra và lưu userDataNew như bình thường
-        if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
-            // Lưu dữ liệu vào Firebase
-            update(userDataRef, userDataNew)
-                .then(() => {
-                    console.log("🟢 Dữ liệu đã được lưu!");
-                    userDataOld = { ...userDataNew }; // Cập nhật userDataOld sau khi lưu
-                })
-                .catch((error) => {
-                    console.error("❌ Lỗi khi lưu dữ liệu:", error);
-                });
-        }
     }
 }
 
@@ -7895,7 +7844,7 @@ document.addEventListener("visibilitychange", function () {
         isLogin = false;
     } else {
         if (isFinalLoadData && !isOut) {
-            setUserOnline()
+            checkUserLogins();
         }
         isLogin = true;
     }
@@ -8281,7 +8230,6 @@ function register() {
                     nameUser: name,
                     telUser: tel,
                     activateUser: "Yes",
-                    isOnlineUser: 0,
                     keyLogin: 0,
                     pointRank: 0,
                     goldUser: 0,
@@ -8388,12 +8336,6 @@ function login(isTest) {
                 return;
             }
 
-            if (userData.isOnlineUser > 0) {
-                messageElement.innerText = "Tài khoản đang có người sử dụng!";
-                hideLoading();
-                return;
-            }
-
             if (userData.activateUser === "No") {
                 messageElement.innerText = "Tài khoản chưa được kích hoạt, vui lòng đợi hoặc liên hệ hỗ trợ!";
                 hideLoading();
@@ -8407,7 +8349,6 @@ function login(isTest) {
             set(firebaseUserRef, {
                 ...userData,
                 keyLogin: newKey,
-                isOnlineUser: 1 // Cập nhật trạng thái online
             })
                 .then(() => {
                     username = usernameLogin;
@@ -9228,173 +9169,6 @@ window.addEventListener("beforeunload", function (event) {
         saveDataUserToFirebase("Out");
     }
 });
-
-let isOut = false;
-function setUserOnline() {
-    if (!username) {
-        console.error("Username is required");
-        return;
-    }
-
-    const userRef = ref(db, 'allUsers/' + username);
-
-    // 1️⃣ Cập nhật trạng thái online ngay lập tức
-    get(userRef)
-        .then(snapshot => {
-            if (snapshot.exists()) {
-                const userData = snapshot.val();
-                let isOnlineUser1 = userData?.isOnlineUser || 0;
-
-                isOnlineUser1 += 1
-
-                update(userRef, {
-                    isOnlineUser: isOnlineUser1
-                });
-                
-                get(userRef).then(snapshotupdate => {
-                    const dataOnlineUpdate = snapshotupdate.val();
-                    let isOnlineUser2 = dataOnlineUpdate?.isOnlineUser || 0;
-                    if (isOnlineUser2 > 1) {
-
-                        saveDataUserToFirebase("Out");
-
-                        isOut = true;
-
-                        // 3️⃣ Tạo popup đếm ngược
-                        const countdownPopup = document.createElement("div");
-                        countdownPopup.id = "countdownPopup"; // Thêm ID để truy cập dễ dàng
-                        countdownPopup.style.position = "fixed";
-                        countdownPopup.style.top = "50%";
-                        countdownPopup.style.left = "50%";
-                        countdownPopup.style.transform = "translate(-50%, -50%)";
-                        countdownPopup.style.padding = "20px";
-                        countdownPopup.style.backgroundColor = "#ffcc00";
-                        countdownPopup.style.color = "#000";
-                        countdownPopup.style.borderRadius = "10px";
-                        countdownPopup.style.fontSize = "24px";
-                        countdownPopup.style.zIndex = "1000";
-                        countdownPopup.style.textAlign = "center";
-                        countdownPopup.innerHTML = "Có người đã đăng nhập. Bạn sẽ bị thoát trong <span id='countdown'>10</span> giây.";
-                        document.body.appendChild(countdownPopup);
-
-                        // 4️⃣ Chạy bộ đếm ngược từ 10 → 1
-                        let countdown = 10;
-                        const countdownInterval = setInterval(() => {
-                            const countdownElement = document.getElementById("countdown");
-                            if (countdownElement) {
-                                countdownElement.innerText = countdown;
-                            }
-
-                            countdown--;
-                            if (countdown < 0) {
-                                clearInterval(countdownInterval);
-                                window.location.reload();
-                            }
-                        }, 1000);
-
-                    }
-                })
-            } else {
-                console.error("User data not found");
-            }
-        })
-}
-
-
-
-
-
-
-//++++++++++++++
-function setUserOffline() {
-    if (!isFinalLoadData) return;
-
-    const appScriptUrl = "https://script.google.com/macros/s/AKfycbx23Gup4uGO5JlhIk85OrhQcXomBjNBiS5XpzeE3CDEwZOEL_8JybpR53roIdGCoH4/exec";
-
-    const dataOnline = {
-        username: username,  // Gửi tên người dùng
-    };
-
-    if (endGame) {
-        // Reset chỉ số trước khi lưu
-        [typeGameConquest.skillBattle, typeGameConquest.battlePetUseSlotRound].forEach((obj) => {
-            Object.values(obj).forEach((skill) => {
-                skill.COOLDOWN[4] = 0;
-                skill.DAME[3] = 0;
-                skill.HEAL[3] = 0;
-                skill.SHIELD[3] = 0;
-                skill.BURN[3] = 0;
-                skill.POISON[3] = 0;
-                skill.CRIT[3] = 0;
-            });
-        });
-    }
-
-    let userPetIDs = userPet.map(item => item.ID);
-    if (userPetIDs.length < 1) {
-        userPetIDs = [""]
-    }
-    let battleUserPetIDs = typeGameConquest.battleUserPet.map(item => item.ID);
-    if (battleUserPetIDs.length < 1) {
-        battleUserPetIDs = [""]
-    }
-
-    let battleUserPetRoundIDs = [...new Set(typeGameConquest.battleUserPetRound.map(item => item.ID))];
-    if (battleUserPetRoundIDs.length < 1) {
-        battleUserPetRoundIDs = [""]
-    }
-
-
-    console.log("battleUserPetRound", typeGameConquest.battleUserPetRound)
-    console.log("battleUserPetRoundIDs", typeGameConquest.battleUserPetRoundIDs)
-    console.log("battlePetInShop", typeGameConquest.battlePetInShop)
-
-    let allBattleUsersData = {
-        typeGameConquest: {
-            ...typeGameConquest, // Sao chép dữ liệu Conquest gốc để tránh ảnh hưởng
-            battleUserPetRound: battleUserPetRoundIDs, // Cập nhật battleUserPetRound
-            battleUserPet: battleUserPetIDs // Cập nhật battleUserPet
-        },
-        typeGameSolo5Mon, // Giữ nguyên dữ liệu của typeGameSolo5Mon
-        typeGameGuess, // Giữ nguyên dữ liệu của typeGameGuess
-    };
-
-
-    const userData = {
-        passwordUser: password,
-        nameUser: nameUser,
-        activateUser: activateUser,
-        telUser: telUser,
-        pointRank: pointRank,
-        goldUser: goldUser,
-        diamondUser: diamondUser,
-        onGame: onGame,
-        infoStartGame: infoStartGame,
-        isOnlineUser: 0,
-        characterUser: characterUser,
-        userPet: userPetIDs,
-        battleData: allBattleUsersData,
-        isBan: isBan,
-        timeOnline: timeOnline,
-        weekOnline: weekOnline,
-        ticketsUser: ticketsUser,
-        vipTicket: vipTicket,
-        idSkillRND: idSkillRND,
-        todayCheckin: todayCheckin,
-        weekCheckin: weekCheckin,
-        giftCheckinComplete: giftCheckinComplete,
-        questDay: questDay,
-        questWeek: questWeek,
-        questWeekend: questWeekend,
-    };
-
-    const data = { userData, dataOnline };
-
-    // Gửi dữ liệu sau khi lấy được giá trị chính xác từ Firebase
-    navigator.sendBeacon(appScriptUrl, JSON.stringify(data));
-
-    return data;
-}
 
 //Nút setting trong battle 
 function openPopupSetting() {
