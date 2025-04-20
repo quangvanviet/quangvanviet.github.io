@@ -338,7 +338,7 @@
                 </div>
 
                 <div class="buttonMainScreen" onclick="openShop()">Cửa hàng</div>
-                <div class="buttonMainScreen" onclick="openRankBoard()">Bảng xếp hạng</div>
+                <div class="buttonMainScreen" onclick="showOrHiddenDiv('hunterBoard')">Đi săn</div>
             </div>
 
             <div
@@ -377,49 +377,6 @@
                     font-weight: bold;
                     position: absolute;
                     ">Thay đổi nhân vật
-                        </div>
-                    </div>
-
-                    <!-- Tủ đồ -->
-                    <div id="bagInventory" style="background: #edd29a;
-                  border-radius: 10px;
-                  height: 350px;
-                  background-size: cover;
-                  background-position: center;
-                  background-repeat: no-repeat;
-                  align-items: center;
-                  justify-content: center;
-                  color: #ffffff;
-                  font-weight: bold;
-                  z-index: 2;
-                  box-shadow: rgb(157 121 48) 0px 4px 10px;
-                  border: 4px solid;
-                  transition: opacity 0.5s ease, transform 1s ease;
-                  position: absolute;
-                  ;" class="hiddenDiv">
-                        <!-- Các slot ô đồ pet để gắn vào random trận đấu -->
-                        <div id="container"
-                            style="height: 100%; width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: space-between; align-items: flex-start;">
-                            <!-- Inventory -->
-                            <div style="display: flex; flex-direction: column; margin: 4px;">
-                                <a id="textInventory"
-                                    style="font-size: 14px; background: #068383; padding: 5px; border-radius: 5px; margin-bottom: 4px;">Tủ
-                                    đồ của bạn</a>
-                                <div id="inventory"
-                                    style="height: 301px; overflow-y: auto; border-radius: 10px; background: #cf9e77a1; border: 6px solid #ff000000;">
-                                    <div id="inventoryPages"></div>
-                                </div>
-                            </div>
-                            <!-- Bag -->
-                            <div style="display: flex; flex-direction: column; margin: 4px;">
-                                <a id="textBag"
-                                    style="font-size: 14px; background: #068383; padding: 5px; border-radius: 5px; margin-bottom: 4px;">Hành
-                                    lý</a>
-                                <div id="bag"
-                                    style="height: 301px; overflow-y: auto; border-radius: 10px; background: #cf9e77a1; border: 6px solid #ff000000;">
-                                    <div id="bagPages"></div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -600,6 +557,80 @@
                         </div>
                     </div>
 
+                    <div id="hunterBoard" style="width: 100%; max-width: 600px; margin: auto; border-radius: 10px; padding: 10px; padding-top: 18px; background: rgb(83 183 133); font-size: 12px; min-height: 310px; position: absolute; border: 4px solid #5dd69a; box-shadow: rgb(50 111 124) 2px 3px 1px 2px;transition: opacity 0.5s ease 0s, transform 1s ease 0s; flex-direction: column; outline: 1px solid #00000030;" class="hiddenDiv">
+              
+                        <div style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
+                          <div style="background: #164049;position: absolute;top: -20px;width: 200px;height: 23px;display: flex;color: #2fe98c;font-size: 16px;font-weight: bold;border-radius: 10px;border: 3px solid #256876;box-shadow: rgb(17 50 57) 1px 2px 1px 2px;justify-content: center;align-items: center;">ĐI SĂN</div>
+                        </div>
+                        
+                        <div style="background: #5dd69a; padding: 5px 5px; border-radius: 10px;">
+                            <div
+                                style="display: flex; flex-flow: column wrap; height: 310px; align-items: center; overflow-x: auto; place-content: center flex-start;">
+                        
+                                <div
+                                    style="display: flex; flex-direction: row; border-radius: 10px; gap: 20px; border: 5px solid #ff000000; flex-wrap: wrap;justify-content: center; align-content: center;">
+                                    <!-- Vùng 1 -->
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" 
+                                        onmouseout="this.style.transform='scale(1)';"
+                                        onclick="openHunterMap('Sơn La')">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
+                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        <p
+                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
+                                            Sơn La</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- gacha screen -->
                     <div id="gacha-container"
                         style="width: 100%; max-width: 600px; min-height: 350px; background: linear-gradient(to bottom, #ffcc00, #ff6600); color: white; text-align: center; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); display: none; flex-direction: column; justify-content: center; align-items: center;">
@@ -719,7 +750,37 @@
                 </div>
             </div>
             <div style="display: flex; flex-direction: column;align-items: center;justify-content: space-between;">
-                <div id="openQuest" class="buttonMainScreen" onclick="openQuestBoard()">Nhiệm vụ</div>
+                <div style="display:flex;flex-direction: row-reverse;position: relative;">
+                    <div onclick ="showOrHiddenDiv('menuContainer')" id="openMenu" class="buttonMainScreen" style="cursor: pointer;"> 
+                      Mở rộng
+                    </div>
+                    <div id="menuContainer" class="hiddenDiv" style="position: absolute;transition: transform 1s ease, opacity 0.8s ease 0s;flex-wrap: wrap; gap: 10px;top: 0px;right: 120px;z-index: 2;">
+                      <div style="display: flex;flex-direction: row;gap: 10px;z-index: 1;">
+                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
+                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
+                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
+                        onclick="openQuestBoard()">
+                        Nhiệm vụ</button>
+                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
+                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
+                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
+                        onclick="openRankBoard()">
+                        Bảng xếp hạng</button>
+                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
+                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
+                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
+                        onclick="">
+                        Nhân vật</button>
+                      </div>
+                      <!-- <div style="transition: max-width 0.4s ease 0s, opacity 0.4s ease 0s;opacity: 1;display: flex;flex-direction: row;gap: 10px;z-index: 1;">
+                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;" onclick="openQuestBoard()">Nhiệm vụ</button>
+                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 2</button>
+                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 3</button>
+                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 4</button>
+                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 5</button>
+                      </div> -->
+                    </div>
+                </div>
                 <div id="openBag" class="buttonMainScreen" onclick="openBag()">Tủ đồ</div>
                 <div id="openGame" class="buttonMainScreen" onclick="openMenuStartGame()">Vào trận</div>
             </div>
@@ -796,7 +857,16 @@
                     <div id="screenShop"
                         style="display: flex; flex-direction: column; width: 100%; height: 100%; border-radius: 10px; border: 3px solid white; background: #edd096; box-shadow: rgb(178 103 50) -1px -1px 5px 2px;">
                         <!-- screenGacha -->
-                        <div id="gachaPage" style="display: flex; flex-direction: column; height: 100%; width: 100%;">
+                        <div id="gachaPage" style="display: flex; flex-direction: column; height: 100%; width: 100%; position: relative">
+                            
+                            <!-- Nút tủ đồ -->
+                            <div style="display: flex;flex-direction: column;gap: 5px;position: absolute;top: 3px;right: 3px;">
+                                <button onclick="openBag('Left')" style="padding: 10px 20px;background: rgb(39 185 58);color: white;border: none;border-radius: 5px;cursor: pointer;font-weight: bold;box-shadow: 1px 2px 1px 1px #00000099;">
+                                    Tủ đồ
+                                </button>
+                                
+                            </div>
+                            
                             <!-- Title / message -->
                             <div
                                 style="display: flex; flex-direction: column; width: 100%; height: 12%; color: firebrick; margin-top: 10px;">
@@ -807,7 +877,7 @@
 
                             <!-- Gacha machine -->
                             <div id="slotGacha"
-                                style="display: flex; flex-direction: row; height: 70%; width: 100%; justify-content: space-evenly; align-items: center; color: rebeccapurple">
+                                style="display: flex; flex-direction: row; height: 60%; width: 100%; justify-content: space-evenly; align-items: center; color: rebeccapurple">
                                 <!-- Chứa các slot -->
                                 <div id="skill1S" class="slotSkillGacha">?
                                 </div>
@@ -822,44 +892,50 @@
                             </div>
 
                             <div id="slotGachaText"
-                                style="display: flex; flex-direction: row; height: 10%; justify-content: space-evenly; align-items: center; font-size: 15px; margin-top: -30px;">
-                                <div id="skill1SText" style="width: 130px; font-weight: bold;color: firebrick;">
+                                style="display: flex; flex-direction: row; height: 10%; justify-content: space-evenly; align-items: center; font-size: 15px; margin-top: -25px;">
+                                <div id="skill1SText" style="width: 100px; font-weight: bold;color: firebrick;">
                                 </div>
-                                <div id="skill2SText" style="width: 130px; font-weight: bold;color: firebrick;">
+                                <div id="skill2SText" style="width: 100px; font-weight: bold;color: firebrick;">
                                 </div>
-                                <div id="skill3SText" style="width: 130px; font-weight: bold;color: firebrick;">
+                                <div id="skill3SText" style="width: 100px; font-weight: bold;color: firebrick;">
                                 </div>
-                                <div id="skill4SText" style="width: 130px; font-weight: bold;color: firebrick;">
+                                <div id="skill4SText" style="width: 100px; font-weight: bold;color: firebrick;">
                                 </div>
-                                <div id="skill5SText" style="width: 130px; font-weight: bold;color: firebrick;">
+                                <div id="skill5SText" style="width: 100px; font-weight: bold;color: firebrick;">
                                 </div>
                             </div>
 
                             <!-- Button gacha -->
                             <div
                                 style="display: flex; flex-direction: row; height: 10%; justify-content: center; align-items: center; gap: 15px; margin-top: 5px;">
-                                <button id="gachax1" onclick="gacha(false)" style="
-                            padding: 10px 20px;
-                            background: #d9534f;
-                            color: white;
-                            border: none;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            font-weight: bold;
-                            ">
-                                    Săn x1 [1 vàng]
-                                </button>
-                                <button id="gachax5" onclick="gacha(true)" style="
-                            padding: 10px 20px;
-                            background: #d9534f;
-                            color: white;
-                            border: none;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            font-weight: bold;
-                            ">
-                                    Săn x5 [5 vàng]
-                                </button>
+                                <div style="display: flex; flex-direction: column; gap: 5px">
+                                    <button id="gachax1" onclick="gacha5Mon(false)" style="
+                                                                padding: 10px 20px;
+                                                                background: #d9534f;
+                                                                color: white;
+                                                                border: none;
+                                                                border-radius: 5px;
+                                                                cursor: pointer;
+                                                                font-weight: bold;
+                                                                ">
+                                        Quay x1
+                                    </button>
+                                    <span style=" color: #d9534f;font-size: 13px; font-weight: bold;"><i class="fa-solid fa-coins"></i>: 5000</span>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 5px">
+                                    <button id="gachax5" onclick="gacha5Mon(true)" style="
+                                                                padding: 10px 20px;
+                                                                background: #d9534f;
+                                                                color: white;
+                                                                border: none;
+                                                                border-radius: 5px;
+                                                                cursor: pointer;
+                                                                font-weight: bold;
+                                                                ">
+                                        Quay x5
+                                    </button>
+                                    <span style=" color: #d9534f;font-size: 13px; font-weight: bold;"><i class="fa-solid fa-coins"></i>: 15000</span>
+                                </div>
                             </div>
 
                         </div>
@@ -909,7 +985,7 @@
 
                 <button id="gachaPageButton"
                     style="width: 90%; min-height: 22%; background: firebrick; color: white; font-size: 12px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease-in-out; text-align: center; display: flex; align-items: center; justify-content: center;"
-                    onclick="changePageShop('gachaPage')">Săn</button>
+                    onclick="changePageShop('gachaPage')">Quay</button>
 
                 <button id="exchangePageButton"
                     style="width: 90%; min-height: 22%; background: firebrick; color: white; font-size: 12px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease-in-out; text-align: center; display: flex; align-items: center; justify-content: center;"
@@ -917,6 +993,352 @@
             </div>
 
         </div> <!-- Đóng shopScreen -->
+
+        <!-- Popup tủ đồ new -->
+        <div id="popupBag" class="hiddenDiv"
+            style="display: flex; flex-direction: row;justify-content: center;align-items: center; gap: 3px; position: absolute; z-index: 5">
+            <button
+            style="position: absolute;margin: 5px;border-radius: 42px;cursor: pointer;font-size: 15px;top: -20px;right: -20px;padding: 3px 8px;border: 2px solid wheat;box-shadow: rgb(188, 119, 45) 0px 2px 1px 1px;background: rgb(145 16 134);color: white;font-weight: bold;transform: scale(1); z-index: 6;"
+            onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';"
+            onmouseout="this.style.background='rgb(145 16 134)'; this.style.transform='scale(1)';"
+            onclick="openBag()">x</button>
+
+            <!-- Div tủ đồ -->
+            <div id="inventoryPages"
+                style="max-width: 400px;min-width: 400px;height: 320px;padding: 10px;background: rgb(219 73 73);border-radius: 10px;z-index: 5;color: white;position: relative;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;border: 4px solid #ecc123;box-shadow: rgb(144 13 13) 1px 2px 1px 2px;">
+        
+                <div
+                    style="background: #c92525;position: absolute;top: -20px;width: 200px;height: 18px;display: flex;color: #ffe200;font-size: 15px;font-weight: bold;border-radius: 5px;border: 3px solid #fb464682;box-shadow: rgb(178 34 34) 1px 2px 1px 2px;justify-content: center;align-items: center;outline: 2px solid #fbde00cf;text-shadow: 1px 2px 1px #921919;padding: 2px 2px;">
+                    TỦ ĐỒ</div>
+        
+                <div 
+                    style="padding: 5px;background: #ffc33a;border-radius: 8px;display: flex;flex-direction: row;justify-content: space-around;align-items: center;margin-top: 17px;position: relative;border: 2px solid wheat;box-shadow: rgb(119 38 38 / 81%) 1px 1px 1px 1px;height: 100%;width: 97%;">
+        
+                    <div
+                        style="position: absolute;top: -10px;display: flex;flex-direction: row;justify-content: center;align-items: center;gap: 3px;width: 100%;">
+                        <span id="buttonSSR"
+                            style="color: rgb(255, 255, 255);font-size: 13px;font-weight: bold;background: rgb(222 109 62);padding: 2px;border-radius: 5px;min-width: 30px;border: 2px solid rgb(119, 38, 38);box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px;transform: scale(1);cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('SSR', 'buttonSSR')">SSR</span>
+                        <span id="buttonSS"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('SS', 'buttonSS')">SS</span>
+                        <span id="buttonS"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('S', 'buttonS')">S</span>
+                        <span id="buttonA"
+                            style="color: rgb(255, 255, 255);font-size: 13px;font-weight: bold;background: rgb(222 109 62);padding: 2px;border-radius: 5px;min-width: 30px;border: 2px solid rgb(119, 38, 38);box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px;transform: scale(1);cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('A', 'buttonA')">A</span>
+                        <span id="buttonB"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('B', 'buttonB')">B</span>
+                        <span id="buttonC"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('C', 'buttonC')">C</span>
+                        <span id="buttonD"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('D', 'buttonD')">D</span>
+                        <span id="buttonAll"
+                            style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 2px; border-radius: 5px; min-width: 30px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="chosenSortBagLeft('All', 'buttonAll')">All</span>
+                    </div>
+        
+                    <div
+                        style="display: flex;flex-direction: column;font-size: 12px;color: black;height: 285px; width: 100%;align-items: center; justify-content: flex-start;">
+        
+                        <!-- Thanh đầy tủ đồ phải-->
+                        <div
+                            style="display: flex;flex-direction: row;align-content: center;width: 100%;align-items: center;gap: 5px;justify-content: space-around; margin-top: 10px; margin-bottom: 4px;">
+                            <div
+                                style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
+        
+                                <div style="display: flex;flex-direction: column;width: 100%;">
+                                    <div
+                                        style="width: 100%;height: 14px;background: #00000059;border-radius: 5px;overflow: hidden;">
+                                        <div id="weightBagLeft" style="width: 50%;height: 100%;background: #30a8a1;">
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div id="weightBagLeftText"
+                                    style="width: 15%;position: absolute;font-size: 11px;font-weight: bold;color: white;">
+                                    (40/40)
+                                </div>
+                            </div>
+                            <button id="upWeightBag"
+                                style="border-radius: 42px;cursor: pointer;font-size: 12px;padding: 1px 5px;border: 2px solid wheat;box-shadow: rgba(10, 10, 10, 0.32) 0px 2px 1px 1px;background:rgb(13 33 185);color: white;font-weight: bold;transform: scale(1);"
+                                onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.1)';"
+                                onmouseout="this.style.background='rgb(13 33 185)'; this.style.transform='scale(1)';"
+                                onclick="showUpWeightBag()">+</button>
+                        </div>
+        
+                        <!-- Vùng tủ đồ -->
+                        <div id="boardBagLeft" style="display: flex;flex-direction: row;background-color: #ffffff24;border-radius: 10px;width: 100%;
+                                height: 100%;overflow-x: auto;flex-wrap: wrap;justify-content: center;align-content: flex-start;gap: 20px;
+                                padding: 15px 0px;align-items: flex-start;">
+        
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Div hành lý -->
+            <div id="bagPages"
+                style="max-width: 300px;min-width: 300px;height: 320px;padding: 10px;background: rgb(219 73 73);border-radius: 10px;z-index: 5;color: white;position: relative;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;border: 4px solid #ecc123;box-shadow: rgb(145 15 14) 1px 2px 1px 2px;">
+        
+                <div
+                    style="background: #c92525;position: absolute;top: -20px;width: 150px;height: 18px;display: flex;color: #ffe200;font-size: 15px;font-weight: bold;border-radius: 5px;border: 3px solid #fb464682;box-shadow: rgb(178 34 34) 1px 2px 1px 2px;justify-content: center;align-items: center;outline: 2px solid #fbd300cf;text-shadow: 1px 2px 1px #921919;padding: 2px 2px;">
+                    HÀNH LÝ</div>
+        
+                <div style=" padding: 5px; background: #ffc33a;  border-radius: 8px; display: flex; flex-direction: row;
+                    justify-content: space-around; align-items: center; margin-top: 17px; position: relative; border: 2px solid wheat;
+                    box-shadow: rgb(119 38 38 / 81%) 1px 1px 1px 1px; height: 100%; width: 97%;">
+        
+                    <div style="position: absolute;top: -10px;display: flex;flex-direction: row;justify-content: center;
+                                align-items: center;gap: 3px;width: 100%;">
+                        <span id="buttonTypeConquest"
+                            style="color: rgb(255, 255, 255);font-size: 13px;font-weight: bold;background: rgb(222 109 62);padding: 2px;border-radius: 5px;min-width: 30px;border: 2px solid rgb(119, 38, 38);box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px;transform: scale(1);cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';"
+                            onclick="">Chinh phục (Xếp hạng)</span>
+                    </div>
+        
+                    <div style="display: flex;flex-direction: column;font-size: 12px;color: black;height: 285px; width: 100%;
+                                align-items: center; justify-content: flex-start;">
+        
+                        <!-- Thanh đầy tủ đồ phải-->
+                        <div style="
+                                    display: flex;
+                                    flex-direction: row;
+                                    align-content: center;
+                                    width: 100%;
+                                    align-items: center;
+                                    gap: 5px;
+                                    justify-content: space-around;
+                                    margin-top: 15px;
+                                    margin-bottom: 4px;
+                                    ">
+                            <div
+                                style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
+        
+                                <div style="display: flex;flex-direction: column;width: 100%;">
+                                    <div
+                                        style="width: 100%;height: 14px;background: #00000059;border-radius: 5px;overflow: hidden;">
+                                        <div id="weightBagRight" style="width: 50%;height: 100%;background: #30a8a1;">
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div id="weightBagRightText"
+                                    style="width: 15%;position: absolute;font-size: 11px;font-weight: bold;color: white;">
+                                    (40/40)
+                                </div>
+                            </div>
+        
+                        </div>
+        
+                        <!-- Vùng tủ đồ -->
+                        <div id="boardBagRight" style="display: flex;flex-direction: row;background-color: #ffffff24;border-radius: 10px;width: 100%;
+                                                    height: 100%;overflow-x: auto;flex-wrap: wrap;justify-content: center;align-content: flex-start;gap: 20px;
+                                                    padding: 15px 0px;align-items: flex-start;">
+        
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div id="overlayPopupBag"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #00000000; z-index: 4;">
+        </div>
+
+        <div id="hunterZone"
+            style=" display: none; flex-direction: row; gap: 5px; padding-left: 10px; padding-right: 10px; 
+            padding-top: 20px; padding-bottom: 20px; height: 300px; min-width: 30%; justify-content: flex-start; border-radius: 20px; width: 68%; border: 5px solid; background: rgba(245, 233, 194, 0.5); box-shadow: rgb(178 103 50) 0px 4px 8px 0px; position: relative">
+            <div style="display: flex;flex-direction: row;gap: 5px;position: absolute;top: 8px;right: 25px;z-index: 1;">
+                <button id="autoButton" onclick="toggleAutoMovement()">Tự động săn</button>
+                <button style="font-weight: bold; padding: 5px 10px; background: rgb(76, 175, 80); color: white; border-radius: 5px; 
+                cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
+                box-shadow: rgb(148, 186, 149) 1px 1px 1px 1px; transform: scale(1);" 
+                onmouseover="this.style.background='#ad2a0f'; this.style.transform='scale(1.05)';" 
+                onmouseout="this.style.background='#4CAF50'; this.style.transform='scale(1)';" 
+                onclick="closeHunterMap()">Quay lại</button>
+            </div>
+            
+            <div id="viewport"
+                style="width: 100%; height: 100%; overflow: hidden; position: relative; border: 2px solid #fff;border-radius: 10px;">
+                <div id="mapHunter"
+                    style="position: absolute; width: 1024px; height: 1536px; background-image: url('https://res.cloudinary.com/dxgawkr4g/image/upload/v1744952970/xgbyxzwiwtbu3j3faxwm.png'); background-size: cover;">
+                    <img id="playerHunter"
+                        src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif" style="
+                          width: 32px;
+                          height: 32px;
+                          position: absolute;
+                          z-index: 2;
+                          pointer-events: none">
+        
+                </div>
+            </div>
+        
+            <div style="position: absolute; top: 10px; left: 20px; gap: 3px;display: flex;flex-direction: row;align-content: center; align-items: center;">
+                <div id="staminaBar"
+                    style=" width: 300px; height: 20px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
+                    <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
+                    </div>
+                    <div id="staminaText"
+                        style="font-weight: bold; position: absolute; top: 3px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
+                        100/100</div>
+                </div>
+                <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 3px;"
+                    onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';"
+                    onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" 
+                    onclick="showUpStamina()"
+                    >
+                    +
+                </span>
+                <div style="width: 20px;">
+
+                </div>
+                <!-- Vàng -->
+                <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')" 
+                style=" background: #c52f2f; padding: 3px 7px; font-size: 13px;
+                font-weight: bold; border-radius: 10px;">
+                    <i class="fa-solid fa-coins"></i>
+                    <span id="goldUserHunter" style="align-items: left">1000</span>
+                </div>
+                <!-- Ruby -->
+                <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')"
+                style="background: #c52f2f; padding: 3px 7px; font-size: 13px;
+                font-weight: bold; border-radius: 10px;">
+                    <i class="fa-solid fa-gem"></i>
+                    <span id="diamondUserHunter" style="align-items: left">0</span>
+                </div>
+            </div>
+        
+            <div id="menuHunter"
+                style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 25px; right: 20px;">
+                <!-- Nút Mở rộng -->
+                <button id="toggleMenuHunter"
+                    style="padding: 10px 20px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
+                     border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">
+                    Mở rộng
+                </button>
+        
+                <!-- Các nút ẩn -->
+                <div id="menuButtonsHunter" style="display: none; flex-direction: row; gap: 5px; font-weight: bold;">
+                    <button
+                        style="padding: 10px 20px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
+                        onclick="openBag('Left')"
+                        >Tủ đồ</button>
+                    <button
+                        style="padding: 10px 20px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        2</button>
+                    <button
+                        style="padding: 10px 20px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        3</button>
+                </div>
+            </div>
+        
+        </div>
+        
+        <!-- Popup hiển thị 5Mon gặp phải -->
+        <div id="popupMeet5Mon" style="display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(240, 226, 201);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: rgb(0 0 0 / 20%) 0px 4px 6px;
+            text-align: center;
+            z-index: 1000;
+            min-width: 250px;">
+
+            <div style="display: flex; flex-direction: row; gap: 10px; position: relative;">
+                <img id="imgPopupSTT5MonMeet" src=""
+                    style="height: 250px; object-fit: cover; border-radius: 10px; border: 2px solid rebeccapurple;">
+                <div id="rareColorPopupSTT5MonMeet"
+                    style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
+                    <span id="rareTextPopupSTT5MonMeet"
+                        style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
+                </div>
+        
+                <div
+                    style="display: flex; flex-direction: column; min-width: 300px; align-items: center; justify-content: flex-start;">
+                    <h3 id="namePopupSTT5MonMeet" style="margin: 0;
+                        margin-top: 2px;
+                        font-weight: bold;
+                        color: white;
+                        background: firebrick;
+                        border-bottom-right-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        pointer-events: none;
+                        width: 100%">
+                    </h3>
+                    <div id=""
+                        style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(83, 21, 21);text-shadow: 2px 1px 2px #140a03;top: 3px;right: -180px;width: 100%;">
+                        <span id="allStats5MonMeet"
+                            style="position: absolute;font-size: 14px;color: #ffd600;font-weight: bold;border-radius: 5px;">⚔️:
+                            206</span>
+                    </div>
+                    <p id="descPopupSTT5MonMeet" style="background: #fff3dc;
+                        margin: 0px;
+                        border: 6px solid #ff000000;
+                        margin-top: 5px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        min-height: 170px;
+                        max-height: 170px;
+                        max-width: 300px;
+                        width: 95%;
+                        overflow: auto;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        font-weight: normal;
+                        gap: 3px;
+                        box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;
+                        color: rebeccapurple;">
+                    </p>
+
+                    <div style="width: 96%; height: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                    align-content: center;margin-top: 10px;">
+                        <span id="percentCatch5MonMeet" style="padding: 4px 10px; color: wheat;  background: rebeccapurple; border-radius: 8px; font-size: 14px;">
+                            Tỷ lệ: 100%
+                        </span>
+                        <div style="display: flex; flex-direction: row; gap: 4px;">
+                            <button
+                                style="font-weight: bold; padding: 5px 10px; background: rgb(76, 127, 175); color: white; border-radius: 5px; 
+                                cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
+                                box-shadow: #0000009a 1px 1px 1px 1px; transform: scale(1);"
+                                onmouseover="this.style.background='rgb(40 179 84)'; this.style.transform='scale(1.05)';"
+                                onmouseout="this.style.background='rgb(76, 127, 175)'; this.style.transform='scale(1)';" onclick="closePopupMeet5Mon()">
+                                Bỏ qua
+                            </button>
+
+                            <button
+                                style="font-weight: bold; padding: 5px 10px; background: rgb(175, 76, 76); color: white; border-radius: 5px; 
+                                cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
+                                box-shadow:  #0000009a 1px 1px 1px 1px; transform: scale(1);"
+                                onmouseover="this.style.background='rgb(40 179 84)'; this.style.transform='scale(1.05)';"
+                                onmouseout="this.style.background='rgb(175, 76, 76)'; this.style.transform='scale(1)';" onclick="catch5MonMeet()">
+                                Bắt lấy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Màn hình trận đấu -->
@@ -1346,7 +1768,7 @@
 
     <!-- Popup hiển thị lựa chọn nhân vật -->
     <div id="popupSelectCharacter"
-        style="display:none; flex-direction: column; gap: 20px; width: 100%; z-index: 9999; align-items: center; align-content: center; justify-content: center; height: 50%; background: radial-gradient(#faf5b4, transparent);">
+        style="position: absolute;display:none; flex-direction: column; gap: 20px; width: 100%; z-index: 9999; align-items: center; align-content: center; justify-content: center; height: 50%; background: radial-gradient(#faf5b4, transparent);">
         <!-- Header -->
         <div
             style="display: flex; flex-direction: column; gap: 5px; max-width: 700px; align-content: center; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #f5e833; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">
@@ -1434,8 +1856,13 @@
         <div style="display: flex; flex-direction: row; gap: 10px; position: relative;">
             <img id="imgPopupSTT5Mon" src=""
                 style="height: 250px; object-fit: cover; border-radius: 10px; border: 2px solid rebeccapurple;">
+            <div id="rareColorPopupSTT5Mon"
+                style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
+                <span id="rareTextPopupSTT5Mon"
+                    style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
+            </div>
             <div id="levelColorPopupSTT5Mon"
-                style="position: absolute;font-size: 25px;font-weight: bold;color: red;text-shadow: rgba(0, 0, 0, 0.54) 0px 1px 2px;top: 0px;left: 157px;">
+                style="position: absolute;font-size: 25px;font-weight: bold;color: red;text-shadow: rgba(0, 0, 0, 0.54) 0px 1px 2px;top: 20px;left: 152px;">
                 <i class="fa-solid fa-diamond"></i>
                 <span id="levelTextPopupSTT5Mon"
                     style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: white;font-weight: bold;">2</span>
@@ -1452,28 +1879,116 @@
         border-bottom-left-radius: 10px;
         pointer-events: none;
         width: 100%"></h3>
-                <p id="descPopupSTT5Mon" style="background: #fff3dc;
-        margin: 0px;
-        border: 6px solid #ff000000;
-        margin-top: 5px;
-        border-radius: 10px;
-        font-size: 12px;
-        min-height: 210px;
-        max-height: 210px;
-        max-width: 300px;
-        width: 95%;
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-        font-weight: normal;
-        gap: 3px;
-        box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;"></p>
+        <div id="" style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(83, 21, 21);text-shadow: 2px 1px 2px #140a03;top: 3px;right: -180px;width: 100%;">
+            <span id="allStats5Mon" style="position: absolute;font-size: 14px;color: #ffd600;font-weight: bold;border-radius: 5px;">⚔️: 206</span>
+        </div>
+            <p id="descPopupSTT5Mon" style="background: #fff3dc;
+                margin: 0px;
+                border: 6px solid #ff000000;
+                margin-top: 5px;
+                border-radius: 10px;
+                font-size: 12px;
+                min-height: 170px;
+                max-height: 170px;
+                max-width: 300px;
+                width: 95%;
+                overflow: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                font-weight: normal;
+                gap: 3px;
+                box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;">
+            </p>
+            <div style="width: 96%; height: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                align-content: center;margin-top: 10px;">
+                    <span id="IDcreate5MonPopupSTT5Mon" style="padding: 4px 10px; color: wheat;  background: rebeccapurple; border-radius: 8px; font-size: 14px;">
+                        "!@#$%^*$#(*^$)"
+                    </span>
+                    <div style="display: flex; flex-direction: row; gap: 4px;">
+                        <button id="buttonPopupSTT5Mon"
+                            style="font-weight: bold; padding: 5px 20px; background: rgb(63 117 219); color: white; border-radius: 5px; 
+                            cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
+                            box-shadow: rgb(0 0 0 / 69%) 1px 1px 1px 1px; transform: scale(1);"
+                            onmouseover="this.style.background='rgb(54 157 37)'; this.style.transform='scale(1.05)';"
+                            onmouseout="this.style.background='rgb(63 117 219)'; this.style.transform='scale(1)';" onclick="">
+                            Thả đi
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Popup hiển thị thông tin 5mon Battle -->
+    <div id="popupSTT5MonInBattle" style="display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgb(240, 226, 201);
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 20%) 0px 4px 6px;
+        text-align: center;
+        z-index: 1000;
+        min-width: 250px;">
+    
+        <div style="display: flex; flex-direction: row; gap: 10px; position: relative;">
+            <img id="imgPopupSTT5MonInBattle" src=""
+                style="height: 250px; object-fit: cover; border-radius: 10px; border: 2px solid rebeccapurple;">
+            <div id="rareColorPopupSTT5MonInBattle"
+                style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
+                <span id="rareTextPopupSTT5MonInBattle"
+                    style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
+            </div>
+            <div id="levelColorPopupSTT5MonInBattle"
+                style="position: absolute;font-size: 25px;font-weight: bold;color: red;text-shadow: rgba(0, 0, 0, 0.54) 0px 1px 2px;top: 20px;left: 152px;">
+                <i class="fa-solid fa-diamond"></i>
+                <span id="levelTextPopupSTT5MonInBattle"
+                    style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: white;font-weight: bold;">2</span>
+            </div>
+    
+            <div
+                style="display: flex; flex-direction: column; min-width: 300px; align-items: center; justify-content: flex-start;">
+                <h3 id="namePopupSTT5MonInBattle" style="margin: 0;
+            margin-top: 2px;
+            font-weight: bold;
+            color: white;
+            background: firebrick;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            pointer-events: none;
+            width: 100%"></h3>
+                <div id=""
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(83, 21, 21);text-shadow: 2px 1px 2px #140a03;top: 3px;right: -180px;width: 100%;">
+                    <span id="allStats5MonInBattle"
+                        style="position: absolute;font-size: 14px;color: #ffd600;font-weight: bold;border-radius: 5px;">⚔️:
+                        206</span>
+                </div>
+                <p id="descPopupSTT5MonInBattle" style="background: #fff3dc;
+                    margin: 0px;
+                    border: 6px solid #ff000000;
+                    margin-top: 5px;
+                    border-radius: 10px;
+                    font-size: 12px;
+                    min-height: 210px;
+                    max-height: 210px;
+                    max-width: 300px;
+                    width: 95%;
+                    overflow: auto;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    text-align: left;
+                    font-weight: normal;
+                    gap: 3px;
+                    box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;">
+                </p>
+            </div>
+        </div>
+    </div>  
 
     <!-- Popup hiển thị thông tin user/comp trong battle -->
     <div id="popupInfoMyOrComp">
@@ -1739,7 +2254,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          text-align: center;">Giá trị quy đổi: 1000đ = 1 kim cương</p>
+          text-align: center; gap: 3px;">Giá trị quy đổi: 1000đ = 1 <i class="fa-solid fa-gem"></i></p>
                 </div>
             </div>
         </div>
