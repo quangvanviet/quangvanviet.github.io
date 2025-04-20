@@ -856,8 +856,8 @@ body {
 .slotSkillGacha {
     background: #3b3b56;
     border-radius: 5px;
-    width: 130px;
-    height: 152px;
+    width: 100px;
+    height: 132px;
     background-size: cover;
     /* Hình nền phủ kín */
     background-position: center;
@@ -2022,3 +2022,69 @@ body {
     scrollbar-color: linear-gradient(45deg, #ff5f6d, #ffc371) #ececec;
     /* Màu thanh cuộn và nền */
 }
+
+#autoButton {
+    padding: 5px 10px;
+    font-weight: bold;
+    background-color: #c51d80;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 2px solid #ffffff40;
+    box-shadow: 1px 1px 1px 1px #961862;
+  }
+
+  #autoButton.active {
+    background-color: #f44336;
+  }
+
+  #autoButton:hover {
+    transform: scale(1.05);
+  }
+
+  /* Style for the modal */
+  .popup-modal {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Nền mờ */
+  }
+
+  /* Modal content */
+  .popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  /* Close button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  #menuButtons {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+  #menuButtons.show {
+    opacity: 1;
+  }
