@@ -12029,9 +12029,9 @@ function movePlayer(timestamp) {
     
     // 👉 Flip trái/phải
     if (targetX < startX) {
-        document.getElementById('playerHunter').style.transform = "scaleX(-1)";
-    } else if (targetX > startX) {
         document.getElementById('playerHunter').style.transform = "scaleX(1)";
+    } else if (targetX > startX) {
+        document.getElementById('playerHunter').style.transform = "scaleX(-1)";
     }
 
     updateView();
@@ -12719,9 +12719,9 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
 
     // 👉 Flip hình ảnh nếu di chuyển sang trái hoặc phải
     if (targetX < currentX) {
-      pet.style.transform = "scaleX(-1)";
-    } else {
       pet.style.transform = "scaleX(1)";
+    } else {
+      pet.style.transform = "scaleX(-1)";
     }
 
     pet.style.left = targetX + "px";
