@@ -722,7 +722,7 @@ function startStaminaRegen() {
     if (staminaInterval) return; // tránh tạo nhiều interval
 
     staminaInterval = setInterval(() => {
-        if (staminaUser < 100) {
+        if (staminaUser < 1000) {
             staminaUser += 1;
             updateStamina();
 
@@ -754,11 +754,11 @@ function restoreStamina() {
     let diffMin = Math.floor(diffMs / (1000 * 60));
 
     let staminaToAdd = Math.floor(diffMin / 1);
-    if (staminaToAdd > 100) staminaToAdd = 100
+    if (staminaToAdd > 1000) staminaToAdd = 1000
     if (staminaToAdd > 0) {
         staminaUser += staminaToAdd;
-        if (staminaUser > 100) {
-            staminaUser = 100
+        if (staminaUser > 1000) {
+            staminaUser = 1000
             
         } else {
             messageOpen(`🔥 Đã hồi ${staminaToAdd} thể lực lúc bạn offline!`);
@@ -792,7 +792,7 @@ function resetDayorWeek() {
         console.log("Ngày mới! Reset biến daily...");
         todayCheckin = "No";
         questDay = { qd1: [0, "No"], qd2: [0, "No"], qd3: [0, "No"], qd4: [0, "No"], qd5: [0, "No"], qd6: [0, "No"] };
-        staminaUser = 100;
+        staminaUser = 1000;
         // Kiểm tra nếu hôm nay là thứ 2, reset thêm biến tuần
         timeOnline = newTimeOnline
         if (weekOnline !== newWeekOnline) {
@@ -11988,7 +11988,7 @@ function updateStamina() {
     staminaFill.style.width = `${staminaPercentage}%`; // Đảm bảo thanh staminaUser có chiều rộng đúng
 
     // Cập nhật hiển thị số staminaUser
-    staminaText.textContent = `${staminaUser}/100`;
+    staminaText.textContent = `${staminaUser}/1000`;
 
     if (staminaUser <= 0) {
         staminaUser = 0;
@@ -12012,8 +12012,7 @@ function movePlayer(timestamp) {
     }
 
     if (staminaUser <= 0) {
-        messageOpen('Hết thể lực')
-        return;
+        luckyMeet5Mon = 0
     }
 
     if (Object.values(userPet).length >= weightBagUser) {
@@ -12049,7 +12048,7 @@ function movePlayer(timestamp) {
             catch5Mon();
             luckyMeet5Mon = 5;
         } else {
-            luckyMeet5Mon += 0.1
+            luckyMeet5Mon += 0.5
             spawnRandomPets();
             console.log("luckyMeet5Mon", luckyMeet5Mon)
         }
@@ -12369,15 +12368,28 @@ function catch5Mon() {
     }
    
     const ranges = [
-        { min: 1, max: 5, weight: 40 },   // nhiều nhất
-        { min: 5, max: 10, weight: 25 },
-        { min: 10, max: 15, weight: 15 },
-        { min: 15, max: 20, weight: 10 },
-        { min: 20, max: 25, weight: 5 },
-        { min: 25, max: 30, weight: 3 },
-        { min: 30, max: 35, weight: 1 },
-        { min: 35, max: 40, weight: 1 }   // ít nhất
-      ];
+      { min: 1, max: 5, weight: 20 },    // nhiều nhất
+      { min: 5, max: 10, weight: 15 },
+      { min: 10, max: 15, weight: 12 },
+      { min: 15, max: 20, weight: 10 },
+      { min: 20, max: 25, weight: 8 },
+      { min: 25, max: 30, weight: 7 },
+      { min: 30, max: 35, weight: 6 },
+      { min: 35, max: 40, weight: 5 },
+      { min: 40, max: 45, weight: 4 },
+      { min: 45, max: 50, weight: 3 },
+      { min: 50, max: 55, weight: 2 },
+      { min: 55, max: 60, weight: 2 },
+      { min: 60, max: 65, weight: 1 },
+      { min: 65, max: 70, weight: 1 },
+      { min: 70, max: 75, weight: 1 },
+      { min: 75, max: 80, weight: 1 },
+      { min: 80, max: 85, weight: 1 },
+      { min: 85, max: 90, weight: 0.5 },
+      { min: 90, max: 95, weight: 0.5 },
+      { min: 95, max: 100, weight: 0.5 }
+    ];
+
     
       const totalWeight = ranges.reduce((sum, r) => sum + r.weight, 0);
       const random = Math.random() * totalWeight;
@@ -12537,7 +12549,7 @@ function changeTabWhenAutoMove() {
 
 function showUpStamina() {
 
-    if (staminaUser >= 100) {
+    if (staminaUser >= 1000) {
         messageOpen("Bạn đang rất xung mãn rồi!")
         return;
     }
@@ -12639,8 +12651,8 @@ function upStamina() {
         messageOpen('Không đủ kim cương')
         return;
     } else {
-        staminaUser += 10
-        if (staminaUser > 100) staminaUser = 100;
+        staminaUser += 100
+        if (staminaUser > 1000) staminaUser = 1000;
 
         updateStamina();
         resetGoldAndTicket();
@@ -12653,8 +12665,13 @@ let count5MonSpawn = 0;
     const mapWidth = map.offsetWidth;
     const mapHeight = map.offsetHeight;
     let spawn5Mon = Math.random() * 100
-
-    if (spawn5Mon < 20 && count5MonSpawn < 15) {
+    let percentSeen5Mon = 0
+    if (staminaUser <= 0) {
+        percentSeen5Mon = 5
+    } else {
+        percentSeen5Mon = 30
+    }
+    if (spawn5Mon < percentSeen5Mon && count5MonSpawn < 30) {
         count5MonSpawn += 1
         const pet = document.createElement("img");
         pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif";
