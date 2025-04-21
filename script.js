@@ -11984,7 +11984,7 @@ function updateView() {
 
 function updateStamina() {
     // Cập nhật thanh staminaUser: tính phần trăm và cập nhật
-    let staminaPercentage = Math.max(0, Math.min(100, (staminaUser / 100) * 100));
+    let staminaPercentage = Math.max(0, Math.min(100, (staminaUser / 1000) * 100));
     staminaFill.style.width = `${staminaPercentage}%`; // Đảm bảo thanh staminaUser có chiều rộng đúng
 
     // Cập nhật hiển thị số staminaUser
