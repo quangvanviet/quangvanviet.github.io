@@ -12026,6 +12026,13 @@ function movePlayer(timestamp) {
     // Tính vị trí hiện tại theo tween tuyến tính
     playerX = startX + (targetX - startX) * progress;
     playerY = startY + (targetY - startY) * progress;
+    
+    // 👉 Flip trái/phải
+    if (targetX < startX) {
+        playerElement.style.transform = "scaleX(-1)";
+    } else if (targetX > startX) {
+        playerElement.style.transform = "scaleX(1)";
+    }
 
     updateView();
 
@@ -12700,21 +12707,23 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
     const currentX = parseFloat(pet.style.left);
     const currentY = parseFloat(pet.style.top);
 
-    // Giới hạn khoảng cách di chuyển trong 100px (có thể điều chỉnh)
-    const maxDistance = 300;
-
+    const maxDistance = 200;
     let offsetX = (Math.random() - 0.5) * 2 * maxDistance;
     let offsetY = (Math.random() - 0.5) * 2 * maxDistance;
 
     let targetX = currentX + offsetX;
     let targetY = currentY + offsetY;
 
-    // Đảm bảo không vượt khỏi map
     targetX = Math.max(0, Math.min(mapWidth - 32, targetX));
     targetY = Math.max(0, Math.min(mapHeight - 32, targetY));
 
-    const angle = Math.atan2(targetY - currentY, targetX - currentX) * (180 / Math.PI);
-    pet.style.transform = `rotate(${angle}deg)`;
+    // 👉 Flip hình ảnh nếu di chuyển sang trái hoặc phải
+    if (targetX < currentX) {
+      pet.style.transform = "scaleX(-1)";
+    } else {
+      pet.style.transform = "scaleX(1)";
+    }
+
     pet.style.left = targetX + "px";
     pet.style.top = targetY + "px";
 
@@ -12723,9 +12732,6 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
 
   move(); // Bắt đầu lần đầu
 }
-
-
-
 
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
