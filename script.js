@@ -12046,7 +12046,7 @@ function movePlayer(timestamp) {
         console.log("rd5MonID", rd5MonID)
         if (rd5MonID <= luckyMeet5Mon) {
             meet5Mon = true;
-            ();
+            catch5Mon();
             luckyMeet5Mon = 5;
         } else {
             luckyMeet5Mon += 0.1
