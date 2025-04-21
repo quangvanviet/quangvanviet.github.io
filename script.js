@@ -12046,7 +12046,7 @@ function movePlayer(timestamp) {
         console.log("rd5MonID", rd5MonID)
         if (rd5MonID <= luckyMeet5Mon) {
             meet5Mon = true;
-            catch5Mon();
+            ();
             luckyMeet5Mon = 5;
         } else {
             luckyMeet5Mon += 0.1
@@ -12060,7 +12060,7 @@ function movePlayer(timestamp) {
 
 var list5MonMeet = []; //Danh sách sẽ gặp ở bản đồ hiện tại
 var is5MonMeet = {};
-var percentCatch5MonMeet = 0;
+var percentMeet = 0;
 function catch5Mon() {
 
     //Dựa vào list5MonMeet để random
@@ -12368,7 +12368,31 @@ function catch5Mon() {
         descTextItem += "";
     }
 
-    percentCatch5MonMeet = Math.random() * 80;
+    let percentCatch5MonMeet = 0;
+    
+    const ranges = [
+        { min: 1, max: 5, weight: 40 },   // nhiều nhất
+        { min: 5, max: 10, weight: 25 },
+        { min: 10, max: 15, weight: 15 },
+        { min: 15, max: 20, weight: 10 },
+        { min: 20, max: 25, weight: 5 },
+        { min: 25, max: 30, weight: 3 },
+        { min: 30, max: 35, weight: 1 },
+        { min: 35, max: 40, weight: 1 }   // ít nhất
+      ];
+    
+      const totalWeight = ranges.reduce((sum, r) => sum + r.weight, 0);
+      const random = Math.random() * totalWeight;
+    
+      let cumulative = 0;
+      for (const range of ranges) {
+        cumulative += range.weight;
+        if (random < cumulative) {
+          // Trả ra một số ngẫu nhiên trong khoảng đó
+          percentCatch5MonMeet = Math.random() * (range.max - range.min) + range.min;
+        }
+      }
+    
     let roundedPercent = percentCatch5MonMeet.toFixed(1); // làm tròn 1 chữ số sau dấu phẩy
     
     document.getElementById("percentCatch5MonMeet").textContent = `Tỷ lệ bắt: ${roundedPercent}%`;
@@ -12625,12 +12649,14 @@ function upStamina() {
 }
 
 // ---- Pet random xuất hiện ---- //
+let count5MonSpawn = 0;
   function spawnRandomPets() {
     const mapWidth = map.offsetWidth;
     const mapHeight = map.offsetHeight;
     let spawn5Mon = Math.random()
 
-    if (spawn5Mon < 5) {
+    if (spawn5Mon < 5 && count5MonSpawn < 15) {
+        count5MonSpawn += 1
         const pet = document.createElement("img");
         pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif";
         pet.className = "wildPet";
@@ -12638,11 +12664,20 @@ function upStamina() {
         const y = Math.random() * (mapHeight - 32);
         pet.style.left = x + "px";
         pet.style.top = y + "px";
-        pet.addEventListener("click", () => catch5Mon());
+        pet.addEventListener("click", () => catchPet(pet));
         map.appendChild(pet);
         movePetSmoothly(pet, mapWidth, mapHeight);  
     }
   }
+
+function meet5Mon(pet) {
+    pet.classList.add("pet-catching");
+    count5MonSpawn -= 1
+    catch5Mon();
+    setTimeout(() => {
+      pet.remove();
+    }, 800);
+}
 
 function movePetSmoothly(pet, mapWidth, mapHeight) {
   function move() {
@@ -12713,7 +12748,7 @@ window.openHunterMap = openHunterMap;
 window.toggleAutoMovement = toggleAutoMovement;
 window.showUpStamina = showUpStamina;
 window.closePopupMeet5Mon = closePopupMeet5Mon;
-window.catch5MonMeet = catch5MonMeet;
+window.Meet = Meet;
 window.openBag = openBag;
 window.loadItemBagLeft = loadItemBagLeft;
 window.chosenSortBagLeft = chosenSortBagLeft;
