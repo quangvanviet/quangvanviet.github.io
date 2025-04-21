@@ -2094,7 +2094,7 @@ body {
       width: 32px;
       height: 32px;
       z-index: 1;
-      transition: top 1s linear, left 1s linear, transform 0.9s ease-in-out;
+      transition: top 1s linear, left 1s linear;
       cursor: pointer;
     }
 
