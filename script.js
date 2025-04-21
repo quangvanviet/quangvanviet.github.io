@@ -12044,8 +12044,12 @@ function movePlayer(timestamp) {
         playerY = targetY;
 
         // Trừ staminaUser mỗi lần di chuyển xong
-        staminaUser -= staminaDrain;
-        updateStamina();
+        if (isMeet5Mon) {
+            
+        } else {
+            staminaUser -= staminaDrain;
+            updateStamina();
+        }
 
         // Random xem có gặp pet không
         let rd5MonID = Math.random() * 100;
@@ -12067,8 +12071,11 @@ function movePlayer(timestamp) {
 var list5MonMeet = []; //Danh sách sẽ gặp ở bản đồ hiện tại
 var is5MonMeet = {};
 var percentCatch5MonMeet = 0;
+var isMeet5Mon = false
 function catch5Mon() {
-
+    if (isMeet5Mon) return;
+    isMeet5Mon true;
+    
     //Dựa vào list5MonMeet để random
     if (list5MonMeet.length === 0) {
         console.warn("Không có 5Mon nào để bắt!");
@@ -12443,6 +12450,7 @@ function catch5MonMeet() {
     //reset các biến bắt 5mon về rỗng
     is5MonMeet = {};
     percentCatch5MonMeet = 0;
+    isMeet5Mon = false;
 
     document.getElementById("popupMeet5Mon").style.display = "none";
     document.getElementById("popupOverlay").style.display = "none";
@@ -12465,6 +12473,7 @@ function closePopupMeet5Mon (){
     //reset các biến bắt 5mon về rỗng
     is5MonMeet = {};
     percentCatch5MonMeet = 0;
+    isMeet5Mon = false;
 }
 
 
