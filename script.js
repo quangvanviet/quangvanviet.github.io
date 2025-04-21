@@ -12665,13 +12665,13 @@ let count5MonSpawn = 0;
         const y = Math.random() * (mapHeight - 32);
         pet.style.left = x + "px";
         pet.style.top = y + "px";
-        pet.addEventListener("click", () => catchPet(pet));
+        pet.addEventListener("click", () => click5MonMeet(pet));
         map.appendChild(pet);
         movePetSmoothly(pet, mapWidth, mapHeight);  
     }
   }
 
-function meet5Mon(pet) {
+function click5MonMeet(pet) {
     pet.classList.add("pet-catching");
     count5MonSpawn -= 1
     catch5Mon();
