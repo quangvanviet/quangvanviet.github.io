@@ -12074,7 +12074,7 @@ var percentCatch5MonMeet = 0;
 var isMeet5Mon = false
 function catch5Mon() {
     if (isMeet5Mon) return;
-    isMeet5Mon true;
+    isMeet5Mon = true;
     
     //Dựa vào list5MonMeet để random
     if (list5MonMeet.length === 0) {
