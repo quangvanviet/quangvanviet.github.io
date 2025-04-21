@@ -1188,16 +1188,16 @@
                 </div>
             </div>
         
-            <div style="position: absolute; top: 10px; left: 20px; gap: 3px;display: flex;flex-direction: row;align-content: center; align-items: center;">
+            <div style="position: absolute; top: 10px; left: 20px; gap: 3px;display: flex;flex-direction: row;align-content: center; align-items: center;width: 100%; z-index: 3;">
                 <div id="staminaBar"
-                    style=" width: 300px; height: 20px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
+                    style=" width: 20%; height: 15px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
                     <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
                     </div>
                     <div id="staminaText"
-                        style="font-weight: bold; position: absolute; top: 3px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
+                        style="font-weight: bold; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
                         100/100</div>
                 </div>
-                <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 3px;"
+                <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 1px;"
                     onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';"
                     onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" 
                     onclick="showUpStamina()"
@@ -1209,14 +1209,14 @@
                 </div>
                 <!-- Vàng -->
                 <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')" 
-                style=" background: #c52f2f; padding: 3px 7px; font-size: 13px;
+                style=" background: #c52f2f; padding: 1px 7px; font-size: 13px;
                 font-weight: bold; border-radius: 10px;">
                     <i class="fa-solid fa-coins"></i>
                     <span id="goldUserHunter" style="align-items: left">1000</span>
                 </div>
                 <!-- Ruby -->
                 <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')"
-                style="background: #c52f2f; padding: 3px 7px; font-size: 13px;
+                style="background: #c52f2f; padding: 1px 7px; font-size: 13px;
                 font-weight: bold; border-radius: 10px;">
                     <i class="fa-solid fa-gem"></i>
                     <span id="diamondUserHunter" style="align-items: left">0</span>
@@ -1227,7 +1227,7 @@
                 style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 25px; right: 20px;">
                 <!-- Nút Mở rộng -->
                 <button id="toggleMenuHunter"
-                    style="padding: 10px 20px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
+                    style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
                      border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">
                     Mở rộng
                 </button>
@@ -1235,14 +1235,14 @@
                 <!-- Các nút ẩn -->
                 <div id="menuButtonsHunter" style="display: none; flex-direction: row; gap: 5px; font-weight: bold;">
                     <button
-                        style="padding: 10px 20px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
+                        style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
                         onclick="openBag('Left')"
                         >Tủ đồ</button>
                     <button
-                        style="padding: 10px 20px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
                         2</button>
                     <button
-                        style="padding: 10px 20px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
                         3</button>
                 </div>
             </div>
