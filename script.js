@@ -12727,7 +12727,7 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
     pet.style.left = targetX + "px";
     pet.style.top = targetY + "px";
 
-    setTimeout(move, 1000 + Math.random() * 2000);
+    setTimeout(move, 2000 + Math.random() * 2000);
   }
 
   move(); // Bắt đầu lần đầu
