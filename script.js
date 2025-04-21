@@ -12390,6 +12390,7 @@ function catch5Mon() {
         if (random < cumulative) {
           // Trả ra một số ngẫu nhiên trong khoảng đó
           percentCatch5MonMeet = Math.random() * (range.max - range.min) + range.min;
+          break;
         }
       }
     
@@ -12653,7 +12654,7 @@ let count5MonSpawn = 0;
   function spawnRandomPets() {
     const mapWidth = map.offsetWidth;
     const mapHeight = map.offsetHeight;
-    let spawn5Mon = Math.random()
+    let spawn5Mon = Math.random() * 100
 
     if (spawn5Mon < 5 && count5MonSpawn < 15) {
         count5MonSpawn += 1
