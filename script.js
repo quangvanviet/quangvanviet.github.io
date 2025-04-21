@@ -12029,9 +12029,9 @@ function movePlayer(timestamp) {
     
     // 👉 Flip trái/phải
     if (targetX < startX) {
-        playerElement.style.transform = "scaleX(-1)";
+        document.getElementById('playerHunter').style.transform = "scaleX(-1)";
     } else if (targetX > startX) {
-        playerElement.style.transform = "scaleX(1)";
+        document.getElementById('playerHunter').style.transform = "scaleX(1)";
     }
 
     updateView();
