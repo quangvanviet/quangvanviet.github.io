@@ -12654,7 +12654,7 @@ let count5MonSpawn = 0;
     const mapHeight = map.offsetHeight;
     let spawn5Mon = Math.random() * 100
 
-    if (spawn5Mon < 5 && count5MonSpawn < 15) {
+    if (spawn5Mon < 20 && count5MonSpawn < 15) {
         count5MonSpawn += 1
         const pet = document.createElement("img");
         pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif";
