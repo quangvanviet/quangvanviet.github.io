@@ -763,6 +763,7 @@ function restoreStamina() {
         } else {
             messageOpen(`🔥 Đã hồi ${staminaToAdd} thể lực lúc bạn offline!`);
         }
+        updateStamina();
     }
 }
 
@@ -3195,17 +3196,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
@@ -3332,17 +3327,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
@@ -3484,17 +3473,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
@@ -3683,17 +3666,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
@@ -3777,17 +3754,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
@@ -3882,17 +3853,11 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.STR * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.AGI * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 
-                        (typeGameConquest.battlePetInInventory[slot.id].POWER.HP * 
-                            (typeGameConquest.battlePetInInventory[slot.id].LEVEL * 3)/100)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
