@@ -2088,3 +2088,27 @@ body {
   #menuButtons.show {
     opacity: 1;
   }
+
+.wildPet {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      z-index: 1;
+      transition: top 2.5s linear, left 2.5s linear, transform 0.5s ease-in-out;
+      cursor: pointer;
+    }
+
+    .pet-catching {
+      animation: catchEffect 0.8s ease-out forwards;
+    }
+
+    @keyframes catchEffect {
+      0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0) rotate(720deg);
+        opacity: 0;
+      }
+    }
