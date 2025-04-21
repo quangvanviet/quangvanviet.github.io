@@ -12049,7 +12049,7 @@ function movePlayer(timestamp) {
             catch5Mon();
             luckyMeet5Mon = 5;
         } else {
-            luckyMeet5Mon += 1
+            luckyMeet5Mon += 0.1
             spawnRandomPets();
             console.log("luckyMeet5Mon", luckyMeet5Mon)
         }
@@ -12630,9 +12630,9 @@ function upStamina() {
     const mapHeight = map.offsetHeight;
     let spawn5Mon = Math.random()
 
-    if (spawn5Mon < 10) {
+    if (spawn5Mon < 5) {
         const pet = document.createElement("img");
-        pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744988888/sample_pet.gif";
+        pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif";
         pet.className = "wildPet";
         const x = Math.random() * (mapWidth - 32);
         const y = Math.random() * (mapHeight - 32);
@@ -12644,19 +12644,35 @@ function upStamina() {
     }
   }
 
-  function movePetSmoothly(pet, mapWidth, mapHeight) {
-    function move() {
-      const currentX = parseFloat(pet.style.left);
-      const currentY = parseFloat(pet.style.top);
-      const targetX = Math.random() * (mapWidth - 32);
-      const targetY = Math.random() * (mapHeight - 32);
-      const angle = Math.atan2(targetY - currentY, targetX - currentX) * (180 / Math.PI);
-      pet.style.transform = `rotate(${angle}deg)`;
-      pet.style.left = targetX + "px";
-      pet.style.top = targetY + "px";
-    }
-    setInterval(move, 3000 + Math.random() * 2000);
+function movePetSmoothly(pet, mapWidth, mapHeight) {
+  function move() {
+    const currentX = parseFloat(pet.style.left);
+    const currentY = parseFloat(pet.style.top);
+
+    // Giới hạn khoảng cách di chuyển trong 100px (có thể điều chỉnh)
+    const maxDistance = 300;
+
+    let offsetX = (Math.random() - 0.5) * 2 * maxDistance;
+    let offsetY = (Math.random() - 0.5) * 2 * maxDistance;
+
+    let targetX = currentX + offsetX;
+    let targetY = currentY + offsetY;
+
+    // Đảm bảo không vượt khỏi map
+    targetX = Math.max(0, Math.min(mapWidth - 32, targetX));
+    targetY = Math.max(0, Math.min(mapHeight - 32, targetY));
+
+    const angle = Math.atan2(targetY - currentY, targetX - currentX) * (180 / Math.PI);
+    pet.style.transform = `rotate(${angle}deg)`;
+    pet.style.left = targetX + "px";
+    pet.style.top = targetY + "px";
+
+    setTimeout(move, 1000 + Math.random() * 2000);
   }
+
+  move(); // Bắt đầu lần đầu
+}
+
 
 
 
