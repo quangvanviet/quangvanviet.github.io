@@ -12060,7 +12060,7 @@ function movePlayer(timestamp) {
 
 var list5MonMeet = []; //Danh sách sẽ gặp ở bản đồ hiện tại
 var is5MonMeet = {};
-var percentMeet = 0;
+var percentCatch5MonMeet = 0;
 function catch5Mon() {
 
     //Dựa vào list5MonMeet để random
@@ -12367,9 +12367,7 @@ function catch5Mon() {
     } else {
         descTextItem += "";
     }
-
-    let percentCatch5MonMeet = 0;
-    
+   
     const ranges = [
         { min: 1, max: 5, weight: 40 },   // nhiều nhất
         { min: 5, max: 10, weight: 25 },
