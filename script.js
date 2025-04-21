@@ -12632,11 +12632,11 @@ function scalePower5Mon(STR) {
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
 
-    dame = Math.round(valuePower * 1.12)
-    heal = Math.round(valuePower * 0.92)
-    shield = Math.round(valuePower * 0.72)
-    burn = Math.round(valuePower * 0.18)
-    poison = Math.round(valuePower * 0.12)
+    dame = Math.round(valuePower * 0.48)
+    heal = Math.round(valuePower * 0.45)
+    shield = Math.round(valuePower * 0.43)
+    burn = Math.round(valuePower * 0.09)
+    poison = Math.round(valuePower * 0.08)
 
     return {dame, heal, shield, burn, poison}
 }
