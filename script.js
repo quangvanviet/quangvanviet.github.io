@@ -11942,6 +11942,7 @@ function openHunterMap(isMap) {
 
         hideLoading();
     }, 1000);
+    
     spawnRandomPets();
 }
 
@@ -12049,6 +12050,7 @@ function movePlayer(timestamp) {
             luckyMeet5Mon = 5;
         } else {
             luckyMeet5Mon += 1
+            spawnRandomPets();
             console.log("luckyMeet5Mon", luckyMeet5Mon)
         }
 
