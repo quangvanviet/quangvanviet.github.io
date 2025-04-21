@@ -4045,55 +4045,25 @@ function loadEventSlotBattle() {
 
 function update5MonBattle(skill) {
 
-    // Tạo scale cho STR tương tự như cách bạn đã làm với AGI
-    let scaleSTR = 0;  // Giá trị mặc định
-    if (skill.POWER.STR <= 20) {
-        scaleSTR = 1.5;  // 150%
-    } else if (skill.POWER.STR <= 50) {
-        scaleSTR = 1.2;  // 120%
-    } else if (skill.POWER.STR <= 100) {
-        scaleSTR = 1;  // 100% = 1
-    } else if (skill.POWER.STR <= 200) {
-        scaleSTR = 0.85;  // 85%
-    } else if (skill.POWER.STR <= 250) {
-        scaleSTR = 0.75;  // 75%
-    } else if (skill.POWER.STR <= 300) {
-        scaleSTR = 0.65;  // 65%
-    } else if (skill.POWER.STR <= 400) {
-        scaleSTR = 0.55;  // 55%
-    } else if (skill.POWER.STR <= 500) {
-        scaleSTR = 0.5;   // 50%
-    } else if (skill.POWER.STR <= 700) {
-        scaleSTR = 0.45;  // 45%
-    } else if (skill.POWER.STR <= 900) {
-        scaleSTR = 0.4;   // 40%
-    } else if (skill.POWER.STR <= 1200) {
-        scaleSTR = 0.35;  // 35%
-    } else if (skill.POWER.STR <= 1500) {
-        scaleSTR = 0.3;   // 30%
-    } else if (skill.POWER.STR <= 2000) {
-        scaleSTR = 0.25;  // 25%
-    } else {
-        scaleSTR = 0.2;   // 20%
-    }
+    let powerSTR = scalePower5Mon(skill.POWER.STR);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-
+    
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (skill.EFFECT.includes("Attacking")) {
-        dame = Math.ceil(skill.POWER.STR * 0.5 * scaleSTR);  // Giảm dần khi STR tăng
+        dame = powerSTR.dame;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Healing")) {
-        heal = Math.ceil(skill.POWER.STR * 0.45 * scaleSTR);  // Giảm dần khi STR tăng
+        heal = powerSTR.heal;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Shield")) {
-        shield = Math.ceil(skill.POWER.STR * 0.4 * scaleSTR);  // Giảm dần khi STR tăng
+        shield = powerSTR.shield;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Burn")) {
-        burn = Math.ceil(skill.POWER.STR * 0.09 * scaleSTR);  // Giảm dần khi STR tăng
+        burn = powerSTR.burn;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Poison")) {
-        poison = Math.ceil(skill.POWER.STR * 0.08 * scaleSTR);  // Giảm dần khi STR tăng
+        poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -10801,57 +10771,27 @@ function getRandom5mon() {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let scaleSTR = 0;  // Giá trị mặc định
-
-    if (infoPetRandom.POWER.STR <= 20) {
-        scaleSTR = 1.5;  // 150%
-    } else if (infoPetRandom.POWER.STR <= 50) {
-        scaleSTR = 1.2;  // 120%
-    } else if (infoPetRandom.POWER.STR <= 100) {
-        scaleSTR = 1;  // 100% = 1
-    } else if (infoPetRandom.POWER.STR <= 200) {
-        scaleSTR = 0.85;  // 85%
-    } else if (infoPetRandom.POWER.STR <= 250) {
-        scaleSTR = 0.75;  // 75%
-    } else if (infoPetRandom.POWER.STR <= 300) {
-        scaleSTR = 0.65;  // 65%
-    } else if (infoPetRandom.POWER.STR <= 400) {
-        scaleSTR = 0.55;  // 55%
-    } else if (infoPetRandom.POWER.STR <= 500) {
-        scaleSTR = 0.5;   // 50%
-    } else if (infoPetRandom.POWER.STR <= 700) {
-        scaleSTR = 0.45;  // 45%
-    } else if (infoPetRandom.POWER.STR <= 900) {
-        scaleSTR = 0.4;   // 40%
-    } else if (infoPetRandom.POWER.STR <= 1200) {
-        scaleSTR = 0.35;  // 35%
-    } else if (infoPetRandom.POWER.STR <= 1500) {
-        scaleSTR = 0.3;   // 30%
-    } else if (infoPetRandom.POWER.STR <= 2000) {
-        scaleSTR = 0.25;  // 25%
-    } else {
-        scaleSTR = 0.2;   // 20%
-    }
+    let powerSTR = scalePower5Mon(infoPetRandom.POWER.STR);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-
+    
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (infoPetRandom.EFFECT.includes("Attacking")) {
-        dame = Math.ceil(infoPetRandom.POWER.STR * 0.5 * scaleSTR);  // Giảm dần khi STR tăng
+        dame = powerSTR.dame;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Healing")) {
-        heal = Math.ceil(infoPetRandom.POWER.STR * 0.45 * scaleSTR);  // Giảm dần khi STR tăng
+        heal = powerSTR.heal;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Shield")) {
-        shield = Math.ceil(infoPetRandom.POWER.STR * 0.4 * scaleSTR);  // Giảm dần khi STR tăng
+        shield = powerSTR.shield;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Burn")) {
-        burn = Math.ceil(infoPetRandom.POWER.STR * 0.09 * scaleSTR);  // Giảm dần khi STR tăng
+        burn = powerSTR.burn;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Poison")) {
-        poison = Math.ceil(infoPetRandom.POWER.STR * 0.08 * scaleSTR);  // Giảm dần khi STR tăng
+        poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
-
+    
     //Tính cooldown
     let minC = 0;
     let maxC = 30;
@@ -11312,58 +11252,27 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let scaleSTR = 1;  // Giá trị mặc định
-
-    if (str <= 20) {
-        scaleSTR = 1.5;  // 150%
-    } else if (str <= 50) {
-        scaleSTR = 1.2;  // 120%
-    } else if (str <= 100) {
-        scaleSTR = 1;  // 100% = 1
-    } else if (str <= 200) {
-        scaleSTR = 0.85;  // 85%
-    } else if (str <= 250) {
-        scaleSTR = 0.75;  // 75%
-    } else if (str <= 300) {
-        scaleSTR = 0.65;  // 65%
-    } else if (str <= 400) {
-        scaleSTR = 0.55;  // 55%
-    } else if (str <= 500) {
-        scaleSTR = 0.5;   // 50%
-    } else if (str <= 700) {
-        scaleSTR = 0.45;  // 45%
-    } else if (str <= 900) {
-        scaleSTR = 0.4;   // 40%
-    } else if (str <= 1200) {
-        scaleSTR = 0.35;  // 35%
-    } else if (str <= 1500) {
-        scaleSTR = 0.3;   // 30%
-    } else if (str <= 2000) {
-        scaleSTR = 0.25;  // 25%
-    } else {
-        scaleSTR = 0.2;   // 20%
-    }
+    let powerSTR = scalePower5Mon(str);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-
+    
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (select5Mon.EFFECT.includes("Attacking")) {
-        dame = Math.ceil(str * 0.5 * scaleSTR);  // Giảm dần khi STR tăng
-        dame = Math.ceil(str * 0.5 * scaleSTR);  //Tính lại công thức này+++++++++++++++++++++++
+        dame = powerSTR.dame;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Healing")) {
-        heal = Math.ceil(str * 0.45 * scaleSTR);  // Giảm dần khi STR tăng
+        heal = powerSTR.heal;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Shield")) {
-        shield = Math.ceil(str * 0.4 * scaleSTR);  // Giảm dần khi STR tăng
+        shield = powerSTR.shield;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Burn")) {
-        burn = Math.ceil(str * 0.09 * scaleSTR);  // Giảm dần khi STR tăng
+        burn = powerSTR.burn;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Poison")) {
-        poison = Math.ceil(str * 0.08 * scaleSTR);  // Giảm dần khi STR tăng
+        poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
-
+    
     //Tính cooldown
     let minC = 0;
     let maxC = 30;
@@ -12131,51 +12040,25 @@ function catch5Mon() {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let scaleSTR = 1;  // Giá trị mặc định
-
-    if (str <= 100) {
-        scaleSTR = 2; 
-    } else if (str <= 200) {
-        scaleSTR = 1.7;
-    } else if (str <= 250) {
-        scaleSTR = 1.45;
-    } else if (str <= 300) {
-        scaleSTR = 1.25; 
-    } else if (str <= 400) {
-        scaleSTR = 1.1;  
-    } else if (str <= 500) {
-        scaleSTR = 1;
-    } else if (str <= 700) {
-        scaleSTR = 0.9;
-    } else if (str <= 900) {
-        scaleSTR = 0.8;
-    } else if (str <= 1200) {
-        scaleSTR = 0.7;
-    } else if (str <= 1500) {
-        scaleSTR = 0.6;
-    } else if (str <= 2000) {
-        scaleSTR = 0.5;
-    } else {
-        scaleSTR = 0.4;
-    }
+    let powerSTR = scalePower5Mon(str);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-
+    
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (e5mon.EFFECT.includes("Attacking")) {
-        dame = Math.ceil(str * 0.5 * scaleSTR);  // Giảm dần khi STR tăng
+        dame = powerSTR.dame;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Healing")) {
-        heal = Math.ceil(str * 0.45 * scaleSTR);  // Giảm dần khi STR tăng
+        heal = powerSTR.heal;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Shield")) {
-        shield = Math.ceil(str * 0.4 * scaleSTR);  // Giảm dần khi STR tăng
+        shield = powerSTR.shield;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Burn")) {
-        burn = Math.ceil(str * 0.09 * scaleSTR);  // Giảm dần khi STR tăng
+        burn = powerSTR.burn;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Poison")) {
-        poison = Math.ceil(str * 0.08 * scaleSTR);  // Giảm dần khi STR tăng
+        poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -12740,6 +12623,22 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
   }
 
   move(); // Bắt đầu lần đầu
+}
+
+function scalePower5Mon(STR) {
+    const baseScale = 1;
+    const scaleSTR = baseScale * Math.log10(STR); 
+    let valuePower = 1 + STR / scaleSTR
+
+    let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
+
+    dame = Math.round(valuePower * 1.12)
+    heal = Math.round(valuePower * 0.92)
+    shield = Math.round(valuePower * 0.72)
+    burn = Math.round(valuePower * 0.18)
+    poison = Math.round(valuePower * 0.12)
+
+    return {dame, heal, shield, burn, poison}
 }
 
 // Gán các hàm vào window
