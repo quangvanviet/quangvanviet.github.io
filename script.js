@@ -11942,7 +11942,7 @@ function openHunterMap(isMap) {
 
         hideLoading();
     }, 1000);
-    
+    spawnRandomPets();
 }
 
 function closeHunterMap() {
@@ -12621,6 +12621,42 @@ function upStamina() {
         resetGoldAndTicket();
     }
 }
+
+// ---- Pet random xuất hiện ---- //
+  function spawnRandomPets() {
+    const mapWidth = map.offsetWidth;
+    const mapHeight = map.offsetHeight;
+    let spawn5Mon = Math.random()
+
+    if (spawn5Mon < 10) {
+        const pet = document.createElement("img");
+        pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744988888/sample_pet.gif";
+        pet.className = "wildPet";
+        const x = Math.random() * (mapWidth - 32);
+        const y = Math.random() * (mapHeight - 32);
+        pet.style.left = x + "px";
+        pet.style.top = y + "px";
+        pet.addEventListener("click", () => catch5Mon());
+        map.appendChild(pet);
+        movePetSmoothly(pet, mapWidth, mapHeight);  
+    }
+  }
+
+  function movePetSmoothly(pet, mapWidth, mapHeight) {
+    function move() {
+      const currentX = parseFloat(pet.style.left);
+      const currentY = parseFloat(pet.style.top);
+      const targetX = Math.random() * (mapWidth - 32);
+      const targetY = Math.random() * (mapHeight - 32);
+      const angle = Math.atan2(targetY - currentY, targetX - currentX) * (180 / Math.PI);
+      pet.style.transform = `rotate(${angle}deg)`;
+      pet.style.left = targetX + "px";
+      pet.style.top = targetY + "px";
+    }
+    setInterval(move, 3000 + Math.random() * 2000);
+  }
+
+
 
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
