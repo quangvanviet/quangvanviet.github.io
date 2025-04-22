@@ -1186,16 +1186,29 @@
                     z-index: 1;
                     ">
                 </div>
-                <div style="background: #744620;color: white;border-radius: 8px;padding: 6px;padding-left: 35px;padding-right: 15px;
-                    text-align: center;font-size: 12px;font-weight: bold; display: flex;flex-direction: row; height: 10px;
-                    justify-content: center;align-items: center; margin-left: -30px; gap: 5px;
-                    ">
-                    <span id="nameUser" style="text-align: left;">quangvanviet</span>
-                    <span id="isRanking" style="align-items: left">(Top: 5)</span>
+                <div style="display:flex; flex-direction: column">
+                    <div style="background: #744620;color: white;border-radius: 8px;padding: 6px;padding-left: 35px;padding-right: 15px;
+                        text-align: center;font-size: 12px;font-weight: bold; display: flex;flex-direction: row; height: 10px;
+                        justify-content: center;align-items: center; margin-left: -30px; gap: 5px;
+                        ">
+                        <span id="nameUser" style="text-align: left;">quangvanviet</span>
+                        <span id="isRanking" style="align-items: left">(Top: 5)</span>
+                    </div>
+                    <div style="gap: 3px;display: flex;flex-direction: row;align-content: center;align-items: center;width: 130%; margin-left: -10px;">
+                        <div id="staminaBar" style=" width: 100%; height: 15px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
+                            <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
+                            </div>
+                            <div id="staminaText" style="font-weight: bold; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
+                                100/100</div>
+                        </div>
+                        <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 1px;" onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';" onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" onclick="showUpStamina()">
+                            +
+                        </span>
+                    </div>
                 </div>
                 <div style="background: #a9754b;color: #fff;border-radius: 8px;padding: 6px;padding-top: 38px;font-size: 10px;font-weight: bold;
                     display: flex; flex-direction: column;position: absolute;top: 10px;margin-left: 2px;
-                    align-items: flex-start;justify-content: flex-start;width: 10px;">
+                    align-items: flex-start;justify-content: flex-start;width: 10px; gap: 3px;">
                     <div style="display: flex;gap: 2px;font-size: 12px;flex-direction: column;align-content: center;justify-content: center;align-items: flex-start;min-width: 50px;">
                         <!-- Vàng -->
                         <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')" style="
@@ -1258,21 +1271,17 @@
                             <span id="pointRank" style="align-items: left">0</span>
                         </div>
                     </div>
+                    <div style="background: white;padding: 4px;border-radius: 15px;width: 10px;height: 10px;color: black;font-size: 16px;
+                        font-weight: bold;cursor: pointer"
+                        onmouseover="this.style.transform='scale(1.2)';" 
+                        onmouseout="this.style.transform='scale(1)';" 
+                        onclick="">>
+                        <span>^</span>
+                    </div>
                 </div>
             </div>
             
-            <div style="display: flex;flex-direction: column;width: 100%;z-index: 3;position: absolute;top: 10px;right: 10px;align-items: flex-end;">
-                <div style="gap: 3px;display: flex;flex-direction: row-reverse;align-content: center;align-items: center;width: 100%;">
-                    <div id="staminaBar" style=" width: 30%; height: 15px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
-                        <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
-                        </div>
-                        <div id="staminaText" style="font-weight: bold; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
-                            100/100</div>
-                    </div>
-                    <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 1px;" onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';" onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" onclick="showUpStamina()">
-                        +
-                    </span>
-                </div>
+            <div style="display: flex;flex-direction: column;z-index: 3;position: absolute;top: 10px;right: 10px;align-items: flex-end;">
                 <button id="autoButton" onclick="toggleAutoMovement()">Tự động săn</button>
             </div>
             
@@ -1302,7 +1311,7 @@
                 </button>
         
                 <!-- Các nút ẩn -->
-                <div id="menuButtons2" style="display: none; flex-direction: row-reverse; gap: 3px; font-weight: bold;">
+                <div id="menuButtons2" style="display: flex; flex-direction: row-reverse; gap: 3px; font-weight: bold;">
                     <button
                         style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
                         onclick="openBag('Left')"
