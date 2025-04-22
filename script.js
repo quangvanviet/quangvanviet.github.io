@@ -11503,7 +11503,7 @@ function loadCheckin() {
   background: red;
   height: 10px;
   width: 10px;
-  border-radius: 15px;
+  border-radius: 15px; 
   border: 1px solid wheat;
   box-shadow: rgb(0 0 0 / 36%) 1px 1px 1px 1px;
   "></span>`;
