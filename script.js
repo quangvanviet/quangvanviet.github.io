@@ -11744,16 +11744,20 @@ function loadMap(isMap) {
 }
 
 function settingMap() {
-    map.style.width = (viewport.offsetWidth * 2) + 'px';
-    map.style.height = (viewport.offsetWidth * 2) + 'px';        
-    viewWidth = viewport.offsetWidth;
-    viewHeight = viewport.offsetHeight;
-    mapWidth = viewport.offsetWidth * 2;
-    mapHeight = viewport.offsetWidth * 2;
-    playerX = mapWidth / 2;
-    playerY = mapHeight / 2;
-    player.style.width = (viewport.offsetHeight/8) + "px";
-    player.style.height = (viewport.offsetHeight/8) + "px";
+    showLoading();
+    setTimeout(() => {
+        map.style.width = (viewport.offsetWidth * 2) + 'px';
+        map.style.height = (viewport.offsetWidth * 2) + 'px';        
+        viewWidth = viewport.offsetWidth;
+        viewHeight = viewport.offsetHeight;
+        mapWidth = viewport.offsetWidth * 2;
+        mapHeight = viewport.offsetWidth * 2;
+        playerX = mapWidth / 2;
+        playerY = mapHeight / 2;
+        player.style.width = (viewport.offsetHeight/8) + "px";
+        player.style.height = (viewport.offsetHeight/8) + "px";
+        hideLoading();
+    }, 500);
 }
 
 window.addEventListener("resize", settingMap);
