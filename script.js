@@ -5637,7 +5637,7 @@ function checkButtonDifficultyGame(value) {
 }
 
 function startGame() {
-    closeMap()
+    closeMap();
     if (infoStartGame.typeGame === "Conquest") {
         if (infoStartGame.modeGame === "Guide") {
 
@@ -12632,8 +12632,6 @@ window.messageOpen = messageOpen;
 window.nextStepGuide = nextStepGuide;
 window.selectCharacterForUser = selectCharacterForUser;
 window.openFullscreen = openFullscreen;
-window.closeHunterMap = closeHunterMap;
-window.openHunterMap = openHunterMap;
 window.toggleAutoMovement = toggleAutoMovement;
 window.showUpStamina = showUpStamina;
 window.closePopupMeet5Mon = closePopupMeet5Mon;
