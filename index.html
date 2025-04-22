@@ -260,6 +260,67 @@
             onclick="openFullscreen()">
             [ ]
         </div>
+            <div style="display: flex; flex-direction: column;align-items: flex-start;justify-content: space-between;">
+                 <div id="userInfoContainer" style="
+             display: flex;
+             flex-direction: column;
+             font-family: Arial, sans-serif;
+             position: absolute; 
+             z-index: 1;
+           ">
+                     <!-- Avatar -->
+                     <div
+                         style="width:60px; height: 60px; color: white; border-radius: 50px; padding: 10px; text-align: center; display: flex; justify-content: space-between; align-items: center; position: absolute; border: solid 2px #bd8f17; background: url(https://bathanh.com.vn/wp-content/uploads/2017/08/default_avatar.png); background-size: cover;">
+                     </div>
+ 
+                     <!-- Thông tin Username và Name -->
+                     <div
+                         style="background: #744620; color: white; border-radius: 8px; padding: 10px; text-align: center; font-size: 12px; font-weight: bold; display: flex; flex-direction: row; margin-left: 35px;">
+                         <span style="width: 45px;"></span>
+                         <span style="text-align: left;">Name</span>
+                     </div>
+ 
+                     <!-- Vàng và Điểm Xếp Hạng -->
+                     <div
+                         style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 35px;">
+                         <div
+                             style="background: #a9754b;color: #fff; border-radius: 8px; padding: 5px; font-size: 10px; font-weight: bold;display: flex; flex-direction: row;">
+                             <span style="width: 50px;"></span>
+                             <div style="display: flex; gap: 15px; font-size: 12px;">
+                                 <!-- Vàng -->
+                                 <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')">
+                                     <i class="fa-solid fa-coins"></i>
+                                     <span style="align-items: left">1000</span>
+                                 </div>
+                                 <!-- Ticket -->
+                                 <div onclick="messageOpen('Đây là vé đổi dùng để đổi trong cửa hàng')">
+                                     <i class="fa-solid fa-ticket-simple"></i>
+                                     <span style="align-items: left">1000</span>
+                                 </div>
+ 
+                                 <!-- Ruby -->
+                                 <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')">
+                                     <i class="fa-solid fa-gem"></i>
+                                     <span style="align-items: left">1000</span>
+                                 </div>
+ 
+ 
+                             </div>
+                         </div>
+                         <div
+                             style="background: #cf9e77; color: white; border-radius: 8px; padding: 5px; font-size: 12px; font-weight: bold;display: flex; flex-direction: row;">
+                             <span style="width: 50px;"></span>
+                             <div onclick="messageOpen('Đây là điểm xếp hạng')">
+                                 <!-- Rank point -->
+                                 <i class="fa-solid fa-medal"></i>
+                                 <span style="align-items: left">1500</span>
+                                 <span style="align-items: left">?</span>
+                             </div>
+ 
+                         </div>
+                     </div>
+                 </div>
+                
                 <div style="background: #af111100;
                   border-radius: 5px;
                   width: 80px;
