@@ -639,8 +639,9 @@
 
         <!-- Popup nhiệm vụ / popup Quest -->
         <div id="popupQuestBoard"
-            style="max-width: 600px; display: flex; flex-direction: row;justify-content: flex-start;align-items: center; position: absolute"
+            style="z-index: 5;max-width: 600px; display: flex; flex-direction: row;justify-content: flex-start;align-items: center; position: absolute"
             class="hiddenDiv">
+            
             <!-- Div nhiệm vụ -->
             <div
                 style="max-width: 400px;min-width: 400px;height: 320px;padding: 10px;background: rgb(246, 187, 123);border-radius: 10px;z-index: 1000;color: white;position: relative;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;border: 4px solid wheat;box-shadow: rgb(177, 112, 42) 1px 2px 1px 2px;">
@@ -750,9 +751,14 @@
 
         <!-- Bảng xếp hạng -->
         <div id="rankBoard"
-            style="width: 100%; max-width: 600px; margin: auto; border-radius: 10px; padding: 10px; background: rgb(83 183 133); font-size: 12px; min-height: 330px; position: absolute; border: 4px solid #5dd69a; box-shadow: rgb(50 111 124) 1px 2px 1px 1px;transition: opacity 0.5s ease 0s, transform 1s ease 0s; flex-direction: column; outline: 1px solid #00000030;"
+            style="z-index: 5;width: 100%; max-width: 600px; margin: auto; border-radius: 10px; padding: 10px; background: rgb(83 183 133); font-size: 12px; min-height: 330px; position: absolute; border: 4px solid #5dd69a; box-shadow: rgb(50 111 124) 1px 2px 1px 1px;transition: opacity 0.5s ease 0s, transform 1s ease 0s; flex-direction: column; outline: 1px solid #00000030;"
             class="hiddenDiv">
-
+            <button style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; font-size: 15px; 
+                top: -20px; right: -20px; padding: 3px 8px; border: 2px solid wheat; box-shadow: rgb(188, 119, 45) 0px 2px 1px 1px; 
+                background: rgb(234, 62, 62); color: white; font-weight: bold; transform: scale(1.05); z-index: 6;" 
+                onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';" 
+                onmouseout="this.style.background='rgb(145 16 134)'; this.style.transform='scale(1)';" 
+                onclick="openRankBoard()">x</button>
             <div
                 style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
                 <div
