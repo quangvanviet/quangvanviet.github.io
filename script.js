@@ -12655,3 +12655,4 @@ window.openBag = openBag;
 window.loadItemBagLeft = loadItemBagLeft;
 window.chosenSortBagLeft = chosenSortBagLeft;
 window.showUpWeightBag = showUpWeightBag;
+window.hideOrShowInfoGoldDiamond = hideOrShowInfoGoldDiamond;
