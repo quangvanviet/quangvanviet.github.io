@@ -599,7 +599,7 @@ function loadDataForUser() {
             );
 
             // Cập nhật UI thông tin người dùng
-            document.getElementById("nameUser").innerText = `${nameUser} - ${vipTicket}`;
+            document.getElementById("nameUser").innerText = `${nameUser}`;
             resetGoldAndTicket();
             isFinalLoadData = true;
             updateStamina();
@@ -11755,25 +11755,29 @@ function loadMap(isMap) {
 
 function settingMap() {
     if (!isFinalLoadData) return;
-    
-    showLoading();
-    setTimeout(() => {
-        map.style.width = (viewport.offsetWidth * 2) + 'px';
-        map.style.height = (viewport.offsetWidth * 2) + 'px';        
-        viewWidth = viewport.offsetWidth;
-        viewHeight = viewport.offsetHeight;
-        mapWidth = viewport.offsetWidth * 2;
-        mapHeight = viewport.offsetWidth * 2;
-        playerX = (viewport.offsetWidth * 2) / 2;
-        playerY = (viewport.offsetWidth * 2) / 2;
-        player.style.width = (viewport.offsetHeight/8) + "px";
-        player.style.height = (viewport.offsetHeight/8) + "px";
-        updateView();
-        hideLoading();
-    }, 500);
+
+    map.style.width = (viewport.offsetWidth * 2) + 'px';
+    map.style.height = (viewport.offsetWidth * 2) + 'px';        
+    viewWidth = viewport.offsetWidth;
+    viewHeight = viewport.offsetHeight;
+    mapWidth = viewport.offsetWidth * 2;
+    mapHeight = viewport.offsetWidth * 2;
+    playerX = (viewport.offsetWidth * 2) / 2;
+    playerY = (viewport.offsetWidth * 2) / 2;
+    player.style.width = (viewport.offsetHeight/8) + "px";
+    player.style.height = (viewport.offsetHeight/8) + "px";
+    updateView();
+
 }
 
 window.addEventListener("resize", settingMap);
+if (mainScreen) {
+    const resizeObserver = new ResizeObserver(() => {
+      settingMap();
+    });
+  
+    resizeObserver.observe(mainScreen);
+}
 
 document.getElementById("toggleMenu").addEventListener("click", () => {
     if (document.getElementById("menuButtons1").style.display === "flex") {
@@ -12608,8 +12612,10 @@ function scalePower5Mon(STR) {
 function hideOrShowInfoGoldDiamond() {
     if (document.getElementById('infoGoldDiamond').style.display === "none") {
         document.getElementById('infoGoldDiamond').style.display = "flex";
+        document.getElementById('hideOrShowInfoGoldDiamond').style.transform = 'scaleY(1)';
     } else {
         document.getElementById('infoGoldDiamond').style.display = "none";
+        document.getElementById('hideOrShowInfoGoldDiamond').style.transform = 'scaleY(-1)';
     }
 }
 
