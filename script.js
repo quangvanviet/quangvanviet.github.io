@@ -11744,6 +11744,8 @@ function loadMap(isMap) {
 }
 
 function settingMap() {
+    if (!isFinalLoadData) return;
+    
     showLoading();
     setTimeout(() => {
         map.style.width = (viewport.offsetWidth * 2) + 'px';
