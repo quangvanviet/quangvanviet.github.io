@@ -11736,7 +11736,17 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    settingMap();
+    map.style.width = (viewport.offsetWidth * 2) + 'px';
+    map.style.height = (viewport.offsetWidth * 2) + 'px';        
+    viewWidth = viewport.offsetWidth;
+    viewHeight = viewport.offsetHeight;
+    mapWidth = viewport.offsetWidth * 2;
+    mapHeight = viewport.offsetWidth * 2;
+    playerX = (viewport.offsetWidth * 2) / 2;
+    playerY = (viewport.offsetWidth * 2) / 2;
+    player.style.width = (viewport.offsetHeight/8) + "px";
+    player.style.height = (viewport.offsetHeight/8) + "px";
+    updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
     updateStamina(); 
