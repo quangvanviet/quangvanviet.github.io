@@ -12605,6 +12605,14 @@ function scalePower5Mon(STR) {
     return {dame, heal, shield, burn, poison}
 }
 
+function hideOrShowInfoGoldDiamond() {
+    if (document.getElementById('infoGoldDiamond').style.display === "none") {
+        document.getElementById('infoGoldDiamond').style.display = "flex";
+    } else {
+        document.getElementById('infoGoldDiamond').style.display = "none";
+    }
+}
+
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
 window.register = register;
