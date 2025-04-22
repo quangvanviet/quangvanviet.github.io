@@ -712,6 +712,7 @@ function loadDataForUser() {
         .catch(error => {
             console.error("Lỗi khi tải dữ liệu từ Firebase:", error);
         });
+    updateStamina();
 }
 
 //Tăng stamina cho user mỗi khi đăng nhập hoặc quay lại
@@ -11736,11 +11737,8 @@ function loadMap(isMap) {
     }
 
     settingMap();
-    playerX = (viewport.offsetWidth * 2) / 2;
-    playerY = (viewport.offsetWidth * 2) / 2;
     
     document.getElementById("mainScreen").style.display = "flex";
-    updateView();
     updateStamina(); 
     spawnRandomPets();
 }
@@ -11754,8 +11752,11 @@ function settingMap() {
         viewHeight = viewport.offsetHeight;
         mapWidth = viewport.offsetWidth * 2;
         mapHeight = viewport.offsetWidth * 2;
+        playerX = (viewport.offsetWidth * 2) / 2;
+        playerY = (viewport.offsetWidth * 2) / 2;
         player.style.width = (viewport.offsetHeight/8) + "px";
         player.style.height = (viewport.offsetHeight/8) + "px";
+        updateView();
         hideLoading();
     }, 500);
 }
