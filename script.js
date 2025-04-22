@@ -11742,14 +11742,16 @@ function openHunterMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    const toggleButton = document.getElementById("toggleMenuHunter");
-    const menuButtons = document.getElementById("menuButtonsHunter");
-
+    const toggleButton = document.getElementById("toggleMenu");
+    const menuButtons1 = document.getElementById("menuButtons1");
+    const menuButtons2 = document.getElementById("menuButtons2");
+    
     let isMenuOpen = false;
 
     toggleButton.addEventListener("click", () => {
         isMenuOpen = !isMenuOpen;
-        menuButtons.style.display = isMenuOpen ? "flex" : "none";
+        menuButtons1.style.display = isMenuOpen ? "flex" : "none";
+        menuButtons2.style.display = isMenuOpen ? "flex" : "none";
         toggleButton.textContent = isMenuOpen ? "Thu gọn" : "Mở rộng";
     });
 
