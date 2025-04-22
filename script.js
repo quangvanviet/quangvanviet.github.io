@@ -11724,8 +11724,6 @@ var allPetMeet = [
 ]
 
 function loadMap(isMap) {
-    showLoading()
-
     //Dựa vào map để cho idPet vào list5monMeet 
     const foundLocation = allPetMeet.find(item => item.location === isMap);
     // Nếu tìm thấy, gán danh sách petMeets vào list5MonMeet
@@ -11737,20 +11735,6 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    const toggleButton = document.getElementById("toggleMenu");
-    const menuButtons1 = document.getElementById("menuButtons1");
-    const menuButtons2 = document.getElementById("menuButtons2");
-    
-    let isMenuOpen = false;
-
-    toggleButton.addEventListener("click", () => {
-        isMenuOpen = !isMenuOpen;
-        menuButtons1.style.display = isMenuOpen ? "flex" : "none";
-        menuButtons2.style.display = isMenuOpen ? "flex" : "none";
-        toggleButton.textContent = isMenuOpen ? "Thu gọn" : "Mở rộng";
-    });
-
-    document.getElementById("mainScreen").style.display = "flex";
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
@@ -11761,19 +11745,20 @@ function loadMap(isMap) {
     playerY = mapHeight / 2;
     player.style.width = (viewport.offsetHeight/8) + "px";
     player.style.height = (viewport.offsetHeight/8) + "px";
-    document.getElementById("mainScreen").style.display = "none";
-
-    setTimeout(() => {
-        document.getElementById("mainScreen").style.display = "flex";
-        document.getElementById("mainScreen").style.display = "none";
-        updateView();
-        updateStamina(); // Cập nhật thanh staminaUser ban đầu
-
-        hideLoading();
-    }, 1000);
-    
+    document.getElementById("mainScreen").style.display = "flex";
+    updateView();
+    updateStamina(); 
     spawnRandomPets();
 }
+
+let isMenuOpen = false;
+document.getElementById("toggleMenu").addEventListener("click", () => {
+    isMenuOpen = !isMenuOpen;
+    document.getElementById("menuButtons1").style.display = isMenuOpen ? "flex" : "none";
+    document.getElementById("menuButtons2").style.display = isMenuOpen ? "flex" : "none";
+    document.getElementById("toggleMenu").textContent = isMenuOpen ? "Thu gọn" : "Mở rộng";
+});
+
 map.addEventListener("click", function (event) {
     if (!canClick || isAutoHunter) return;
     canClick = false;
