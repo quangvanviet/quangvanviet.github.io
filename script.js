@@ -5637,6 +5637,7 @@ function checkButtonDifficultyGame(value) {
 }
 
 function startGame() {
+    closeMap()
     if (infoStartGame.typeGame === "Conquest") {
         if (infoStartGame.modeGame === "Guide") {
 
@@ -6434,6 +6435,7 @@ function outGameRank() {
         document.getElementById('nextStepGame').innerText = "Tiếp tục"
         resetGoldAndTicket();
         closePopupSetting();
+        loadMap('Sơn La');
     }, 1000);
     endLoading();
 }
@@ -8767,6 +8769,7 @@ function login(isTest) {
                     document.getElementById("loginUsername").value = "";
                     document.getElementById("loginPassword").value = "";
                     openFullscreen();
+                    loadMap('Sơn La');
                     startStaminaRegen();
                 });
 
@@ -10061,6 +10064,7 @@ function closeShop() {
     startLoading();
     setTimeout(() => {
         resetGoldAndTicket();
+        loadMap('Sơn La')
         document.getElementById('mainScreen').style.display = "flex";
         document.getElementById('shopScreen').style.display = "none";
     }, 1000);
@@ -11719,7 +11723,7 @@ var allPetMeet = [
     {location: "Sơn La", petMeets: ["A0001", "A0002", "A0003", "A0004"]},
 ]
 
-function openHunterMap(isMap) {
+function loadMap(isMap) {
     showLoading()
 
     //Dựa vào map để cho idPet vào list5monMeet 
@@ -11759,45 +11763,6 @@ function openHunterMap(isMap) {
     player.style.height = (viewport.offsetHeight/8) + "px";
     document.getElementById("mainScreen").style.display = "none";
 
-    map.addEventListener("click", function (event) {
-        if (!canClick || isAutoHunter) return;
-        canClick = false;
-    
-        const rect = map.getBoundingClientRect();
-        targetX = event.clientX - rect.left;
-        targetY = event.clientY - rect.top;
-    
-        targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
-        targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
-    
-        // Vẽ dấu "X" ở điểm đến
-        const marker = document.createElement("div");
-        marker.className = "target-x";
-    
-        marker.style.position = "absolute";
-        marker.style.color = "firebrick";
-        marker.style.fontWeight = "bold";
-        marker.style.fontSize = "18px";
-        marker.style.transform = "translate(-50%, -50%)";
-        marker.style.zIndex = "2";
-    
-        marker.textContent = "x";
-        marker.style.pointerEvents = "none";
-        marker.style.left = `${targetX}px`;
-        marker.style.top = `${targetY}px`;
-        marker.style.transform = `translate(-50%, -50%)`; // Căn giữa dấu "X"
-        map.appendChild(marker);
-    
-    
-        // Xoá dấu sau 2 giây
-        setTimeout(() => {
-            map.removeChild(marker);
-            canClick = true;
-        }, timeMove);
-    
-        requestAnimationFrame(movePlayer);
-    });
-
     setTimeout(() => {
         document.getElementById("mainScreen").style.display = "flex";
         document.getElementById("mainScreen").style.display = "none";
@@ -11809,25 +11774,56 @@ function openHunterMap(isMap) {
     
     spawnRandomPets();
 }
+map.addEventListener("click", function (event) {
+    if (!canClick || isAutoHunter) return;
+    canClick = false;
 
-function closeHunterMap() {
-    showLoading();
+    const rect = map.getBoundingClientRect();
+    targetX = event.clientX - rect.left;
+    targetY = event.clientY - rect.top;
+
+    targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
+    targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
+
+    // Vẽ dấu "X" ở điểm đến
+    const marker = document.createElement("div");
+    marker.className = "target-x";
+
+    marker.style.position = "absolute";
+    marker.style.color = "firebrick";
+    marker.style.fontWeight = "bold";
+    marker.style.fontSize = "18px";
+    marker.style.transform = "translate(-50%, -50%)";
+    marker.style.zIndex = "2";
+
+    marker.textContent = "x";
+    marker.style.pointerEvents = "none";
+    marker.style.left = `${targetX}px`;
+    marker.style.top = `${targetY}px`;
+    marker.style.transform = `translate(-50%, -50%)`; // Căn giữa dấu "X"
+    map.appendChild(marker);
+
+
+    // Xoá dấu sau 2 giây
     setTimeout(() => {
+        map.removeChild(marker);
+        canClick = true;
+    }, timeMove);
 
-        autoButton.textContent = "Tự động săn";
-        autoButton.classList.remove("active");
-        autoButton.style.border = "2px solid #ffffff40";
-        autoButton.style.boxShadow = "1px 1px 1px 1px #961862";
-        clearInterval(autoInterval); // Dừng lại khi tắt auto
-        isAutoHunter = false;
+    requestAnimationFrame(movePlayer);
+});
 
-        // Xóa sự kiện visibilitychange khi tắt auto
-        document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
+function closeMap() {
 
-        document.getElementById("mainScreen").style.display = "none";
-        document.getElementById("mainScreen").style.display = "flex";
-        hideLoading();
-    }, 1000);
+    autoButton.textContent = "Tự động săn";
+    autoButton.classList.remove("active");
+    autoButton.style.border = "2px solid #ffffff40";
+    autoButton.style.boxShadow = "1px 1px 1px 1px #961862";
+    clearInterval(autoInterval); // Dừng lại khi tắt auto
+    isAutoHunter = false;
+
+    // Xóa sự kiện visibilitychange khi tắt auto
+    document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
 }
 
 
