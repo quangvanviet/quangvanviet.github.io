@@ -240,552 +240,174 @@
             </div>
         </div>
 
-        <!-- Màn hình trang chủ -->
-        <div id="mainScreen" style="
-        display: none;
-        flex-direction: row;
-        gap: 15px;
-        padding: 20px 15px;
-        min-height: 100%;
-        min-width: 95%;
-        justify-content: space-between;
-        border-radius: 20px;
-        background: hsla(46,72%,86%,.5);
-        box-shadow: 0 4px 8px 0 #b26732;
-        border: 5px solid;
-      ">
-        <div style="width: 30px;height: 30px;border-radius: 5px;color: black;background: wheat;position: absolute;top: -22px;left: 40px;
-                font-size: 20px;font-weight: bold;display: flex;flex-direction: column;align-content: center;justify-content: center;
-                align-items: center;text-align: center;cursor: pointer;"
-            onclick="openFullscreen()">
-            [ ]
-        </div>
-            <div style="display: flex; flex-direction: column;align-items: flex-start;justify-content: space-between;">
-                 <div id="userInfoContainer" style="
-             display: flex;
-             flex-direction: column;
-             font-family: Arial, sans-serif;
-             position: absolute; 
-             z-index: 1;
-           ">
-                     <!-- Avatar -->
-                     <div
-                         style="width:60px; height: 60px; color: white; border-radius: 50px; padding: 10px; text-align: center; display: flex; justify-content: space-between; align-items: center; position: absolute; border: solid 2px #bd8f17; background: url(https://bathanh.com.vn/wp-content/uploads/2017/08/default_avatar.png); background-size: cover;">
-                     </div>
- 
-                     <!-- Thông tin Username và Name -->
-                     <div
-                         style="background: #744620; color: white; border-radius: 8px; padding: 10px; text-align: center; font-size: 12px; font-weight: bold; display: flex; flex-direction: row; margin-left: 35px;">
-                         <span style="width: 45px;"></span>
-                         <span style="text-align: left;">Name</span>
-                     </div>
- 
-                     <!-- Vàng và Điểm Xếp Hạng -->
-                     <div
-                         style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 35px;">
-                         <div
-                             style="background: #a9754b;color: #fff; border-radius: 8px; padding: 5px; font-size: 10px; font-weight: bold;display: flex; flex-direction: row;">
-                             <span style="width: 50px;"></span>
-                             <div style="display: flex; gap: 15px; font-size: 12px;">
-                                 <!-- Vàng -->
-                                 <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')">
-                                     <i class="fa-solid fa-coins"></i>
-                                     <span style="align-items: left">1000</span>
-                                 </div>
-                                 <!-- Ticket -->
-                                 <div onclick="messageOpen('Đây là vé đổi dùng để đổi trong cửa hàng')">
-                                     <i class="fa-solid fa-ticket-simple"></i>
-                                     <span style="align-items: left">1000</span>
-                                 </div>
- 
-                                 <!-- Ruby -->
-                                 <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')">
-                                     <i class="fa-solid fa-gem"></i>
-                                     <span style="align-items: left">1000</span>
-                                 </div>
- 
- 
-                             </div>
-                         </div>
-                         <div
-                             style="background: #cf9e77; color: white; border-radius: 8px; padding: 5px; font-size: 12px; font-weight: bold;display: flex; flex-direction: row;">
-                             <span style="width: 50px;"></span>
-                             <div onclick="messageOpen('Đây là điểm xếp hạng')">
-                                 <!-- Rank point -->
-                                 <i class="fa-solid fa-medal"></i>
-                                 <span style="align-items: left">1500</span>
-                                 <span style="align-items: left">?</span>
-                             </div>
- 
-                         </div>
-                     </div>
-                 </div>
-                
-                <div style="background: #af111100;
-                  border-radius: 5px;
-                  width: 80px;
-                  height: 80px;
-                  padding: 5px;
-                  background-size: cover;
-                  background-position: center;
-                  background-repeat: no-repeat;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  color: #ffffff;
-                  font-weight: bold;
-                  position: relative;">
+        <!-- Màn hình chính -->
+        <div id="mainScreen"
+            style=" display: none; flex-direction: row; gap: 5px; padding-left: 10px; padding-right: 10px; 
+            padding-top: 20px; padding-bottom: 20px; height: 300px; min-width: 30%; justify-content: flex-start; border-radius: 20px; 
+            width: 95%; border: 5px solid; background: rgba(245, 233, 194, 0.5); box-shadow: rgb(178 103 50) 0px 4px 8px 0px; position: relative">
+            <div id="viewport"
+                style="width: 100%; height: 100%; overflow: hidden; position: relative; border: 2px solid #fff;border-radius: 10px;">
+                <div id="mapHunter"
+                    style="position: absolute; width: 1024px; height: 1536px; background-image: url('https://res.cloudinary.com/dxgawkr4g/image/upload/v1744952970/xgbyxzwiwtbu3j3faxwm.png'); background-size: cover;">
+                    <img id="playerHunter"
+                        src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif" style="
+                          width: 32px;
+                          height: 32px;
+                          position: absolute;
+                          z-index: 2;
+                          pointer-events: none">
                 </div>
-
-                <div class="buttonMainScreen" onclick="openShop()">Cửa hàng</div>
-                <div class="buttonMainScreen" onclick="showOrHiddenDiv('hunterBoard')">Đi săn</div>
             </div>
-
-            <div
-                style="display: flex; flex-direction: column;align-items: center;justify-content: space-between; z-index: 2;">
-                <div
-                    style="border-radius: 5px;width: 600px;height: 350px;background-size: cover;background-position: center;background-repeat: no-repeat;display: flex;align-items: center;justify-content: center;color: #ffffff;font-weight: bold;position: relative;">
-                    <!-- Hình ảnh nhân vật -->
-                    <div id="imgCharacter" style="
-                  height: 100%;
-                  background-position: center;
-                  background-repeat: no-repeat;
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  color: #ffffff;
-                  font-weight: bold;
-                  position: relative;
-                  flex-direction: column;
-                  background: url(https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png);
-                  background-size: cover;
-                  min-width: 60%;
-                  border-radius: 600px;
-                  border: 4px solid #a67146;
-                  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);">
-                        <div style="background: #a9754b;
-                    border-radius: 5px;
-                    bottom: -8px;
-                    padding: 5px;
+            
+            <div style="display: flex;flex-direction: row;width: 100%;z-index: 3;position: absolute;top: 4px;left: 2px;">
+                <div style="width:20px;height: 20px;color: white;border-radius: 50px;padding: 10px;text-align: center;
+                    display: flex;justify-content: space-between;align-items: center;border: solid 2px #bd8f17;
+                    background: url(https://bathanh.com.vn/wp-content/uploads/2017/08/default_avatar.png);
                     background-size: cover;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #ffffff;
-                    font-weight: bold;
-                    position: absolute;
-                    ">Thay đổi nhân vật
-                        </div>
-                    </div>
-
-                    <!-- Popup nhiệm vụ / popup Quest -->
-                    <div id="popupQuestBoard"
-                        style="max-width: 600px; display: flex; flex-direction: row;justify-content: flex-start;align-items: center; position: absolute"
-                        class="hiddenDiv">
-                        <!-- Div nhiệm vụ -->
-                        <div
-                            style="max-width: 400px;min-width: 400px;height: 320px;padding: 10px;background: rgb(246, 187, 123);border-radius: 10px;z-index: 1000;color: white;position: relative;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;border: 4px solid wheat;box-shadow: rgb(177, 112, 42) 1px 2px 1px 2px;">
-
-                            <div
-                                style="background: #f08888;position: absolute;top: -20px;width: 200px;height: 23px;display: flex;color: #ffffff;font-size: 16px;font-weight: bold;border-radius: 10px;border: 4px solid #e07373;box-shadow: rgb(178 34 34) 1px 2px 1px 2px;justify-content: center;align-items: center;outline: 2px solid;text-shadow: 1px 2px 1px #921919;">
-                                NHIỆM VỤ</div>
-
-                            <div
-                                style="padding: 5px;background: #f08888;border-radius: 8px;margin-bottom: 10px;display: flex;flex-direction: row;justify-content: space-around;align-items: center;margin-top: 25px;position: relative;border: 2px solid wheat;box-shadow: rgb(119 38 38 / 81%) 1px 1px 1px 1px;height: 275px;width: 97%;">
-
-                                <div
-                                    style="position: absolute;top: -10px;display: flex;flex-direction: row;justify-content: center;align-items: center;gap: 25px;width: 100%;">
-                                    <span id="buttonQuestDay"
-                                        style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(168, 48, 48); padding: 5px 25px; border-radius: 15px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.02)';"
-                                        onmouseout="this.style.transform='scale(1)';" onclick="loadQuest('Day')">Nhiệm
-                                        vụ ngày</span>
-                                    <span id="buttonQuestWeek"
-                                        style="color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; background: rgb(222, 109, 62); padding: 5px 25px; border-radius: 15px; border: 2px solid rgb(119, 38, 38); box-shadow: rgba(50, 50, 50, 0.53) 1px 1px 1px 1px; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.02)';"
-                                        onmouseout="this.style.transform='scale(1)';" onclick="loadQuest('Week')">Nhiệm
-                                        vụ tuần</span>
-                                </div>
-
-                                <div id="boardAddQuest"
-                                    style="display: flex;flex-direction: column;font-size: 12px;color: black;height: 245px;overflow-y: auto;border-radius: 15px;margin-top: 20px;align-items: center;padding: 5px;gap: 8px;">
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Div điểm danh -->
-                        <div
-                            style="max-width: 200px;min-width: 200px;height: 320px;padding: 10px;background: rgb(246, 187, 123);border-radius: 10px;z-index: 1000;color: white;position: relative;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;border: 4px solid wheat;box-shadow: rgb(177, 112, 42) 1px 2px 1px 2px;">
-                            <button
-                                style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; font-size: 16px; top: -20px; right: -20px; padding: 5px 10px; border: 2px solid wheat; box-shadow: rgb(188, 119, 45) 0px 2px 1px 1px; background: rgb(240, 115, 115); color: white; font-weight: bold; transform: scale(1);"
-                                onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';"
-                                onmouseout="this.style.background='#f07373'; this.style.transform='scale(1)';"
-                                onclick="showOrHiddenDiv('popupQuestBoard')">x</button>
-
-                            <div
-                                style="background: #f08888;position: absolute;top: -20px;width: 125px;height: 23px;display: flex;color: #ffffff;font-size: 16px;font-weight: bold;border-radius: 10px;border: 4px solid #e07373;box-shadow: rgb(178 34 34) 1px 2px 1px 2px;justify-content: center;align-items: center;outline: 2px solid;text-shadow: 1px 2px 1px #921919;">
-                                ĐIỂM DANH</div>
-
-                            <div
-                                style="padding: 10px;background: #f08888;border-radius: 8px;width: 95%;border: 2px solid wheat;margin-bottom: 10px;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;margin-top: 25px;box-shadow: rgb(119 38 38 / 81%) 1px 1px 1px 1px;position: relative;height: 275px;gap: 36px;">
-                                <span
-                                    style="color: #fffbfa;font-size: 13px;font-weight: bold;background: #30a8a1;padding: 5px 25px;border-radius: 15px;position: absolute;top: -10px;border: 2px solid #266f77;box-shadow: rgb(43 44 44 / 42%) 1px 1px 1px 1px;">Ngày
-                                    thứ</span>
-                                <div
-                                    style="display: flex;flex-direction: row;justify-content: center;align-items: center;gap: 9px;margin-top: 15px;flex-wrap: wrap;">
-                                    <span id="checkint2"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">2</span>
-                                    <span id="checkint3"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">3</span>
-                                    <span id="checkint4"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">4</span>
-                                    <span id="checkint5"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">5</span>
-                                    <span id="checkint6"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">6</span>
-                                    <span id="checkint7"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">7</span>
-                                    <span id="checkincn"
-                                        style="display: inline-block; width: 30px; height: 30px; line-height: 30px; border-radius: 50%; background: gray; margin: 3px; box-shadow: rgba(0, 0, 0, 0.36) 1px 1px 1px 1px; border: 2px solid wheat; transform: scale(1); cursor: pointer;"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';">CN</span>
-                                </div>
-
-                                <!-- Thanh chăm chỉ -->
-                                <div
-                                    style="display: flex;flex-direction: column;align-content: center;width: 100%;align-items: center;gap: 33px;justify-content: space-around;">
-                                    <div
-                                        style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
-                                        <div style="display: flex;flex-direction: column;width: 100%;">
-                                            <div
-                                                style="width: 100%;height: 20px;background: #00000059;border-radius: 5px;overflow: hidden;">
-                                                <div id="timeLine" style="width: 50%;height: 100%;background: #30a8a1;">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="timeLineText" style="width: 15%;position: absolute;">
-                                            (6/6)
-                                        </div>
-                                    </div>
-                                    <i id="timeLineGift" class="fa-solid fa-gift"
-                                        style="font-size: 50px; text-shadow: rgb(88, 16, 16) 2px 2px; color: white; cursor: pointer; transform: scale(1);"
-                                        onmouseover="this.style.transform='scale(1.2)';"
-                                        onmouseout="this.style.transform='scale(1)';"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bảng xếp hạng -->
-                    <div id="rankBoard"
-                        style="width: 100%; max-width: 600px; margin: auto; border-radius: 10px; padding: 10px; background: rgb(83 183 133); font-size: 12px; min-height: 330px; position: absolute; border: 4px solid #5dd69a; box-shadow: rgb(50 111 124) 1px 2px 1px 1px;transition: opacity 0.5s ease 0s, transform 1s ease 0s; flex-direction: column; outline: 1px solid #00000030;"
-                        class="hiddenDiv">
-
-                        <div
-                            style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
-                            <div
-                                style="background: #164049;position: absolute;top: -20px;width: 200px;height: 23px;display: flex;color: #2fe98c;font-size: 16px;font-weight: bold;border-radius: 10px;border: 3px solid #256876;box-shadow: rgb(17 50 57) 1px 2px 1px 2px;justify-content: center;align-items: center;">
-                                BẢNG XẾP HẠNG</div>
-                        </div>
-
-                        <button id="prev-page" disabled
-                            style="font-size: 22px;font-weight: bold;color: #17f586;background-color: rgb(145, 46, 99);border-radius: 5px;border: 2px solid #bc4585;height: 25px;width: 25px;display: flex;cursor: pointer;position: absolute;z-index: 1; top: 155px;left: -20px;place-content: center;align-items: center;box-shadow: rgb(90 24 59) 1px 1px 1px 1px;"
-                            onmouseover="this.style.transform='scale(1.2)'; this.style.color='white'; this.style.transition='transform 0.3s ease, color 0.3s ease';"
-                            onmouseout="this.style.transform='scale(1)'; this.style.color='#17f586'; this.style.transition='transform 0.3s ease, color 0.3s ease';"
-                            onclick="changePage(-1)">
-                            ◀
-                        </button>
-
-                        <button id="next-page" disabled
-                            style="font-size: 22px;font-weight: bold;color: #17f586;background-color: rgb(145, 46, 99);border-radius: 5px;border: 2px solid #bc4585;height: 25px;width: 25px;display: flex;cursor: pointer;position: absolute;z-index: 1; top: 155px; right: -20px;place-content: center;align-items: center;box-shadow: rgb(90 24 59) 1px 1px 1px 1px;"
-                            onmouseover="this.style.transform='scale(1.2)'; this.style.color='white'; this.style.transition='transform 0.3s ease, color 0.3s ease';"
-                            onmouseout="this.style.transform='scale(1)'; this.style.color='#17f586'; this.style.transition='transform 0.3s ease, color 0.3s ease';"
-                            onclick="changePage(1)">
-                            ▶
-                        </button>
-
-                        <table id="leaderboard-table"
-                            style="width: 100%; border-collapse: collapse; table-layout: fixed; height: 30px; margin-top: 5px;">
-                            <thead>
-                                <tr style="background: #164049; color: white;">
-                                    <th style="width: 10%;"></th>
-                                    <th style="width: 15%;">Top</th>
-                                    <th style="width: 40%;">Tên người chơi</th>
-                                    <th style="width: 25%;">Điểm xếp hạng</th>
-                                    <th style="width: 10%;"></th>
-                                </tr>
-                            </thead>
-                        </table>
-
-                        <div id="leaderboard-wrapper" style="max-height: 280px; overflow-y: auto;">
-                            <table id="leaderboard-table"
-                                style="width: 100%; border-collapse: separate;border-spacing: 0 7px;">
-                                <tbody id="leaderboard-body"></tbody>
-                            </table>
-                        </div>
-
-                        <div id="myRank" style="max-height: 30px;">
-                            <table id="leaderboard-table"
-                                style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                                <thead>
-                                    <tr
-                                        style="background: rgb(168 2 2); color: white; height: 30px; clip-path: polygon(2% 0%, 98% 0%, 100% 50%, 98% 110%, 2% 110%, 0% 50%); box-shadow: rgb(0 0 0 / 59%) 0px 3px 2px 0px;">
-                                        <td style="width: 10%; text-align: right;">Bạn:</td>
-                                        <td id="myRankTop" style="width: 15%; text-align: center;">Top</td>
-                                        <td id="myRankName" style="width: 40%; text-align: center; font-weight: bold;">
-                                            Người chơi</td>
-                                        <td id="myRankPoint" style="width: 25%; text-align: center;">Điểm</td>
-                                        <td style="width: 10%; text-align: center;"></td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="hunterBoard" style="width: 100%; max-width: 600px; margin: auto; border-radius: 10px; padding: 10px; padding-top: 18px; background: rgb(83 183 133); font-size: 12px; min-height: 310px; position: absolute; border: 4px solid #5dd69a; box-shadow: rgb(50 111 124) 2px 3px 1px 2px;transition: opacity 0.5s ease 0s, transform 1s ease 0s; flex-direction: column; outline: 1px solid #00000030;" class="hiddenDiv">
-              
-                        <div style="display: flex;flex-direction: row;width: 100%;align-content: center;justify-content: center;align-items: center;">
-                          <div style="background: #164049;position: absolute;top: -20px;width: 200px;height: 23px;display: flex;color: #2fe98c;font-size: 16px;font-weight: bold;border-radius: 10px;border: 3px solid #256876;box-shadow: rgb(17 50 57) 1px 2px 1px 2px;justify-content: center;align-items: center;">ĐI SĂN</div>
-                        </div>
-                        
-                        <div style="background: #5dd69a; padding: 5px 5px; border-radius: 10px;">
-                            <div
-                                style="display: flex; flex-flow: column wrap; height: 310px; align-items: center; overflow-x: auto; place-content: center flex-start;">
-                        
-                                <div
-                                    style="display: flex; flex-direction: row; border-radius: 10px; gap: 20px; border: 5px solid #ff000000; flex-wrap: wrap;justify-content: center; align-content: center;">
-                                    <!-- Vùng 1 -->
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" 
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="openHunterMap('Sơn La')">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                    <div style="min-width: 100px; height: 100px; padding: 2px; background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: #164049 2px 3px 1px 2px; justify-content: center; border: 4px solid #256876; position: relative;"
-                                        onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                                        <p
-                                            style="font-size: 15px; font-weight: bold; margin: 1px 0px 0px; color: white; background: #256876; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 105px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; justify-content: center; height: 22px;">
-                                            Sơn La</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- gacha screen -->
-                    <div id="gacha-container"
-                        style="width: 100%; max-width: 600px; min-height: 350px; background: linear-gradient(to bottom, #ffcc00, #ff6600); color: white; text-align: center; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); display: none; flex-direction: column; justify-content: center; align-items: center;">
-                        <h2>Gacha Pet</h2>
-                        <div id="gacha-result"
-                            style="font-size: 18px; margin-bottom: 20px; font-weight: bold; min-height: 80px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 8px;">
-                            Ấn nút để quay gacha!
-                        </div>
-                        <button id="gacha-button" onclick="gacha()"
-                            style="background: #ff0000; color: white; font-size: 18px; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: bold;"
-                            onmouseover="this.style.background='#cc0000'; this.style.transform='scale(1.1)';"
-                            onmouseout="this.style.background='#ff0000'; this.style.transform='scale(1)';"
-                            onmousedown="this.style.background='#990000';" onmouseup="this.style.background='#cc0000';">
-                            Quay Gacha
-                        </button>
-                    </div>
-
-                    <!-- start game screen -->
-                    <div id="openMenuStartGame"
-                        style="display: flex;flex-direction: column;width: 100%;min-width: 700px; max-width:700px;margin: auto;border-radius: 10px;padding: 5px;background: rgb(238, 210, 155);font-size: 15px;min-height: 340px;position: relative;justify-content: space-between;align-items: flex-start;box-shadow: rgb(177 112 42) 1px 2px 1px 2px;border: 5px solid white;color: rgb(116, 70, 32); position: absolute"
-                        class="hiddenDiv">
-                        <div
-                            style="display: flex; flex-direction: row;gap: 10px;justify-content: space-between;width: 98%;align-items: center;height: 30px;padding: 5px;background: #a9754b;border-radius: 15px;box-shadow: rgb(117 56 5) 1px 2px 1px 1px;color: wheat;">
-                            <span
-                                style="font-weight: bold;border-radius: 5px;height: 100%;display: flex;align-items: center;justify-content: center; padding: 5px;">Chế
-                                độ chơi:</span>
-                            <div style="display: flex; flex-direction: row; gap: 10px; padding: 5px;">
-                                <div id="valueButtonTypeGame1"
-                                    style="background: #c25c5c;border: 1px solid; border-radius: 10px; padding: 5px;min-width: 100px; cursor: pointer; box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';"
-                                    onclick="checkButtonTypeGame('Conquest')">Chinh phục</div>
-                                <div id="valueButtonTypeGame2"
-                                    style="background: #c25c5c; border: 1px solid; border-radius: 10px; padding: 5px;min-width: 100px; cursor: pointer; box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';"
-                                    onclick="checkButtonTypeGame('Solo5Mon')">Đối kháng</div>
-                                <div id="valueButtonTypeGame3"
-                                    style="background: #c25c5c; border: 1px solid; border-radius: 10px; padding: 5px;min-width: 100px; cursor: pointer; box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';"
-                                    onclick="checkButtonTypeGame('Guess')">Dự đoán</div>
-                            </div>
-                        </div>
-
-                        <div
-                            style="display: flex;flex-direction: row;gap: 10px;min-height: 215px;min-width: 95%;justify-content: space-between;align-items: center;border: 3px solid white;border-radius: 10px;padding: 10px;background: #f5deb3; box-shadow: rgb(177 112 42) 1px 2px 1px 2px">
-                            <div id="menuGameRank"
-                                style="display: flex; flex-direction: column; gap: 10px;background: #cf9e77;height: 215px;border-radius: 10px;justify-content: flex-start;padding: 5px; width: 25%; box-shadow: rgb(169 117 75) 1px 2px 1px 1px;">
-                                <div id="valueButtonModeGame1"
-                                    style="background: #c25c5c;border-radius: 10px;padding: 5px;color: wheat; cursor: pointer;box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';"
-                                    onclick="checkButtonModeGame('Guide')">Tập luyện</div>
-                                <div id="valueButtonModeGame2"
-                                    style="background: #c25c5c;border-radius: 10px;padding: 5px;color: wheat; cursor: pointer;box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';"
-                                    onclick="checkButtonModeGame('Normal')">Đấu Thường</div>
-                                <div id="valueButtonModeGame3"
-                                    style="background: #c25c5c;border-radius: 10px;padding: 5px;color: wheat; cursor: pointer;box-shadow: rgb(99 31 31) 1px 2px 1px 1px;"
-                                    onmouseover="this.style.transform='scale(1.03)';"
-                                    onmouseout="this.style.transform='scale(1)';" onclick="checkButtonModeGame('Rank')">
-                                    Xếp hạng</div>
-                            </div>
-                            <div id="descGameRank"
-                                style="border: 2px solid rebeccapurple;background: #f0e4ce;border-radius: 5px;width: 70%;height: 215px;padding: 5px;text-align: justify; overflow-x: auto; gap: 10px; display: flex; flex-direction: column; justify-content: flex-start; font-size: 14px; color: rebeccapurple;">
-                            </div>
-                        </div>
-
-                        <div
-                            style="display: flex; flex-direction: row; gap: 3px;width: 100%;align-items: center;height: 30px;border-radius: 10px;color: wheat;justify-content: space-between;">
-                            <div
-                                style="display: flex; flex-direction: row;width: 100%;align-items: center;height: 25px;border-radius: 10px;justify-content: space-between;background: #a9754b; padding: 3px; padding-left: 6px; padding-right: 6px; box-shadow: rgb(117 56 5) 1px 2px 1px 1px;">
-                                <div>
-                                    Độ khó:
-                                </div>
-
-                                <div style="display: flex; flex-direction: row; gap: 10px; font-size: 12px;">
-                                    <div id="valueButtonDifficultyGame1"
-                                        style="background: #c25c5c; border-radius: 5px; min-width: 60px; padding: 3px; cursor: pointer; box-shadow: rgb(116 7 7) 0px 1px 0px 1px;"
-                                        onmouseover="this.style.transform='scale(1.03)';"
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="checkButtonDifficultyGame('Easy')">Dễ</div>
-                                    <div id="valueButtonDifficultyGame2"
-                                        style="background: #c25c5c; border-radius: 5px; min-width: 60px; padding: 3px; cursor: pointer; box-shadow: rgb(116 7 7) 0px 1px 0px 1px;"
-                                        onmouseover="this.style.transform='scale(1.03)';"
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="checkButtonDifficultyGame('Normal')">Thường</div>
-                                    <div id="valueButtonDifficultyGame3"
-                                        style="background: #c25c5c; border-radius: 5px; min-width: 60px; padding: 3px; cursor: pointer; box-shadow: rgb(116 7 7) 0px 1px 0px 1px;"
-                                        onmouseover="this.style.transform='scale(1.03)';"
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="checkButtonDifficultyGame('Hard')">Khó</div>
-                                    <div id="valueButtonDifficultyGame4"
-                                        style="background: #c25c5c; border-radius: 5px; min-width: 60px; padding: 3px; cursor: pointer; box-shadow: rgb(116 7 7) 0px 1px 0px 1px;"
-                                        onmouseover="this.style.transform='scale(1.03)';"
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="checkButtonDifficultyGame('Very Hard')">Siêu khó</div>
-                                    <div id="valueButtonDifficultyGame5"
-                                        style="background: #c25c5c; border-radius: 5px; min-width: 60px; padding: 3px; cursor: pointer; box-shadow: rgb(116 7 7) 0px 1px 0px 1px;"
-                                        onmouseover="this.style.transform='scale(1.03)';"
-                                        onmouseout="this.style.transform='scale(1)';"
-                                        onclick="checkButtonDifficultyGame('Hell')">Địa ngục</div>
-                                </div>
-                            </div>
-
-                            <div style="background: #2285b2; border-radius: 10px;min-width: 120px;padding: 4px; cursor: pointer;     box-shadow: rgb(20 55 67) 1px 2px 1px 1px; height: 20px"
-                                onmouseover="this.style.background='#6222b2'; this.style.transform='scale(1.05)';"
-                                onmouseout="this.style.background='#2285b2'; this.style.transform='scale(1)';"
-                                onclick="startGame()">
-                                Vào game
-                            </div>
-                        </div>
-                    </div>
-
+                    z-index: 1;
+                    ">
                 </div>
-            </div>
-            <div style="display: flex; flex-direction: column;align-items: center;justify-content: space-between;">
-                <div style="display:flex;flex-direction: row-reverse;position: relative;">
-                    <div onclick ="showOrHiddenDiv('menuContainer')" id="openMenu" class="buttonMainScreen" style="cursor: pointer;"> 
-                      Mở rộng
+                <div style="display:flex; flex-direction: column">
+                    <div style="background: #744620;color: white;border-radius: 8px;padding: 6px;padding-left: 35px;padding-right: 15px;
+                        text-align: center;font-size: 12px;font-weight: bold; display: flex;flex-direction: row; height: 10px;
+                        justify-content: center;align-items: center; margin-left: -30px; gap: 5px;
+                        ">
+                        <span id="nameUser" style="text-align: left;">quangvanviet</span>
+                        <span id="isRanking" style="align-items: left">(Top: 5)</span>
                     </div>
-                    <div id="menuContainer" class="hiddenDiv" style="position: absolute;transition: transform 1s ease, opacity 0.8s ease 0s;flex-wrap: wrap; gap: 10px;top: 0px;right: 120px;z-index: 2;">
-                      <div style="display: flex;flex-direction: row;gap: 10px;z-index: 1;">
-                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
-                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
-                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
-                        onclick="openQuestBoard()">
-                        Nhiệm vụ</button>
-                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
-                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
-                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
-                        onclick="openRankBoard()">
-                        Bảng xếp hạng</button>
-                        <button style="padding: 5px;background: #246170;color: white;border: 3px solid #196f83;border-radius: 8px;font-size: 14px;cursor: pointer;box-shadow: rgb(18 54 62) 3px 4px 1px 1px;text-align: center;font-weight: bold; min-width: 80px;" 
-                        onmouseover="this.style.background='#3092aa'; this.style.transform='scale(1.05)';"
-                        onmouseout="this.style.background='#246170'; this.style.transform='scale(1)';"
-                        onclick="">
-                        Nhân vật</button>
-                      </div>
-                      <!-- <div style="transition: max-width 0.4s ease 0s, opacity 0.4s ease 0s;opacity: 1;display: flex;flex-direction: row;gap: 10px;z-index: 1;">
-                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;" onclick="openQuestBoard()">Nhiệm vụ</button>
-                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 2</button>
-                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 3</button>
-                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 4</button>
-                        <button style="padding: 10px; background-color: rgb(46, 204, 113); color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; text-align: left;">Nhiệm vụ 5</button>
-                      </div> -->
+                    <div onclick="messageOpen('Đây là thể lực, khi hết thể lực sẽ khó săn tìm 5Mon hơn')" style="gap: 3px;display: flex;flex-direction: row;align-content: center;align-items: center;width: 113%; margin-left: -10px;">
+                        <div id="staminaBar" style=" width: 100%; height: 15px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
+                            <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
+                            </div>
+                            <div id="staminaText" style="font-weight: bold; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
+                                100/100</div>
+                        </div>
+                        <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 1px;" onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';" onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" onclick="showUpStamina()">
+                            +
+                        </span>
                     </div>
                 </div>
-                <div id="openBag" class="buttonMainScreen" onclick="openBag()">Tủ đồ</div>
-                <div id="openGame" class="buttonMainScreen" onclick="openMenuStartGame()">Vào trận</div>
+                <div style="background: #a9754b;color: #fff;border-radius: 8px;padding: 6px;padding-top: 38px;font-size: 10px;font-weight: bold;
+                    display: flex; flex-direction: column;position: absolute;top: 10px;margin-left: 2px;
+                    align-items: flex-start;justify-content: flex-start;width: 10px; gap: 3px;">
+                    <div id="infoGoldDiamond" style="display: flex;gap: 2px;font-size: 12px;flex-direction: column;align-content: center;justify-content: center;align-items: flex-start;min-width: 50px;">
+                        <!-- Vàng -->
+                        <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')" style="
+                            background: #ff7900ad;
+                            padding: 2px;
+                            width: 100%;
+                            border-radius: 5px;
+                            text-align: left;
+                            border: 1px solid #6633999c;
+                            display: flex;
+                            gap: 4px;
+                            flex-direction: row;
+                        ">
+                            <i class="fa-solid fa-coins"></i>
+                            <span id="goldUser" style="align-items: left">1000000</span>
+                        </div>
+                        <!-- Ticket -->
+                        <div onclick="messageOpen('Đây là vé đổi dùng để đổi trong cửa hàng')" style="
+                            background: #ff7900ad;
+                            padding: 2px;
+                            width: 100%;
+                            border-radius: 5px;
+                            text-align: left;
+                            border: 1px solid #6633999c;
+                            display: flex;
+                            gap: 4px;
+                            flex-direction: row;
+                        ">
+                            <i class="fa-solid fa-ticket-simple"></i>
+                            <span id="ticketUser" style="align-items: left">0</span>
+                        </div>
+    
+                        <!-- Ruby -->
+                        <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')" style="
+                            background: #ff7900ad;
+                            padding: 2px;
+                            width: 100%;
+                            border-radius: 5px;
+                            text-align: left;
+                            border: 1px solid #6633999c;
+                            display: flex;
+                            gap: 4px;
+                            flex-direction: row;
+                        ">
+                            <i class="fa-solid fa-gem"></i>
+                            <span id="diamondUser" style="align-items: left">0</span>
+                        </div>
+                        <div onclick="messageOpen('Đây là điểm xếp hạng')" style="
+                            background: #ff7900ad;
+                            padding: 2px;
+                            width: 100%;
+                            border-radius: 5px;
+                            text-align: left;
+                            border: 1px solid #6633999c;
+                            display: flex;
+                            gap: 4px;
+                            flex-direction: row;">
+                            <!-- Rank point -->
+                            <i class="fa-solid fa-medal"></i>
+                            <span id="pointRank" style="align-items: left">0</span>
+                        </div>
+                    </div>
+                    <div style="background: white;padding: 4px;border-radius: 15px;width: 10px;height: 10px;color: black;font-size: 16px;
+                        font-weight: bold;cursor: pointer"
+                        onmouseover="this.style.transform='scale(1.2)';" 
+                        onmouseout="this.style.transform='scale(1)';" 
+                        onclick="hideOrShowInfoGoldDiamond()">
+                        <span>^</span>
+                    </div>
+                </div>
             </div>
+            
+            <div style="display: flex;flex-direction: column;z-index: 3;position: absolute;top: 10px;right: 10px;align-items: flex-end;">
+                <button id="autoButton" onclick="toggleAutoMovement()">Tự động săn</button>
+            </div>
+            
+            <div id="menu1" style="display: flex;flex-direction: column-reverse;gap: 5px;position: absolute;bottom: 6px;right: 10px;z-index: 3">
+                <!-- Nút Mở rộng -->
+                <button id="toggleMenu" style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
+                    border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu gọn</button><!-- Các nút ẩn -->
+                
+            <div id="menuButtons1" style="display: flex;flex-direction: column-reverse;gap: 3px;font-weight: bold;">
+                    <button style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;" onclick="openBag('Left')">Tủ đồ</button>
+                    <button style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        2</button>
+                    <button style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        3</button>
+                </div>
+            </div>
+            
+            <div id="menu2"
+                style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 6px; right: 10px;">
+                <button
+                    style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
+                     border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">
+                    Mở rộng
+                </button>
+        
+                <!-- Các nút ẩn -->
+                <div id="menuButtons2" style="display: flex; flex-direction: row-reverse; gap: 3px; font-weight: bold;">
+                    <button
+                        style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
+                        onclick="openBag('Left')"
+                        >Tủ đồ</button>
+                    <button
+                        style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        2</button>
+                    <button
+                        style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        3</button>
+                </div>
+            </div>
+        
         </div>
-
+        
         <!-- Màn hình shop -->
         <div id="shopScreen" style="
         display: none;
@@ -1158,173 +780,6 @@
         </div>
         <div id="overlayPopupBag"
             style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #00000000; z-index: 4;">
-        </div>
-
-        <div id="hunterZone"
-            style=" display: none; flex-direction: row; gap: 5px; padding-left: 10px; padding-right: 10px; 
-            padding-top: 20px; padding-bottom: 20px; height: 300px; min-width: 30%; justify-content: flex-start; border-radius: 20px; 
-            width: 95%; border: 5px solid; background: rgba(245, 233, 194, 0.5); box-shadow: rgb(178 103 50) 0px 4px 8px 0px; position: relative">
-            <div id="viewport"
-                style="width: 100%; height: 100%; overflow: hidden; position: relative; border: 2px solid #fff;border-radius: 10px;">
-                <div id="mapHunter"
-                    style="position: absolute; width: 1024px; height: 1536px; background-image: url('https://res.cloudinary.com/dxgawkr4g/image/upload/v1744952970/xgbyxzwiwtbu3j3faxwm.png'); background-size: cover;">
-                    <img id="playerHunter"
-                        src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif" style="
-                          width: 32px;
-                          height: 32px;
-                          position: absolute;
-                          z-index: 2;
-                          pointer-events: none">
-                </div>
-            </div>
-            
-            <div style="display: flex;flex-direction: row;width: 100%;z-index: 3;position: absolute;top: 4px;left: 2px;">
-                <div style="width:20px;height: 20px;color: white;border-radius: 50px;padding: 10px;text-align: center;
-                    display: flex;justify-content: space-between;align-items: center;border: solid 2px #bd8f17;
-                    background: url(https://bathanh.com.vn/wp-content/uploads/2017/08/default_avatar.png);
-                    background-size: cover;
-                    z-index: 1;
-                    ">
-                </div>
-                <div style="display:flex; flex-direction: column">
-                    <div style="background: #744620;color: white;border-radius: 8px;padding: 6px;padding-left: 35px;padding-right: 15px;
-                        text-align: center;font-size: 12px;font-weight: bold; display: flex;flex-direction: row; height: 10px;
-                        justify-content: center;align-items: center; margin-left: -30px; gap: 5px;
-                        ">
-                        <span id="nameUser" style="text-align: left;">quangvanviet</span>
-                        <span id="isRanking" style="align-items: left">(Top: 5)</span>
-                    </div>
-                    <div onclick="messageOpen('Đây là thể lực, khi hết thể lực sẽ khó săn tìm 5Mon hơn')" style="gap: 3px;display: flex;flex-direction: row;align-content: center;align-items: center;width: 113%; margin-left: -10px;">
-                        <div id="staminaBar" style=" width: 100%; height: 15px; background-color: #555; border-radius: 10px; position: relative; box-shadow: #00000070 1px 1px 1px 1px;">
-                            <div id="staminaFill" style="height: 100%; background-color: rgb(89 219 178); border-radius: 10px; width: 100%;">
-                            </div>
-                            <div id="staminaText" style="font-weight: bold; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); color: white; font-size: 12px; z-index: 1;">
-                                100/100</div>
-                        </div>
-                        <span style="background: orange; border-radius: 30px; width: 15px; height: 15px; font-size: 15px; font-weight: bold;box-shadow: #00000087 1px 1px 1px 1px;padding: 1px;" onmouseover="this.style.background='red'; this.style.transform='scale(1.2)';" onmouseout="this.style.background='orange'; this.style.transform='scale(1)';" onclick="showUpStamina()">
-                            +
-                        </span>
-                    </div>
-                </div>
-                <div style="background: #a9754b;color: #fff;border-radius: 8px;padding: 6px;padding-top: 38px;font-size: 10px;font-weight: bold;
-                    display: flex; flex-direction: column;position: absolute;top: 10px;margin-left: 2px;
-                    align-items: flex-start;justify-content: flex-start;width: 10px; gap: 3px;">
-                    <div id="infoGoldDiamond" style="display: flex;gap: 2px;font-size: 12px;flex-direction: column;align-content: center;justify-content: center;align-items: flex-start;min-width: 50px;">
-                        <!-- Vàng -->
-                        <div onclick="messageOpen('Đây là vàng dùng để mua vật phẩm trong cửa hàng')" style="
-                            background: #ff7900ad;
-                            padding: 2px;
-                            width: 100%;
-                            border-radius: 5px;
-                            text-align: left;
-                            border: 1px solid #6633999c;
-                            display: flex;
-                            gap: 4px;
-                            flex-direction: row;
-                        ">
-                            <i class="fa-solid fa-coins"></i>
-                            <span id="goldUser" style="align-items: left">1000000</span>
-                        </div>
-                        <!-- Ticket -->
-                        <div onclick="messageOpen('Đây là vé đổi dùng để đổi trong cửa hàng')" style="
-                            background: #ff7900ad;
-                            padding: 2px;
-                            width: 100%;
-                            border-radius: 5px;
-                            text-align: left;
-                            border: 1px solid #6633999c;
-                            display: flex;
-                            gap: 4px;
-                            flex-direction: row;
-                        ">
-                            <i class="fa-solid fa-ticket-simple"></i>
-                            <span id="ticketUser" style="align-items: left">0</span>
-                        </div>
-    
-                        <!-- Ruby -->
-                        <div onclick="messageOpen('Đây là kim cương dùng để mua vật phẩm trong cửa hàng')" style="
-                            background: #ff7900ad;
-                            padding: 2px;
-                            width: 100%;
-                            border-radius: 5px;
-                            text-align: left;
-                            border: 1px solid #6633999c;
-                            display: flex;
-                            gap: 4px;
-                            flex-direction: row;
-                        ">
-                            <i class="fa-solid fa-gem"></i>
-                            <span id="diamondUser" style="align-items: left">0</span>
-                        </div>
-                        <div onclick="messageOpen('Đây là điểm xếp hạng')" style="
-                            background: #ff7900ad;
-                            padding: 2px;
-                            width: 100%;
-                            border-radius: 5px;
-                            text-align: left;
-                            border: 1px solid #6633999c;
-                            display: flex;
-                            gap: 4px;
-                            flex-direction: row;">
-                            <!-- Rank point -->
-                            <i class="fa-solid fa-medal"></i>
-                            <span id="pointRank" style="align-items: left">0</span>
-                        </div>
-                    </div>
-                    <div style="background: white;padding: 4px;border-radius: 15px;width: 10px;height: 10px;color: black;font-size: 16px;
-                        font-weight: bold;cursor: pointer"
-                        onmouseover="this.style.transform='scale(1.2)';" 
-                        onmouseout="this.style.transform='scale(1)';" 
-                        onclick="hideOrShowInfoGoldDiamond()">
-                        <span>^</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="display: flex;flex-direction: column;z-index: 3;position: absolute;top: 10px;right: 10px;align-items: flex-end;">
-                <button id="autoButton" onclick="toggleAutoMovement()">Tự động săn</button>
-            </div>
-            
-            <div id="menu1" style="display: flex;flex-direction: column-reverse;gap: 5px;position: absolute;bottom: 6px;right: 10px;z-index: 3">
-                <!-- Nút Mở rộng -->
-                <button id="toggleMenu" style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
-                    border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu gọn</button><!-- Các nút ẩn -->
-                
-            <div id="menuButtons1" style="display: flex;flex-direction: column-reverse;gap: 3px;font-weight: bold;">
-                    <button style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;
-                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;" onclick="openBag('Left')">Tủ đồ</button>
-                    <button style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;
-                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
-                        2</button>
-                    <button style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;
-                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
-                        3</button>
-                </div>
-            </div>
-            
-            <div id="menu2"
-                style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 6px; right: 10px;">
-                <button
-                    style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
-                     border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">
-                    Mở rộng
-                </button>
-        
-                <!-- Các nút ẩn -->
-                <div id="menuButtons2" style="display: flex; flex-direction: row-reverse; gap: 3px; font-weight: bold;">
-                    <button
-                        style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
-                        onclick="openBag('Left')"
-                        >Tủ đồ</button>
-                    <button
-                        style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
-                        2</button>
-                    <button
-                        style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
-                        3</button>
-                </div>
-            </div>
-        
         </div>
         
         <!-- Popup hiển thị 5Mon gặp phải -->
