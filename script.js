@@ -11735,6 +11735,15 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
+    settingMap();
+    
+    document.getElementById("mainScreen").style.display = "flex";
+    updateView();
+    updateStamina(); 
+    spawnRandomPets();
+}
+
+function settingMap() {
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
@@ -11745,11 +11754,9 @@ function loadMap(isMap) {
     playerY = mapHeight / 2;
     player.style.width = (viewport.offsetHeight/8) + "px";
     player.style.height = (viewport.offsetHeight/8) + "px";
-    document.getElementById("mainScreen").style.display = "flex";
-    updateView();
-    updateStamina(); 
-    spawnRandomPets();
 }
+
+window.addEventListener("resize", settingMap);
 
 document.getElementById("toggleMenu").addEventListener("click", () => {
     if (document.getElementById("menuButtons1").style.display === "flex") {
