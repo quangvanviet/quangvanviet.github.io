@@ -11751,12 +11751,16 @@ function loadMap(isMap) {
     spawnRandomPets();
 }
 
-let isMenuOpen = false;
 document.getElementById("toggleMenu").addEventListener("click", () => {
-    isMenuOpen = !isMenuOpen;
-    document.getElementById("menuButtons1").style.display = isMenuOpen ? "flex" : "none";
-    document.getElementById("menuButtons2").style.display = isMenuOpen ? "flex" : "none";
-    document.getElementById("toggleMenu").textContent = isMenuOpen ? "Thu gọn" : "Mở rộng";
+    if (document.getElementById("menuButtons1").style.display === "flex") {
+        document.getElementById("menuButtons1").style.display =  "none";
+        document.getElementById("menuButtons2").style.display =  "none";
+        document.getElementById("toggleMenu").textContent = "Mở rộng";
+    } else {
+        document.getElementById("menuButtons1").style.display =  "flex";
+        document.getElementById("menuButtons2").style.display =  "flex";
+        document.getElementById("toggleMenu").textContent = "Thu gọn";
+    }
 });
 
 map.addEventListener("click", function (event) {
