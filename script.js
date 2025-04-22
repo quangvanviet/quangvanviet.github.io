@@ -11736,6 +11736,8 @@ function loadMap(isMap) {
     }
 
     settingMap();
+    playerX = (viewport.offsetWidth * 2) / 2;
+    playerY = (viewport.offsetWidth * 2) / 2;
     
     document.getElementById("mainScreen").style.display = "flex";
     updateView();
@@ -11752,8 +11754,6 @@ function settingMap() {
         viewHeight = viewport.offsetHeight;
         mapWidth = viewport.offsetWidth * 2;
         mapHeight = viewport.offsetWidth * 2;
-        playerX = mapWidth / 2;
-        playerY = mapHeight / 2;
         player.style.width = (viewport.offsetHeight/8) + "px";
         player.style.height = (viewport.offsetHeight/8) + "px";
         hideLoading();
