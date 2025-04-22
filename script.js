@@ -5337,7 +5337,7 @@ function internalUp() {
 //hàm mở đóng các nút trong giao diện chính
 function showOrHiddenDiv(idDiv) {
     const allDivs = {
-      openMenuStartGame: [document.getElementById("openMenuStartGame"), "Right"],
+      menuStartGame: [document.getElementById("menuStartGame"), "Right"],
       bagInventory: [document.getElementById("bagInventory"), "Right"],
       rankBoard: [document.getElementById("rankBoard"), "Left"],
       popupQuestBoard: [document.getElementById("popupQuestBoard"), "Right"],
@@ -5400,7 +5400,7 @@ function openMenuStartGame() {
         return;
     } else {
         changeButtonMenuStartGame();
-        showOrHiddenDiv("openMenuStartGame");
+        showOrHiddenDiv("menuStartGame");
     }
 }
 
