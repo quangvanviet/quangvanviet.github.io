@@ -11755,7 +11755,7 @@ function openHunterMap(isMap) {
         toggleButton.textContent = isMenuOpen ? "Thu gọn" : "Mở rộng";
     });
 
-    document.getElementById("hunterZone").style.display = "flex";
+    document.getElementById("mainScreen").style.display = "flex";
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
@@ -11766,7 +11766,7 @@ function openHunterMap(isMap) {
     playerY = mapHeight / 2;
     player.style.width = (viewport.offsetHeight/8) + "px";
     player.style.height = (viewport.offsetHeight/8) + "px";
-    document.getElementById("hunterZone").style.display = "none";
+    document.getElementById("mainScreen").style.display = "none";
 
     map.addEventListener("click", function (event) {
         if (!canClick || isAutoHunter) return;
@@ -11808,7 +11808,7 @@ function openHunterMap(isMap) {
     });
 
     setTimeout(() => {
-        document.getElementById("hunterZone").style.display = "flex";
+        document.getElementById("mainScreen").style.display = "flex";
         document.getElementById("mainScreen").style.display = "none";
         updateView();
         updateStamina(); // Cập nhật thanh staminaUser ban đầu
@@ -11833,7 +11833,7 @@ function closeHunterMap() {
         // Xóa sự kiện visibilitychange khi tắt auto
         document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
 
-        document.getElementById("hunterZone").style.display = "none";
+        document.getElementById("mainScreen").style.display = "none";
         document.getElementById("mainScreen").style.display = "flex";
         hideLoading();
     }, 1000);
