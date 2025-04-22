@@ -1276,8 +1276,24 @@
                 <button id="autoButton" onclick="toggleAutoMovement()">Tự động săn</button>
             </div>
             
-        
-            <div id="menuHunter"
+            <div id="menu1" style="display: flex;flex-direction: column-reverse;gap: 5px;position: absolute;bottom: 6px;right: 10px;">
+                <!-- Nút Mở rộng -->
+                <button id="toggleMenuHunter" style="padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
+                    border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu gọn</button><!-- Các nút ẩn -->
+                
+            <div id="menuButtons1" style="display: flex;flex-direction: column-reverse;gap: 3px;font-weight: bold;">
+                    <button style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;" onclick="openBag('Left')">Tủ đồ</button>
+                    <button style="padding: 4px 6px; background-color: #FF9800; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        2</button>
+                    <button style="padding: 4px 6px; background-color: #9C27B0; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;">Menu
+                        3</button>
+                </div>
+            </div>
+            
+            <div id="menu2"
                 style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 25px; right: 20px;">
                 <!-- Nút Mở rộng -->
                 <button id="toggleMenuHunter"
@@ -1287,7 +1303,7 @@
                 </button>
         
                 <!-- Các nút ẩn -->
-                <div id="menuButtonsHunter" style="display: none; flex-direction: row; gap: 5px; font-weight: bold;">
+                <div id="menuButtons2" style="display: none; flex-direction: row-reverse; gap: 3px; font-weight: bold;">
                     <button
                         style="padding: 4px 6px; background-color: #2196F3; color: white; border-radius: 5px; cursor: pointer;border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba;"
                         onclick="openBag('Left')"
