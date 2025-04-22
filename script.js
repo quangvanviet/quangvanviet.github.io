@@ -8846,7 +8846,7 @@ function chosenSortBagLeft(sort, divID) {
     loadItemBagLeft(sortBagLeft);
 }
 
-function openBag(leftOrRight){
+function openBag(){
 
     showOrHiddenDiv('popupBag');
     if (!sortBagLeft || sortBagLeft === "") {
@@ -8875,18 +8875,9 @@ function openBag(leftOrRight){
     } else {
         document.getElementById("overlayPopupBag").style.display = "block";
     }
-
-    if (leftOrRight === "Left") {
-        document.getElementById("bagPages").style.display = "none"
-    } else {
-        setTimeout(() => {
-            document.getElementById("bagPages").style.display = "flex"
-        }, 500);
-    }
-
 }
 
-function loadItemBagLeft(sort, leftOrRight){
+function loadItemBagLeft(sort){
     sortBagLeft = sort
     const boardBagLeft = document.getElementById("boardBagLeft")
     const containerId = "inventoryPages";
@@ -8967,7 +8958,7 @@ function loadItemBagLeft(sort, leftOrRight){
         //Kiểm tra xem đã trang bị chưa
         const hasEquipped = Object.values(typeGameConquest.battleUserPet).some(pet => pet.ID === item.ID);
 
-        if (hasEquipped && leftOrRight !== "Left") {
+        if (hasEquipped) {
             const ownedOverlay = document.createElement("div");
             ownedOverlay.textContent = "Đã dùng";
             ownedOverlay.style.cssText = `
