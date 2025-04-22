@@ -602,6 +602,7 @@ function loadDataForUser() {
             document.getElementById("nameUser").innerText = `${nameUser} - ${vipTicket}`;
             resetGoldAndTicket();
             isFinalLoadData = true;
+            updateStamina();
             hideLoading();
 
             // Hiển thị popup nếu user chưa chọn nhân vật
@@ -712,7 +713,6 @@ function loadDataForUser() {
         .catch(error => {
             console.error("Lỗi khi tải dữ liệu từ Firebase:", error);
         });
-    updateStamina();
 }
 
 //Tăng stamina cho user mỗi khi đăng nhập hoặc quay lại
