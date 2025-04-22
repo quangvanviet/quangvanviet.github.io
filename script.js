@@ -11307,9 +11307,6 @@ function resetGoldAndTicket() {
     document.getElementById("pointRank").innerText = `${pointRank}`;
     document.getElementById("diamondUser").innerText = `${diamondUser}`;
 
-    document.getElementById("goldUserHunter").innerText = `${goldUser}`;
-    document.getElementById("diamondUserHunter").innerText = `${diamondUser}`;
-
     //Cập nhật bảng xếp hạng hiện tại:
     const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
     const myTop = sortedUsers.findIndex(([user]) => user === username) + 1; // Thứ hạng bắt đầu từ 1
