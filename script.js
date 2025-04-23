@@ -11847,6 +11847,43 @@ function closeMap() {
     document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
 }
 
+let isHolding = false;
+map.addEventListener("mousedown", function (event) {
+    if (isAutoHunter) return;
+    isHolding = true;
+    handleHoverMove(event); // Di chuyển ngay khi nhấn
+});
+
+map.addEventListener("mouseup", function () {
+    isHolding = false;
+});
+
+map.addEventListener("mouseleave", function () {
+    isHolding = false;
+});
+
+map.addEventListener("mousemove", function (event) {
+    if (isHolding) {
+        handleHoverMove(event);
+    }
+});
+
+function handleHoverMove(event) {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+        moveStartTime = null;
+    }
+
+    const rect = map.getBoundingClientRect();
+    targetX = event.clientX - rect.left;
+    targetY = event.clientY - rect.top;
+
+    targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
+    targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
+
+    requestAnimationFrame(movePlayer);
+}
 
 let staminaDrain = 1; // Mỗi lần di chuyển trừ đi bao nhiêu staminaUser
 
