@@ -6438,7 +6438,6 @@ function outGameRank() {
         document.getElementById('nextStepGame').innerText = "Tiếp tục"
         resetGoldAndTicket();
         closePopupSetting();
-        loadMap('Sơn La');
     }, 1000);
     endLoading();
 }
@@ -10067,7 +10066,6 @@ function closeShop() {
     startLoading();
     setTimeout(() => {
         resetGoldAndTicket();
-        loadMap('Sơn La')
         document.getElementById('mainScreen').style.display = "flex";
         document.getElementById('shopScreen').style.display = "none";
     }, 1000);
