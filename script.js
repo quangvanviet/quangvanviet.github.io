@@ -172,7 +172,7 @@ function saveDataUserToFirebase() {
         telUser: telUser,
         pointRank: pointRank,
         goldUser: goldUser,
-        staminaUser: staminaUser,
+        // staminaUser: staminaUser,
         weightBagUser: weightBagUser,
         luckyMeet5Mon: luckyMeet5Mon,
         diamondUser: diamondUser,
@@ -199,7 +199,9 @@ function saveDataUserToFirebase() {
     //Kiểm tra và lưu userDataNew
     if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
         // Lưu dữ liệu vào Firebase
-        update(userDataRef, userDataNew)
+        let dataUpdate = { ...userDataNew, staminaUser: staminaUser };
+        
+        update(userDataRef, dataUpdate)
             .then(() => {
                 console.log("🟢 Dữ liệu đã được lưu!");
                 userDataOld = { ...userDataNew }; // Cập nhật userDataOld sau khi lưu
@@ -682,7 +684,7 @@ function loadDataForUser() {
                 telUser: telUser,
                 pointRank: pointRank,
                 goldUser: goldUser,
-                staminaUser: staminaUser,
+                // staminaUser: staminaUser,
                 weightBagUser: weightBagUser,
                 luckyMeet5Mon: luckyMeet5Mon,
                 diamondUser: diamondUser,
@@ -11949,7 +11951,14 @@ function movePlayer(timestamp) {
             }
         } else {
             luckyMeet5Mon += luckUp;
-            spawnRandomPets();
+            if (staminaUser <= 0) {
+                let rdSpawn5Mon = Math.random() * 100;
+                if (rdSpawn5Mon <= 30) {
+                    spawnRandomPets();
+                }
+            } else {
+               spawnRandomPets(); 
+            }
         }
     }
 
