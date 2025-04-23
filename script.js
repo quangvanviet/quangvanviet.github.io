@@ -11854,8 +11854,11 @@ let staminaDrain = 1; // Mỗi lần di chuyển trừ đi bao nhiêu staminaUse
 let isAutoMoving = false;
 
 function updateView() {
-    player.style.left = playerX + "px";
-    player.style.top = playerY + "px";
+    const playerWidth = player.offsetWidth;
+    const playerHeight = player.offsetHeight;
+
+    player.style.left = (playerX - playerWidth / 2) + "px";
+    player.style.top = (playerY - playerHeight / 2) + "px";
 
     let offsetX = Math.min(Math.max(0, playerX - viewWidth / 2), mapWidth - viewWidth);
     let offsetY = Math.min(Math.max(0, playerY - viewHeight / 2), mapHeight - viewHeight);
