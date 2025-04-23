@@ -174,7 +174,7 @@ function saveDataUserToFirebase() {
         goldUser: goldUser,
         // staminaUser: staminaUser,
         weightBagUser: weightBagUser,
-        luckyMeet5Mon: luckyMeet5Mon,
+        // luckyMeet5Mon: luckyMeet5Mon,
         diamondUser: diamondUser,
         onGame: onGame,
         infoStartGame: infoStartGame,
@@ -199,7 +199,7 @@ function saveDataUserToFirebase() {
     //Kiểm tra và lưu userDataNew
     if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
         // Lưu dữ liệu vào Firebase
-        let dataUpdate = { ...userDataNew, staminaUser: staminaUser };
+        let dataUpdate = { ...userDataNew, staminaUser: staminaUser , luckyMeet5Mon: luckyMeet5Mon};
         
         update(userDataRef, dataUpdate)
             .then(() => {
@@ -686,7 +686,7 @@ function loadDataForUser() {
                 goldUser: goldUser,
                 // staminaUser: staminaUser,
                 weightBagUser: weightBagUser,
-                luckyMeet5Mon: luckyMeet5Mon,
+                // luckyMeet5Mon: luckyMeet5Mon,
                 diamondUser: diamondUser,
                 onGame: onGame,
                 infoStartGame: infoStartGame,
