@@ -11791,9 +11791,17 @@ document.getElementById("toggleMenu").addEventListener("click", () => {
     }
 });
 
+let animationId = null
+
 map.addEventListener("click", function (event) {
-    if (!canClick || isAutoHunter) return;
-    canClick = false;
+    if (isAutoHunter) return;
+
+    // Hủy animation đang chạy nếu có
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+        moveStartTime = null; // Reset thời điểm bắt đầu để tính lại bước mới
+    }
 
     const rect = map.getBoundingClientRect();
     targetX = event.clientX - rect.left;
@@ -11802,29 +11810,25 @@ map.addEventListener("click", function (event) {
     targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
     targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
 
-    // Vẽ dấu "X" ở điểm đến
     const marker = document.createElement("div");
     marker.className = "target-x";
-
-    marker.style.position = "absolute";
-    marker.style.color = "firebrick";
-    marker.style.fontWeight = "bold";
-    marker.style.fontSize = "18px";
-    marker.style.transform = "translate(-50%, -50%)";
-    marker.style.zIndex = "2";
-
     marker.textContent = "x";
-    marker.style.pointerEvents = "none";
-    marker.style.left = `${targetX}px`;
-    marker.style.top = `${targetY}px`;
-    marker.style.transform = `translate(-50%, -50%)`; // Căn giữa dấu "X"
+
+    Object.assign(marker.style, {
+        position: "absolute",
+        color: "firebrick",
+        fontWeight: "bold",
+        fontSize: "18px",
+        transform: "translate(-50%, -50%)",
+        zIndex: "2",
+        pointerEvents: "none",
+        left: `${targetX}px`,
+        top: `${targetY}px`
+    });
+
     map.appendChild(marker);
-
-
-    // Xoá dấu sau 2 giây
     setTimeout(() => {
         map.removeChild(marker);
-        canClick = true;
     }, timeMove);
 
     requestAnimationFrame(movePlayer);
@@ -11889,22 +11893,21 @@ function movePlayer(timestamp) {
     }
 
     if (staminaUser <= 0) {
-        luckyMeet5Mon = 0
+        luckyMeet5Mon = 0;
     }
 
     if (Object.values(userPet).length >= weightBagUser) {
-        messageOpen('Tủ đồ đã đầy')
+        messageOpen('Tủ đồ đã đầy');
         return;
     }
 
     const elapsed = timestamp - moveStartTime;
-    const progress = Math.min(elapsed / moveDuration, 1); // Từ 0 đến 1
+    const progress = Math.min(elapsed / moveDuration, 1);
 
-    // Tính vị trí hiện tại theo tween tuyến tính
     playerX = startX + (targetX - startX) * progress;
     playerY = startY + (targetY - startY) * progress;
-    
-    // 👉 Flip trái/phải
+
+    // Flip trái/phải
     if (targetX < startX) {
         document.getElementById('playerHunter').style.transform = "scaleX(1)";
     } else if (targetX > startX) {
@@ -11914,31 +11917,26 @@ function movePlayer(timestamp) {
     updateView();
 
     if (progress < 1 || meet5Mon) {
-        requestAnimationFrame(movePlayer);
+        animationId = requestAnimationFrame(movePlayer);
     } else {
-        moveStartTime = null; // reset để lần sau di chuyển mới
+        moveStartTime = null;
+        animationId = null;
         playerX = targetX;
         playerY = targetY;
 
-        // Trừ staminaUser mỗi lần di chuyển xong
-        if (isMeet5Mon) {
-            
-        } else {
+        if (!isMeet5Mon) {
             staminaUser -= staminaDrain;
             updateStamina();
         }
 
-        // Random xem có gặp pet không
         let rd5MonID = Math.random() * 100;
-        console.log("rd5MonID", rd5MonID)
         if (rd5MonID <= luckyMeet5Mon) {
             meet5Mon = true;
             catch5Mon();
             luckyMeet5Mon = 5;
         } else {
-            luckyMeet5Mon += 0.5
+            luckyMeet5Mon += 0.5;
             spawnRandomPets();
-            console.log("luckyMeet5Mon", luckyMeet5Mon)
         }
 
         updateView();
