@@ -12651,6 +12651,8 @@ function hideOrShowInfoGoldDiamond() {
 }
 
 //Audio
+
+//Audio background
   const musicBGList = [
     "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
     "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
@@ -12705,6 +12707,20 @@ function hideOrShowInfoGoldDiamond() {
   });
 
   window.addEventListener("load", playRandomMusic);
+
+//Audio click
+const clickAudio = document.getElementById("clickSound");
+  clickAudio.volume = 0.6; // điều chỉnh âm lượng
+
+  // Phát âm thanh khi click bất kỳ button nào (kể cả tạo sau)
+  document.addEventListener("click", function(e) {
+    const isButton = e.target.tagName.toLowerCase() === "button" || e.target.closest("button");
+    if (isButton) {
+      clickAudio.currentTime = 0;
+      clickAudio.play().catch(() => {});
+    }
+  });
+
 
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
