@@ -12650,6 +12650,61 @@ function hideOrShowInfoGoldDiamond() {
     }
 }
 
+//Audio
+  const musicList = [
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3"
+  ];
+
+  const audio = document.getElementById("bgMusic");
+  let lastPlayedIndex = -1;
+  const volumeTarget = 0.5;
+  const fadeDuration = 2000; // ms
+
+  function getRandomIndexExcept(exceptIndex) {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * musicList.length);
+    } while (musicList.length > 1 && newIndex === exceptIndex);
+    return newIndex;
+  }
+
+  function fadeVolume(target, duration, callback) {
+    const step = 50;
+    const diff = (target - audio.volume) / (duration / step);
+    const interval = setInterval(() => {
+      audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
+      if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
+        clearInterval(interval);
+        if (callback) callback();
+      }
+    }, step);
+  }
+
+  function playRandomMusic() {
+    const index = getRandomIndexExcept(lastPlayedIndex);
+    lastPlayedIndex = index;
+    audio.src = musicList[index];
+    audio.volume = 0.0;
+
+    audio.play().then(() => {
+      fadeVolume(volumeTarget, fadeDuration);
+    }).catch(() => {
+      document.addEventListener("click", () => {
+        audio.play().then(() => fadeVolume(volumeTarget, fadeDuration));
+      }, { once: true });
+    });
+  }
+
+  audio.addEventListener("ended", () => {
+    fadeVolume(0.0, fadeDuration, () => {
+      playRandomMusic();
+    });
+  });
+
+  window.addEventListener("load", playRandomMusic);
+
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
 window.register = register;
