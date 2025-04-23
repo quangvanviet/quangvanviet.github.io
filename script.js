@@ -12662,7 +12662,7 @@ function hideOrShowInfoGoldDiamond() {
 
   const audio = document.getElementById("bgMusic");
   let lastPlayedIndex = -1;
-  const volumeTarget = 0.5;
+  const volumeTarget = 0.2;
   const fadeDuration = 2000; // ms
 
   function getRandomIndexExcept(exceptIndex) {
@@ -12710,7 +12710,7 @@ function hideOrShowInfoGoldDiamond() {
 
 //Audio click
 const clickAudio = document.getElementById("clickSound");
-  clickAudio.volume = 0.6; // điều chỉnh âm lượng
+  clickAudio.volume = 0.9; // điều chỉnh âm lượng
 
   // Phát âm thanh khi click bất kỳ button nào (kể cả tạo sau)
   document.addEventListener("click", function(e) {
