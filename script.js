@@ -11892,8 +11892,11 @@ function movePlayer(timestamp) {
         startY = playerY;
     }
 
+    let luckUp = 0
     if (staminaUser <= 0) {
-        luckyMeet5Mon = 0;
+        luckUp = 0.2;
+    } else {
+        luckUp = 0.4;
     }
 
     if (Object.values(userPet).length >= weightBagUser) {
@@ -11939,9 +11942,13 @@ function movePlayer(timestamp) {
         if (rd5MonID <= luckyMeet5Mon) {
             meet5Mon = true;
             catch5Mon();
-            luckyMeet5Mon = 5;
+            if (staminaUser <= 0) {
+                luckyMeet5Mon = 0;
+            } else {
+               luckyMeet5Mon = 5; 
+            }
         } else {
-            luckyMeet5Mon += 0.2;
+            luckyMeet5Mon += luckUp;
             spawnRandomPets();
         }
     }
