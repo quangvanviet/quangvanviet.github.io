@@ -11847,44 +11847,6 @@ function closeMap() {
     document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
 }
 
-let isHolding = false;
-map.addEventListener("mousedown", function (event) {
-    if (isAutoHunter) return;
-    isHolding = true;
-    handleHoverMove(event); // Di chuyển ngay khi nhấn
-});
-
-map.addEventListener("mouseup", function () {
-    isHolding = false;
-});
-
-map.addEventListener("mouseleave", function () {
-    isHolding = false;
-});
-
-map.addEventListener("mousemove", function (event) {
-    if (isHolding) {
-        handleHoverMove(event);
-    }
-});
-
-function handleHoverMove(event) {
-    if (animationId) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
-        moveStartTime = null;
-    }
-
-    const rect = map.getBoundingClientRect();
-    targetX = event.clientX - rect.left;
-    targetY = event.clientY - rect.top;
-
-    targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
-    targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
-
-    requestAnimationFrame(movePlayer);
-}
-
 let staminaDrain = 1; // Mỗi lần di chuyển trừ đi bao nhiêu staminaUser
 
 let isAutoMoving = false;
@@ -11921,6 +11883,7 @@ let moveStartTime = null;
 let moveDuration = 1000; // ms
 let timeMove = 1050;
 let meet5Mon = false //Trạng thái gặp 5mon
+let movedDistance = 0; //Biến lưu khoảng cách đã di chuyển
 
 function movePlayer(timestamp) {
     if (!moveStartTime) {
@@ -11941,8 +11904,18 @@ function movePlayer(timestamp) {
     const elapsed = timestamp - moveStartTime;
     const progress = Math.min(elapsed / moveDuration, 1);
 
-    playerX = startX + (targetX - startX) * progress;
-    playerY = startY + (targetY - startY) * progress;
+    let newX = startX + (targetX - startX) * progress;
+    let newY = startY + (targetY - startY) * progress;
+
+    // Tính khoảng cách đã đi kể từ lần update trước
+    let dx = newX - playerX;
+    let dy = newY - playerY;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+    movedDistance += distance;
+
+    // Cập nhật vị trí nhân vật
+    playerX = newX;
+    playerY = newY;
 
     // Flip trái/phải
     if (targetX < startX) {
@@ -11953,13 +11926,9 @@ function movePlayer(timestamp) {
 
     updateView();
 
-    if (progress < 1 || meet5Mon) {
-        animationId = requestAnimationFrame(movePlayer);
-    } else {
-        moveStartTime = null;
-        animationId = null;
-        playerX = targetX;
-        playerY = targetY;
+    // Nếu đã di chuyển > 50px
+    if (movedDistance >= 50) {
+        movedDistance = 0;
 
         if (!isMeet5Mon) {
             staminaUser -= staminaDrain;
@@ -11975,7 +11944,17 @@ function movePlayer(timestamp) {
             luckyMeet5Mon += 0.5;
             spawnRandomPets();
         }
+    }
 
+    // Tiếp tục animation nếu chưa đến đích
+    if (progress < 1 || meet5Mon) {
+        animationId = requestAnimationFrame(movePlayer);
+    } else {
+        moveStartTime = null;
+        animationId = null;
+        playerX = targetX;
+        playerY = targetY;
+        movedDistance = 0; // Reset luôn khi đến đích
         updateView();
     }
 }
