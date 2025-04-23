@@ -12651,10 +12651,11 @@ function hideOrShowInfoGoldDiamond() {
 }
 
 //Audio
-  const musicList = [
+  const musicBGList = [
     "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
     "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
-    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3"
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745398510/dhe1luws4cwzgoxnj2oi.mp3"
   ];
 
   const audio = document.getElementById("bgMusic");
@@ -12665,8 +12666,8 @@ function hideOrShowInfoGoldDiamond() {
   function getRandomIndexExcept(exceptIndex) {
     let newIndex;
     do {
-      newIndex = Math.floor(Math.random() * musicList.length);
-    } while (musicList.length > 1 && newIndex === exceptIndex);
+      newIndex = Math.floor(Math.random() * musicBGList.length);
+    } while (musicBGList.length > 1 && newIndex === exceptIndex);
     return newIndex;
   }
 
@@ -12685,7 +12686,7 @@ function hideOrShowInfoGoldDiamond() {
   function playRandomMusic() {
     const index = getRandomIndexExcept(lastPlayedIndex);
     lastPlayedIndex = index;
-    audio.src = musicList[index];
+    audio.src = musicBGList[index];
     audio.volume = 0.0;
 
     audio.play().then(() => {
