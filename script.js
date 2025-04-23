@@ -11927,7 +11927,7 @@ function movePlayer(timestamp) {
     updateView();
 
     // Nếu đã di chuyển > 50px
-    if (movedDistance >= 50) {
+    if (movedDistance >= 150) {
         movedDistance = 0;
 
         if (!isMeet5Mon) {
@@ -11941,7 +11941,7 @@ function movePlayer(timestamp) {
             catch5Mon();
             luckyMeet5Mon = 5;
         } else {
-            luckyMeet5Mon += 0.5;
+            luckyMeet5Mon += 0.2;
             spawnRandomPets();
         }
     }
@@ -12550,9 +12550,9 @@ let count5MonSpawn = 0;
     if (staminaUser <= 0) {
         percentSeen5Mon = 5
     } else {
-        percentSeen5Mon = 30
+        percentSeen5Mon = 20
     }
-    if (spawn5Mon < percentSeen5Mon && count5MonSpawn < 30) {
+    if (spawn5Mon < percentSeen5Mon && count5MonSpawn < 20) {
         count5MonSpawn += 1
         const pet = document.createElement("img");
         pet.src = "https://res.cloudinary.com/dxgawkr4g/image/upload/v1744969937/mt66cdg95hhpgv5uammj.gif";
