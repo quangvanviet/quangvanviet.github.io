@@ -11746,8 +11746,8 @@ function loadMap(isMap) {
     mapHeight = viewport.offsetWidth * 2;
     playerX = (viewport.offsetWidth * 2) / 2;
     playerY = (viewport.offsetWidth * 2) / 2;
-    player.style.width = (viewport.offsetHeight/8) + "px";
-    player.style.height = (viewport.offsetHeight/8) + "px";
+    player.style.width = (viewport.offsetHeight/2) + "px";
+    player.style.height = (viewport.offsetHeight/2) + "px";
     updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
@@ -11766,8 +11766,8 @@ function settingMap() {
     mapHeight = viewport.offsetWidth * 2;
     playerX = (viewport.offsetWidth * 2) / 2;
     playerY = (viewport.offsetWidth * 2) / 2;
-    player.style.width = (viewport.offsetHeight/8) + "px";
-    player.style.height = (viewport.offsetHeight/8) + "px";
+    player.style.width = (viewport.offsetHeight/2) + "px";
+    player.style.height = (viewport.offsetHeight/2) + "px";
     updateView();
 
 }
