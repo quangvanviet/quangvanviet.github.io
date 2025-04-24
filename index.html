@@ -12,33 +12,6 @@
 </head>
 
 <body>
-    <div id="musicControls" style="
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 6px 10px;
-      border-radius: 12px;
-      backdrop-filter: blur(4px);
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      z-index: 9999;
-    ">
-      <button id="toggleMusic" title="Tắt nhạc" style="
-        background: none;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-      ">🔊</button>
-      
-      <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.2" style="
-        width: 100px;
-        cursor: pointer;
-      ">
-    </div>
     <audio id="bgMusic" hidden></audio>
     <audio id="clickSound" src="https://res.cloudinary.com/dxgawkr4g/video/upload/v1745399283/byjcjqnocyzsslce8kwv.mp3" 
         preload="auto" hidden></audio>
@@ -439,7 +412,7 @@
                         border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba; position: relative;"
                         onmouseover="this.style.transform='scale(1.1)';" 
                         onmouseout="this.style.transform='scale(1)';" 
-                        onclick="openPopupSetting()">
+                        onclick="openPopupSettingMain()">
                         Tùy chỉnh
                     </button>
                 </div>
@@ -2168,8 +2141,92 @@
     <div id="popupOverlay"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;">
     </div>
+    
+    <!--   popup setting main   -->
+    <div id="popupSettingMain" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 997; position: absolute;">
+        <div style="
+        position: absolute;
+        background: #e7c17f;
+        border: 5px solid wheat;
+        border-radius: 20px;
+        width: 480px;
+        height: 230px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        z-index: 998;
+        animation: fadeIn 1s ease-out;
+        padding: 5px;
+        gap: 22px;
+        box-shadow: rgb(200 155 75) 1px 2px 1px 2px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        ">
 
-    <!-- Popup setting -->
+            <button style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; 
+                font-size: 16px; top: -20px; right: -20px; padding: 5px 10px; border: 2px solid wheat; 
+                box-shadow: rgb(188, 119, 45) 0px 2px 1px 1px; background: rgb(240, 115, 115); color: white; 
+                font-weight: bold; transform: scale(1);" 
+                onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';" 
+                onmouseout="this.style.background='#f07373'; this.style.transform='scale(1)';" 
+                onclick="openPopupSettingMain()">x</button>
+
+            <div style="background: #f89674;position: absolute;top: -20px;width: 140px;height: 20px;display: flex;color: white;font-size: 15px;font-weight: bold;border-radius: 10px;border: 3px solid #ffd8cd;box-shadow: rgb(199 125 99) 1px 2px 1px 2px;justify-content: center;align-items: center;/* outline: 2px solid; */text-shadow: 1px 2px 1px #835016;">
+                TÙY CHỈNH</div>
+
+            <div style="display: flex;flex-direction: row;width: 100%;justify-content: space-around;align-items: center;min-height: 127px;gap: 10px;margin-top: 10px;">
+                <!-- Thông tin trong game -->
+                <div style="display: flex;flex-direction: column;width: 65%;height: 200px;padding: 5px;border: 3px solid wheat;border-radius: 15px;box-shadow: rgb(200 155 75) 1px 2px 1px 2px;gap: 5px;">
+                    <div style="display: flex; flex-direction: column; text-align: justify; font-size: 13px; color: black; gap: 10px; ">
+                        <!-- Âm thanh -->
+                        <div id="musicControlsBoard" style="display: flex; flex-direction: column; text-align: justify;">
+                             <div id="musicControls" style="
+                                  display: flex;
+                                  align-items: center;
+                                  gap: 8px;
+                                  background: rgba(255, 255, 255, 0.15);
+                                  padding: 6px 10px;
+                                  border-radius: 12px;
+                                  backdrop-filter: blur(4px);
+                                  bottom: 20px;
+                                  right: 20px;
+                                  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                  z-index: 9999;
+                                ">
+                                  <button id="toggleMusic" title="Tắt nhạc" style="
+                                    background: none;
+                                    border: none;
+                                    font-size: 20px;
+                                    cursor: pointer;
+                                    transition: transform 0.2s ease;
+                                  ">🔊</button>
+                                  
+                                  <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.2" style="
+                                    width: 100px;
+                                    cursor: pointer;
+                                  ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Các nút thao tác -->
+                <div style="display: flex;flex-direction: column;width: 30%;height: 200px;padding: 5px;border: 3px solid wheat;border-radius: 15px;justify-content: flex-start;box-shadow: rgb(200 155 75) 1px 2px 1px 2px;gap: 10px;">
+                    <button id="buttonSettingMainMusic" style="font-weight: bold; color: white; background: rgb(248, 150, 116); height: 30px; 
+                        border-radius: 15px; border: 2px solid rgb(255, 216, 205); box-shadow: rgb(203, 134, 107) 0px 2px 1px 1px; 
+                        text-shadow: rgb(61, 85, 169) 1px 2px 1px; transform: scale(1);" 
+                        onmouseover="this.style.background='rgb(235 32 32)'; this.style.transform='scale(1.05)';" 
+                        onmouseout="this.style.background='rgb(248 150 116)'; this.style.transform='scale(1)';" 
+                        onclick="selectButtonSettingMain('Âm thanh')">Âm thanh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup setting battle-->
     <div id="popupSetting"
         style="display: none; justify-content: center; align-items: center; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 997; position: absolute;">
         <div style="position: absolute;
