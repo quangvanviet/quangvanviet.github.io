@@ -12692,28 +12692,43 @@ function hideOrShowInfoGoldDiamond() {
     }, step);
   }
 
-  function playRandomMusic() {
-    const index = getRandomIndexExcept(lastPlayedIndex);
-    lastPlayedIndex = index;
-    audio.src = musicBGList[index];
-    audio.volume = 0.0;
+let musicBGIsPlay = false;
+function playRandomMusic() {
+  const index = getRandomIndexExcept(lastPlayedIndex);
+  lastPlayedIndex = index;
+  audio.src = musicBGList[index];
+  audio.volume = 0.0;
 
-    audio.play().then(() => {
-      fadeVolume(volumeTarget, fadeDuration);
-    }).catch(() => {
-      document.addEventListener("click", () => {
-        audio.play().then(() => fadeVolume(volumeTarget, fadeDuration));
-      }, { once: true });
-    });
-  }
+  audio.play().then(() => {
+    fadeVolume(volumeTarget, fadeDuration);
+    musicBGIsPlay = true; // Cập nhật trạng thái khi play thành công
+  }).catch(() => {
+    // Nếu phát thất bại (thường là do chưa có user interaction trên mobile)
+    const resumeHandler = () => {
+      if (!musicBGIsPlay) {
+        audio.play().then(() => {
+          fadeVolume(volumeTarget, fadeDuration);
+          musicBGIsPlay = true;
+        }).catch((err) => {
+          console.log("Phát nhạc thất bại sau click:", err);
+        });
+      }
+      document.removeEventListener("click", resumeHandler); // tránh bị add nhiều lần
+    };
 
-  audio.addEventListener("ended", () => {
-    fadeVolume(0.0, fadeDuration, () => {
-      playRandomMusic();
-    });
+    document.addEventListener("click", resumeHandler);
   });
+}
 
-  window.addEventListener("load", playRandomMusic);
+// Khi nhạc kết thúc
+audio.addEventListener("ended", () => {
+  fadeVolume(0.0, fadeDuration, () => {
+    musicBGIsPlay = false;
+    playRandomMusic();
+  });
+});
+
+window.addEventListener("load", playRandomMusic);
 
 //Audio click
 const clickAudio = document.getElementById("clickSound");
