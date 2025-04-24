@@ -8771,7 +8771,7 @@ function login(isTest) {
                     document.getElementById("loginUsername").value = "";
                     document.getElementById("loginPassword").value = "";
                     openFullscreen();
-                    loadMap('Sơn La');
+                    loadMap();
                     startStaminaRegen();
                 });
 
@@ -11720,16 +11720,20 @@ const viewport = document.getElementById("viewport");
 
 let canClick = true;
 
-var allPetMeet = [
-    {location: "Sơn La", petMeets: ["A0001", "A0002", "A0003", "A0004"]},
-]
-
 function loadMap(isMap) {
-    //Dựa vào map để cho idPet vào list5monMeet 
-    const foundLocation = allPetMeet.find(item => item.location === isMap);
+    //random để lấy số 5Mon trong allpets
+    let random5MonByLocalMap = [];
+    let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
+    
+    for (let i = 1; i <= 100; i++) {
+        if (allPetsLv1.length === 0) break; // tránh lỗi nếu không có 5mon level 1
+        let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
+        random5MonByLocalMap.push(allPetsLv1[rdIndex].ID);
+    }
+
     // Nếu tìm thấy, gán danh sách petMeets vào list5MonMeet
-    if (foundLocation) {
-        list5MonMeet = [...foundLocation.petMeets]; // tạo bản sao mảng
+    if (random5MonByLocalMap) {
+        list5MonMeet = [...random5MonByLocalMap]; // tạo bản sao mảng
         console.log("Danh sách 5Mon gặp ở", isMap, ":", list5MonMeet);
     } else {
         list5MonMeet = [];
@@ -11744,8 +11748,14 @@ function loadMap(isMap) {
     mapHeight = viewport.offsetWidth * 2;
     playerX = (viewport.offsetWidth * 2) / 2;
     playerY = (viewport.offsetWidth * 2) / 2;
-    player.style.width = (viewport.offsetHeight/2) + "px";
-    player.style.height = (viewport.offsetHeight/2) + "px";
+    if (mapHeight < mapWidth) {
+        player.style.width = (viewport.offsetHeight/2) + "px";
+        player.style.height = (viewport.offsetHeight/2) + "px";
+    } else {
+        player.style.width = (viewport.offsetWidth/2) + "px";
+        player.style.height = (viewport.offsetWidth/2) + "px";
+    }
+
     updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
@@ -11762,8 +11772,13 @@ function settingMap() {
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
     mapHeight = viewport.offsetWidth * 2;
-    playerX = (viewport.offsetWidth * 2) / 2;
-    playerY = (viewport.offsetWidth * 2) / 2;
+    if (mapHeight < mapWidth) {
+        player.style.width = (viewport.offsetHeight/2) + "px";
+        player.style.height = (viewport.offsetHeight/2) + "px";
+    } else {
+        player.style.width = (viewport.offsetWidth/2) + "px";
+        player.style.height = (viewport.offsetWidth/2) + "px";
+    }
     player.style.width = (viewport.offsetHeight/2) + "px";
     player.style.height = (viewport.offsetHeight/2) + "px";
     updateView();
