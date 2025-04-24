@@ -11748,7 +11748,7 @@ function loadMap(isMap) {
     mapHeight = viewport.offsetWidth * 2;
     playerX = (viewport.offsetWidth * 2) / 2;
     playerY = (viewport.offsetWidth * 2) / 2;
-    if (mapHeight < mapWidth) {
+    if (mapHeight > mapWidth) {
         player.style.width = (viewport.offsetHeight/2) + "px";
         player.style.height = (viewport.offsetHeight/2) + "px";
     } else {
@@ -11772,7 +11772,7 @@ function settingMap() {
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
     mapHeight = viewport.offsetWidth * 2;
-    if (mapHeight < mapWidth) {
+    if (mapHeight > mapWidth) {
         player.style.width = (viewport.offsetHeight/2) + "px";
         player.style.height = (viewport.offsetHeight/2) + "px";
     } else {
