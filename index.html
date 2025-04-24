@@ -2151,7 +2151,7 @@
         border-radius: 20px;
         width: 480px;
         height: 230px;
-        display: flex;
+        display: none;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
@@ -2181,21 +2181,20 @@
                 <div style="display: flex;flex-direction: column;width: 65%;height: 200px;padding: 5px;border: 3px solid wheat;border-radius: 15px;box-shadow: rgb(200 155 75) 1px 2px 1px 2px;gap: 5px;">
                     <div style="display: flex; flex-direction: column; text-align: justify; font-size: 13px; color: black; gap: 10px; ">
                         <!-- Âm thanh -->
-                        <div id="musicControlsBoard" style="display: flex; flex-direction: column; text-align: justify;">
-                             <div id="musicControls" style="
+                        <!-- Âm thanh Background -->
+                        <div id="musicControlsBoardBG" style="display: flex;flex-direction: column;text-align: justify;">
+                             <div id="musicControlsBG" style="
                                   display: flex;
                                   align-items: center;
                                   gap: 8px;
                                   background: rgba(255, 255, 255, 0.15);
                                   padding: 6px 10px;
                                   border-radius: 12px;
-                                  backdrop-filter: blur(4px);
-                                  bottom: 20px;
-                                  right: 20px;
                                   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                                  z-index: 9999;
+                                  justify-content: center;
+                                  align-content: center;
                                 ">
-                                  <button id="toggleMusic" title="Tắt nhạc" style="
+                                  <button id="toggleMusicBG" title="Tắt nhạc" style="
                                     background: none;
                                     border: none;
                                     font-size: 20px;
@@ -2204,11 +2203,39 @@
                                   ">🔊</button>
                                   
                                   <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.2" style="
-                                    width: 100px;
+                                    width: 80%;
                                     cursor: pointer;
                                   ">
                             </div>
                         </div>
+
+                        <!-- Âm thanh click -->
+                        <div id="musicControlsBoardClick" style="display: flex; flex-direction: column; text-align: justify;">
+                          <div id="musicControlsClick" style="
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            background: rgba(255, 255, 255, 0.15);
+                            padding: 6px 10px;
+                            border-radius: 12px;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                            justify-content: center;
+                          ">
+                            <button id="toggleMusicClick" title="Tắt âm click" style="
+                              background: none;
+                              border: none;
+                              font-size: 20px;
+                              cursor: pointer;
+                              transition: transform 0.2s ease;
+                            ">🔊</button>
+                        
+                            <input type="range" id="volumeControlClick" min="0" max="1" step="0.01" value="0.9" style="
+                              width: 80px;
+                              cursor: pointer;
+                            ">
+                          </div>
+                        </div>
+                        
                     </div>
                 </div>
 
