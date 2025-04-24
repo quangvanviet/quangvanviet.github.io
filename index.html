@@ -12,6 +12,33 @@
 </head>
 
 <body>
+    <div id="musicControls" style="
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 10px;
+      border-radius: 12px;
+      backdrop-filter: blur(4px);
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 9999;
+    ">
+      <button id="toggleMusic" title="Tắt nhạc" style="
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      ">🔊</button>
+      
+      <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.2" style="
+        width: 100px;
+        cursor: pointer;
+      ">
+    </div>
     <audio id="bgMusic" hidden></audio>
     <audio id="clickSound" src="https://res.cloudinary.com/dxgawkr4g/video/upload/v1745399283/byjcjqnocyzsslce8kwv.mp3" 
         preload="auto" hidden></audio>
@@ -407,6 +434,13 @@
                         <div id="flagQuest" style="position: absolute;bottom: 0px;right: 0px;font-size: 30px;color: red;text-shadow: 1px 1px black;">
                             •
                         </div>
+                    </button>
+                    <button style="padding: 4px 6px; background-color: #2196f3; color: white; border-radius: 5px; cursor: pointer;
+                        border: 2px solid #ffffff2b;box-shadow: 1px 1px 1px 1px #000000ba; position: relative;"
+                        onmouseover="this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.transform='scale(1)';" 
+                        onclick="openPopupSetting()">
+                        Tùy chỉnh
                     </button>
                 </div>
             </div>
