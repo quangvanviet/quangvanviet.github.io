@@ -9943,10 +9943,10 @@ function selectButtonSettingMain(select) {
     });
 
     // Hiện phần điều chỉnh âm thanh
-    document.getElementById('musicControlsBoard').style.display = "flex";
+    document.getElementById('musicControlsBoardBG').style.display = "flex";
 
     if (select === "Âm thanh") {
-        document.getElementById('musicControlsBoard').style.display = "flex";
+        document.getElementById('musicControlsBoardBG').style.display = "flex";
         document.getElementById('buttonSettingMainMusic').style.background = "rgb(235, 32, 32)";
     }
 }
@@ -12762,43 +12762,69 @@ audio.addEventListener("ended", () => {
 window.addEventListener("load", playRandomMusic);
 
 // Cập nhật volume khi kéo slider
-const volumeControl = document.getElementById("volumeControl");
-const toggleMusicBtn = document.getElementById("toggleMusic");
+const volumeControlBG = document.getElementById("volumeControlBG");
+const toggleMusicBtnBG = document.getElementById("toggleMusicBG");
 
-volumeControl.addEventListener("input", (e) => {
+volumeControlBG.addEventListener("input", (e) => {
   const newVolume = parseFloat(e.target.value);
   audio.volume = newVolume;
   if (newVolume === 0) {
-    toggleMusicBtn.textContent = "🔇";
+    toggleMusicBtnBG.textContent = "🔇";
   } else {
-    toggleMusicBtn.textContent = "🔊";
+    toggleMusicBtnBG.textContent = "🔊";
   }
 });
 
 // Tắt/bật nhạc khi bấm nút
-toggleMusicBtn.addEventListener("click", () => {
+toggleMusicBtnBG.addEventListener("click", () => {
   if (audio.muted) {
     audio.muted = false;
-    toggleMusicBtn.textContent = "🔊";
+    toggleMusicBtnBG.textContent = "🔊";
   } else {
     audio.muted = true;
-    toggleMusicBtn.textContent = "🔇";
+    toggleMusicBtnBG.textContent = "🔇";
   }
 });
 
 
 //Audio click
 const clickAudio = document.getElementById("clickSound");
-  clickAudio.volume = 0.9; // điều chỉnh âm lượng
+const volumeControlClick = document.getElementById("volumeControlClick");
+const toggleMusicClick = document.getElementById("toggleMusicClick");
 
-  // Phát âm thanh khi click bất kỳ button nào (kể cả tạo sau)
-  document.addEventListener("click", function(e) {
-    const isButton = e.target.tagName.toLowerCase() === "button" || e.target.closest("button");
-    if (isButton) {
-      clickAudio.currentTime = 0;
-      clickAudio.play().catch(() => {});
-    }
-  });
+clickAudio.volume = parseFloat(volumeControlClick.value);
+let clickSoundMuted = false;
+
+// Phát âm thanh khi click button
+document.addEventListener("click", function(e) {
+  const isButton = e.target.tagName.toLowerCase() === "button" || e.target.closest("button");
+  if (isButton && !clickSoundMuted) {
+    clickAudio.currentTime = 0;
+    clickAudio.play().catch(() => {});
+  }
+});
+
+// Điều chỉnh âm lượng click
+volumeControlClick.addEventListener("input", () => {
+  const volume = parseFloat(volumeControlClick.value);
+  clickAudio.volume = volume;
+  clickSoundMuted = volume === 0;
+  toggleMusicClick.textContent = volume === 0 ? "🔇" : "🔊";
+});
+
+// Tắt/bật âm click bằng nút
+toggleMusicClick.addEventListener("click", () => {
+  clickSoundMuted = !clickSoundMuted;
+  if (clickSoundMuted) {
+    clickAudio.volume = 0;
+    volumeControlClick.value = 0;
+    toggleMusicClick.textContent = "🔇";
+  } else {
+    clickAudio.volume = 0.9;
+    volumeControlClick.value = 0.9;
+    toggleMusicClick.textContent = "🔊";
+  }
+});
 
 
 // Gán các hàm vào window
