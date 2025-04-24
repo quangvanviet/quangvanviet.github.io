@@ -12812,17 +12812,15 @@ volumeControlClick.addEventListener("input", () => {
   toggleMusicClick.textContent = volume === 0 ? "🔇" : "🔊";
 });
 
-// Tắt/bật âm click bằng nút
 toggleMusicClick.addEventListener("click", () => {
+  const audio = document.getElementById("clickSound");
   clickSoundMuted = !clickSoundMuted;
-  if (clickSoundMuted) {
-    clickAudio.volume = 0;
-    volumeControlClick.value = 0;
-    toggleMusicClick.textContent = "🔇";
+  if (audio.muted) {
+    audio.muted = false;
+    toggleMusicBtnClick.textContent = "🔊";
   } else {
-    clickAudio.volume = 0.9;
-    volumeControlClick.value = 0.9;
-    toggleMusicClick.textContent = "🔊";
+    audio.muted = true;
+    toggleMusicBtnClick.textContent = "🔇";
   }
 });
 
