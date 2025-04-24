@@ -11779,10 +11779,7 @@ function settingMap() {
         player.style.width = (viewport.offsetWidth/2) + "px";
         player.style.height = (viewport.offsetWidth/2) + "px";
     }
-    player.style.width = (viewport.offsetHeight/2) + "px";
-    player.style.height = (viewport.offsetHeight/2) + "px";
     updateView();
-
 }
 
 window.addEventListener("resize", settingMap);
