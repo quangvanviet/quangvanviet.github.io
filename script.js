@@ -9921,6 +9921,37 @@ window.addEventListener("beforeunload", function (event) {
     }
 });
 
+//Nút setting main
+function openPopupSettingMain() {
+    const popup = document.getElementById('popupSettingMain');
+    if (popup.style.display === "flex") {
+        popup.style.display = "none";
+    } else {
+        popup.style.display = "flex";
+        selectButtonSettingMain('Âm thanh');
+    }
+}
+
+function selectButtonSettingMain(select) {
+    const allSelect = {
+        buttonSettingMainMusic: document.getElementById('buttonSettingMainMusic'),
+    };
+
+    // Reset màu tất cả các nút
+    Object.values(allSelect).forEach(button => {
+        button.style.background = "rgb(248, 150, 116)";
+    });
+
+    // Hiện phần điều chỉnh âm thanh
+    document.getElementById('musicControlsBoard').style.display = "flex";
+
+    if (select === "Âm thanh") {
+        document.getElementById('musicControlsBoard').style.display = "flex";
+        document.getElementById('musicControlsBoard').style.background = "rgb(235, 32, 32)";
+    }
+}
+
+
 //Nút setting trong battle 
 function openPopupSetting() {
     const popup = document.getElementById('popupSetting');
@@ -9949,7 +9980,7 @@ function openPopupSetting() {
 
 }
 
-//Đóng setting
+//Đóng setting battle
 function closePopupSetting() {
     const popup = document.getElementById('popupSetting');
     popup.style.display = "none"
@@ -12811,3 +12842,5 @@ window.loadItemBagLeft = loadItemBagLeft;
 window.chosenSortBagLeft = chosenSortBagLeft;
 window.showUpWeightBag = showUpWeightBag;
 window.hideOrShowInfoGoldDiamond = hideOrShowInfoGoldDiamond;
+window.openPopupSettingMain = openPopupSettingMain;
+window.selectButtonSettingMain = selectButtonSettingMain;
