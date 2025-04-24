@@ -11748,14 +11748,8 @@ function loadMap(isMap) {
     mapHeight = viewport.offsetWidth * 2;
     playerX = (viewport.offsetWidth * 2) / 2;
     playerY = (viewport.offsetWidth * 2) / 2;
-    if (mapHeight > mapWidth) {
-        player.style.width = (viewport.offsetHeight/2) + "px";
-        player.style.height = (viewport.offsetHeight/2) + "px";
-    } else {
-        player.style.width = (viewport.offsetWidth/2) + "px";
-        player.style.height = (viewport.offsetWidth/2) + "px";
-    }
-
+    player.style.width = (mapWidth/9) + "px";
+    player.style.height = (mapWidth/9) + "px";
     updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
@@ -11772,13 +11766,8 @@ function settingMap() {
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
     mapHeight = viewport.offsetWidth * 2;
-    if (mapHeight > mapWidth) {
-        player.style.width = (viewport.offsetHeight/2) + "px";
-        player.style.height = (viewport.offsetHeight/2) + "px";
-    } else {
-        player.style.width = (viewport.offsetWidth/2) + "px";
-        player.style.height = (viewport.offsetWidth/2) + "px";
-    }
+    player.style.width = (mapWidth/9) + "px";
+    player.style.height = (mapWidth/9) + "px";
     updateView();
 }
 
