@@ -11768,6 +11768,12 @@ function settingMap() {
     mapHeight = viewport.offsetWidth * 2;
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
+
+    //setting size 5mon
+    document.querySelectorAll('.wildPet').forEach(el => {
+      el.style.width = (mapWidth/35) + "px";
+      el.style.height = (mapWidth/35) + "px";
+    });
     updateView();
 }
 
