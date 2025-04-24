@@ -12730,6 +12730,32 @@ audio.addEventListener("ended", () => {
 
 window.addEventListener("load", playRandomMusic);
 
+// Cập nhật volume khi kéo slider
+const volumeControl = document.getElementById("volumeControl");
+const toggleMusicBtn = document.getElementById("toggleMusic");
+
+volumeControl.addEventListener("input", (e) => {
+  const newVolume = parseFloat(e.target.value);
+  audio.volume = newVolume;
+  if (newVolume === 0) {
+    toggleMusicBtn.textContent = "🔇";
+  } else {
+    toggleMusicBtn.textContent = "🔊";
+  }
+});
+
+// Tắt/bật nhạc khi bấm nút
+toggleMusicBtn.addEventListener("click", () => {
+  if (audio.muted) {
+    audio.muted = false;
+    toggleMusicBtn.textContent = "🔊";
+  } else {
+    audio.muted = true;
+    toggleMusicBtn.textContent = "🔇";
+  }
+});
+
+
 //Audio click
 const clickAudio = document.getElementById("clickSound");
   clickAudio.volume = 0.9; // điều chỉnh âm lượng
