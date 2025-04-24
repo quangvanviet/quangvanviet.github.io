@@ -9947,7 +9947,7 @@ function selectButtonSettingMain(select) {
 
     if (select === "Âm thanh") {
         document.getElementById('musicControlsBoard').style.display = "flex";
-        document.getElementById('musicControlsBoard').style.background = "rgb(235, 32, 32)";
+        document.getElementById('buttonSettingMainMusic').style.background = "rgb(235, 32, 32)";
     }
 }
 
