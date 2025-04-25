@@ -2600,109 +2600,6 @@ function applyAtkEffect(teamAtk) {
 
 }
 
-//Tạo popup hiển thị thông tin STT skill =====Dĩ vãng=====
-function createInfoSkill() {
-    document.querySelectorAll('.skill').forEach(skill => {
-        if (!skill.dataset.hasEvent) {
-            skill.addEventListener('click', function (event) {
-                // Lấy id skill
-                //+++++++++++++
-                const skillId = skill.parentElement?.id || '';
-                const slotSkill = skill.parentElement?.parentElement?.id || '';
-
-                // Ngừng sự kiện click của skill để không kích hoạt sự kiện click toàn bộ trang
-                event.stopPropagation();
-
-                const popup = document.getElementById('popupSTT');
-
-                let skillInfo = null;
-                console.log("skillId", skillId)
-                console.log("slotSkill", slotSkill)
-
-                if (slotSkill === "battleShop" && typeGameConquest.battlePetInShop?.[skillId]) {
-                    skillInfo = typeGameConquest.battlePetInShop[skillId];
-                } else if (slotSkill === "battleInventory" && typeGameConquest.battlePetInInventory?.[skillId]) {
-                    skillInfo = typeGameConquest.battlePetInInventory[skillId];
-                } else if (
-                    (slotSkill === "skillBarB" || slotSkill === "skillBarA") &&
-                    typeGameConquest.skillBattle?.[skillId]
-                ) {
-                    skillInfo = typeGameConquest.skillBattle[skillId];
-                    console.log("vào đây", skillInfo)
-                } else if (slotSkill === "skillBarBfn") {
-                    skillInfo = skillFinalGame[skillId]
-                } else if (slotSkill === "slotGacha") {
-                    skillInfo = randomPet[skillId];
-                }
-
-                textPopupInfoSkill(skillInfo, "inGame");
-
-                // Lấy tọa độ của effectContainerB
-                const effectContainerB = document.getElementById(skill.id);
-                const effectContainerRect = effectContainerB.getBoundingClientRect();
-                const effectContainerScreenBattle = slotSkill === "slotGacha" ? document.getElementById("shopScreen") : document.getElementById("ScreenBattle");
-                const screenBattleRect = effectContainerScreenBattle.getBoundingClientRect(); // Tọa độ cố định
-                const screenBattleMidpoint = screenBattleRect.left + (screenBattleRect.width / 2); // Tọa độ giữa của ScreenBattle
-
-                // Lấy thông tin kích thước của popup
-                popup.style.display = 'flex'; // Hiển thị tạm để lấy kích thước
-                const popupWidth = popup.offsetWidth;
-                const popupHeight = popup.offsetHeight;
-                popup.style.display = 'none'; // Ẩn lại trước khi định vị
-
-                // Tính toán vị trí cho popup
-                let popupLeft = 0;
-                let popupTop = 0;
-                if (slotSkill === "battleShop" || slotSkill === "skillBarA") { //Vị trí ở shop
-                    if (effectContainerRect.left < screenBattleMidpoint) { //Ở bên trái
-                        popupLeft = effectContainerRect.left + window.scrollX;
-                    } else {//Ở bên phải
-                        popupLeft = effectContainerRect.right + window.scrollX - popupWidth;
-                    }
-                    popupTop = effectContainerRect.bottom + window.scrollY + 10;
-                } else if (slotSkill === "battleInventory") {
-                    console.log(effectContainerRect.left, screenBattleMidpoint)
-                    if (effectContainerRect.left < screenBattleMidpoint) { //Ở bên trái
-                        popupLeft = effectContainerRect.right + window.scrollX;
-                    } else {//Ở bên phải
-                        popupLeft = effectContainerRect.left + window.scrollX - popupWidth;
-                    }
-                    popupTop = effectContainerRect.bottom + window.scrollY - popupHeight;
-                } else if (slotSkill === "skillBarB" || slotSkill === "skillBarBfn") {
-                    if (effectContainerRect.left < screenBattleMidpoint) { //Ở bên trái
-                        popupLeft = effectContainerRect.left + window.scrollX;
-                    } else {//Ở bên phải
-                        popupLeft = effectContainerRect.right + window.scrollX - popupWidth;
-                    }
-                    popupTop = effectContainerRect.top + window.scrollY - popupHeight - 10;
-                } else if (slotSkill === "slotGacha") {
-                    if (effectContainerRect.left < screenBattleMidpoint) { //Ở bên trái
-                        popupLeft = effectContainerRect.right + window.scrollX;
-                    } else {//Ở bên phải
-                        popupLeft = effectContainerRect.left + window.scrollX - popupWidth;
-                    }
-                    popupTop = effectContainerRect.bottom + window.scrollY - popupHeight;
-                }
-                // Dịch chuyển popup sao cho mép dưới của popup trùng với mép dưới của effectContainerB
-
-                // Cập nhật vị trí cho popup
-                popup.style.left = `${popupLeft}px`;
-                popup.style.top = `${popupTop}px`;
-
-                // Hiển thị popup
-                if (slotSkill === "skillBarBfn") {
-                    popup.style.zIndex = 1500;
-                } else {
-                    popup.style.zIndex = 100;
-                }
-                popup.style.display = 'flex';
-
-            });
-            skill.dataset.hasEvent = "true"; // Đánh dấu đã thêm sự kiện
-        }
-    });
-}
-
 function createInfo5mon() {
     document.querySelectorAll(".skill").forEach((skill) => {
         if (!skill.dataset.hasEvent) {
@@ -6700,7 +6597,6 @@ function createSkill(slotDiv) {
 
     //Load event click hiện info cho các skill
     createInfo5mon();
-    // createInfoSkill();
 }
 
 //Cập nhật thông tin skill khi ở tủ đồ và ở slot skill khi di chuyển skill
@@ -6821,7 +6717,6 @@ function updateSttForSkillAffter() {
             });
         }
     });
-    // createInfoSkill();
     createInfo5mon();
 }
 
