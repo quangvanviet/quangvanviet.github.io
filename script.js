@@ -5277,10 +5277,11 @@ function showOrHiddenDiv(idDiv) {
       mainDiv.classList.remove("hiddenDiv");
       mainDiv.style.setProperty("--translateX", "0px");
     }
+
+    if (idDiv === "popupShop") {
+        switchTabShop('gacha');
+    }
   }
-
-
-
 
 //Vào game
 //Logic:
@@ -9966,7 +9967,7 @@ function changePage(direction) {
 }
 
 //Shop
-function switchTab(tab) {
+function switchTabShop(tab) {
     const tabs = ['shop', 'gacha', 'exchange'];
     tabs.forEach(t => {
       document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
@@ -12473,3 +12474,4 @@ window.showUpWeightBag = showUpWeightBag;
 window.hideOrShowInfoGoldDiamond = hideOrShowInfoGoldDiamond;
 window.openPopupSettingMain = openPopupSettingMain;
 window.selectButtonSettingMain = selectButtonSettingMain;
+window.switchTabShop = switchTabShop;
