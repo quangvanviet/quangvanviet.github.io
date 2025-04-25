@@ -9970,8 +9970,8 @@ function switchTabShop(tab) {
     });
        
     document.getElementById('tabShop').style.background = tab === 'shop' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
-    document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(201 138 77)' : 'rgb(201 138 77)';
-    document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(201 138 77)' : 'rgb(201 138 77)';
+    document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
+    document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
         
     if (document.getElementById('gacha').style.display === "flex") {
         document.getElementById(`skill1S`).innerHTML = "?";
