@@ -10042,8 +10042,8 @@ function addItemForShopPage(rowId, itemList) {
         const itemDiv = document.createElement("div");
         itemDiv.id = `${item.idItem}`
         itemDiv.style.cssText = `
-  min-width: 145px;
-  height: 145px;
+  min-width: 80px;
+  height: 80px;
   padding: 2px;
   background: url('${item.URLitem}');
   border-radius: 10px;
@@ -10051,7 +10051,7 @@ function addItemForShopPage(rowId, itemList) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: #bf823f 1px 2px 3px 2px;
+  box-shadow: rgb(106 28 28) 2px 2px 1px 2px;
   justify-content: center;
   border: 4px solid firebrick;
   background-size: cover;
@@ -10061,7 +10061,7 @@ function addItemForShopPage(rowId, itemList) {
         // Thêm tên item
         const name = document.createElement("p");
         name.textContent = item.nameItem;
-        name.style.cssText = "font-size: 12px; font-weight: bold; margin: 0px; color: white; margin-top: 1px; background:firebrick; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 155px; pointer-events: none;position: absolute;bottom: -4px; display: flex; align-items: center; justify-content: center;height: 20px;";
+        name.style.cssText = "font-size: 12px; font-weight: bold; margin: 0px; color: white; margin-top: 1px; background:firebrick; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; width: 90px; pointer-events: none;position: absolute;bottom: -4px; display: flex; align-items: center; justify-content: center;height: 20px;";
 
         // Gắn tất cả vào itemDiv
         itemDiv.appendChild(name);
@@ -10571,7 +10571,7 @@ function addItemForExchangePage(rowId, itemList) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: rgb(0 0 0 / 20%) 0px 2px 5px;
+  box-shadow: rgb(0 0 0 / 20%) 2px 2px 1px 2px;
   justify-content: center;
   position: relative;
 `;
