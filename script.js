@@ -5347,6 +5347,7 @@ function showOrHiddenDiv(idDiv) {
       menuContainer: [document.getElementById("menuContainer"), "Right"],
       hunterBoard: [document.getElementById("hunterBoard"), "Right"],
       popupBag: [document.getElementById("popupBag"), "Right"],
+      popupShop: [document.getElementById("popupShop"), "Left"],
     };
   
     const mainDiv = allDivs[idDiv] ? allDivs[idDiv][0] : "";
@@ -10057,9 +10058,6 @@ function rankBoard() {
     document.getElementById("next-page").disabled = currentPageRank === totalPages;
 }
 
-
-
-
 // Chuyển trang
 function changePage(direction) {
     const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
@@ -10072,84 +10070,31 @@ function changePage(direction) {
     rankBoard();
 }
 
-//Mở shop
-function openShop() {
-    //Ẩn trang chủ
-    startLoading();
-    setTimeout(() => {
-        for (let i = 0; i < 5; i++) {
-            document.getElementById(`skill${i + 1}S`).innerHTML = "?";
-            document.getElementById(`skill${i + 1}SText`).innerHTML = "";
-            document.getElementById(`skill${i + 1}S`).style.overflow = "hidden";
-            document.getElementById(`skill${i + 1}S`).classList.remove("user");
-        }
-
-        resetGoldAndTicket();
-        document.getElementById('mainScreen').style.display = "none";
-        document.getElementById('shopScreen').style.display = "flex";
-        changePageShop("gachaPage")
-    }, 1000)
-    endLoading();
-}
-
-//Đóng shop
-function closeShop() {
-    startLoading();
-    setTimeout(() => {
-        resetGoldAndTicket();
-        document.getElementById('mainScreen').style.display = "flex";
-        document.getElementById('shopScreen').style.display = "none";
-    }, 1000);
-    endLoading();
-}
-
-//Chuyển trang trong shop
-function changePageShop(isPage) {
-    const pages = [
-        { page: "gachaPage" },
-        { page: "shopPage" },
-        { page: "exchangePage" }
-    ];
-
-    pages.forEach(({ page }) => {
-        const pageElement = document.getElementById(page);
-        pageElement.style.display = "none";
+//Shop
+function switchTab(tab) {
+    const tabs = ['shop', 'gacha', 'exchange'];
+    tabs.forEach(t => {
+      document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
     });
-
-    if (isPage === "gachaPage") {
-        const pageElement = document.getElementById(isPage);
-        pageElement.style.display = "flex"
+       
+    document.getElementById('tabShop').style.background = tab === 'shop' ? '#ffcc80' : '#ffe0b2';
+    document.getElementById('tabGacha').style.background = tab === 'gacha' ? '#ffcc80' : '#ffe0b2';
+    document.getElementById('tabExchange').style.background = tab === 'exchange' ? '#ffcc80' : '#ffe0b2';
+        
+    if (document.getElementById('gacha').style.display === "flex") {
+        document.getElementById(`skill1S`).innerHTML = "?";
+        document.getElementById(`skill1SText`).innerHTML = "";
+        document.getElementById(`skill1S`).style.overflow = "hidden";
+        document.getElementById(`skill1S`).classList.remove("user");
     }
-    if (isPage === "shopPage") {
-        const pageElement = document.getElementById(isPage);
+
+    if (document.getElementById('shop').style.display === "flex") {
         openShopPage();
-        pageElement.style.display = "flex"
-    }
-    if (isPage === "exchangePage") {
-        const pageElement = document.getElementById(isPage);
-        openExchangePage();
-        pageElement.style.display = "flex"
     }
 
-    changePageShopButton();
-}
-
-//Đổi hiệu ứng button
-function changePageShopButton() {
-    const pages = [
-        { page: "gachaPage", button: "gachaPageButton" },
-        { page: "shopPage", button: "shopPageButton" },
-        { page: "exchangePage", button: "exchangePageButton" }
-    ];
-
-    pages.forEach(({ page, button }) => {
-        const pageElement = document.getElementById(page);
-        const buttonElement = document.getElementById(button);
-
-        buttonElement.style.background = pageElement.style.display === "flex"
-            ? "#3c7fec"
-            : "firebrick";
-    });
+    if (document.getElementById('exchange').style.display === "flex") {
+        openShopPage();
+    }
 }
 
 //Shop page
@@ -10336,232 +10281,31 @@ function closePaymentGateway() {
 //Gacha Page
 var randomPet = {
     skill1S: defaultSTT5Mon,
-    skill2S: defaultSTT5Mon,
-    skill3S: defaultSTT5Mon,
-    skill4S: defaultSTT5Mon,
-    skill5S: defaultSTT5Mon,
 };
 
-function gacha(isX5) {
-    const filteredPets = allPets.filter(pet => pet.LEVEL === 1);
-    if (filteredPets.length === 0) {
-        messageOpen("Không có pet nào để gacha!");
-        return;
-    }
-
-    // Kiểm tra userPet có đủ các pet trong filteredPets chưa
-    if (userPet) {
-        const hasAllPets = filteredPets.every(pet => userPet.hasOwnProperty(pet.ID));
-
-        if (hasAllPets) {
-            messageOpen("Không còn 5Mon nào để săn, hãy chờ phát hành 5Mon mới");
-            return;
-        }
-    }
-
-    //Kiểm tra đủ vàng để gacha không
-    if (isX5) {
-        if (goldUser < 5) {
-            messageOpen("Không đủ vàng");
-            return;
-        } else {
-            goldUser -= 5;
-        }
-    } else {
-        if (goldUser < 1) {
-            messageOpen("Không đủ vàng");
-            return;
-        } else {
-            goldUser -= 1;
-        }
-    }
-
-    document.getElementById("gachax1").disabled = true;
-    document.getElementById("gachax5").disabled = true;
-    document.getElementById("gachax1").style.background = "gray";
-    document.getElementById("gachax5").style.background = "gray";
-
-    let stopTimes = [4000, 6000, 8000, 10000, 12000];
-    let chosenPets = [];
-
-    // Làm trống randomPet trước
-    randomPet = {
-        skill1S: defaultSTT5Mon,
-        skill2S: defaultSTT5Mon,
-        skill3S: defaultSTT5Mon,
-        skill4S: defaultSTT5Mon,
-        skill5S: defaultSTT5Mon,
-    };
-
-    for (let i = 0; i < 5; i++) {
-        document.getElementById(`skill${i + 1}S`).innerHTML = "?";
-        document.getElementById(`skill${i + 1}S`).classList.remove("comp");
-        document.getElementById(`skill${i + 1}SText`).innerHTML = "";
-        document.getElementById(`skill${i + 1}S`).style.overflow = "hidden";
-    }
-
-    // Chọn pet trước khi quay
-    if (isX5) {
-        for (let i = 0; i < 5; i++) {
-            const randomIndex = Math.floor(Math.random() * filteredPets.length);
-            let pet = filteredPets[randomIndex];
-
-            // Kiểm tra pet trùng trước khi quay
-            if (userPet.hasOwnProperty(pet.ID)) {
-                ticketsUser += 1; // Nếu đã có pet, đổi thành vé
-                setTimeout(() => {
-                    document.getElementById(`skill${i + 1}SText`).innerHTML = "Đã có";
-                }, stopTimes[i])
-
-            } else {
-                userPet.push(pet); // Nếu chưa có, thêm vào userPet
-                setTimeout(() => {
-                    document.getElementById(`skill${i + 1}SText`).innerHTML = "Mới";
-                }, stopTimes[i])
-            }
-
-            randomPet[`skill${i + 1}S`] = pet;
-        }
-    } else {
-        const pet = filteredPets[Math.floor(Math.random() * filteredPets.length)];
-
-        if (userPet.hasOwnProperty(pet.ID)) {
-            ticketsUser += 1;
-            setTimeout(() => {
-                document.getElementById(`skill${1}SText`).innerHTML = "Đã có";
-            }, stopTimes[0])
-        } else {
-            userPet.push(pet);
-            setTimeout(() => {
-                document.getElementById(`skill${1}SText`).innerHTML = "Mới";
-            }, stopTimes[0])
-        }
-        randomPet.skill1S = pet;
-    }
-
-    console.log("5mon sau khi random", randomPet);
-    let lengthRD = isX5 ? 5 : 1
-    // Chạy hiệu ứng quay
-    for (let o = 0; o < lengthRD; o++) {
-        let slotKey = `skill${o + 1}S`
-        let slotElement = document.getElementById(slotKey);
-        let container = document.createElement("div");
-        container.classList.add("slotContainer");
-        slotElement.innerHTML = "";
-        slotElement.appendChild(container);
-
-        let finalPet = randomPet[slotKey].URLimg;
-        chosenPets.push(finalPet);
-
-        // Chứa danh sách ảnh để quay
-        let images = [];
-        let scrollSpeed = 50; // Tốc độ cuộn ảnh (càng nhỏ càng nhanh)
-        let totalImages = 100; // Số ảnh gốc
-
-        // Thêm ảnh 5mon quay trúng
-        let finalImg = document.createElement("img");
-        finalImg.src = finalPet;
-        images.push(finalImg);
-
-        for (let i = 0; i < totalImages; i++) {
-            let img = document.createElement("img");
-            img.src = filteredPets[Math.floor(Math.random() * filteredPets.length)].URLimg;
-            images.push(img);
-        }
-
-        // Nhân ba danh sách ảnh để tạo hiệu ứng vòng lặp mượt
-        [...images, ...images, ...images, ...images, ...images, ...images].forEach(img => container.appendChild(img));
-
-        // Bắt đầu hiệu ứng quay bằng requestAnimationFrame()
-        let position = 0;
-        let stopAfter = stopTimes[o]; // Thời gian dừng lại
-        let startTime = Date.now();
-        let animationFrame;
-
-        function spin() {
-            let elapsed = Date.now() - startTime;
-
-            if (elapsed < stopAfter) {
-                position += scrollSpeed;
-
-                // Khi cuộn đến giới hạn, đặt lại vị trí về 0 để lặp vô hạn
-                if (position >= totalImages * 100) {
-                    position = 0;
-                }
-
-                container.style.transform = `translateY(-${position}px)`;
-                animationFrame = requestAnimationFrame(spin);
-            } else {
-                cancelAnimationFrame(animationFrame);
-
-                // Khi dừng, hiển thị ảnh trúng thưởng đúng vị trí
-                slotElement.innerHTML = "";
-                slotElement.style.overflow = "visible";
-                createSkillGacha(o);
-            }
-        }
-
-        requestAnimationFrame(spin);
-    }
-
-    if (isX5) {
-        setTimeout(() => {
-            resetGoldAndTicket();
-            document.getElementById("gachax1").disabled = false;
-            document.getElementById("gachax5").disabled = false;
-            document.getElementById("gachax1").style.background = "#d9534f";
-            document.getElementById("gachax5").style.background = "#d9534f";
-        }, stopTimes[4])
-    } else {
-        setTimeout(() => {
-            resetGoldAndTicket();
-            document.getElementById("gachax1").disabled = false;
-            document.getElementById("gachax5").disabled = false;
-            document.getElementById("gachax1").style.background = "#d9534f";
-            document.getElementById("gachax5").style.background = "#d9534f";
-        }, stopTimes[0])
-    }
-}
-
 //New gacha
-function gacha5Mon(isX5) {
+function gacha5Mon() {
     const filteredPets = allPets.filter(pet => pet.LEVEL === 1);
     if (filteredPets.length === 0) {
         messageOpen("Không có pet nào để gacha!");
         return;
     }
 
-    if (!isX5 && Object.values(userPet).length >= weightBagUser) {
-        messageOpen('Tủ đồ đã đầy')
-        return
-    }
-
-    if (isX5 && Object.values(userPet).length + 4 >= weightBagUser) {
+    if (Object.values(userPet).length >= weightBagUser) {
         messageOpen('Tủ đồ đã đầy')
         return
     }
 
     //Kiểm tra đủ vàng để gacha không
-    if (isX5) {
-        if (goldUser < 5) {
-            messageOpen("Không đủ vàng");
-            return;
-        } else {
-            goldUser -= 5;
-        }
+    if (goldUser < 1) {
+        messageOpen("Không đủ vàng");
+        return;
     } else {
-        if (goldUser < 1) {
-            messageOpen("Không đủ vàng");
-            return;
-        } else {
-            goldUser -= 1;
-        }
+        goldUser -= 1;
     }
 
     document.getElementById("gachax1").disabled = true;
-    document.getElementById("gachax5").disabled = true;
     document.getElementById("gachax1").style.background = "gray";
-    document.getElementById("gachax5").style.background = "gray";
 
     let stopTimes = [4000, 6000, 8000, 10000, 12000];
     let chosenPets = [];
@@ -10569,32 +10313,19 @@ function gacha5Mon(isX5) {
     // Làm trống randomPet trước
     randomPet = {
         skill1S: defaultSTT5Mon,
-        skill2S: defaultSTT5Mon,
-        skill3S: defaultSTT5Mon,
-        skill4S: defaultSTT5Mon,
-        skill5S: defaultSTT5Mon,
     };
 
-    for (let i = 0; i < 5; i++) {
-        document.getElementById(`skill${i + 1}S`).innerHTML = "?";
-        document.getElementById(`skill${i + 1}S`).classList.remove("comp");
-        document.getElementById(`skill${i + 1}SText`).innerHTML = "";
-        document.getElementById(`skill${i + 1}S`).style.overflow = "hidden";
-    }
+    document.getElementById(`skill1S`).innerHTML = "?";
+    document.getElementById(`skill1S`).classList.remove("comp");
+    document.getElementById(`skill1SText`).innerHTML = "";
+    document.getElementById(`skill1S`).style.overflow = "hidden";
 
     // Chọn pet trước khi quay
-    if (isX5) {
-        for (let i = 0; i < 5; i++) {
-            let pet = getRandom5mon();
-            randomPet[`skill${i + 1}S`] = pet;
-        }
-    } else {
-        const pet = getRandom5mon();
-        randomPet.skill1S = pet;
-    }
+    const pet = getRandom5mon();
+    randomPet.skill1S = pet;
 
     console.log("5mon sau khi random", randomPet);
-    let lengthRD = isX5 ? 5 : 1
+    let lengthRD = 1
     // Chạy hiệu ứng quay
     for (let o = 0; o < lengthRD; o++) {
         let slotKey = `skill${o + 1}S`
@@ -10654,27 +10385,14 @@ function gacha5Mon(isX5) {
                 createSkillGacha(o);
             }
         }
-
         requestAnimationFrame(spin);
     }
 
-    if (isX5) {
-        setTimeout(() => {
-            resetGoldAndTicket();
-            document.getElementById("gachax1").disabled = false;
-            document.getElementById("gachax5").disabled = false;
-            document.getElementById("gachax1").style.background = "#d9534f";
-            document.getElementById("gachax5").style.background = "#d9534f";
-        }, stopTimes[4])
-    } else {
-        setTimeout(() => {
-            resetGoldAndTicket();
-            document.getElementById("gachax1").disabled = false;
-            document.getElementById("gachax5").disabled = false;
-            document.getElementById("gachax1").style.background = "#d9534f";
-            document.getElementById("gachax5").style.background = "#d9534f";
-        }, stopTimes[0])
-    }
+    setTimeout(() => {
+        resetGoldAndTicket();
+        document.getElementById("gachax1").disabled = false;
+        document.getElementById("gachax1").style.background = "#d9534f";
+    }, stopTimes[0])
 }
 
 //Random 5mon
@@ -12828,7 +12546,6 @@ toggleMusicClick.addEventListener("click", () => {
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
 window.register = register;
-window.openShop = openShop;
 window.openRankBoard = openRankBoard;
 window.loadQuest = loadQuest;
 window.showOrHiddenDiv = showOrHiddenDiv;
