@@ -10189,11 +10189,11 @@ function gacha5Mon() {
     }
 
     //Kiểm tra đủ vàng để gacha không
-    if (goldUser < 1) {
+    if (goldUser < 5000) {
         messageOpen("Không đủ vàng");
         return;
     } else {
-        goldUser -= 1;
+        goldUser -= 5000;
     }
 
     document.getElementById("gachax1").disabled = true;
