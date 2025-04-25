@@ -9969,9 +9969,9 @@ function switchTabShop(tab) {
       document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
     });
        
-    document.getElementById('tabShop').style.background = tab === 'shop' ? 'rgb(201 138 77)' : '#ffe0b2';
-    document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(201 138 77)' : '#ffe0b2';
-    document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(201 138 77)' : '#ffe0b2';
+    document.getElementById('tabShop').style.background = tab === 'shop' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
+    document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(201 138 77)' : 'rgb(201 138 77)';
+    document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(201 138 77)' : 'rgb(201 138 77)';
         
     if (document.getElementById('gacha').style.display === "flex") {
         document.getElementById(`skill1S`).innerHTML = "?";
@@ -10562,8 +10562,8 @@ function addItemForExchangePage(rowId, itemList) {
         const itemDiv = document.createElement("div");
         itemDiv.id = `${item.ID}`
         itemDiv.style.cssText = `
-  min-width: 125px;
-  height: 125px;
+  min-width: 105px;
+  height: 105px;
   padding: 2px;
   background: rgb(255, 243, 220);
   border-radius: 10px;
@@ -10574,12 +10574,13 @@ function addItemForExchangePage(rowId, itemList) {
   box-shadow: rgb(0 0 0 / 20%) 2px 2px 1px 2px;
   justify-content: center;
   position: relative;
+  border: 2px solid #d1b792;
 `;
 
         // Thêm hình ảnh
         const img = document.createElement("img");
         img.src = item.URLimg;
-        img.style.cssText = "height: 95px; object-fit: cover; pointer-events: none;";
+        img.style.cssText = "height: 75px; object-fit: cover; pointer-events: none;";
 
         // Thêm tên item
         const name = document.createElement("p");
