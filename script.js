@@ -9989,7 +9989,7 @@ function switchTabShop(tab) {
     }
 
     if (document.getElementById('exchange').style.display === "flex") {
-        openShopPage();
+        openExchangePage();
     }
 }
 
