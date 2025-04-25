@@ -1129,15 +1129,21 @@
         <!--  popup Shop new  -->
         <div id="popupShop" style="display: flex; justify-content: center; align-items: center; width: 100%; 
             height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 997; position: absolute;">
-            <div style=" flex-direction: column;justify-content: center;align-items: center; width: 400px; 
-                background: #8d5a1f; border: 4px solid #e0a35c; border-radius: 15px; 
-                box-shadow: 2px 2px 2px 2px #672722; padding: 5px; padding-top: 20px; position: relative;">
-                <button style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; font-size: 15px; top: -20px; 
-                    right: -20px; padding: 3px 8px; border: 2px solid wheat; box-shadow: rgb(103 39 34) 0px 2px 1px 1px; 
-                    background: rgb(98 15 15); color: white; font-weight: bold; transform: scale(1.05); z-index: 6;" 
-                    onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';" 
-                    onmouseout="this.style.background='rgb(98 15 15)'; this.style.transform='scale(1)';" 
-                    onclick="">x
+            <div style="
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 400px;
+                background: #ab783e;
+                border: 4px solid #e0a35c;
+                border-radius: 15px;
+                box-shadow: 2px 2px 2px 2px #723c27;
+                padding: 5px;
+                padding-top: 20px;
+                display: flex;
+                position: relative;
+                ">
+                <button style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; font-size: 15px; top: -20px; right: -20px; padding: 3px 8px; border: 2px solid wheat; box-shadow: rgb(103, 39, 34) 0px 2px 1px 1px; background: rgb(98, 15, 15); color: white; font-weight: bold; transform: scale(1); z-index: 6;" onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';" onmouseout="this.style.background='rgb(98 15 15)'; this.style.transform='scale(1)';" onclick="">x
                 </button>
     
                 <div style="
@@ -1164,25 +1170,50 @@
                 
                 <!-- Tabs -->
                 <div style="display: flex; justify-content: space-around; width: 98%;">
-                  <div id="tabGacha" onclick="switchTab('gacha')" 
-                      style="flex: 1; text-align: center; padding: 5px; 
-                      border-radius: 12px 12px 0 0; font-weight: bold; cursor: pointer; background: #ffe0b2;">
+                  <div id="tabGacha" onclick="switchTab('gacha')" style="
+                      flex: 1;
+                      text-align: center;
+                      padding: 5px;
+                      border-radius: 12px 12px 0 0;
+                      font-weight: bold;
+                      cursor: pointer;
+                      background: #ffe0b2;
+                      border: 2px solid #672722;
+                      border-bottom: 0px;
+                      ">
                       Quay
                   </div>
-                  <div id="tabShop" onclick="switchTab('shop')" 
-                      style="flex: 1; text-align: center; padding: 5px; 
-                      border-radius: 12px 12px 0 0; font-weight: bold; cursor: pointer; background: #ffcc80;">
+                  <div id="tabShop" onclick="switchTab('shop')" style="
+                      flex: 1;
+                      text-align: center;
+                      padding: 5px;
+                      border-radius: 12px 12px 0 0;
+                      font-weight: bold;
+                      cursor: pointer;
+                      background: #ffcc80;
+                      border: 2px solid #672722;
+                      border-bottom: 0px;
+                      ">
                       Mua sắm
                   </div>
-                  <div id="tabExchange" onclick="switchTab('exchange')" 
-                      style="flex: 1; text-align: center; padding: 5px; 
-                      border-radius: 12px 12px 0 0; font-weight: bold; cursor: pointer; background: #ffe0b2;">
+                  <div id="tabExchange" onclick="switchTab('exchange')" style="
+                      flex: 1;
+                      text-align: center;
+                      padding: 5px;
+                      border-radius: 12px 12px 0 0;
+                      font-weight: bold;
+                      cursor: pointer;
+                      background: #ffe0b2;
+                      border: 2px solid #672722;
+                      border-bottom: 0px;
+                      ">
                       Đổi
                   </div>
                 </div>
                 
                 <!-- Nội dung tab -->
-                <div id="tabContent" style=" display: flex;
+                <div id="tabContent" style="
+                        display: flex;
                         flex-direction: column;
                         flex-wrap: wrap;
                         align-content: center;
@@ -1191,16 +1222,18 @@
                         height: 210px;
                         overflow-y: auto;
                         overflow-x: hidden;
-                        width: 94.2%;
+                        width: 95.5%;
                         background: #ffe0b2;
                         padding: 3px;
                         border-radius: 10px;
                         border-top-left-radius: 0px;
                         border-top-right-radius: 0px;
-                        border: 5px solid #ffffff00;">
+                        border: 2px solid #643229;
+                        border-top: 2px solid #c2ab89;
+                        ">
             
                   <!-- SHOP -->
-                  <div id="shop" style="width: 100%; padding: 5px;">
+                  <div id="shop" style="width: 100%;padding: 5px;display: none;">
                     <div id="shopPage" style="display: flex;
                         flex-flow: column wrap;
                         align-items: center;">
@@ -1224,23 +1257,126 @@
                                 justify-content: center; height: 20px;">Gói 200 vàng</p>
                             </div>
                             
+                        <div id="I0003" style="min-width: 145px; height: 145px; padding: 2px; 
+                                background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; 
+                                box-shadow: rgb(191, 130, 63) 1px 2px 3px 2px; justify-content: center; border: 4px solid firebrick; 
+                                position: relative;"><p style="font-size: 12px; font-weight: bold; margin: 1px 0px 0px; color: white; 
+                                background: firebrick; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; 
+                                width: 155px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; 
+                                justify-content: center; height: 20px;">Gói 200 vàng</p>
+                            </div><div id="I0003" style="min-width: 145px; height: 145px; padding: 2px; 
+                                background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; 
+                                box-shadow: rgb(191, 130, 63) 1px 2px 3px 2px; justify-content: center; border: 4px solid firebrick; 
+                                position: relative;"><p style="font-size: 12px; font-weight: bold; margin: 1px 0px 0px; color: white; 
+                                background: firebrick; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; 
+                                width: 155px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; 
+                                justify-content: center; height: 20px;">Gói 200 vàng</p>
+                            </div><div id="I0003" style="min-width: 145px; height: 145px; padding: 2px; 
+                                background: url(&quot;https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png&quot;) 0% 0% / cover; 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; 
+                                box-shadow: rgb(191, 130, 63) 1px 2px 3px 2px; justify-content: center; border: 4px solid firebrick; 
+                                position: relative;"><p style="font-size: 12px; font-weight: bold; margin: 1px 0px 0px; color: white; 
+                                background: firebrick; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; 
+                                width: 155px; pointer-events: none; position: absolute; bottom: -4px; display: flex; align-items: center; 
+                                justify-content: center; height: 20px;">Gói 200 vàng</p>
+                            </div>
                         </div>
                     </div>
 
                   </div>
             
                   <!-- Gacha -->
-                  <div id="gacha" style="display: none; text-align: center; padding: 20px;">
-                    <h3 style="color: #6a1b9a;">✨ Gacha Time!</h3>
-                    <p>Quay để nhận vật phẩm hiếm!</p>
-                    <button style="background: #d1c4e9; border: none; padding: 8px 20px; border-radius: 10px; font-weight: bold; color: #4a148c;">Gacha 300 🪙</button>
+                  <div id="gacha" style="display: none;text-align: center;padding: 5px;flex-direction: row;align-items: center;width: 100%;height: 100%;justify-content: space-around;">
+                        <div id="slotGacha" style="display: flex;flex-direction: row-reverse;width: 100%;height: 100%;justify-content: space-around;align-items: center;color: rebeccapurple;">
+                            <!-- Chứa các slot -->
+                        <div>
+                            <div id="skill1S" class="slotSkillGacha" style="overflow: hidden;">?
+                            </div>
+                        <div id="slotGachaText" style="display: flex;flex-direction: row;height: 10%;justify-content: space-evenly;align-items: center;font-size: 15px;">
+                            <div id="skill1SText" style="width: 100px; font-weight: bold;color: firebrick;"></div>
+                        </div>
+                        </div>
+                            
+                        <div style="display: flex; flex-direction: row; height: 10%; justify-content: center; align-items: center; gap: 15px; margin-top: 5px;">
+                            <div style="display: flex;flex-direction: column-reverse;gap: 10px;">
+                                <button id="gachax1" onclick="gacha5Mon(false)" style="
+                                                            padding: 10px 20px;
+                                                            background: #d9534f;
+                                                            color: white;
+                                                            border: none;
+                                                            border-radius: 5px;
+                                                            cursor: pointer;
+                                                            font-weight: bold;
+                                                            ">
+                                    Quay x1
+                                </button>
+                                <span style=" color: #d9534f;font-size: 13px; font-weight: bold;">
+                                    <i class="fa-solid fa-coins"></i>: 5000
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                   </div>
             
                   <!-- Đổi -->
-                  <div id="exchange" style="display: none; text-align: center; padding: 20px;">
-                    <h3 style="color: #2e7d32;">🎁 Đổi quà</h3>
-                    <p>Sử dụng điểm để đổi vật phẩm đặc biệt</p>
-                    <button style="background: #c8e6c9; border: none; padding: 8px 20px; border-radius: 10px; font-weight: bold; color: #1b5e20;">Xem Quà</button>
+                  <div id="exchange" style="display: flex;text-align: center;padding: 5px;width: 100%;">
+                    <div id="exchangePage" style="display: flex;flex-direction: column;justify-content: space-evenly;">
+                        <!-- Hàng 1 -->
+                        <div id="exchangeRow1" class="exchangeRow" style="height: 100%;">
+                            <div id="A0068" style="min-width: 125px; height: 125px; padding: 2px; background: rgb(255, 243, 220); 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; 
+                                align-items: center; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; justify-content: center; 
+                                position: relative;">
+                                <img src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0007.png" style="height: 95px;
+                                    object-fit: cover; pointer-events: none;">
+                                <p style="font-size: 12px; font-weight: bold; 
+                                    margin: 1px 0px 0px; color: white; background: firebrick; border-bottom-right-radius: 6px; 
+                                    border-bottom-left-radius: 6px; min-width: 100px; pointer-events: none;">5mon68
+                                </p>
+                                <p style="font-size: 12px; color: gold; background: seagreen; margin: 0px; border-radius: 5px; width: 95px; font-weight: bold; pointer-events: none;">10 vé đổi
+                                </p>
+                            </div>
+                        <div id="A0068" style="min-width: 125px; height: 125px; padding: 2px; background: rgb(255, 243, 220); 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; 
+                                align-items: center; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; justify-content: center; 
+                                position: relative;">
+                                <img src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0007.png" style="height: 95px;
+                                    object-fit: cover; pointer-events: none;">
+                                <p style="font-size: 12px; font-weight: bold; 
+                                    margin: 1px 0px 0px; color: white; background: firebrick; border-bottom-right-radius: 6px; 
+                                    border-bottom-left-radius: 6px; min-width: 100px; pointer-events: none;">5mon68
+                                </p>
+                                <p style="font-size: 12px; color: gold; background: seagreen; margin: 0px; border-radius: 5px; width: 95px; font-weight: bold; pointer-events: none;">10 vé đổi
+                                </p>
+                            </div><div id="A0068" style="min-width: 125px; height: 125px; padding: 2px; background: rgb(255, 243, 220); 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; 
+                                align-items: center; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; justify-content: center; 
+                                position: relative;">
+                                <img src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0007.png" style="height: 95px;
+                                    object-fit: cover; pointer-events: none;">
+                                <p style="font-size: 12px; font-weight: bold; 
+                                    margin: 1px 0px 0px; color: white; background: firebrick; border-bottom-right-radius: 6px; 
+                                    border-bottom-left-radius: 6px; min-width: 100px; pointer-events: none;">5mon68
+                                </p>
+                                <p style="font-size: 12px; color: gold; background: seagreen; margin: 0px; border-radius: 5px; width: 95px; font-weight: bold; pointer-events: none;">10 vé đổi
+                                </p>
+                            </div><div id="A0068" style="min-width: 125px; height: 125px; padding: 2px; background: rgb(255, 243, 220); 
+                                border-radius: 10px; text-align: center; display: flex; flex-direction: column; 
+                                align-items: center; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; justify-content: center; 
+                                position: relative;">
+                                <img src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0007.png" style="height: 95px;
+                                    object-fit: cover; pointer-events: none;">
+                                <p style="font-size: 12px; font-weight: bold; 
+                                    margin: 1px 0px 0px; color: white; background: firebrick; border-bottom-right-radius: 6px; 
+                                    border-bottom-left-radius: 6px; min-width: 100px; pointer-events: none;">5mon68
+                                </p>
+                                <p style="font-size: 12px; color: gold; background: seagreen; margin: 0px; border-radius: 5px; width: 95px; font-weight: bold; pointer-events: none;">10 vé đổi
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                   </div>
             
                 </div>
