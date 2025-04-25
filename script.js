@@ -3933,23 +3933,19 @@ function update5MonBattle(skill) {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 30;
-    let scaleC = 15;
-    if (skill.POWER.AGI <= 100) {
-        scaleC = 15
-    } else if (skill.POWER.AGI <= 200) {
-        scaleC = 14
-    } else if (skill.POWER.AGI <= 250) {
-        scaleC = 13
-    } else if (skill.POWER.AGI <= 300) {
-        scaleC = 12
-    } else if (skill.POWER.AGI <= 400) {
-        scaleC = 11
+    let maxC = 15;
+    
+    let agi = skill.POWER.AGI;
+    let scaleC = 160;
+    
+    if (agi <= 100) {
+        scaleC = 130;
     } else {
-        scaleC = 10
+        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
+        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + skill.POWER.AGI/scaleC)*1000;
+    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
 
     return {
         dame: dame,
@@ -10400,23 +10396,19 @@ function getRandom5mon() {
     
     //Tính cooldown
     let minC = 0;
-    let maxC = 30;
-    let scaleC = 15;
-    if (infoPetRandom.POWER.AGI <= 100) {
-        scaleC = 15
-    } else if (infoPetRandom.POWER.AGI <= 200) {
-        scaleC = 14
-    } else if (infoPetRandom.POWER.AGI <= 250) {
-        scaleC = 13
-    } else if (infoPetRandom.POWER.AGI <= 300) {
-        scaleC = 12
-    } else if (infoPetRandom.POWER.AGI <= 400) {
-        scaleC = 11
-    } else if (infoPetRandom.POWER.AGI <= 500) {
-        scaleC = 10
+    let maxC = 15;
+    
+    let agi = infoPetRandom.POWER.AGI;
+    let scaleC = 160;
+    
+    if (agi <= 100) {
+        scaleC = 130;
+    } else {
+        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
+        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + infoPetRandom.POWER.AGI/scaleC)*1000;
+    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
 
     //Gán info vào 5mon
     let final5mon = {
@@ -10881,23 +10873,18 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     
     //Tính cooldown
     let minC = 0;
-    let maxC = 30;
-    let scaleC = 15;
+    let maxC = 15;
+    
+    let scaleC = 160;
+    
     if (agi <= 100) {
-        scaleC = 15
-    } else if (agi <= 200) {
-        scaleC = 14
-    } else if (agi <= 250) {
-        scaleC = 13
-    } else if (agi <= 300) {
-        scaleC = 12
-    } else if (agi <= 400) {
-        scaleC = 11
-    } else if (agi <= 500) {
-        scaleC = 10
+        scaleC = 130;
+    } else {
+        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
+        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
 
     //Gán info vào 5mon
     let final5mon = {
@@ -11709,20 +11696,15 @@ function catch5Mon() {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 30;
-    let scaleC = 15;
+    let maxC = 15;
+    
+    let scaleC = 160;
+    
     if (agi <= 100) {
-        scaleC = 15
-    } else if (agi <= 200) {
-        scaleC = 14
-    } else if (agi <= 250) {
-        scaleC = 13
-    } else if (agi <= 300) {
-        scaleC = 12
-    } else if (agi <= 400) {
-        scaleC = 11
-    } else if (agi <= 500) {
-        scaleC = 10
+        scaleC = 130;
+    } else {
+        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
+        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
     let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
