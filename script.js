@@ -9969,9 +9969,9 @@ function switchTabShop(tab) {
       document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
     });
        
-    document.getElementById('tabShop').style.background = tab === 'shop' ? '#ffcc80' : '#ffe0b2';
-    document.getElementById('tabGacha').style.background = tab === 'gacha' ? '#ffcc80' : '#ffe0b2';
-    document.getElementById('tabExchange').style.background = tab === 'exchange' ? '#ffcc80' : '#ffe0b2';
+    document.getElementById('tabShop').style.background = tab === 'shop' ? 'rgb(201 138 77)' : '#ffe0b2';
+    document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(201 138 77)' : '#ffe0b2';
+    document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(201 138 77)' : '#ffe0b2';
         
     if (document.getElementById('gacha').style.display === "flex") {
         document.getElementById(`skill1S`).innerHTML = "?";
