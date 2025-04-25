@@ -2185,8 +2185,8 @@
                         <div id="musicControlsBoardBG" style="display: flex;flex-direction: column;text-align: justify;">
                              <div id="musicControlsBG" style="
                                   display: flex;
+                                  flex-direction: column;
                                   align-items: center;
-                                  gap: 8px;
                                   background: rgba(255, 255, 255, 0.15);
                                   padding: 6px 10px;
                                   border-radius: 12px;
@@ -2194,18 +2194,21 @@
                                   justify-content: center;
                                   align-content: center;
                                 ">
-                                  <button id="toggleMusicBG" title="Tắt nhạc" style="
-                                    background: none;
-                                    border: none;
-                                    font-size: 20px;
-                                    cursor: pointer;
-                                    transition: transform 0.2s ease;
-                                  ">🔊</button>
-                                  
-                                  <input type="range" id="volumeControlBG" min="0" max="1" step="0.01" value="0.2" style="
-                                    width: 80%;
-                                    cursor: pointer;
-                                  ">
+                                 <span>Âm lượng nhạc nền</span>
+                                 <div style="display: flex; flex-direction: row; width: 100%;">
+                                      <button id="toggleMusicBG" title="Tắt nhạc" style="
+                                        background: none;
+                                        border: none;
+                                        font-size: 20px;
+                                        cursor: pointer;
+                                        transition: transform 0.2s ease;
+                                      ">🔊</button>
+                                      
+                                      <input type="range" id="volumeControlBG" min="0" max="1" step="0.01" value="0.2" style="
+                                        width: 80%;
+                                        cursor: pointer;
+                                      ">
+                                  </div>
                             </div>
                         </div>
 
@@ -2213,26 +2216,29 @@
                         <div id="musicControlsBoardClick" style="display: flex; flex-direction: column; text-align: justify;">
                           <div id="musicControlsClick" style="
                             display: flex;
+                            flex-direction: column;
                             align-items: center;
-                            gap: 8px;
                             background: rgba(255, 255, 255, 0.15);
                             padding: 6px 10px;
                             border-radius: 12px;
                             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
                             justify-content: center;
                           ">
-                            <button id="toggleMusicClick" title="Tắt âm click" style="
-                              background: none;
-                              border: none;
-                              font-size: 20px;
-                              cursor: pointer;
-                              transition: transform 0.2s ease;
-                            ">🔊</button>
-                        
-                            <input type="range" id="volumeControlClick" min="0" max="1" step="0.01" value="0.9" style="
-                              width: 80%;
-                              cursor: pointer;
-                            ">
+                            <span>Âm lượng nút bấm</span>
+                            <div style="display: flex; flex-direction: row; width: 100%;">
+                                <button id="toggleMusicClick" title="Tắt âm click" style="
+                                  background: none;
+                                  border: none;
+                                  font-size: 20px;
+                                  cursor: pointer;
+                                  transition: transform 0.2s ease;
+                                ">🔊</button>
+                            
+                                <input type="range" id="volumeControlClick" min="0" max="1" step="0.01" value="0.9" style="
+                                  width: 80%;
+                                  cursor: pointer;
+                                ">
+                            </div?
                           </div>
                         </div>
                         
