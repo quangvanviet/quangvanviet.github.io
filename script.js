@@ -10938,10 +10938,6 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
 //Reset gold + ticket + điểm xếp hạng
 function resetGoldAndTicket() {
-    document.getElementById("goldUserShop").innerText = `${goldUser}`;
-    document.getElementById("ticketUserShop").innerText = `${ticketsUser}`;
-    document.getElementById("diamondUserShop").innerText = `${diamondUser}`;
-
     document.getElementById("goldUser").innerText = `${goldUser}`;
     document.getElementById("ticketUser").innerText = `${ticketsUser}`;
     document.getElementById("pointRank").innerText = `${pointRank}`;
@@ -10950,8 +10946,7 @@ function resetGoldAndTicket() {
     //Cập nhật bảng xếp hạng hiện tại:
     const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
     const myTop = sortedUsers.findIndex(([user]) => user === username) + 1; // Thứ hạng bắt đầu từ 1
-    document.getElementById("isRanking").innerText = `(Top: ${myTop})`;
-    // document.getElementById("isRanking").innerText = `${newRank}`;
+    document.getElementById("isRanking").innerText = `(Hạng: ${myTop})`;
 
 }
 
@@ -12454,8 +12449,6 @@ window.openQuestBoard = openQuestBoard;
 window.openBag = openBag;
 window.openMenuStartGame = openMenuStartGame;
 window.openPaymentGateway = openPaymentGateway;
-window.closeShop = closeShop;
-window.changePageShop = changePageShop;
 window.reRollShop = reRollShop;
 window.nextStepGame1 = nextStepGame1;
 window.openPopupSetting = openPopupSetting;
