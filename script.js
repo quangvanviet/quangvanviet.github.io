@@ -11407,8 +11407,8 @@ function settingMap() {
 
     //setting size 5mon
     document.querySelectorAll('.wildPet').forEach(el => {
-      el.style.width = (mapWidth/35) + "px";
-      el.style.height = (mapWidth/35) + "px";
+      el.style.width = (mapWidth/36) + "px";
+      el.style.height = (mapWidth/36) + "px";
     });
     
     updateView();
