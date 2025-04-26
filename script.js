@@ -11380,10 +11380,10 @@ function loadMap(isMap) {
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
 
-    if (window.innerWidth <= 500) {
-        // Thiết bị di động (điện thoại)
-        screenMain.style.height = "70vh";
-    }
+    // if (window.innerWidth <= 500) {
+    //     // Thiết bị di động (điện thoại)
+    //     screenMain.style.height = "70vh";
+    // }
     
     updateView();
     
@@ -11410,10 +11410,10 @@ function settingMap() {
       el.style.height = (mapWidth/35) + "px";
     });
     
-    if (window.innerWidth <= 500) {
-        // Thiết bị di động (điện thoại)
-        screenMain.style.height = "70vh";
-    }
+    // if (window.innerWidth <= 500) {
+    //     // Thiết bị di động (điện thoại)
+    //     screenMain.style.height = "70vh";
+    // }
     
     updateView();
 }
