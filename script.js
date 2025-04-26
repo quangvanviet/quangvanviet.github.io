@@ -11334,6 +11334,7 @@ const player = document.getElementById("playerHunter");
 const autoButton = document.getElementById("autoButton");
 const staminaFill = document.getElementById("staminaFill");
 const staminaText = document.getElementById("staminaText");
+const screenMain = document.getElementById("mainScreen");
 
 let mapWidth = 1024;
 let mapHeight = 1536;
@@ -11378,6 +11379,16 @@ function loadMap(isMap) {
     playerY = (viewport.offsetWidth * 2) / 2;
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
+
+    if (window.innerWidth <= 500) {
+        // Thiết bị di động (điện thoại)
+        screenMain.style.height = "70vh";
+    } else {
+        // Thiết bị lớn hơn (máy tính bảng, PC)
+        screenMain.style.height = "90vh";
+    }
+    
+    
     updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
@@ -11392,8 +11403,8 @@ function settingMap() {
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
     viewHeight = viewport.offsetHeight;
-    mapWidth = viewport.offsetWidth * 2;
-    mapHeight = viewport.offsetWidth * 2;
+    mapWidth = viewport.offsetWidth * 3;
+    mapHeight = viewport.offsetWidth * 3;
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
 
@@ -11402,6 +11413,15 @@ function settingMap() {
       el.style.width = (mapWidth/35) + "px";
       el.style.height = (mapWidth/35) + "px";
     });
+    
+    if (window.innerWidth <= 500) {
+        // Thiết bị di động (điện thoại)
+        screenMain.style.height = "70vh";
+    } else {
+        // Thiết bị lớn hơn (máy tính bảng, PC)
+        screenMain.style.height = "90vh";
+    }
+    
     updateView();
 }
 
