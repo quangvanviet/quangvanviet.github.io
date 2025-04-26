@@ -12296,40 +12296,42 @@ function hideOrShowInfoGoldDiamond() {
 //Audio
 
 //Audio background
-  const musicBGList = [
-    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
-    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
-    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3",
-    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745398510/dhe1luws4cwzgoxnj2oi.mp3"
-  ];
+const musicBGList = [
+  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
+  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
+  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3",
+  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745398510/dhe1luws4cwzgoxnj2oi.mp3"
+];
 
-  const audio = document.getElementById("bgMusic");
-  let lastPlayedIndex = -1;
-  const volumeTarget = 0.2;
-  const fadeDuration = 2000; // ms
-
-  function getRandomIndexExcept(exceptIndex) {
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * musicBGList.length);
-    } while (musicBGList.length > 1 && newIndex === exceptIndex);
-    return newIndex;
-  }
-
-  function fadeVolume(target, duration, callback) {
-    const step = 50;
-    const diff = (target - audio.volume) / (duration / step);
-    const interval = setInterval(() => {
-      audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
-      if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
-        clearInterval(interval);
-        if (callback) callback();
-      }
-    }, step);
-  }
-
+const audio = document.getElementById("bgMusic");
+let lastPlayedIndex = -1;
+const volumeTarget = 0.2;
+const fadeDuration = 2000;
 let musicBGIsPlay = false;
+
+function getRandomIndexExcept(exceptIndex) {
+  let newIndex;
+  do {
+    newIndex = Math.floor(Math.random() * musicBGList.length);
+  } while (musicBGList.length > 1 && newIndex === exceptIndex);
+  return newIndex;
+}
+
+function fadeVolume(target, duration, callback) {
+  const step = 50;
+  const diff = (target - audio.volume) / (duration / step);
+  const interval = setInterval(() => {
+    audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
+    if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
+      clearInterval(interval);
+      if (callback) callback();
+    }
+  }, step);
+}
+
 function playRandomMusic() {
+  if (musicBGIsPlay) return; // Tránh gọi trùng
+
   const index = getRandomIndexExcept(lastPlayedIndex);
   lastPlayedIndex = index;
   audio.src = musicBGList[index];
@@ -12337,22 +12339,9 @@ function playRandomMusic() {
 
   audio.play().then(() => {
     fadeVolume(volumeTarget, fadeDuration);
-    musicBGIsPlay = true; // Cập nhật trạng thái khi play thành công
-  }).catch(() => {
-    // Nếu phát thất bại (thường là do chưa có user interaction trên mobile)
-    const resumeHandler = () => {
-      if (!musicBGIsPlay) {
-        audio.play().then(() => {
-          fadeVolume(volumeTarget, fadeDuration);
-          musicBGIsPlay = true;
-        }).catch((err) => {
-          console.log("Phát nhạc thất bại sau click:", err);
-        });
-      }
-      document.removeEventListener("click", resumeHandler); // tránh bị add nhiều lần
-    };
-
-    document.addEventListener("click", resumeHandler);
+    musicBGIsPlay = true;
+  }).catch((err) => {
+    console.log("Cần tương tác người dùng:", err);
   });
 }
 
@@ -12362,6 +12351,13 @@ audio.addEventListener("ended", () => {
     musicBGIsPlay = false;
     playRandomMusic();
   });
+});
+
+// Lắng nghe click để kiểm tra và phát nhạc nếu chưa chạy
+document.addEventListener("click", () => {
+  if (!musicBGIsPlay) {
+    playRandomMusic();
+  }
 });
 
 window.addEventListener("load", playRandomMusic);
