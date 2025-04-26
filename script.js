@@ -11369,6 +11369,13 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
+    //setting màn hình mainscreen
+    if (window.innerWidth <= 1000) {
+        // Thiết bị di động (điện thoại)
+        screenMain.style.height = "70vh";
+        screenMain.style.width = "95%";
+    }
+    
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
@@ -11379,12 +11386,6 @@ function loadMap(isMap) {
     playerY = (viewport.offsetWidth * 2) / 2;
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
-
-    if (window.innerWidth <= 1000) {
-        // Thiết bị di động (điện thoại)
-        screenMain.style.height = "70vh";
-        screenMain.style.width = "95%";
-    }
     
     updateView();
     
@@ -11396,6 +11397,13 @@ function loadMap(isMap) {
 function settingMap() {
     if (!isFinalLoadData) return;
 
+    //setting màn hình mainscreen
+    if (window.innerWidth <= 1000) {
+        // Thiết bị di động (điện thoại)
+        screenMain.style.height = "70vh";
+        screenMain.style.width = "95%";
+    }
+    
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
