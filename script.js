@@ -11383,6 +11383,7 @@ function loadMap(isMap) {
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
+        screenMain.style.width = "95%";
     }
     
     updateView();
@@ -11409,11 +11410,6 @@ function settingMap() {
       el.style.width = (mapWidth/35) + "px";
       el.style.height = (mapWidth/35) + "px";
     });
-    
-    if (window.innerWidth <= 1000) {
-        // Thiết bị di động (điện thoại)
-        screenMain.style.height = "70vh";
-    }
     
     updateView();
 }
