@@ -11369,8 +11369,8 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    map.style.width = (viewport.offsetWidth * 3) + 'px';
-    map.style.height = (viewport.offsetWidth * 3) + 'px';        
+    map.style.width = (viewport.offsetWidth * 2) + 'px';
+    map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
@@ -11395,12 +11395,12 @@ function loadMap(isMap) {
 function settingMap() {
     if (!isFinalLoadData) return;
 
-    map.style.width = (viewport.offsetWidth * 3) + 'px';
-    map.style.height = (viewport.offsetWidth * 3) + 'px';        
+    map.style.width = (viewport.offsetWidth * 2) + 'px';
+    map.style.height = (viewport.offsetWidth * 2) + 'px';        
     viewWidth = viewport.offsetWidth;
     viewHeight = viewport.offsetHeight;
-    mapWidth = viewport.offsetWidth * 3;
-    mapHeight = viewport.offsetWidth * 3;
+    mapWidth = viewport.offsetWidth * 2;
+    mapHeight = viewport.offsetWidth * 2;
     player.style.width = (mapWidth/9) + "px";
     player.style.height = (mapWidth/9) + "px";
 
