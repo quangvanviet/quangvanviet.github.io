@@ -11388,7 +11388,6 @@ function loadMap(isMap) {
         screenMain.style.height = "45vh";
     }
     
-    
     updateView();
     
     document.getElementById("mainScreen").style.display = "flex";
