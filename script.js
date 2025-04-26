@@ -11385,7 +11385,7 @@ function loadMap(isMap) {
         screenMain.style.height = "70vh";
     } else {
         // Thiết bị lớn hơn (máy tính bảng, PC)
-        screenMain.style.height = "90vh";
+        screenMain.style.height = "45vh";
     }
     
     
@@ -11419,7 +11419,7 @@ function settingMap() {
         screenMain.style.height = "70vh";
     } else {
         // Thiết bị lớn hơn (máy tính bảng, PC)
-        screenMain.style.height = "90vh";
+        screenMain.style.height = "45vh";
     }
     
     updateView();
