@@ -11381,7 +11381,9 @@ function loadMap(isMap) {
         
         document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
         document.getElementById("battleScreen").style.transformOrigin = "left";
-        document.getElementById("battleScreen").style.marginLeft = "35px";
+        // Tính marginLeft sao cho battleScreen có khoảng cách hợp lý bên trái
+        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        document.getElementById("battleScreen").style.marginLeft = `${marginLeft}px`;
     } else {
         document.getElementById("battleScreen").style.transform = "scale(1)";
         document.getElementById("battleScreen").style.transformOrigin = "center";
@@ -11421,7 +11423,10 @@ function settingMap() {
         
         document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
         document.getElementById("battleScreen").style.transformOrigin = "left";
-        document.getElementById("battleScreen").style.marginLeft = "35px";
+        // Tính marginLeft sao cho battleScreen có khoảng cách hợp lý bên trái
+        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        
+        document.getElementById("battleScreen").style.marginLeft = `${marginLeft}px`;
     } else {
         document.getElementById("battleScreen").style.transform = "scale(1)";
         document.getElementById("battleScreen").style.transformOrigin = "center";
