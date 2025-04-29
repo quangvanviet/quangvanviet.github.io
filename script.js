@@ -11371,31 +11371,43 @@ function loadMap(isMap) {
 
     //setting màn hình mainscreen
     const battleScreen = document.getElementById("battleScreen");
+    
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
     
-        const screenMainWidth = screenMain.offsetWidth;
+        const screenWidth = window.innerWidth;
+    
+        // Tạm thời reset scale về 1 để đo chính xác
+        battleScreen.style.transform = "scale(1)";
+        battleScreen.style.transformOrigin = "left";
+    
+        // Lấy chiều rộng thực của battleScreen khi chưa scale
         const battleWidth = battleScreen.offsetWidth;
     
-        // Tính tỉ lệ scale sao cho battleScreen vừa với screenMain
-        let scale = screenMainWidth / battleWidth;
+        // Tính toán tỉ lệ scale phù hợp với màn hình
+        let scale = screenWidth / battleWidth;
     
-        // Giới hạn scale tối đa nếu cần (tránh phóng to quá)
+        // Nếu muốn để lại một chút lề hai bên (~5%), ta giảm scale xuống một chút
+        scale = scale * 0.95;
+    
+        // Giới hạn scale tối đa
         scale = Math.min(scale, 1);
     
+        // Áp dụng scale
         battleScreen.style.transform = `scale(${scale})`;
         battleScreen.style.transformOrigin = "left";
     
-        // Căn trái có lề bằng phần khoảng trống chia đôi
-        const marginLeft = (screenMainWidth - (battleWidth * scale)) / 2;
+        // Tính khoảng lề bên trái để căn giữa nhẹ (tuỳ chọn)
+        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
         battleScreen.style.marginLeft = `${marginLeft}px`;
     } else {
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "center";
         battleScreen.style.marginLeft = null;
     }
+
 
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
@@ -11421,31 +11433,43 @@ function settingMap() {
 
     //setting màn hình mainscreen
     const battleScreen = document.getElementById("battleScreen");
+    
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
     
-        const screenMainWidth = screenMain.offsetWidth;
+        const screenWidth = window.innerWidth;
+    
+        // Tạm thời reset scale về 1 để đo chính xác
+        battleScreen.style.transform = "scale(1)";
+        battleScreen.style.transformOrigin = "left";
+    
+        // Lấy chiều rộng thực của battleScreen khi chưa scale
         const battleWidth = battleScreen.offsetWidth;
     
-        // Tính tỉ lệ scale sao cho battleScreen vừa với screenMain
-        let scale = screenMainWidth / battleWidth;
+        // Tính toán tỉ lệ scale phù hợp với màn hình
+        let scale = screenWidth / battleWidth;
     
-        // Giới hạn scale tối đa nếu cần (tránh phóng to quá)
+        // Nếu muốn để lại một chút lề hai bên (~5%), ta giảm scale xuống một chút
+        scale = scale * 0.95;
+    
+        // Giới hạn scale tối đa
         scale = Math.min(scale, 1);
     
+        // Áp dụng scale
         battleScreen.style.transform = `scale(${scale})`;
         battleScreen.style.transformOrigin = "left";
     
-        // Căn trái có lề bằng phần khoảng trống chia đôi
-        const marginLeft = (screenMainWidth - (battleWidth * scale)) / 2;
+        // Tính khoảng lề bên trái để căn giữa nhẹ (tuỳ chọn)
+        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
         battleScreen.style.marginLeft = `${marginLeft}px`;
     } else {
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "center";
         battleScreen.style.marginLeft = null;
     }
+
 
 
     
