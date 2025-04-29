@@ -11370,25 +11370,33 @@ function loadMap(isMap) {
     }
 
     //setting màn hình mainscreen
+    const battleScreen = document.getElementById("battleScreen");
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
-
-        const screenWidth = window.innerWidth; // Chiều rộng của màn hình
-        const screenMainWidth = screenMain.offsetWidth; // Chiều rộng của screenMain
-        let scale = screenWidth / screenMainWidth; // Tính tỷ lệ scale
-        
-        document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
-        document.getElementById("battleScreen").style.transformOrigin = "left";
-        // Tính marginLeft sao cho battleScreen có khoảng cách hợp lý bên trái
-        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        document.getElementById("battleScreen").style.marginLeft = `${marginLeft}px`;
+    
+        const screenMainWidth = screenMain.offsetWidth;
+        const battleWidth = battleScreen.offsetWidth;
+    
+        // Tính tỉ lệ scale sao cho battleScreen vừa với screenMain
+        let scale = screenMainWidth / battleWidth;
+    
+        // Giới hạn scale tối đa nếu cần (tránh phóng to quá)
+        scale = Math.min(scale, 1);
+    
+        battleScreen.style.transform = `scale(${scale})`;
+        battleScreen.style.transformOrigin = "left";
+    
+        // Căn trái có lề bằng phần khoảng trống chia đôi
+        const marginLeft = (screenMainWidth - (battleWidth * scale)) / 2;
+        battleScreen.style.marginLeft = `${marginLeft}px`;
     } else {
-        document.getElementById("battleScreen").style.transform = "scale(1)";
-        document.getElementById("battleScreen").style.transformOrigin = "center";
-        document.getElementById("battleScreen").style.marginLeft = null;
+        battleScreen.style.transform = "scale(1)";
+        battleScreen.style.transformOrigin = "center";
+        battleScreen.style.marginLeft = null;
     }
+
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
@@ -11412,26 +11420,33 @@ function settingMap() {
     if (!isFinalLoadData) return;
 
     //setting màn hình mainscreen
+    const battleScreen = document.getElementById("battleScreen");
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
-
-        const screenWidth = window.innerWidth; // Chiều rộng của màn hình
-        const screenMainWidth = screenMain.offsetWidth; // Chiều rộng của screenMain
-        let scale = screenWidth / screenMainWidth; // Tính tỷ lệ scale
-        
-        document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
-        document.getElementById("battleScreen").style.transformOrigin = "left";
-        // Tính marginLeft sao cho battleScreen có khoảng cách hợp lý bên trái
-        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        
-        document.getElementById("battleScreen").style.marginLeft = `${marginLeft}px`;
+    
+        const screenMainWidth = screenMain.offsetWidth;
+        const battleWidth = battleScreen.offsetWidth;
+    
+        // Tính tỉ lệ scale sao cho battleScreen vừa với screenMain
+        let scale = screenMainWidth / battleWidth;
+    
+        // Giới hạn scale tối đa nếu cần (tránh phóng to quá)
+        scale = Math.min(scale, 1);
+    
+        battleScreen.style.transform = `scale(${scale})`;
+        battleScreen.style.transformOrigin = "left";
+    
+        // Căn trái có lề bằng phần khoảng trống chia đôi
+        const marginLeft = (screenMainWidth - (battleWidth * scale)) / 2;
+        battleScreen.style.marginLeft = `${marginLeft}px`;
     } else {
-        document.getElementById("battleScreen").style.transform = "scale(1)";
-        document.getElementById("battleScreen").style.transformOrigin = "center";
-        document.getElementById("battleScreen").style.marginLeft = null;
+        battleScreen.style.transform = "scale(1)";
+        battleScreen.style.transformOrigin = "center";
+        battleScreen.style.marginLeft = null;
     }
+
 
     
     
