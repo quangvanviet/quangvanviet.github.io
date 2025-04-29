@@ -11370,11 +11370,16 @@ function loadMap(isMap) {
     }
 
     //setting màn hình mainscreen
-        if (window.innerWidth <= 1000) {
+    if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
-        document.getElementById("battleScreen").style.transform = "scale(0.75)";
+
+        const screenWidth = window.innerWidth; // Chiều rộng của màn hình
+        const screenMainWidth = screenMain.offsetWidth; // Chiều rộng của screenMain
+        let scale = screenWidth / screenMainWidth; // Tính tỷ lệ scale
+        
+        document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
         document.getElementById("battleScreen").style.transformOrigin = "left";
         document.getElementById("battleScreen").style.marginLeft = "35px";
     } else {
@@ -11409,7 +11414,12 @@ function settingMap() {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
-        document.getElementById("battleScreen").style.transform = "scale(0.75)";
+
+        const screenWidth = window.innerWidth; // Chiều rộng của màn hình
+        const screenMainWidth = screenMain.offsetWidth; // Chiều rộng của screenMain
+        let scale = screenWidth / screenMainWidth; // Tính tỷ lệ scale
+        
+        document.getElementById("battleScreen").style.transform = `scale(${scale})`; // Áp dụng tỷ lệ tính toán
         document.getElementById("battleScreen").style.transformOrigin = "left";
         document.getElementById("battleScreen").style.marginLeft = "35px";
     } else {
@@ -11418,6 +11428,7 @@ function settingMap() {
         document.getElementById("battleScreen").style.marginLeft = null;
     }
 
+    
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
