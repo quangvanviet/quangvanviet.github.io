@@ -11371,38 +11371,43 @@ function loadMap(isMap) {
 
     //setting màn hình mainscreen
     const battleScreen = document.getElementById("battleScreen");
-    
+
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
     
         const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
     
-        // Tạm thời reset scale về 1 để đo chính xác
+        // Reset transform để đo đúng kích thước gốc
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "left";
     
-        // Lấy chiều rộng thực của battleScreen khi chưa scale
+        // Lấy kích thước thật của battleScreen khi chưa scale
         const battleWidth = battleScreen.offsetWidth;
+        const battleHeight = battleScreen.offsetHeight;
     
-        // Tính toán tỉ lệ scale phù hợp với màn hình
-        let scale = screenWidth / battleWidth;
+        // Tính scale theo cả chiều rộng và chiều cao
+        let scaleW = screenWidth / battleWidth;
+        let scaleH = screenHeight / battleHeight;
     
-        // Nếu muốn để lại một chút lề hai bên (~5%), ta giảm scale xuống một chút
-        scale = scale * 0.95;
+        // Chọn scale nhỏ hơn và chừa lại lề (~5%)
+        let scale = Math.min(scaleW, scaleH) * 0.95;
     
-        // Giới hạn scale tối đa
+        // Đảm bảo không lớn hơn 1
         scale = Math.min(scale, 1);
     
         // Áp dụng scale
         battleScreen.style.transform = `scale(${scale})`;
         battleScreen.style.transformOrigin = "left";
     
-        // Tính khoảng lề bên trái để căn giữa nhẹ (tuỳ chọn)
+        // Căn lề trái để battleScreen nằm giữa nhẹ
         const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
         battleScreen.style.marginLeft = `${marginLeft}px`;
+    
     } else {
+        // Màn hình lớn hơn (PC)
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "center";
         battleScreen.style.marginLeft = null;
@@ -11433,46 +11438,47 @@ function settingMap() {
 
     //setting màn hình mainscreen
     const battleScreen = document.getElementById("battleScreen");
-    
+
     if (window.innerWidth <= 1000) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
     
         const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
     
-        // Tạm thời reset scale về 1 để đo chính xác
+        // Reset transform để đo đúng kích thước gốc
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "left";
     
-        // Lấy chiều rộng thực của battleScreen khi chưa scale
+        // Lấy kích thước thật của battleScreen khi chưa scale
         const battleWidth = battleScreen.offsetWidth;
+        const battleHeight = battleScreen.offsetHeight;
     
-        // Tính toán tỉ lệ scale phù hợp với màn hình
-        let scale = screenWidth / battleWidth;
+        // Tính scale theo cả chiều rộng và chiều cao
+        let scaleW = screenWidth / battleWidth;
+        let scaleH = screenHeight / battleHeight;
     
-        // Nếu muốn để lại một chút lề hai bên (~5%), ta giảm scale xuống một chút
-        scale = scale * 0.95;
+        // Chọn scale nhỏ hơn và chừa lại lề (~5%)
+        let scale = Math.min(scaleW, scaleH) * 0.95;
     
-        // Giới hạn scale tối đa
+        // Đảm bảo không lớn hơn 1
         scale = Math.min(scale, 1);
     
         // Áp dụng scale
         battleScreen.style.transform = `scale(${scale})`;
         battleScreen.style.transformOrigin = "left";
     
-        // Tính khoảng lề bên trái để căn giữa nhẹ (tuỳ chọn)
+        // Căn lề trái để battleScreen nằm giữa nhẹ
         const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
         battleScreen.style.marginLeft = `${marginLeft}px`;
+    
     } else {
+        // Màn hình lớn hơn (PC)
         battleScreen.style.transform = "scale(1)";
         battleScreen.style.transformOrigin = "center";
         battleScreen.style.marginLeft = null;
     }
-
-
-
-    
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';        
