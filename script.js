@@ -11375,7 +11375,7 @@ function loadMap(isMap) {
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
         document.getElementById("battleScreen").style.transform = "scale(0.8)";
-        document.getElementById("battleScreen").style.transformOrigin = "center";
+        document.getElementById("battleScreen").style.transformOrigin = "left";
     } else {
         document.getElementById("battleScreen").style.transform = "scale(1)";
         document.getElementById("battleScreen").style.transformOrigin = "center";
@@ -11408,7 +11408,7 @@ function settingMap() {
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
         document.getElementById("battleScreen").style.transform = "scale(0.8)";
-        document.getElementById("battleScreen").style.transformOrigin = "center";
+        document.getElementById("battleScreen").style.transformOrigin = "left";
     } else {
         document.getElementById("battleScreen").style.transform = "scale(1)";
         document.getElementById("battleScreen").style.transformOrigin = "center";
