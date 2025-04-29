@@ -11374,6 +11374,11 @@ function loadMap(isMap) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
+        document.getElementById("battleScreen").style.transform = "scale(0.8)";
+        document.getElementById("battleScreen").style.transformOrigin = "center";
+    } else {
+        document.getElementById("battleScreen").style.transform = "scale(1)";
+        document.getElementById("battleScreen").style.transformOrigin = "center";
     }
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
@@ -11402,6 +11407,11 @@ function settingMap() {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
+        document.getElementById("battleScreen").style.transform = "scale(0.8)";
+        document.getElementById("battleScreen").style.transformOrigin = "center";
+    } else {
+        document.getElementById("battleScreen").style.transform = "scale(1)";
+        document.getElementById("battleScreen").style.transformOrigin = "center";
     }
     
     map.style.width = (viewport.offsetWidth * 2) + 'px';
