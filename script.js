@@ -11386,23 +11386,27 @@ function settingMap() {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
 
     if (isMobile) {
+        // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transform = "scale(1)"; // Reset lại transform trước khi tính toán mới
         gameScreen.style.transformOrigin = "left";
 
+        // Lấy kích thước của battle screen sau khi đã cập nhật các thông số
         const battleWidth = gameScreen.offsetWidth;
         const battleHeight = gameScreen.offsetHeight;
 
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
-        let scale = Math.min(scaleW, scaleH) * 0.90;
-        scale = Math.min(scale, 1);
 
+        let scale = Math.min(scaleW, scaleH) * 0.90; // Tỷ lệ tối đa là 90%
+        scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
+
+        // Áp dụng tỷ lệ và căn chỉnh lại gameScreen
         gameScreen.style.transform = `scale(${scale})`;
         gameScreen.style.transformOrigin = "left";
 
@@ -11412,6 +11416,7 @@ function settingMap() {
         gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
+        // Nếu không phải trên thiết bị di động, sử dụng kích thước chuẩn
         gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "center";
         gameScreen.style.marginLeft = null;
@@ -11424,15 +11429,16 @@ function settingMap() {
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
     mapHeight = viewport.offsetWidth * 2;
+
+    // Cập nhật kích thước của player và các yếu tố khác
     player.style.width = (mapWidth / 9) + "px";
     player.style.height = (mapWidth / 9) + "px";
 
-    // Cập nhật lại kích thước 5Mon
+    // Cập nhật lại kích thước của các Wild Pets
     document.querySelectorAll('.wildPet').forEach(el => {
         el.style.width = (mapWidth / 36) + "px";
         el.style.height = (mapWidth / 36) + "px";
     });
-
 
     // Cập nhật lại vị trí player dựa trên phần trăm đã lưu
     playerX = percentX * mapWidth;
@@ -11445,24 +11451,29 @@ function settingMap() {
 
 window.onload = function() {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
+
     if (isMobile) {
+        // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transform = "scale(1)"; // Reset lại transform trước khi tính toán mới
         gameScreen.style.transformOrigin = "left";
 
+        // Lấy kích thước của battle screen sau khi đã cập nhật các thông số
         const battleWidth = gameScreen.offsetWidth;
         const battleHeight = gameScreen.offsetHeight;
 
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
-        let scale = Math.min(scaleW, scaleH) * 0.90;
-        scale = Math.min(scale, 1);
 
+        let scale = Math.min(scaleW, scaleH) * 0.90; // Tỷ lệ tối đa là 90%
+        scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
+
+        // Áp dụng tỷ lệ và căn chỉnh lại gameScreen
         gameScreen.style.transform = `scale(${scale})`;
         gameScreen.style.transformOrigin = "left";
 
@@ -11472,6 +11483,7 @@ window.onload = function() {
         gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
+        // Nếu không phải trên thiết bị di động, sử dụng kích thước chuẩn
         gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "center";
         gameScreen.style.marginLeft = null;
@@ -11479,11 +11491,15 @@ window.onload = function() {
 
 };
 
+// Đảm bảo cập nhật kích thước khi thay đổi kích thước màn hình (bao gồm khi xoay màn hình)
+let resizeTimeout;
 window.addEventListener("resize", function () {
-    // Xử lý resize khi người dùng thay đổi kích thước màn hình hoặc xoay điện thoại
-    setTimeout(function () {
-        settingMap(); // Gọi lại settingMap để cập nhật lại các giá trị kích thước
-    }, 200); // Delay để giảm tần suất gọi lại function
+    clearTimeout(resizeTimeout);
+
+    // Thiết lập thời gian chờ 200ms trước khi gọi lại settingMap() để tránh gọi quá nhiều
+    resizeTimeout = setTimeout(function () {
+        settingMap(); // Gọi lại settingMap để tính toán lại các giá trị kích thước khi xoay màn hình
+    }, 200);
 });
 
 
