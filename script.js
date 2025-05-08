@@ -11479,7 +11479,12 @@ window.onload = function() {
 
 };
 
-window.addEventListener("resize", settingMap);
+window.addEventListener("resize", function () {
+    // Xử lý resize khi người dùng thay đổi kích thước màn hình hoặc xoay điện thoại
+    setTimeout(function () {
+        settingMap(); // Gọi lại settingMap để cập nhật lại các giá trị kích thước
+    }, 200); // Delay để giảm tần suất gọi lại function
+});
 
 
 document.getElementById("toggleMenu").addEventListener("click", () => {
