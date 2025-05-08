@@ -48,7 +48,7 @@ var keyLogin = ""
 let isOut = false;
 function checkUserLogins() {
     if (!isFinalLoadData) return;
-    
+
     const userDataRef = ref(db, 'allUsers/' + username);
 
     get(userDataRef).then(snapshot => {
@@ -135,23 +135,23 @@ function saveDataUserToFirebase() {
         battleUserPetIDs = {}; // Tránh trường hợp không có battle pet
     } else {
         battleUserPetIDs = Object.fromEntries(
-        Object.entries(typeGameConquest.battleUserPet).map(([key, pet]) => {
-          const { URLimg, ...rest } = pet;  // Loại URLimg ra
-          return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
-        })
-      );
+            Object.entries(typeGameConquest.battleUserPet).map(([key, pet]) => {
+                const { URLimg, ...rest } = pet;  // Loại URLimg ra
+                return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
+            })
+        );
     }
 
-    let battleUserPetRoundIDs = {}    
+    let battleUserPetRoundIDs = {}
     if (Object.keys(typeGameConquest.battleUserPetRound).length < 1) {
         battleUserPetRoundIDs = {}; // Tránh trường hợp không có battle pet round
     } else {
         battleUserPetRoundIDs = Object.fromEntries(
             Object.entries(typeGameConquest.battleUserPetRound).map(([key, pet]) => {
-              const { URLimg, ...rest } = pet;  // Loại URLimg ra
-              return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
+                const { URLimg, ...rest } = pet;  // Loại URLimg ra
+                return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
             })
-          );
+        );
     }
 
     let allBattleUsersData = {
@@ -199,8 +199,8 @@ function saveDataUserToFirebase() {
     //Kiểm tra và lưu userDataNew
     if (JSON.stringify(userDataOld) !== JSON.stringify(userDataNew)) {
         // Lưu dữ liệu vào Firebase
-        let dataUpdate = { ...userDataNew, staminaUser: staminaUser , luckyMeet5Mon: luckyMeet5Mon};
-        
+        let dataUpdate = { ...userDataNew, staminaUser: staminaUser, luckyMeet5Mon: luckyMeet5Mon };
+
         update(userDataRef, dataUpdate)
             .then(() => {
                 console.log("🟢 Dữ liệu đã được lưu!");
@@ -298,40 +298,40 @@ var effectsSellUp = {}; // Tạo đối tượng để lưu các Effect SellUp v
 function loadAllData() {
     get(ref(db)).then(snapshot => {
         const data = snapshot.val();
-        
+
         allCharacter = data.allCharacter || [];
-            allQuestData = data.allQuestData || {};
-            allPets = data.allPets || [];
-            allUsers = data.allUsers || {};
-            defaultHP = data.defaultHP
-            allComps = data.allComps.filter(item => item !== null);
+        allQuestData = data.allQuestData || {};
+        allPets = data.allPets || [];
+        allUsers = data.allUsers || {};
+        defaultHP = data.defaultHP
+        allComps = data.allComps.filter(item => item !== null);
 
-            var skillDescriptions = data.skillDescriptions || {};
+        var skillDescriptions = data.skillDescriptions || {};
 
-            var effectsSkillArray = skillDescriptions.effectsSkill;
-            var effectsInternalArray = skillDescriptions.effectsInternal;
-            var effectsSellUpArray = skillDescriptions.effectsSellUp;
+        var effectsSkillArray = skillDescriptions.effectsSkill;
+        var effectsInternalArray = skillDescriptions.effectsInternal;
+        var effectsSellUpArray = skillDescriptions.effectsSellUp;
 
-            effectsSkill = effectsSkillArray.reduce((acc, item) => {
-                acc[item.name] = { dameSkill: item.dameSkill, descriptionSkill: item.descriptionSkill };
-                return acc; // ⚠️ Cần return acc để tiếp tục tích lũy giá trị
-            }, {});
+        effectsSkill = effectsSkillArray.reduce((acc, item) => {
+            acc[item.name] = { dameSkill: item.dameSkill, descriptionSkill: item.descriptionSkill };
+            return acc; // ⚠️ Cần return acc để tiếp tục tích lũy giá trị
+        }, {});
 
-            effectsInternal = effectsInternalArray.reduce((acc, item) => {
-                acc[item.name] = { dameInternal: item.dameInternal, descriptionInternal: item.descriptionInternal };
-                return acc;
-            }, {});
+        effectsInternal = effectsInternalArray.reduce((acc, item) => {
+            acc[item.name] = { dameInternal: item.dameInternal, descriptionInternal: item.descriptionInternal };
+            return acc;
+        }, {});
 
-            effectsSellUp = effectsSellUpArray.reduce((acc, item) => {
-                acc[item.name] = { dameSellUp: item.dameSellUp, descriptionSellUp: item.descriptionSellUp };
-                return acc;
-            }, {});
+        effectsSellUp = effectsSellUpArray.reduce((acc, item) => {
+            acc[item.name] = { dameSellUp: item.dameSellUp, descriptionSellUp: item.descriptionSellUp };
+            return acc;
+        }, {});
 
-            console.log(effectsSkill, effectsInternal, effectsSellUp);
-            console.log("allPets", allPets);
-            console.log("allUsers", allUsers);
-            console.log("allCharacter", allCharacter);
-            console.log("allComps", allComps);
+        console.log(effectsSkill, effectsInternal, effectsSellUp);
+        console.log("allPets", allPets);
+        console.log("allUsers", allUsers);
+        console.log("allCharacter", allCharacter);
+        console.log("allComps", allComps);
     })
 }
 
@@ -397,9 +397,11 @@ var nowBurnBattleComp = 0;
 var nowPoisonBattleComp = 0;
 
 let isLogin = false;
-var defaultSTT5Mon = {ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg:"",
+var defaultSTT5Mon = {
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
     LEVEL: 0, DAME: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-    BURN: [0, 0, 0, 0, 0], POISON:[0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0],COOLDOWN: [0, 0, 0, 0, 0]};
+    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
+};
 var price5MonConquest = 0;
 var typeGameGuess = {}
 var typeGameSolo5Mon = {}
@@ -521,7 +523,7 @@ function loadDataForUser() {
                     }
                     return [key, pet];
                 });
-                      
+
                 // Bước 2: Chuyển mảng [key, value] trở lại object
                 userPet = Object.fromEntries(userPet) ?? {};
             }
@@ -571,13 +573,13 @@ function loadDataForUser() {
 
             // Lấy thông tin battle pets         
             typeGameConquest.battleUserPet = !data.battleData?.typeGameConquest?.battleUserPet
-            ? {}
-            : Object.fromEntries(
-                Object.entries(data.battleData.typeGameConquest.battleUserPet).map(([key, pet]) => {
-                    const matched = allPets.find(p => p.ID === pet.ID && Number(p.LEVEL) === 1);
-                    return [key, matched ? { ...pet, URLimg: matched.URLimg } : pet];
-                })
-            );
+                ? {}
+                : Object.fromEntries(
+                    Object.entries(data.battleData.typeGameConquest.battleUserPet).map(([key, pet]) => {
+                        const matched = allPets.find(p => p.ID === pet.ID && Number(p.LEVEL) === 1);
+                        return [key, matched ? { ...pet, URLimg: matched.URLimg } : pet];
+                    })
+                );
 
 
             // Cập nhật UI
@@ -592,13 +594,13 @@ function loadDataForUser() {
             });
 
             typeGameConquest.battleUserPetRound = !data.battleData?.typeGameConquest?.battleUserPetRound
-            ? {}
-            : Object.fromEntries(
-                Object.entries(data.battleData.typeGameConquest.battleUserPetRound).map(([key, pet]) => {
-                    const matched = allPets.find(p => p.ID === pet.ID && Number(p.LEVEL) === 1);
-                    return [key, matched ? { ...pet, URLimg: matched.URLimg } : pet];
-                })
-            );
+                ? {}
+                : Object.fromEntries(
+                    Object.entries(data.battleData.typeGameConquest.battleUserPetRound).map(([key, pet]) => {
+                        const matched = allPets.find(p => p.ID === pet.ID && Number(p.LEVEL) === 1);
+                        return [key, matched ? { ...pet, URLimg: matched.URLimg } : pet];
+                    })
+                );
 
             // Cập nhật UI thông tin người dùng
             document.getElementById("nameUser").innerText = `${nameUser}`;
@@ -635,10 +637,10 @@ function loadDataForUser() {
             // Tạo dữ liệu người dùng //+++
             let userPetIDsOld = Object.fromEntries(
                 Object.entries(userPet).map(([key, pet]) => {
-                  const { URLimg, ...rest } = pet;  // Loại URLimg ra
-                  return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
+                    const { URLimg, ...rest } = pet;  // Loại URLimg ra
+                    return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
                 })
-              );
+            );
 
             // Kiểm tra nếu userPetIDsOld không có bất kỳ phần tử nào
             if (Object.keys(userPetIDsOld).length < 1) {
@@ -647,10 +649,10 @@ function loadDataForUser() {
 
             let battleUserPetIDsOld = Object.fromEntries(
                 Object.entries(typeGameConquest.battleUserPet).map(([key, pet]) => {
-                  const { URLimg, ...rest } = pet;  // Loại URLimg ra
-                  return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
+                    const { URLimg, ...rest } = pet;  // Loại URLimg ra
+                    return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
                 })
-              );
+            );
 
             if (Object.keys(battleUserPetIDsOld).length < 1) {
                 battleUserPetIDsOld = {};
@@ -658,10 +660,10 @@ function loadDataForUser() {
 
             let battleUserPetRoundIDsOld = Object.fromEntries(
                 Object.entries(typeGameConquest.battleUserPetRound).map(([key, pet]) => {
-                  const { URLimg, ...rest } = pet;  // Loại URLimg ra
-                  return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
+                    const { URLimg, ...rest } = pet;  // Loại URLimg ra
+                    return [key, rest];  // Trả về cặp key và rest (pet không có URLimg)
                 })
-              );
+            );
 
             if (Object.keys(battleUserPetRoundIDsOld).length < 1) {
                 battleUserPetRoundIDsOld = {};
@@ -762,7 +764,7 @@ function restoreStamina() {
         staminaUser += staminaToAdd;
         if (staminaUser > 1000) {
             staminaUser = 1000
-            
+
         } else {
             messageOpen(`🔥 Đã hồi ${staminaToAdd} thể lực lúc bạn offline!`);
         }
@@ -1958,27 +1960,27 @@ function skillUpCrit(skillKey, dameSkill, isComp, typeEffect) {
 
 //Skill tăng chỉ số shield skill bằng shield đang được tạo hiện tại
 function skillUpShieldWithNowShield(isComp) {
-  updateSttForSkillAffter();
-  let shieldNow = isComp ? nowShieldBattleComp : nowShieldBattleMy
+    updateSttForSkillAffter();
+    let shieldNow = isComp ? nowShieldBattleComp : nowShieldBattleMy
 
-  // Tăng shield cho các skill có effect "UpShieldWithNowShield"
-  for (const skill in typeGameConquest.skillBattle) {
-    const isCorrectSkill = isComp ? skill.endsWith("A") : skill.endsWith("B");
-    const hasEffect = typeGameConquest.skillBattle[skill]?.EFFECT.includes("UpShieldWithNowShield");
+    // Tăng shield cho các skill có effect "UpShieldWithNowShield"
+    for (const skill in typeGameConquest.skillBattle) {
+        const isCorrectSkill = isComp ? skill.endsWith("A") : skill.endsWith("B");
+        const hasEffect = typeGameConquest.skillBattle[skill]?.EFFECT.includes("UpShieldWithNowShield");
 
-    if (isCorrectSkill && hasEffect) {
-      if (typeGameConquest.skillBattle[skill].EFFECT.includes("Attacking")) {
-        // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
-        typeGameConquest.skillBattle[skill].DAME[4] = shieldNow
-      }
+        if (isCorrectSkill && hasEffect) {
+            if (typeGameConquest.skillBattle[skill].EFFECT.includes("Attacking")) {
+                // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+                typeGameConquest.skillBattle[skill].DAME[4] = shieldNow
+            }
 
-      if (typeGameConquest.skillBattle[skill].EFFECT.includes("Healing")) {
-        // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
-        typeGameConquest.skillBattle[skill].HEAL[4] = shieldNow
-      }
+            if (typeGameConquest.skillBattle[skill].EFFECT.includes("Healing")) {
+                // let damePlus = shieldNow===0?typeGameConquest.skillBattle[skill].SHIELD.reduce((a, b) => a + b, 0)||0:0
+                typeGameConquest.skillBattle[skill].HEAL[4] = shieldNow
+            }
+        }
     }
-  }
-  updateSttForSkillAffter();
+    updateSttForSkillAffter();
 }
 
 //Skill vô hiệu hóa (đóng băng) skill địch
@@ -3096,12 +3098,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3118,7 +3120,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.skillBattle[slot.id].POISON[0] = typeGameConquest.battlePetUseSlotRound[slot.id].POISON[0]
                         typeGameConquest.skillBattle[slot.id].CRIT[0] = typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0]
                         typeGameConquest.skillBattle[slot.id].COOLDOWN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0]
-                       
+
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -3181,40 +3183,40 @@ function loadEventSlotBattle() {
                 } else {
                     // Lấy ID của pet chuẩn bị thêm vào
                     const newPetID = typeGameConquest.battlePetInShop[skill.parentElement.id].ID;
-            
+
                     // Kiểm tra xem đã tồn tại pet có cùng ID trong skillBattle chưa
                     let isDuplicate = false;
-            
+
                     //Kiểm tra slot 1 -> 9 xem đã có pet nào trùng ID chưa
                     for (const key of Object.keys(typeGameConquest.skillBattle)) {
-                      if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
-                        isDuplicate = true;
-                        break;
-                      }
+                        if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
+                            isDuplicate = true;
+                            break;
+                        }
                     }
-            
+
                     // Nếu không bị trùng ID thì cho thêm
                     if (!isDuplicate) {
-                      typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
-                      typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
-            
-                      typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
-            
-                      slot.prepend(skill);
-                      slot.classList.add("occupied");
-                      slot.style.backgroundColor = "";
-                      highlightSkillLevel();
-                      resetMaxHpBattle();
-                      updateSttForSkillAffter();
-            
-                      typeGameConquest.starUser -= price5MonConquest;
-                      typeGameConquest.selectSkillShop += 1;
-                      price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon;
-                      document.getElementById("battleShopText").innerText = price5MonConquest;
-                      document.getElementById("starUser").innerText = typeGameConquest.starUser;
+                        typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
+                        typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
+
+                        typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
+
+                        slot.prepend(skill);
+                        slot.classList.add("occupied");
+                        slot.style.backgroundColor = "";
+                        highlightSkillLevel();
+                        resetMaxHpBattle();
+                        updateSttForSkillAffter();
+
+                        typeGameConquest.starUser -= price5MonConquest;
+                        typeGameConquest.selectSkillShop += 1;
+                        price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon;
+                        document.getElementById("battleShopText").innerText = price5MonConquest;
+                        document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
-                      // Nếu trùng thì chỉ reset màu slot
-                      slot.style.backgroundColor = "";
+                        // Nếu trùng thì chỉ reset màu slot
+                        slot.style.backgroundColor = "";
                     }
                 }
             } else if (parentSlot.parentElement.id == "battleInventory") {//Kéo từ tủ đồ xuống
@@ -3227,12 +3229,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3272,7 +3274,7 @@ function loadEventSlotBattle() {
 
                         //         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         //         typeGameConquest.skillBattle[slot.id].POWER = typeGameConquest.battlePetUseSlotRound[slot.id].POWER
-                                
+
                         //         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
                         //         typeGameConquest.skillBattle[slot.id].HEAL[0] = typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0]
                         //         typeGameConquest.skillBattle[slot.id].SHIELD[0] = typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0]
@@ -3331,36 +3333,36 @@ function loadEventSlotBattle() {
                     console.log("Kéo từ tủ đồ 4")
                     // Lấy ID của pet chuẩn bị thêm vào
                     const newPetID = typeGameConquest.battlePetInInventory[skill.parentElement.id].ID;
-            
+
                     // Kiểm tra xem đã tồn tại pet có cùng ID trong skillBattle chưa
                     let isDuplicate = false;
-            
+
                     //Kiểm tra slot 1 -> 9 xem đã có pet nào trùng ID chưa
                     for (const key of Object.keys(typeGameConquest.skillBattle)) {
-                      if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
-                        isDuplicate = true;
-                        break;
-                      }
+                        if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === newPetID) {
+                            isDuplicate = true;
+                            break;
+                        }
                     }
-            
+
                     // Nếu không bị trùng ID thì cho thêm
                     if (!isDuplicate) {
-                      typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
-                      typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
-            
-                      typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon;
-                      parentSlot.classList.remove("occupied")
-                      
-                      slot.prepend(skill);
-                      
-                      slot.classList.add("occupied");
-                      slot.style.backgroundColor = "";
-                      highlightSkillLevel();
-                      resetMaxHpBattle();
-                      updateSttForSkillAffter();
+                        typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
+                        typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInInventory[skill.parentElement.id];
+
+                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = defaultSTT5Mon;
+                        parentSlot.classList.remove("occupied")
+
+                        slot.prepend(skill);
+
+                        slot.classList.add("occupied");
+                        slot.style.backgroundColor = "";
+                        highlightSkillLevel();
+                        resetMaxHpBattle();
+                        updateSttForSkillAffter();
                     } else {
-                      // Nếu trùng thì chỉ reset màu slot
-                      slot.style.backgroundColor = "";
+                        // Nếu trùng thì chỉ reset màu slot
+                        slot.style.backgroundColor = "";
                     }
                 }
 
@@ -3373,12 +3375,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50*typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3566,12 +3568,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3654,12 +3656,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3753,12 +3755,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50*typeGameConquest.battlePetInInventory[slot.id].LEVEL
-                        
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3913,7 +3915,7 @@ function update5MonBattle(skill) {
     let powerSTR = scalePower5Mon(skill.POWER.STR);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-    
+
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (skill.EFFECT.includes("Attacking")) {
         dame = powerSTR.dame;  // Giảm dần khi STR tăng
@@ -3934,10 +3936,10 @@ function update5MonBattle(skill) {
     //Tính cooldown
     let minC = 0;
     let maxC = 15;
-    
+
     let agi = skill.POWER.AGI;
     let scaleC = 160;
-    
+
     if (agi <= 100) {
         scaleC = 130;
     } else {
@@ -3945,7 +3947,7 @@ function update5MonBattle(skill) {
         scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
+    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     return {
         dame: dame,
@@ -5233,51 +5235,51 @@ function internalUp() {
 //hàm mở đóng các nút trong giao diện chính
 function showOrHiddenDiv(idDiv) {
     const allDivs = {
-      menuStartGame: [document.getElementById("menuStartGame"), "Right"],
-      bagInventory: [document.getElementById("bagInventory"), "Right"],
-      rankBoard: [document.getElementById("rankBoard"), "Left"],
-      popupQuestBoard: [document.getElementById("popupQuestBoard"), "Right"],
-      menuContainer: [document.getElementById("menuContainer"), "Right"],
-      hunterBoard: [document.getElementById("hunterBoard"), "Right"],
-      popupBag: [document.getElementById("popupBag"), "Right"],
-      popupShop: [document.getElementById("popupShop"), "Left"],
+        menuStartGame: [document.getElementById("menuStartGame"), "Right"],
+        bagInventory: [document.getElementById("bagInventory"), "Right"],
+        rankBoard: [document.getElementById("rankBoard"), "Left"],
+        popupQuestBoard: [document.getElementById("popupQuestBoard"), "Right"],
+        menuContainer: [document.getElementById("menuContainer"), "Right"],
+        hunterBoard: [document.getElementById("hunterBoard"), "Right"],
+        popupBag: [document.getElementById("popupBag"), "Right"],
+        popupShop: [document.getElementById("popupShop"), "Left"],
     };
-  
+
     const mainDiv = allDivs[idDiv] ? allDivs[idDiv][0] : "";
-  
+
     const direction = allDivs[idDiv] ? allDivs[idDiv][1] : "";
     let newTranslateX = direction === "Left" ? "-1200px" : "1200px";
-  
+
     // Ẩn tất cả div khác theo hướng đã định
     Object.entries(allDivs).forEach(([key, [div, dir]]) => {
-      if (div && div !== mainDiv) {
-        div.classList.remove("showDiv");
-        div.classList.add("hiddenDiv");
-        div.style.setProperty("--translateX", dir === "Left" ? "-1200px" : "1200px");
-      }
+        if (div && div !== mainDiv) {
+            div.classList.remove("showDiv");
+            div.classList.add("hiddenDiv");
+            div.style.setProperty("--translateX", dir === "Left" ? "-1200px" : "1200px");
+        }
     });
-  
+
     // Kiểm tra nếu idDiv không tồn tại trong allDivs thì báo lỗi và thoát
     if (!allDivs[idDiv] || mainDiv === "") {
-      console.error(`Không tìm thấy ID: ${idDiv}`);
-      return;
+        console.error(`Không tìm thấy ID: ${idDiv}`);
+        return;
     }
-  
+
     // Toggle trạng thái của mainDiv
     if (mainDiv.classList.contains("showDiv")) {
-      mainDiv.classList.remove("showDiv");
-      mainDiv.classList.add("hiddenDiv");
-      mainDiv.style.setProperty("--translateX", newTranslateX);
+        mainDiv.classList.remove("showDiv");
+        mainDiv.classList.add("hiddenDiv");
+        mainDiv.style.setProperty("--translateX", newTranslateX);
     } else {
-      mainDiv.classList.add("showDiv");
-      mainDiv.classList.remove("hiddenDiv");
-      mainDiv.style.setProperty("--translateX", "0px");
+        mainDiv.classList.add("showDiv");
+        mainDiv.classList.remove("hiddenDiv");
+        mainDiv.style.setProperty("--translateX", "0px");
     }
 
     if (idDiv === "popupShop") {
         switchTabShop('gacha');
     }
-  }
+}
 
 //Vào game
 //Logic:
@@ -6265,7 +6267,7 @@ function outGameRank() {
         }
 
         resetOutGame();
-        
+
         typeGameConquest.pointBattle = 0;
 
         // Xóa hết skill trong slot
@@ -8151,7 +8153,7 @@ document.addEventListener("visibilitychange", function () {
 function createNewComp(isWin) {
     const firebaseCompRef = ref(db, "allComps");  // Tham chiếu đến allComps trong Firebase
     const ratioWinCheck = 25;
-    
+
     // Lấy dữ liệu từ Firebase Realtime Database
     get(firebaseCompRef)
         .then(snapshot => {
@@ -8228,10 +8230,10 @@ function createNewComp(isWin) {
             let newBattlePetUseSlotRound = Object.keys(typeGameConquest.battlePetUseSlotRound).reduce((newObj, key) => {
                 let newKey = key.replace(/B$/, 'A');
                 let skillData = typeGameConquest.battlePetUseSlotRound[key];
-            
+
                 // Clone sâu để tránh ảnh hưởng dữ liệu gốc
                 let clonedSkillData = JSON.parse(JSON.stringify(skillData));
-            
+
                 // Xử lý các trường dạng mảng để loại bỏ Infinity/NaN
                 ['COOLDOWN', 'HEAL', 'DAME', 'EFFECT', 'SHIELD', 'POISON'].forEach(field => {
                     if (Array.isArray(clonedSkillData[field])) {
@@ -8240,7 +8242,7 @@ function createNewComp(isWin) {
                         );
                     }
                 });
-            
+
                 newObj[newKey] = clonedSkillData;
                 return newObj;
             }, {});
@@ -8258,7 +8260,7 @@ function createNewComp(isWin) {
                 dameCritA: typeGameConquest.dameCritB,
                 slowA: typeGameConquest.slowB,
                 upCooldownA: typeGameConquest.upCooldownB,
-                idComp: idNewComp, 
+                idComp: idNewComp,
                 winUser: 0,
                 loseUser: 0,
                 ratioWinComp: 0,
@@ -8647,7 +8649,7 @@ function login(isTest) {
             // ✅ Đăng nhập thành công, cập nhật trạng thái online
             let newKey = Math.floor(1000000000 + Math.random() * 9000000000)
             keyLogin = newKey;
-            
+
             set(firebaseUserRef, {
                 ...userData,
                 keyLogin: newKey,
@@ -8723,14 +8725,14 @@ let sortBagRight = "";
 function chosenSortBagLeft(sort, divID) {
 
     const allButtonSort = {
-        buttonSSR: {div: document.getElementById("buttonSSR")},
-        buttonSS: {div: document.getElementById("buttonSS")},
-        buttonS: {div: document.getElementById("buttonS")},
-        buttonA: {div: document.getElementById("buttonA")},
-        buttonB: {div: document.getElementById("buttonB")},
-        buttonC: {div: document.getElementById("buttonC")},
-        buttonD: {div: document.getElementById("buttonD")},
-        buttonAll: {div: document.getElementById("buttonAll")},
+        buttonSSR: { div: document.getElementById("buttonSSR") },
+        buttonSS: { div: document.getElementById("buttonSS") },
+        buttonS: { div: document.getElementById("buttonS") },
+        buttonA: { div: document.getElementById("buttonA") },
+        buttonB: { div: document.getElementById("buttonB") },
+        buttonC: { div: document.getElementById("buttonC") },
+        buttonD: { div: document.getElementById("buttonD") },
+        buttonAll: { div: document.getElementById("buttonAll") },
     }
 
     Object.values(allButtonSort).forEach((button, index) => {
@@ -8744,7 +8746,7 @@ function chosenSortBagLeft(sort, divID) {
     loadItemBagLeft(sortBagLeft);
 }
 
-function openBag(){
+function openBag() {
 
     showOrHiddenDiv('popupBag');
     if (!sortBagLeft || sortBagLeft === "") {
@@ -8764,7 +8766,7 @@ function openBag(){
     } else {
         loadItemBagRight(sortBagRight);
     }
-    
+
     document.getElementById("bagPages").addEventListener("drop", handleDropBag);
     document.getElementById("inventoryPages").addEventListener("drop", handleDropInventory);
 
@@ -8775,7 +8777,7 @@ function openBag(){
     }
 }
 
-function loadItemBagLeft(sort){
+function loadItemBagLeft(sort) {
     sortBagLeft = sort
     const boardBagLeft = document.getElementById("boardBagLeft")
     const containerId = "inventoryPages";
@@ -8889,7 +8891,7 @@ function loadItemBagLeft(sort){
 
     setupPopupInfo5MonBag(userPetSort, "inventory")
     document.getElementById("weightBagLeftText").innerText = `${Object.values(userPet).length}/${weightBagUser}`
-    document.getElementById("weightBagLeft").style.width = `${Math.min(Object.values(userPet).length/weightBagUser*100,100)}%`
+    document.getElementById("weightBagLeft").style.width = `${Math.min(Object.values(userPet).length / weightBagUser * 100, 100)}%`
 }
 
 function handleDropBag(event) {
@@ -8948,17 +8950,17 @@ function handleDropInventory(event) {
 }
 
 
-function loadItemBagRight(sort){
+function loadItemBagRight(sort) {
     sortBagRight = sort;
     const boardBagRight = document.getElementById("boardBagRight")
     const containerId = "bagPages";
-    const battleUserPet = sort === "Conquest"?typeGameConquest.battleUserPet:typeGameSolo5Mon.battleUserPet
+    const battleUserPet = sort === "Conquest" ? typeGameConquest.battleUserPet : typeGameSolo5Mon.battleUserPet
     let battleUserPetSort = Object.values(battleUserPet).sort((a, b) => a.ID.localeCompare(b.ID));
     battleUserPetSort = Object.fromEntries(
         battleUserPetSort.map(item => [item.IDcreate, item])
-      );
+    );
 
-    console.log("battleUserPetSort",battleUserPetSort)
+    console.log("battleUserPetSort", battleUserPetSort)
     boardBagRight.innerHTML = ""
 
     Object.values(battleUserPetSort).forEach((item, index) => {
@@ -9034,13 +9036,13 @@ function loadItemBagRight(sort){
 
     setupPopupInfo5MonBag(battleUserPetSort, "bag")
     document.getElementById("weightBagRightText").innerText = `${Object.values(typeGameConquest.battleUserPet).length}/40`
-    document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length/40*100,100)}%`
+    document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
 
 function setupPopupInfo5MonBag(itemList, prefix) {
     const popup = document.getElementById("popupSTT5Mon");
     const overlay = document.getElementById("popupOverlay");
-    
+
     // Kiểm tra itemList là mảng hay đối tượng
     let itemsArray = [];
 
@@ -9157,7 +9159,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]),1), 1).toFixed(2)}]</span>
+                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
                 <span>${critInfo.trim()}</span>`;
             } else {
@@ -9238,16 +9240,16 @@ function setupPopupInfo5MonBag(itemList, prefix) {
                         }
                     }
 
-                    if (prefix==="skillGacha") {
+                    if (prefix === "skillGacha") {
                         // Làm trống randomPet
                         for (const key in randomPet) {
                             if (randomPet[key].IDcreate === item.IDcreate) {
                                 randomPet[key] = defaultSTT5Mon;
                             }
                         }
-    
+
                         for (let i = 0; i < 5; i++) {
-                            if (randomPet[`skill${i+1}S`].ID === "") {
+                            if (randomPet[`skill${i + 1}S`].ID === "") {
                                 document.getElementById(`skill${i + 1}S`).innerHTML = "?";
                                 document.getElementById(`skill${i + 1}S`).classList.remove("comp");
                                 document.getElementById(`skill${i + 1}SText`).innerHTML = "";
@@ -9373,7 +9375,7 @@ function upWeightBag() {
     } else {
         weightBagUser += 10
         document.getElementById("weightBagLeftText").innerText = `${Object.values(userPet).length}/${weightBagUser}`
-        document.getElementById("weightBagLeft").style.width = `${Math.min(Object.values(userPet).length/weightBagUser*100,100)}%`
+        document.getElementById("weightBagLeft").style.width = `${Math.min(Object.values(userPet).length / weightBagUser * 100, 100)}%`
         resetGoldAndTicket();
     }
 }
@@ -9515,7 +9517,7 @@ function resetOutGame() {
 
     typeGameConquest.battlePetInShop = {
         battleShop1: defaultSTT5Mon,
-        battleShop2:defaultSTT5Mon,
+        battleShop2: defaultSTT5Mon,
         battleShop3: defaultSTT5Mon,
         battleShop4: defaultSTT5Mon,
     };
@@ -9612,7 +9614,7 @@ function textPopupInfoSkill(skill, wherePopup) {
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         popupDesc1.innerHTML =
-            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skill.COOLDOWN[0], 200), 10) / Math.max((skill.COOLDOWN[1] + skill.COOLDOWN[2] + skill.COOLDOWN[3]),1), 1).toFixed(2)}]</span>
+            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skill.COOLDOWN[0], 200), 10) / Math.max((skill.COOLDOWN[1] + skill.COOLDOWN[2] + skill.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -9757,7 +9759,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skillInfo.COOLDOWN[0], 200), 10) / Math.max((skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3]),1), 1).toFixed(2)}]</span>
+            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skillInfo.COOLDOWN[0], 200), 10) / Math.max((skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -9966,13 +9968,13 @@ function changePage(direction) {
 function switchTabShop(tab) {
     const tabs = ['shop', 'gacha', 'exchange'];
     tabs.forEach(t => {
-      document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
+        document.getElementById(t).style.display = t === tab ? 'flex' : 'none';
     });
-       
+
     document.getElementById('tabShop').style.background = tab === 'shop' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
     document.getElementById('tabGacha').style.background = tab === 'gacha' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
     document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
-        
+
     if (document.getElementById('gacha').style.display === "flex") {
         document.getElementById(`skill1S`).innerHTML = "?";
         document.getElementById(`skill1SText`).innerHTML = "";
@@ -10328,15 +10330,15 @@ function randomPet5Mon() {
 
     do {
         total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
-    
+
         str = Math.floor(Math.random() * (total + 1));
         agi = Math.floor(Math.random() * (total + 1));
-        hp  = Math.floor(Math.random() * (total + 1));
-    
-    } while ((str + agi + hp > total) 
-        || str < 10 || agi < 10 || hp < 30 
-        || str > 500 || agi > 500 || hp > 500
-        || str + agi + hp > maxSTT
+        hp = Math.floor(Math.random() * (total + 1));
+
+    } while ((str + agi + hp > total)
+    || str < 10 || agi < 10 || hp < 30
+    || str > 500 || agi > 500 || hp > 500
+    || str + agi + hp > maxSTT
         || str + agi + hp < minSTT
     );
 
@@ -10376,7 +10378,7 @@ function getRandom5mon() {
     let powerSTR = scalePower5Mon(infoPetRandom.POWER.STR);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-    
+
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (infoPetRandom.EFFECT.includes("Attacking")) {
         dame = powerSTR.dame;  // Giảm dần khi STR tăng
@@ -10393,14 +10395,14 @@ function getRandom5mon() {
     if (infoPetRandom.EFFECT.includes("Poison")) {
         poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
-    
+
     //Tính cooldown
     let minC = 0;
     let maxC = 15;
-    
+
     let agi = infoPetRandom.POWER.AGI;
     let scaleC = 160;
-    
+
     if (agi <= 100) {
         scaleC = 130;
     } else {
@@ -10408,7 +10410,7 @@ function getRandom5mon() {
         scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
+    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //Gán info vào 5mon
     let final5mon = {
@@ -10594,7 +10596,7 @@ function addItemForExchangePage(rowId, itemList) {
 
         // Kiểm tra nếu user đã sở hữu pet này
         if (userPet.hasOwnProperty(item.ID)) {
-            
+
             const ownedOverlay = document.createElement("div");
             ownedOverlay.textContent = "Đã sở hữu";
             ownedOverlay.style.cssText = `
@@ -10710,7 +10712,7 @@ function setupPopupEventsExchangePage(itemList) {
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]),1), 1).toFixed(2)}]</span>
+                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
     <span>${critInfo.trim()}</span>`;
             } else {
@@ -10830,10 +10832,10 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         agi = Math.floor(Math.random() * (total + 1));
         hp = Math.floor(Math.random() * (total + 1));
 
-    } while ((str + agi + hp > total) 
-        || str < 10 || agi < 10 || hp < 30 
-        || str > 500 || agi > 500 || hp > 500
-        || str + agi + hp > maxSTT
+    } while ((str + agi + hp > total)
+    || str < 10 || agi < 10 || hp < 30
+    || str > 500 || agi > 500 || hp > 500
+    || str + agi + hp > maxSTT
         || str + agi + hp < minSTT
     );
 
@@ -10854,7 +10856,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let powerSTR = scalePower5Mon(str);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-    
+
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (select5Mon.EFFECT.includes("Attacking")) {
         dame = powerSTR.dame;  // Giảm dần khi STR tăng
@@ -10871,13 +10873,13 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     if (select5Mon.EFFECT.includes("Poison")) {
         poison = powerSTR.poison;  // Giảm dần khi STR tăng
     }
-    
+
     //Tính cooldown
     let minC = 0;
     let maxC = 15;
-    
+
     let scaleC = 160;
-    
+
     if (agi <= 100) {
         scaleC = 130;
     } else {
@@ -10885,7 +10887,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
+    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //Gán info vào 5mon
     let final5mon = {
@@ -10893,7 +10895,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         ID: select5Mon.ID,
         LEVEL: 1,
         NAME: select5Mon.NAME,
-        POWER: {STR:str, AGI:agi, HP:hp},
+        POWER: { STR: str, AGI: agi, HP: hp },
         TYPE: select5Mon.TYPE,
         SELLUP: select5Mon.SELLUP,
         INTERNAL: select5Mon.INTERNAL,
@@ -11353,7 +11355,7 @@ function loadMap(isMap) {
     //random để lấy số 5Mon trong allpets
     let random5MonByLocalMap = [];
     let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
-    
+
     for (let i = 1; i <= 100; i++) {
         if (allPetsLv1.length === 0) break; // tránh lỗi nếu không có 5mon level 1
         let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
@@ -11369,152 +11371,103 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    //setting màn hình mainscreen
-    const battleScreen = document.getElementById("battleScreen");
-
-    if (window.innerWidth <= 1000) {
-        // Thiết bị di động (điện thoại)
-        screenMain.style.height = "70vh";
-        screenMain.style.width = "95%";
-    
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-    
-        // Reset transform để đo đúng kích thước gốc
-        battleScreen.style.transform = "scale(1)";
-        battleScreen.style.transformOrigin = "left";
-    
-        // Lấy kích thước thật của battleScreen khi chưa scale
-        const battleWidth = battleScreen.offsetWidth;
-        const battleHeight = battleScreen.offsetHeight;
-    
-        // Tính scale theo cả chiều rộng và chiều cao
-        let scaleW = screenWidth / battleWidth;
-        let scaleH = screenHeight / battleHeight;
-    
-        // Chọn scale nhỏ hơn và chừa lại lề (~5%)
-        let scale = Math.min(scaleW, scaleH) * 0.95;
-    
-        // Đảm bảo không lớn hơn 1
-        scale = Math.min(scale, 1);
-    
-        // Áp dụng scale
-        battleScreen.style.transform = `scale(${scale})`;
-        battleScreen.style.transformOrigin = "left";
-    
-        // Căn lề trái để battleScreen nằm giữa nhẹ
-        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        battleScreen.style.marginLeft = `${marginLeft}px`;
-    
-    } else {
-        // Màn hình lớn hơn (PC)
-        battleScreen.style.transform = "scale(1)";
-        battleScreen.style.transformOrigin = "center";
-        battleScreen.style.marginLeft = null;
-    }
-
-
-    
-    map.style.width = (viewport.offsetWidth * 2) + 'px';
-    map.style.height = (viewport.offsetWidth * 2) + 'px';        
-    viewWidth = viewport.offsetWidth;
-    viewHeight = viewport.offsetHeight;
-    mapWidth = viewport.offsetWidth * 2;
-    mapHeight = viewport.offsetWidth * 2;
-    playerX = (viewport.offsetWidth * 2) / 2;
-    playerY = (viewport.offsetWidth * 2) / 2;
-    player.style.width = (mapWidth/9) + "px";
-    player.style.height = (mapWidth/9) + "px";
-    
     updateView();
-    
+
     document.getElementById("mainScreen").style.display = "flex";
-    updateStamina(); 
+    updateStamina();
     spawnRandomPets();
 }
 
 function settingMap() {
-    if (!isFinalLoadData) return;
 
     //setting màn hình mainscreen
-    const battleScreen = document.getElementById("battleScreen");
+    const gameScreen = document.getElementById("gameScreen");
 
-    if (window.innerWidth <= 1000) {
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
+
+    if (isMobile) {
         // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
-    
+
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
-    
+
         // Reset transform để đo đúng kích thước gốc
-        battleScreen.style.transform = "scale(1)";
-        battleScreen.style.transformOrigin = "left";
-    
-        // Lấy kích thước thật của battleScreen khi chưa scale
-        const battleWidth = battleScreen.offsetWidth;
-        const battleHeight = battleScreen.offsetHeight;
-    
+        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transformOrigin = "left";
+
+        // Lấy kích thước thật của gameScreen khi chưa scale
+        const battleWidth = gameScreen.offsetWidth;
+        const battleHeight = gameScreen.offsetHeight;
+
         // Tính scale theo cả chiều rộng và chiều cao
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
-    
+
         // Chọn scale nhỏ hơn và chừa lại lề (~5%)
-        let scale = Math.min(scaleW, scaleH) * 0.95;
-    
+        let scale = Math.min(scaleW, scaleH) * 0.90;
+
         // Đảm bảo không lớn hơn 1
         scale = Math.min(scale, 1);
-    
+
         // Áp dụng scale
-        battleScreen.style.transform = `scale(${scale})`;
-        battleScreen.style.transformOrigin = "left";
-    
-        // Căn lề trái để battleScreen nằm giữa nhẹ
+        gameScreen.style.transform = `scale(${scale})`;
+        gameScreen.style.transformOrigin = "left";
+
+        // Căn lề trái để gameScreen nằm giữa nhẹ
         const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        battleScreen.style.marginLeft = `${marginLeft}px`;
-    
+        gameScreen.style.marginLeft = `${marginLeft}px`;
+        const marginTop = (screenHeight - (battleHeight * scale)) / 2;
+        gameScreen.style.marginTop = `${marginTop}px`;
+
     } else {
         // Màn hình lớn hơn (PC)
-        battleScreen.style.transform = "scale(1)";
-        battleScreen.style.transformOrigin = "center";
-        battleScreen.style.marginLeft = null;
+        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transformOrigin = "center";
+        gameScreen.style.marginLeft = null;
     }
-    
+
     map.style.width = (viewport.offsetWidth * 2) + 'px';
-    map.style.height = (viewport.offsetWidth * 2) + 'px';        
+    map.style.height = (viewport.offsetWidth * 2) + 'px';
     viewWidth = viewport.offsetWidth;
     viewHeight = viewport.offsetHeight;
     mapWidth = viewport.offsetWidth * 2;
     mapHeight = viewport.offsetWidth * 2;
-    player.style.width = (mapWidth/9) + "px";
-    player.style.height = (mapWidth/9) + "px";
+    player.style.width = (mapWidth / 9) + "px";
+    player.style.height = (mapWidth / 9) + "px";
 
     //setting size 5mon
     document.querySelectorAll('.wildPet').forEach(el => {
-      el.style.width = (mapWidth/36) + "px";
-      el.style.height = (mapWidth/36) + "px";
+        el.style.width = (mapWidth / 36) + "px";
+        el.style.height = (mapWidth / 36) + "px";
     });
-    
+
     updateView();
 }
+
+window.onload = function() {
+    settingMap();
+};
+
 
 window.addEventListener("resize", settingMap);
 if (mainScreen) {
     const resizeObserver = new ResizeObserver(() => {
-      settingMap();
+        settingMap();
     });
-  
+
     resizeObserver.observe(mainScreen);
 }
 
 document.getElementById("toggleMenu").addEventListener("click", () => {
     if (document.getElementById("menuButtons1").style.display === "flex") {
-        document.getElementById("menuButtons1").style.display =  "none";
-        document.getElementById("menuButtons2").style.display =  "none";
+        document.getElementById("menuButtons1").style.display = "none";
+        document.getElementById("menuButtons2").style.display = "none";
         document.getElementById("toggleMenu").textContent = "Mở rộng";
     } else {
-        document.getElementById("menuButtons1").style.display =  "flex";
-        document.getElementById("menuButtons2").style.display =  "flex";
+        document.getElementById("menuButtons1").style.display = "flex";
+        document.getElementById("menuButtons2").style.display = "flex";
         document.getElementById("toggleMenu").textContent = "Thu gọn";
     }
 });
@@ -11676,7 +11629,7 @@ function movePlayer(timestamp) {
             if (staminaUser <= 0) {
                 luckyMeet5Mon = 0;
             } else {
-               luckyMeet5Mon = 5; 
+                luckyMeet5Mon = 5;
             }
         } else {
             luckyMeet5Mon += luckUp;
@@ -11686,7 +11639,7 @@ function movePlayer(timestamp) {
                     spawnRandomPets();
                 }
             } else {
-               spawnRandomPets(); 
+                spawnRandomPets();
             }
         }
     }
@@ -11711,7 +11664,7 @@ var isMeet5Mon = false
 function catch5Mon() {
     if (isMeet5Mon) return;
     isMeet5Mon = true;
-    
+
     //Dựa vào list5MonMeet để random
     if (list5MonMeet.length === 0) {
         console.warn("Không có 5Mon nào để bắt!");
@@ -11742,15 +11695,15 @@ function catch5Mon() {
 
     do {
         total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
-    
+
         str = Math.floor(Math.random() * (total + 1));
         agi = Math.floor(Math.random() * (total + 1));
-        hp  = Math.floor(Math.random() * (total + 1));
-    
-    } while ((str + agi + hp > total) 
-        || str < 10 || agi < 10 || hp < 30 
-        || str > 500 || agi > 500 || hp > 500
-        || str + agi + hp > maxSTT
+        hp = Math.floor(Math.random() * (total + 1));
+
+    } while ((str + agi + hp > total)
+    || str < 10 || agi < 10 || hp < 30
+    || str > 500 || agi > 500 || hp > 500
+    || str + agi + hp > maxSTT
         || str + agi + hp < minSTT
     );
 
@@ -11770,7 +11723,7 @@ function catch5Mon() {
     let powerSTR = scalePower5Mon(str);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
-    
+
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (e5mon.EFFECT.includes("Attacking")) {
         dame = powerSTR.dame;  // Giảm dần khi STR tăng
@@ -11791,9 +11744,9 @@ function catch5Mon() {
     //Tính cooldown
     let minC = 0;
     let maxC = 15;
-    
+
     let scaleC = 160;
-    
+
     if (agi <= 100) {
         scaleC = 130;
     } else {
@@ -11801,7 +11754,7 @@ function catch5Mon() {
         scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
     }
 
-    let valueC = minC + (maxC-minC)/( 1 + agi/scaleC)*1000;
+    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //Gán info vào 5mon
     is5MonMeet = {
@@ -11809,7 +11762,7 @@ function catch5Mon() {
         ID: e5mon.ID,
         LEVEL: 1,
         NAME: e5mon.NAME,
-        POWER: {STR: str, AGI: agi, HP: hp},
+        POWER: { STR: str, AGI: agi, HP: hp },
         TYPE: e5mon.TYPE,
         SELLUP: e5mon.SELLUP,
         INTERNAL: e5mon.INTERNAL,
@@ -11867,7 +11820,7 @@ function catch5Mon() {
                 // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
                 let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
                 hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-                
+
                 descInfo += hiddenDescription
             }
         });
@@ -11985,52 +11938,52 @@ function catch5Mon() {
     } else {
         descTextItem += "";
     }
-   
+
     const ranges = [
-      { min: 1, max: 5, weight: 20 },    // nhiều nhất
-      { min: 5, max: 10, weight: 15 },
-      { min: 10, max: 15, weight: 12 },
-      { min: 15, max: 20, weight: 10 },
-      { min: 20, max: 25, weight: 8 },
-      { min: 25, max: 30, weight: 7 },
-      { min: 30, max: 35, weight: 6 },
-      { min: 35, max: 40, weight: 5 },
-      { min: 40, max: 45, weight: 4 },
-      { min: 45, max: 50, weight: 3 },
-      { min: 50, max: 55, weight: 2 },
-      { min: 55, max: 60, weight: 2 },
-      { min: 60, max: 65, weight: 1 },
-      { min: 65, max: 70, weight: 1 },
-      { min: 70, max: 75, weight: 1 },
-      { min: 75, max: 80, weight: 1 },
-      { min: 80, max: 85, weight: 1 },
-      { min: 85, max: 90, weight: 0.5 },
-      { min: 90, max: 95, weight: 0.5 },
-      { min: 95, max: 100, weight: 0.5 }
+        { min: 1, max: 5, weight: 20 },    // nhiều nhất
+        { min: 5, max: 10, weight: 15 },
+        { min: 10, max: 15, weight: 12 },
+        { min: 15, max: 20, weight: 10 },
+        { min: 20, max: 25, weight: 8 },
+        { min: 25, max: 30, weight: 7 },
+        { min: 30, max: 35, weight: 6 },
+        { min: 35, max: 40, weight: 5 },
+        { min: 40, max: 45, weight: 4 },
+        { min: 45, max: 50, weight: 3 },
+        { min: 50, max: 55, weight: 2 },
+        { min: 55, max: 60, weight: 2 },
+        { min: 60, max: 65, weight: 1 },
+        { min: 65, max: 70, weight: 1 },
+        { min: 70, max: 75, weight: 1 },
+        { min: 75, max: 80, weight: 1 },
+        { min: 80, max: 85, weight: 1 },
+        { min: 85, max: 90, weight: 0.5 },
+        { min: 90, max: 95, weight: 0.5 },
+        { min: 95, max: 100, weight: 0.5 }
     ];
 
-    
-      const totalWeight = ranges.reduce((sum, r) => sum + r.weight, 0);
-      const random = Math.random() * totalWeight;
-    
-      let cumulative = 0;
-      for (const range of ranges) {
+
+    const totalWeight = ranges.reduce((sum, r) => sum + r.weight, 0);
+    const random = Math.random() * totalWeight;
+
+    let cumulative = 0;
+    for (const range of ranges) {
         cumulative += range.weight;
         if (random < cumulative) {
-          // Trả ra một số ngẫu nhiên trong khoảng đó
-          percentCatch5MonMeet = Math.random() * (range.max - range.min) + range.min;
-          break;
+            // Trả ra một số ngẫu nhiên trong khoảng đó
+            percentCatch5MonMeet = Math.random() * (range.max - range.min) + range.min;
+            break;
         }
-      }
-    
+    }
+
     let roundedPercent = percentCatch5MonMeet.toFixed(1); // làm tròn 1 chữ số sau dấu phẩy
-    
+
     document.getElementById("percentCatch5MonMeet").textContent = `Tỷ lệ bắt: ${roundedPercent}%`;
 
     document.getElementById("descPopupSTT5MonMeet").innerHTML = descTextItem;
     document.getElementById("popupMeet5Mon").style.display = "block";
     document.getElementById("popupOverlay").style.display = "block";
-    
+
 }
 
 function catch5MonMeet() {
@@ -12061,7 +12014,7 @@ function catch5MonMeet() {
     document.getElementById("popupOverlay").style.display = "none";
 }
 
-function closePopupMeet5Mon (){
+function closePopupMeet5Mon() {
     if (isAutoHunter) {
         meet5Mon = false
         document.getElementById("popupMeet5Mon").style.display = "none";
@@ -12101,7 +12054,7 @@ function toggleAutoMovement() {
         document.removeEventListener("visibilitychange", changeTabWhenAutoMove);
         return;
     }
-    
+
 
     isAutoMoving = !isAutoMoving;
     isAutoHunter = true;
@@ -12282,7 +12235,7 @@ function upStamina() {
 
 // ---- Pet random xuất hiện ---- //
 let count5MonSpawn = 0;
-  function spawnRandomPets() {
+function spawnRandomPets() {
     const mapWidth = map.offsetWidth;
     const mapHeight = map.offsetHeight;
     let spawn5Mon = Math.random() * 100
@@ -12303,53 +12256,53 @@ let count5MonSpawn = 0;
         pet.style.top = y + "px";
         pet.addEventListener("click", () => click5MonMeet(pet));
         map.appendChild(pet);
-        movePetSmoothly(pet, mapWidth, mapHeight);  
+        movePetSmoothly(pet, mapWidth, mapHeight);
     }
-  }
+}
 
 function click5MonMeet(pet) {
     pet.classList.add("pet-catching");
     count5MonSpawn -= 1
     catch5Mon();
     setTimeout(() => {
-      pet.remove();
+        pet.remove();
     }, 800);
 }
 
 function movePetSmoothly(pet, mapWidth, mapHeight) {
-  function move() {
-    const currentX = parseFloat(pet.style.left);
-    const currentY = parseFloat(pet.style.top);
+    function move() {
+        const currentX = parseFloat(pet.style.left);
+        const currentY = parseFloat(pet.style.top);
 
-    const maxDistance = 200;
-    let offsetX = (Math.random() - 0.5) * 2 * maxDistance;
-    let offsetY = (Math.random() - 0.5) * 2 * maxDistance;
+        const maxDistance = 200;
+        let offsetX = (Math.random() - 0.5) * 2 * maxDistance;
+        let offsetY = (Math.random() - 0.5) * 2 * maxDistance;
 
-    let targetX = currentX + offsetX;
-    let targetY = currentY + offsetY;
+        let targetX = currentX + offsetX;
+        let targetY = currentY + offsetY;
 
-    targetX = Math.max(0, Math.min(mapWidth - 32, targetX));
-    targetY = Math.max(0, Math.min(mapHeight - 32, targetY));
+        targetX = Math.max(0, Math.min(mapWidth - 32, targetX));
+        targetY = Math.max(0, Math.min(mapHeight - 32, targetY));
 
-    // 👉 Flip hình ảnh nếu di chuyển sang trái hoặc phải
-    if (targetX < currentX) {
-      pet.style.transform = "scaleX(1)";
-    } else {
-      pet.style.transform = "scaleX(-1)";
+        // 👉 Flip hình ảnh nếu di chuyển sang trái hoặc phải
+        if (targetX < currentX) {
+            pet.style.transform = "scaleX(1)";
+        } else {
+            pet.style.transform = "scaleX(-1)";
+        }
+
+        pet.style.left = targetX + "px";
+        pet.style.top = targetY + "px";
+
+        setTimeout(move, 2000 + Math.random() * 2000);
     }
 
-    pet.style.left = targetX + "px";
-    pet.style.top = targetY + "px";
-
-    setTimeout(move, 2000 + Math.random() * 2000);
-  }
-
-  move(); // Bắt đầu lần đầu
+    move(); // Bắt đầu lần đầu
 }
 
 function scalePower5Mon(STR) {
     const baseScale = 1;
-    const scaleSTR = baseScale * Math.log10(STR); 
+    const scaleSTR = baseScale * Math.log10(STR);
     let valuePower = 1 + STR / scaleSTR
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
@@ -12360,7 +12313,7 @@ function scalePower5Mon(STR) {
     burn = Math.round(valuePower * 0.09)
     poison = Math.round(valuePower * 0.08)
 
-    return {dame, heal, shield, burn, poison}
+    return { dame, heal, shield, burn, poison }
 }
 
 function hideOrShowInfoGoldDiamond() {
@@ -12377,10 +12330,10 @@ function hideOrShowInfoGoldDiamond() {
 
 //Audio background
 const musicBGList = [
-  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
-  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
-  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3",
-  "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745398510/dhe1luws4cwzgoxnj2oi.mp3"
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397379/c4nt9wtsye3xfxtcy1li.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397475/tzum1m4pokm4wzysapnj.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745397509/ojwtdwrrntlqrohhky4z.mp3",
+    "https://res.cloudinary.com/dxgawkr4g/video/upload/v1745398510/dhe1luws4cwzgoxnj2oi.mp3"
 ];
 
 const audio = document.getElementById("bgMusic");
@@ -12390,54 +12343,54 @@ const fadeDuration = 2000;
 let musicBGIsPlay = false;
 
 function getRandomIndexExcept(exceptIndex) {
-  let newIndex;
-  do {
-    newIndex = Math.floor(Math.random() * musicBGList.length);
-  } while (musicBGList.length > 1 && newIndex === exceptIndex);
-  return newIndex;
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * musicBGList.length);
+    } while (musicBGList.length > 1 && newIndex === exceptIndex);
+    return newIndex;
 }
 
 function fadeVolume(target, duration, callback) {
-  const step = 50;
-  const diff = (target - audio.volume) / (duration / step);
-  const interval = setInterval(() => {
-    audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
-    if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
-      clearInterval(interval);
-      if (callback) callback();
-    }
-  }, step);
+    const step = 50;
+    const diff = (target - audio.volume) / (duration / step);
+    const interval = setInterval(() => {
+        audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
+        if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
+            clearInterval(interval);
+            if (callback) callback();
+        }
+    }, step);
 }
 
 function playRandomMusic() {
-  if (musicBGIsPlay) return; // Tránh gọi trùng
+    if (musicBGIsPlay) return; // Tránh gọi trùng
 
-  const index = getRandomIndexExcept(lastPlayedIndex);
-  lastPlayedIndex = index;
-  audio.src = musicBGList[index];
-  audio.volume = 0.0;
+    const index = getRandomIndexExcept(lastPlayedIndex);
+    lastPlayedIndex = index;
+    audio.src = musicBGList[index];
+    audio.volume = 0.0;
 
-  audio.play().then(() => {
-    fadeVolume(volumeTarget, fadeDuration);
-    musicBGIsPlay = true;
-  }).catch((err) => {
-    console.log("Cần tương tác người dùng:", err);
-  });
+    audio.play().then(() => {
+        fadeVolume(volumeTarget, fadeDuration);
+        musicBGIsPlay = true;
+    }).catch((err) => {
+        console.log("Cần tương tác người dùng:", err);
+    });
 }
 
 // Khi nhạc kết thúc
 audio.addEventListener("ended", () => {
-  fadeVolume(0.0, fadeDuration, () => {
-    musicBGIsPlay = false;
-    playRandomMusic();
-  });
+    fadeVolume(0.0, fadeDuration, () => {
+        musicBGIsPlay = false;
+        playRandomMusic();
+    });
 });
 
 // Lắng nghe click để kiểm tra và phát nhạc nếu chưa chạy
 document.addEventListener("click", () => {
-  if (!musicBGIsPlay) {
-    playRandomMusic();
-  }
+    if (!musicBGIsPlay) {
+        playRandomMusic();
+    }
 });
 
 window.addEventListener("load", playRandomMusic);
@@ -12447,24 +12400,24 @@ const volumeControlBG = document.getElementById("volumeControlBG");
 const toggleMusicBtnBG = document.getElementById("toggleMusicBG");
 
 volumeControlBG.addEventListener("input", (e) => {
-  const newVolume = parseFloat(e.target.value);
-  audio.volume = newVolume;
-  if (newVolume === 0) {
-    toggleMusicBtnBG.textContent = "🔇";
-  } else {
-    toggleMusicBtnBG.textContent = "🔊";
-  }
+    const newVolume = parseFloat(e.target.value);
+    audio.volume = newVolume;
+    if (newVolume === 0) {
+        toggleMusicBtnBG.textContent = "🔇";
+    } else {
+        toggleMusicBtnBG.textContent = "🔊";
+    }
 });
 
 // Tắt/bật nhạc khi bấm nút
 toggleMusicBtnBG.addEventListener("click", () => {
-  if (audio.muted) {
-    audio.muted = false;
-    toggleMusicBtnBG.textContent = "🔊";
-  } else {
-    audio.muted = true;
-    toggleMusicBtnBG.textContent = "🔇";
-  }
+    if (audio.muted) {
+        audio.muted = false;
+        toggleMusicBtnBG.textContent = "🔊";
+    } else {
+        audio.muted = true;
+        toggleMusicBtnBG.textContent = "🔇";
+    }
 });
 
 
@@ -12477,32 +12430,32 @@ clickAudio.volume = parseFloat(volumeControlClick.value);
 let clickSoundMuted = false;
 
 // Phát âm thanh khi click button
-document.addEventListener("click", function(e) {
-  const isButton = e.target.tagName.toLowerCase() === "button" || e.target.closest("button");
-  if (isButton && !clickSoundMuted) {
-    clickAudio.currentTime = 0;
-    clickAudio.play().catch(() => {});
-  }
+document.addEventListener("click", function (e) {
+    const isButton = e.target.tagName.toLowerCase() === "button" || e.target.closest("button");
+    if (isButton && !clickSoundMuted) {
+        clickAudio.currentTime = 0;
+        clickAudio.play().catch(() => { });
+    }
 });
 
 // Điều chỉnh âm lượng click
 volumeControlClick.addEventListener("input", () => {
-  const volume = parseFloat(volumeControlClick.value);
-  clickAudio.volume = volume;
-  clickSoundMuted = volume === 0;
-  toggleMusicClick.textContent = volume === 0 ? "🔇" : "🔊";
+    const volume = parseFloat(volumeControlClick.value);
+    clickAudio.volume = volume;
+    clickSoundMuted = volume === 0;
+    toggleMusicClick.textContent = volume === 0 ? "🔇" : "🔊";
 });
 
 toggleMusicClick.addEventListener("click", () => {
-  const audio = document.getElementById("clickSound");
-  clickSoundMuted = !clickSoundMuted;
-  if (audio.muted) {
-    audio.muted = false;
-    toggleMusicBtnClick.textContent = "🔊";
-  } else {
-    audio.muted = true;
-    toggleMusicBtnClick.textContent = "🔇";
-  }
+    const audio = document.getElementById("clickSound");
+    clickSoundMuted = !clickSoundMuted;
+    if (audio.muted) {
+        audio.muted = false;
+        toggleMusicBtnClick.textContent = "🔊";
+    } else {
+        audio.muted = true;
+        toggleMusicBtnClick.textContent = "🔇";
+    }
 });
 
 
