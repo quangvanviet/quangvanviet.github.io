@@ -11337,6 +11337,8 @@ const autoButton = document.getElementById("autoButton");
 const staminaFill = document.getElementById("staminaFill");
 const staminaText = document.getElementById("staminaText");
 const screenMain = document.getElementById("mainScreen");
+const gameScreen = document.getElementById("gameScreen");
+const viewport = document.getElementById("viewport");
 
 let mapWidth = 1024;
 let mapHeight = 1536;
@@ -11346,8 +11348,6 @@ let playerX = mapWidth / 2;
 let playerY = mapHeight / 2;
 let targetX = playerX;
 let targetY = playerY;
-
-const viewport = document.getElementById("viewport");
 
 let canClick = true;
 
@@ -11371,63 +11371,53 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    updateView();
+    settingMap();
 
-    document.getElementById("mainScreen").style.display = "flex";
+    screenMain.style.display = "flex";
     updateStamina();
     spawnRandomPets();
 }
 
 function settingMap() {
-
-    //setting màn hình mainscreen
-    const gameScreen = document.getElementById("gameScreen");
+    // Ghi lại phần trăm vị trí hiện tại của player trước khi map thay đổi
+    const percentX = playerX / mapWidth;
+    const percentY = playerY / mapHeight;
 
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
 
     if (isMobile) {
-        // Thiết bị di động (điện thoại)
         screenMain.style.height = "70vh";
         screenMain.style.width = "95%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        // Reset transform để đo đúng kích thước gốc
         gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "left";
 
-        // Lấy kích thước thật của gameScreen khi chưa scale
         const battleWidth = gameScreen.offsetWidth;
         const battleHeight = gameScreen.offsetHeight;
 
-        // Tính scale theo cả chiều rộng và chiều cao
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
-
-        // Chọn scale nhỏ hơn và chừa lại lề (~5%)
         let scale = Math.min(scaleW, scaleH) * 0.90;
-
-        // Đảm bảo không lớn hơn 1
         scale = Math.min(scale, 1);
 
-        // Áp dụng scale
         gameScreen.style.transform = `scale(${scale})`;
         gameScreen.style.transformOrigin = "left";
 
-        // Căn lề trái để gameScreen nằm giữa nhẹ
         const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
         gameScreen.style.marginLeft = `${marginLeft}px`;
         const marginTop = (screenHeight - (battleHeight * scale)) / 2;
         gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
-        // Màn hình lớn hơn (PC)
         gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "center";
         gameScreen.style.marginLeft = null;
     }
 
+    // Cập nhật lại các thông số kích thước map và player
     map.style.width = (viewport.offsetWidth * 2) + 'px';
     map.style.height = (viewport.offsetWidth * 2) + 'px';
     viewWidth = viewport.offsetWidth;
@@ -11437,28 +11427,60 @@ function settingMap() {
     player.style.width = (mapWidth / 9) + "px";
     player.style.height = (mapWidth / 9) + "px";
 
-    //setting size 5mon
+    // Cập nhật lại kích thước 5Mon
     document.querySelectorAll('.wildPet').forEach(el => {
         el.style.width = (mapWidth / 36) + "px";
         el.style.height = (mapWidth / 36) + "px";
     });
 
+
+    // Cập nhật lại vị trí player dựa trên phần trăm đã lưu
+    playerX = percentX * mapWidth;
+    playerY = percentY * mapHeight;
+    targetX = playerX;
+    targetY = playerY;
+
     updateView();
 }
 
 window.onload = function() {
-    settingMap();
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
+    if (isMobile) {
+        screenMain.style.height = "70vh";
+        screenMain.style.width = "95%";
+
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transformOrigin = "left";
+
+        const battleWidth = gameScreen.offsetWidth;
+        const battleHeight = gameScreen.offsetHeight;
+
+        let scaleW = screenWidth / battleWidth;
+        let scaleH = screenHeight / battleHeight;
+        let scale = Math.min(scaleW, scaleH) * 0.90;
+        scale = Math.min(scale, 1);
+
+        gameScreen.style.transform = `scale(${scale})`;
+        gameScreen.style.transformOrigin = "left";
+
+        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        gameScreen.style.marginLeft = `${marginLeft}px`;
+        const marginTop = (screenHeight - (battleHeight * scale)) / 2;
+        gameScreen.style.marginTop = `${marginTop}px`;
+
+    } else {
+        gameScreen.style.transform = "scale(1)";
+        gameScreen.style.transformOrigin = "center";
+        gameScreen.style.marginLeft = null;
+    }
+
 };
 
-
 window.addEventListener("resize", settingMap);
-if (mainScreen) {
-    const resizeObserver = new ResizeObserver(() => {
-        settingMap();
-    });
 
-    resizeObserver.observe(mainScreen);
-}
 
 document.getElementById("toggleMenu").addEventListener("click", () => {
     if (document.getElementById("menuButtons1").style.display === "flex") {
@@ -11477,16 +11499,21 @@ let animationId = null
 map.addEventListener("click", function (event) {
     if (isAutoHunter) return;
 
-    // Hủy animation đang chạy nếu có
     if (animationId) {
         cancelAnimationFrame(animationId);
         animationId = null;
-        moveStartTime = null; // Reset thời điểm bắt đầu để tính lại bước mới
+        moveStartTime = null;
     }
 
     const rect = map.getBoundingClientRect();
-    targetX = event.clientX - rect.left;
-    targetY = event.clientY - rect.top;
+
+    // Tính toán tỉ lệ scale ngược lại
+    const scaleX = map.offsetWidth / rect.width;
+    const scaleY = map.offsetHeight / rect.height;
+
+    // Điều chỉnh tọa độ click theo scale
+    targetX = (event.clientX - rect.left) * scaleX;
+    targetY = (event.clientY - rect.top) * scaleY;
 
     targetX = Math.max(0, Math.min(targetX, mapWidth - 20));
     targetY = Math.max(0, Math.min(targetY, mapHeight - 20));
