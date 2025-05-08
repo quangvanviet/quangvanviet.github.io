@@ -399,7 +399,7 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, DAME: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: {ATK:0, DEF:0, AGI:0, INT:0, LUK:0, HP:0}, DAME: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
 };
 var price5MonConquest = 0;
@@ -5764,7 +5764,7 @@ function openGameRank() {
         if (typeGameConquest.loseBattle >= maxLose) {
             console.log("Game Over! Người chơi đã thua tối đa 10 lần.");
         }
-
+        settingScreenBattle();
     }, 1000);
     endLoading();
 }
@@ -11339,6 +11339,7 @@ const staminaText = document.getElementById("staminaText");
 const screenMain = document.getElementById("mainScreen");
 const gameScreen = document.getElementById("gameScreen");
 const viewport = document.getElementById("viewport");
+const battleScreen = document.getElementById("battleScreen");
 
 let mapWidth = 1024;
 let mapHeight = 1536;
@@ -11393,10 +11394,10 @@ function settingMap() {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        gameScreen.style.transform = "scale(1)"; // Reset lại transform trước khi tính toán mới
+        // Reset transform cho gameScreen trước khi tính toán
+        gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "left";
 
-        // Lấy kích thước của battle screen sau khi đã cập nhật các thông số
         const battleWidth = gameScreen.offsetWidth;
         const battleHeight = gameScreen.offsetHeight;
 
@@ -11406,7 +11407,7 @@ function settingMap() {
         let scale = Math.min(scaleW, scaleH) * 0.90; // Tỷ lệ tối đa là 90%
         scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
-        // Áp dụng tỷ lệ và căn chỉnh lại gameScreen
+        // Áp dụng tỷ lệ cho gameScreen
         gameScreen.style.transform = `scale(${scale})`;
         gameScreen.style.transformOrigin = "left";
 
@@ -11447,6 +11448,38 @@ function settingMap() {
     targetY = playerY;
 
     updateView();
+    settingScreenBattle();
+}
+
+function settingScreenBattle() {
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
+
+    if (isMobile) {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        // Tính toán tỷ lệ và căn chỉnh cho battleScreen riêng biệt
+        const battleWidth2 = battleScreen.offsetWidth;
+        const battleHeight2 = battleScreen.offsetHeight;
+
+        let scaleW2 = screenWidth / battleWidth2;
+        let scaleH2 = screenHeight / battleHeight2;
+
+        let scale2 = Math.min(scaleW2, scaleH2) * 0.90; // Tỷ lệ tối đa là 90%
+        scale2 = Math.min(scale2, 1); // Đảm bảo tỷ lệ không vượt quá 1
+
+        // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
+        battleScreen.style.transform = `scale(${scale2})`;
+
+        // Tính toán marginLeft và marginTop để căn giữa
+        const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
+        battleScreen.style.marginLeft = `${marginLeft2}px`;
+
+    } else {
+        // Cần áp dụng tương tự cho battleScreen nếu cần
+        battleScreen.style.transform = "scale(1)";
+        battleScreen.style.marginLeft = null;
+    }
 }
 
 window.onload = function() {
@@ -11460,10 +11493,10 @@ window.onload = function() {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        gameScreen.style.transform = "scale(1)"; // Reset lại transform trước khi tính toán mới
+        // Reset transform cho gameScreen trước khi tính toán
+        gameScreen.style.transform = "scale(1)";
         gameScreen.style.transformOrigin = "left";
 
-        // Lấy kích thước của battle screen sau khi đã cập nhật các thông số
         const battleWidth = gameScreen.offsetWidth;
         const battleHeight = gameScreen.offsetHeight;
 
@@ -11473,7 +11506,7 @@ window.onload = function() {
         let scale = Math.min(scaleW, scaleH) * 0.90; // Tỷ lệ tối đa là 90%
         scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
-        // Áp dụng tỷ lệ và căn chỉnh lại gameScreen
+        // Áp dụng tỷ lệ cho gameScreen
         gameScreen.style.transform = `scale(${scale})`;
         gameScreen.style.transformOrigin = "left";
 
