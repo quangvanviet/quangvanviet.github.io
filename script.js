@@ -9095,7 +9095,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         itemDiv.addEventListener("click", () => {
             document.getElementById("imgPopupSTT5Mon").src = item.URLimg;
             document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
-            document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.AGI + item.POWER.HP}`;
+            document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
             document.getElementById("levelTextPopupSTT5Mon").textContent = item.LEVEL;
             document.getElementById("rareTextPopupSTT5Mon").textContent = item.RARE;
 
@@ -9125,7 +9125,10 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
             <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${item.POWER.STR}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${item.POWER.DEF}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${item.POWER.INT}</span>
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${item.POWER.AGI}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${item.POWER.LUK}</span>
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${item.POWER.HP}</span>
             </div>
             
@@ -9690,7 +9693,7 @@ function textPopupInfoSkill(skill, wherePopup) {
 function setupPopupInfo5MonInBattle(skillInfo) {
     document.getElementById("imgPopupSTT5MonInBattle").src = skillInfo.URLimg;
     document.getElementById("namePopupSTT5MonInBattle").textContent = skillInfo.NAME;
-    document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${skillInfo.POWER.STR + skillInfo.POWER.AGI + skillInfo.POWER.HP}`;
+    document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${skillInfo.POWER.STR + skillInfo.POWER.DEF + skillInfo.POWER.INT + skillInfo.POWER.LUK + skillInfo.POWER.AGI + skillInfo.POWER.HP}`;
     document.getElementById("levelTextPopupSTT5MonInBattle").textContent = skillInfo.LEVEL;
     document.getElementById("rareTextPopupSTT5MonInBattle").textContent = skillInfo.RARE;
 
@@ -9717,9 +9720,12 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     // Cập nhật thông tin trong popup
     descTextItem += `
     <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
-        <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${skillInfo.POWER.STR}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${skillInfo.POWER.AGI}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${skillInfo.POWER.DEF}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${skillInfo.POWER.INT}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i>: ${skillInfo.POWER.AGI}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${skillInfo.POWER.LUK}</span>
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${skillInfo.POWER.HP}</span>
         </div>
         
@@ -11950,7 +11956,10 @@ function catch5Mon() {
 <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
 <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ???</span>
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ???</span>
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ???</span>
 </div>
 
