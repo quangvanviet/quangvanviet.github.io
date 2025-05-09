@@ -399,7 +399,7 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, POWER: {ATK:0, DEF:0, AGI:0, INT:0, LUK:0, HP:0}, DAME: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: {ATK:0, DEF:0, AGI:0, INT:0, LUK:0, HP:0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
 };
 var price5MonConquest = 0;
@@ -3952,11 +3952,18 @@ function update5MonBattle(skill) {
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
     
     //tính crit
-    let luk = infoPetRandom.POWER.LUK;
+    let luk = skill.POWER.LUK;
     let maxCrit = 60;
-    let scale = 475; // tùy chỉnh
-    let valueCrit = maxCrit * luk / (luk + scale);
+    let scaleCrit = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+
+    //tính def
+    let def = skill.POWER.DEF;
+    let maxDef = 90;
+    let scaleDef = 475; // tùy chỉnh
+    let valueDef = maxDef * def / (def + scaleDef);
+    valueDef = Math.min(maxDef, Math.max(0, valueDef));
     
     return {
         dame: dame,
@@ -3965,7 +3972,8 @@ function update5MonBattle(skill) {
         burn: burn,
         poison: poison,
         crit: valueCrit,
-        cooldown: valueC
+        def: Math.round(valueDef * 100) / 100,
+        cooldown: Math.ceil(valueC)
     }
 }
 
@@ -10426,9 +10434,16 @@ function getRandom5mon() {
     //tính crit
     let luk = infoPetRandom.POWER.LUK;
     let maxCrit = 60;
-    let scale = 475; // tùy chỉnh
-    let valueCrit = maxCrit * luk / (luk + scale);
+    let scaleCrit = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+
+    //tính def
+    let def = infoPetRandom.POWER.DEF;
+    let maxDef = 90;
+    let scaleDef = 475; // tùy chỉnh
+    let valueDef = maxDef * def / (def + scaleDef);
+    valueDef = Math.min(maxDef, Math.max(0, valueDef));
     
     //Gán info vào 5mon
     let final5mon = {
@@ -10443,6 +10458,7 @@ function getRandom5mon() {
         EFFECT: infoPetRandom.EFFECT,
         URLimg: infoPetRandom.URLimg,
         DAME: [dame, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
         HEAL: [heal, 0, 0, 0, 0],
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
@@ -10909,11 +10925,18 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //tính crit
-    let luk = infoPetRandom.POWER.LUK;
+    let luk = select5Mon.POWER.LUK;
     let maxCrit = 60;
-    let scale = 475; // tùy chỉnh
-    let valueCrit = maxCrit * luk / (luk + scale);
+    let scaleCrit = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+
+    //tính def
+    let def = select5Mon.POWER.DEF;
+    let maxDef = 90;
+    let scaleDef = 475; // tùy chỉnh
+    let valueDef = maxDef * def / (def + scaleDef);
+    valueDef = Math.min(maxDef, Math.max(0, valueDef));
     
     //Gán info vào 5mon
     let final5mon = {
@@ -10928,6 +10951,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         EFFECT: select5Mon.EFFECT,
         URLimg: select5Mon.URLimg,
         DAME: [dame, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
         HEAL: [heal, 0, 0, 0, 0],
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
@@ -11866,11 +11890,18 @@ function catch5Mon() {
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //tính crit
-    let luk = infoPetRandom.POWER.LUK;
+    let luk = e5mon.POWER.LUK;
     let maxCrit = 60;
-    let scale = 475; // tùy chỉnh
-    let valueCrit = maxCrit * luk / (luk + scale);
+    let scaleCrit = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+
+    //tính def
+    let def = e5mon.POWER.DEF;
+    let maxDef = 90;
+    let scaleDef = 475; // tùy chỉnh
+    let valueDef = maxDef * def / (def + scaleDef);
+    valueDef = Math.min(maxDef, Math.max(0, valueDef));
     
     //Gán info vào 5mon
     is5MonMeet = {
@@ -11885,6 +11916,7 @@ function catch5Mon() {
         EFFECT: e5mon.EFFECT,
         URLimg: e5mon.URLimg,
         DAME: [dame, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
         HEAL: [heal, 0, 0, 0, 0],
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
