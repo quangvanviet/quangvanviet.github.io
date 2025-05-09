@@ -10934,14 +10934,12 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //tính crit
-    let luk = select5Mon.POWER.LUK;
     let maxCrit = 60;
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
 
     //tính def
-    let def = select5Mon.POWER.DEF;
     let maxDef = 90;
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
@@ -11899,14 +11897,12 @@ function catch5Mon() {
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //tính crit
-    let luk = e5mon.POWER.LUK;
     let maxCrit = 60;
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
 
     //tính def
-    let def = e5mon.POWER.DEF;
     let maxDef = 90;
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
@@ -12457,10 +12453,10 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
     move(); // Bắt đầu lần đầu
 }
 
-function scalePower5Mon(STR) {
+function scalePower5Mon(INT) {
     const baseScale = 1;
-    const scaleSTR = baseScale * Math.log10(STR);
-    let valuePower = 1 + STR / scaleSTR
+    const scaleINT = baseScale * Math.log10(INT);
+    let valuePower = 1 + INT / scaleINT
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
 
