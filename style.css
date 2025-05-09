@@ -20,7 +20,7 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 /* Toàn màn hình chiến đấu */
