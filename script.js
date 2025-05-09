@@ -3955,7 +3955,7 @@ function update5MonBattle(skill) {
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     
     //tính crit
@@ -9133,9 +9133,9 @@ function setupPopupInfo5MonBag(itemList, prefix) {
 
 
             descTextItem += `
-            <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+            <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
             Thuộc tính: 
-                <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+                <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
             </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
             <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
@@ -9598,9 +9598,9 @@ function setupPopupInfo5MonInBattle(skillInfo) {
 
 
     descTextItem += `
-    <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+    <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
     Thuộc tính: 
-        <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+        <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
     </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
     <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
@@ -10311,7 +10311,7 @@ function getRandom5mon() {
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
 
     //tính crit
@@ -10582,9 +10582,9 @@ function setupPopupEventsExchangePage(itemList) {
             
             // Cập nhật thông tin trong popup
             descTextItem += `
-            <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+            <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
             Thuộc tính: 
-                <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+                <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
             </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
             <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
@@ -10813,7 +10813,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000; 
 
     //tính crit
     let maxCrit = 60;
@@ -11772,7 +11772,7 @@ function catch5Mon() {
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
 
     //tính crit
@@ -11838,9 +11838,10 @@ function catch5Mon() {
 </div>`
 
 
-    descTextItem += `<span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+    descTextItem += `
+    <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
     Thuộc tính: 
-        <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+        <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
     </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
     <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
