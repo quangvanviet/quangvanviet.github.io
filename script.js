@@ -9187,12 +9187,12 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
             let critInfo = ""
             if (critPercent > 0) {
-                critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}% </span>`;
+                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%]</span>`;
             }
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
+                    `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
                 <span>${critInfo.trim()}</span>`;
             } else {
@@ -9201,7 +9201,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
 
             if (internalInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Bị động]</span>
+                    `<span style="font-weight: bold">[Kỹ năng bị động]</span>
                     <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
             } else {
                 descTextItem += "";
@@ -9556,143 +9556,6 @@ function resetOutGame() {
     };
 }
 
-function textPopupInfoSkill(skill, wherePopup) {
-    let popupNameLevel = ""
-    let popupDesc0 = ""
-    let popupDesc1 = ""
-    let popupDesc2 = ""
-    let popupDesc3 = ""
-
-    if (wherePopup === "Bag") { //popup mở ở Bag, inventory ngoài màn hình chính
-        popupNameLevel = document.getElementById('popupNameLevelBag')
-        popupDesc0 = document.getElementById('popupDesc0Bag')
-        popupDesc1 = document.getElementById('popupDesc1Bag')
-        popupDesc2 = document.getElementById('popupDesc2Bag')
-        popupDesc3 = document.getElementById('popupDesc3Bag')
-    } else if (wherePopup === "inGame") { //popup mở ở trong game, trong trận đấu
-        popupNameLevel = document.getElementById('popupNameLevel')
-        popupDesc0 = document.getElementById('popupDesc0')
-        popupDesc1 = document.getElementById('popupDesc1')
-        popupDesc2 = document.getElementById('popupDesc2')
-        popupDesc3 = document.getElementById('popupDesc3')
-    }
-
-    // Type
-    let typeInfo = "";
-    skill.TYPE.forEach(type => {
-        typeInfo += `[${type}]`;
-    });
-
-    // Cập nhật thông tin trong popup
-    popupNameLevel.innerHTML = `
-<span style="display: flex; justify-content: space-between; flex-direction: row; align-items: center;">
-<a>${skill.NAME || ''}</a>
-<span style="display: flex; gap: 5px;">
-<span style="color: #4504b3; font-weight: bold; font-size: 12px;">${typeInfo}</span>
-<a style="font-size:11px;">[Lv: ${skill.LEVEL || ''}]</a>
-</span>
-</span>`
-
-
-    popupDesc0.innerHTML = `[Kỹ năng] <span style="font-weight: bold;">[Tốc độ: ${skill.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(skill.COOLDOWN[1] + skill.COOLDOWN[2] + skill.COOLDOWN[3], 1)}]</span>`
-
-    let descInfo = "";
-    let countDescInfo = 1;
-    if (skill.EFFECT.length === 1) {
-        skill.EFFECT.forEach((effect) => {
-            if (effectsSkill[effect]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                descInfo += dynamicDescription(skill)
-            }
-        });
-    } else {
-        skill.EFFECT.forEach((effect) => {
-            if (effectsSkill[effect]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(skill)}</span>`;
-                countDescInfo += 1;
-            }
-        });
-    }
-
-    let internalInfo = "";
-    let countInternalInfo = 1;
-    if (skill.INTERNAL.length === 1) {
-        skill.INTERNAL.forEach((internal) => {
-            if (effectsInternal[internal]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                internalInfo += dynamicDescription(skill)
-            }
-        });
-    } else {
-        skill.INTERNAL.forEach((internal) => {
-            if (effectsInternal[internal]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(skill)}</span>`;
-                countInternalInfo += 1;
-            }
-        });
-    }
-
-    //Chí mạng info
-    let critPercent = skill.CRIT.reduce((a, b) => a + b, 0)
-    let critInfo = ""
-    if (critPercent > 0) {
-        critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}% </span>`;
-    }
-    // Gán nội dung vào phần tử HTML
-    if (descInfo !== "") {
-        popupDesc1.innerHTML =
-            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skill.COOLDOWN[0], 200), 10) / Math.max((skill.COOLDOWN[1] + skill.COOLDOWN[2] + skill.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
-<span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
-<span>${critInfo.trim()}</span>`;
-    } else {
-        popupDesc1.innerHTML = "";
-    }
-
-    if (internalInfo !== "") {
-        popupDesc2.innerHTML =
-            `<span style="font-weight: bold">[Bị động]</span>
-<span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
-    } else {
-        popupDesc2.innerHTML = "";
-    }
-
-    //Sellup info
-    let sellUpInfo = "";
-    let countSellUpInfo = 1;
-    if (skill.SELLUP.length === 1) {
-        skill.SELLUP.forEach((sellup) => {
-            if (effectsSellUp[sellup]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                sellUpInfo += dynamicDescription(skill)
-            }
-        });
-    } else {
-        skill.SELLUP.forEach((sellup) => {
-            if (effectsSellUp[sellup]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(skill)}</span>`;
-                countSellUpInfo += 1;
-            }
-        });
-    }
-
-    if (sellUpInfo !== "") {
-        popupDesc3.innerHTML = `<span style="font-weight: bold">[Thả đi nhận được]</span>
-<span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
-    } else {
-        popupDesc3.innerHTML = "";
-    }
-
-}
-
 function setupPopupInfo5MonInBattle(skillInfo) {
     document.getElementById("imgPopupSTT5MonInBattle").src = skillInfo.URLimg;
     document.getElementById("namePopupSTT5MonInBattle").textContent = skillInfo.NAME;
@@ -9731,14 +9594,18 @@ function setupPopupInfo5MonInBattle(skillInfo) {
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${skillInfo.POWER.LUK}</span>
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${skillInfo.POWER.HP}</span>
         </div>
-        
-        <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
     </div>`
 
 
-    descTextItem +=
-        `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng] [Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>`
-
+    descTextItem += `
+    <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+    Thuộc tính: 
+        <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+    </span>
+    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
+    <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+    `
+    
     let descInfo = "";
     let countDescInfo = 1;
     if (skillInfo.EFFECT.length === 1) {
@@ -9789,13 +9656,13 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     let critPercent = skillInfo.CRIT.reduce((a, b) => a + b, 0)
     let critInfo = ""
     if (critPercent > 0) {
-        critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}% </span>`;
+        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%]</span>`;
     }
 
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / skillInfo.COOLDOWN[0], 200), 10) / Math.max((skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
+            `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -9804,7 +9671,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
 
     if (internalInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Bị động]</span>
+            `<span style="font-weight: bold">[Kỹ năng bị động]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
     } else {
         descTextItem += "";
@@ -10769,12 +10636,12 @@ function setupPopupEventsExchangePage(itemList) {
             let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
             let critInfo = ""
             if (critPercent > 0) {
-                critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}% </span>`;
+                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???]</span>`;
             }
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ${Math.max(Math.max(Math.min(30000 / item.COOLDOWN[0], 200), 10) / Math.max((item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3]), 1), 1).toFixed(2)}]</span>
+                    `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: ???]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
     <span>${critInfo.trim()}</span>`;
             } else {
@@ -10783,7 +10650,7 @@ function setupPopupEventsExchangePage(itemList) {
 
             if (internalInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Bị động]</span>
+                    `<span style="font-weight: bold">[Kỹ năng bị động]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
             } else {
                 descTextItem += "";
