@@ -304,7 +304,8 @@ function loadAllData() {
         allPets = data.allPets || [];
         allUsers = data.allUsers || {};
         defaultHP = data.defaultHP
-        allComps = data.allComps.filter(item => item !== null);
+        allComps = data.allComps || [];
+        console.log("allComps", allComps)
 
         var skillDescriptions = data.skillDescriptions || {};
 
@@ -399,7 +400,7 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0 }, HP: 0, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
 };
 var price5MonConquest = 0;
@@ -856,7 +857,7 @@ function triggerCooldown(skillId) {
             //Kiểm tra xem endgame chưa, nếu chưa => Tiếp tục vòng hồi chiêu
             if (endGame === false) {
                 triggerCooldown(skillId);
-                // Khi hết thời gian hồi chiêu, kích hoạt kỹ năng
+                // Khi hết thời gian hồi chiêu, kích hoạt đòn đánh thường
                 skillAttacking(skillId, dameSkill);
             } else {
                 stopSkillGame()
@@ -869,6 +870,316 @@ function triggerCooldown(skillId) {
     const frameId = requestAnimationFrame(updateCooldown);
     animationFrameIds.push(frameId); // Lưu ID
 }
+
+function baseAttack(skillKey, isComp) {
+    // Kiểm tra skill có tồn tại không
+    if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
+        return;
+    }
+
+    if (endGame === true) {
+        stopSkillGame()
+        return;
+    }
+
+    const skill = document.getElementById(skillKey);
+    const overlay = skill.querySelector('.skillCooldownOverlay');
+
+    const cooldownTime = typeGameConquest.skillBattle[skillKey].COOLDOWN[0];
+
+    // Ưu tiên kiểm tra trạng thái Sleep/delete
+    let skillsSleep = isComp ? skillsSleepA : skillsSleepB;
+    let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB;
+
+    if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+        return; // Bỏ qua nếu bị xoá hoặc ngủ
+    }
+
+    // Đặt lại trạng thái overlay ban đầu
+    overlay.style.transitionDuration = '0ms'; // Không có hiệu ứng chuyển tiếp ban đầu
+    overlay.style.transform = 'scaleY(1)';    // Đặt overlay đầy (hiện full)
+
+    // Khởi tạo thời gian bắt đầu hồi chiêu
+    const startTime = Date.now();
+
+    function updateCooldown() {
+        const elapsedTime = Date.now() - startTime; // Tính thời gian đã trôi qua
+
+        // Tính tỉ lệ hồi chiêu (từ 0 đến 1)
+        const progress = Math.min(elapsedTime / cooldownTime, 1);
+
+        // Điều chỉnh overlay dựa trên tỉ lệ đã trôi qua
+        overlay.style.transform = `scaleY(${1 - progress})`;
+
+        if (elapsedTime < cooldownTime) {
+            // Tiếp tục cập nhật khi chưa hết thời gian hồi chiêu
+            const frameId = requestAnimationFrame(updateCooldown);
+            animationFrameIds.push(frameId); // Lưu ID
+        } else {
+            //Kiểm tra xem endgame chưa, nếu chưa => Tiếp tục vòng hồi chiêu
+            if (endGame === false) {
+                baseAttack(skillKey, isComp);
+                // Khi hết thời gian hồi chiêu, kích hoạt đòn đánh thường
+                // === Xác định mục tiêu ===
+                let targetAttackFirst = isComp ? skillKey.slice(0, -1) + "B" : skillKey.slice(0, -1) + "A";
+
+                // Nếu mục tiêu đầu tiên còn sống
+                if (hpAll5Mon[targetAttackFirst] > 0) {
+                    console.log(`Tấn công mục tiêu: ${targetAttackFirst}`);
+                    // Tính số lần đánh
+                    let doubleAttack = Math.max(
+                        typeGameConquest.skillBattle[skillKey].COOLDOWN[1] +
+                        typeGameConquest.skillBattle[skillKey].COOLDOWN[2] +
+                        typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1
+                    );
+
+                    for (let d = 1; d <= doubleAttack; d++) {
+                        setTimeout(() => {
+                            let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                            let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
+
+                            let critDame = 1;
+                            let upCritDame = isComp ? typeGameConquest.dameCritA : typeGameConquest.dameCritB
+                            let critPoint = typeGameConquest.skillBattle[skillKey].CRIT.reduce((a, b) => a + b, 0); // Tính tổng điểm chí mạng
+
+                            // Random từ 1 -> 100
+                            let randomValue = Math.floor(Math.random() * 100); // Random số nguyên từ 1 đến 100
+
+                            // Kiểm tra nếu randomValue <= critPoint thì kích hoạt chí mạng
+                            let dameCritWithEffect = 0;
+                            if (typeGameConquest.skillBattle[skillKey].EFFECT.includes("doubleDameCrit")) {
+                                dameCritWithEffect = 3
+                            } else {
+                                dameCritWithEffect = 2
+                            }
+
+                            let isCrit = false;
+                            if (randomValue <= critPoint) {
+                                critDame = dameCritWithEffect + upCritDame / 100;
+                                isCrit = true;
+                            } else {
+                                critDame = 1;
+                                isCrit = false;
+                            }
+
+                            // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+                            let dameSkill = 10;
+
+                            baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                        }, d * 200); // delay mỗi lần 200ms
+                    }
+
+                } else {
+                    // Nếu mục tiêu chính đã chết, tìm mục tiêu khác
+                    const skillIndex = parseInt(skillKey.replace(/[^0-9]/g, ""));
+                    const side = isComp ? "B" : "A";
+
+                    let indices = [];
+                    for (let i = skillIndex + 1; i <= 9; i++) indices.push(i);
+                    for (let i = 1; i < skillIndex; i++) indices.push(i);
+
+                    let found = false;
+                    for (let i of indices) {
+                        let targetKey = `skill${i}${side}`;
+                        if (typeGameConquest.skillBattle[targetKey] && hpAll5Mon[targetKey] > 0) {
+                            targetAttackFirst = targetKey;
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        let doubleAttack = Math.max(
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[1] +
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[2] +
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1
+                        );
+
+                        for (let d = 1; d <= doubleAttack; d++) {
+                            setTimeout(() => {
+                                let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                                let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
+
+                                let critDame = 1;
+                                let upCritDame = isComp ? typeGameConquest.dameCritA : typeGameConquest.dameCritB
+                                let critPoint = typeGameConquest.skillBattle[skillKey].CRIT.reduce((a, b) => a + b, 0); // Tính tổng điểm chí mạng
+
+                                // Random từ 1 -> 100
+                                let randomValue = Math.floor(Math.random() * 100); // Random số nguyên từ 1 đến 100
+
+                                // Kiểm tra nếu randomValue <= critPoint thì kích hoạt chí mạng
+                                let dameCritWithEffect = 0;
+                                if (typeGameConquest.skillBattle[skillKey].EFFECT.includes("doubleDameCrit")) {
+                                    dameCritWithEffect = 3
+                                } else {
+                                    dameCritWithEffect = 2
+                                }
+
+                                let isCrit = false;
+                                if (randomValue <= critPoint) {
+                                    critDame = dameCritWithEffect + upCritDame / 100;
+                                    isCrit = true;
+                                } else {
+                                    critDame = 1;
+                                    isCrit = false;
+                                }
+
+                                // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+                                let dameSkill = 10;
+                                skillAttacking(skillKey, dameSkill, isCrit)
+                            }, d * 200); // delay mỗi lần 200ms
+                        }
+                    } else {
+
+                        // Tiếp tục tấn công như ở trên
+                        let doubleAttack = Math.max(
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[1] +
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[2] +
+                            typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1
+                        );
+
+                        for (let d = 1; d <= doubleAttack; d++) {
+                            setTimeout(() => {
+                                let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                                let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
+
+                                let critDame = 1;
+                                let upCritDame = isComp ? typeGameConquest.dameCritA : typeGameConquest.dameCritB
+                                let critPoint = typeGameConquest.skillBattle[skillKey].CRIT.reduce((a, b) => a + b, 0); // Tính tổng điểm chí mạng
+
+                                // Random từ 1 -> 100
+                                let randomValue = Math.floor(Math.random() * 100); // Random số nguyên từ 1 đến 100
+
+                                // Kiểm tra nếu randomValue <= critPoint thì kích hoạt chí mạng
+                                let dameCritWithEffect = 0;
+                                if (typeGameConquest.skillBattle[skillKey].EFFECT.includes("doubleDameCrit")) {
+                                    dameCritWithEffect = 3
+                                } else {
+                                    dameCritWithEffect = 2
+                                }
+
+                                let isCrit = false;
+                                if (randomValue <= critPoint) {
+                                    critDame = dameCritWithEffect + upCritDame / 100;
+                                    isCrit = true;
+                                } else {
+                                    critDame = 1;
+                                    isCrit = false;
+                                }
+
+                                // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+                                let dameSkill = 10;
+
+                                baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                            }, d * 200); // delay mỗi lần 200ms
+                        }
+                    }
+
+                }
+
+            } else {
+                stopSkillGame()
+                return;
+            }
+        }
+    }
+
+    // Bắt đầu vòng lặp cập nhật cooldown
+    const frameId = requestAnimationFrame(updateCooldown);
+    animationFrameIds.push(frameId); // Lưu ID
+
+}
+
+
+// Hàm đánh thường baseAttack
+function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
+    const teamAorB = skillId.includes('A') ? 'TeamA' : 'TeamB';
+    const skill = document.getElementById(skillId);
+    const skillsDelete = teamAorB==='TeamA'?skillsDeleteB:skillsDeleteA
+    const isComp = teamAorB==='TeamA'?true:false
+
+    // Hiệu ứng cho thanh skill 
+    if (teamAorB == 'TeamA') { //bên A
+        skill.classList.add('attackingSkillA');
+        setTimeout(() => skill.classList.remove('attackingSkillA'), 500);
+    } else { //bên B
+        skill.classList.add('attackingSkillB');
+        setTimeout(() => skill.classList.remove('attackingSkillB'), 500);
+    }
+
+    // Tạo hiệu ứng mũi tên/nắm đấm
+    const target = document.getElementById(targetAttack);  // Đối tượng bị tấn công
+
+    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
+
+    // Tạo mũi tên/nắm đấm
+    const attackEffect = document.createElement('div');
+    if (teamAorB === "TeamA") {
+        // attackEffect.classList.add('attackEffectOfA');
+        attackEffect.classList.add('attackEffect')
+    } else {
+        // attackEffect.classList.add('attackEffectOfB');
+        attackEffect.classList.add('attackEffect');
+        attackEffect.style.transform = "rotate(90deg)";
+    }
+
+    // new Audio('sound/attack.mp3').play(); //Âm thanh tấn công
+
+    document.body.appendChild(attackEffect);
+
+    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
+    const skillRect = skill.getBoundingClientRect();
+
+    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    attackEffect.style.position = 'absolute';
+    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
+    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+
+    // Tính toán độ di chuyển tới mục tiêu
+    const targetX = targetRect.left + targetRect.width / 2;
+    const targetY = targetRect.top + targetRect.height / 2;
+
+    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    const moveEffect = () => {
+        const duration = 500; // Thời gian di chuyển (ms)
+        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
+        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+
+        attackEffect.style.transition = `transform ${duration}ms ease-out`;
+        if (teamAorB === "TeamA") {
+            attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        } else {
+            attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(90deg)`;
+        }
+
+        // Xóa phần tử sau khi hiệu ứng kết thúc
+        setTimeout(() => {
+            attackEffect.remove();
+            effectNumberAtBaseAttack(targetAttack, dameSkill, "Attacking", isCrit);
+
+            //Trừ máu target
+            hpAll5Mon[targetAttack] -= dameSkill
+
+            if (hpAll5Mon[targetAttack] <= 0) {
+                skillsDelete[targetAttack] = 1
+                const skillChild = target.querySelector('.skill');
+                if (skillChild) {
+                    skillChild.classList.add('delete');
+                }
+            }
+
+            //Tăng nộ
+            updateRage(skillId, overlayDiv, isComp)
+
+            
+        }, duration);
+    };
+
+
+    // Bắt đầu hiệu ứng di chuyển
+    setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+}
+
 
 // Hàm sử dụng skill Attacking
 function skillAttacking(skillId, dameSkill, isCrit) {
@@ -2383,7 +2694,65 @@ function skillSpeedDown(skillKey, dameSkill, isComp) {
     setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
 }
 
-//Hàm hiển thị số sát thương cộng thêm của burn/poison bay số
+//Hàm hiển thị số sát thương đánh thường baseAttack
+function effectNumberAtBaseAttack(targetAttack, dameSkill, effect, isCrit) {
+    const effectNumberDiv = document.createElement('div');
+
+    const effectContainer = document.getElementById(targetAttack);
+
+    // Thêm class tùy theo loại hiệu ứng
+    if (effect === "Poison") {
+        effectNumberDiv.classList.add('effect', 'poison');
+        effectNumberDiv.innerText = `+${dameSkill}`; // Hiển thị số cho poison
+    } else if (effect === "Burn") {
+        effectNumberDiv.classList.add('effect', 'burn');
+        effectNumberDiv.innerText = `+${dameSkill}`; // Hiển thị số cho burn
+    } else if (effect === "Attacking") {
+        effectNumberDiv.classList.add('effect', 'damage');
+        effectNumberDiv.innerText = `-${dameSkill}`; // Hiển thị số cho burn
+    } else if (effect === "Shield") {
+        effectNumberDiv.classList.add('effect', 'shield');
+        effectNumberDiv.innerText = `+${dameSkill}`; // Hiển thị số cho burn
+    } else if (effect === "Heal") {
+        effectNumberDiv.classList.add('effect', 'heal');
+        effectNumberDiv.innerText = `+${dameSkill}`; // Hiển thị số cho burn
+    }
+
+    if (isCrit) {
+        effectNumberDiv.style.backgroundImage = "url('https://cdn-icons-png.freepik.com/256/7380/7380434.png?semt=ais_hybrid')";
+        effectNumberDiv.style.backgroundSize = "60px 60px";  // Hoặc "cover" tùy thuộc vào cách bạn muốn hình ảnh được phóng to.
+        effectNumberDiv.style.backgroundRepeat = "no-repeat";  // Đảm bảo hình không bị lặp lại.
+        effectNumberDiv.style.backgroundPosition = "center";  // Đặt hình giữa phần tử.
+        effectNumberDiv.style.fontSize = "40px";
+    }
+
+
+    // Tạo một vị trí ngẫu nhiên nhỏ để số sẽ xuất hiện với hiệu ứng
+    const randomX = Math.random() * 80 - 40; // Tạo hiệu ứng di chuyển ±40px
+    const randomY = Math.random() * 80 - 40;
+
+
+    // Đặt vị trí của số sát thương tại vị trí của container
+    // effectNumberDiv.style.position = 'absolute';
+    effectNumberDiv.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    effectNumberDiv.style.fontSize = '20px';  // Đặt kích thước chữ
+    effectNumberDiv.style.zIndex = '200';     // Đảm bảo số luôn nằm trên các phần tử khác
+    effectNumberDiv.style.animation = 'fadeOut 1.5s ease-in-out forwards';  // Thêm hiệu ứng di chuyển
+
+    // Thêm vào container của effect
+    effectContainer.appendChild(effectNumberDiv);
+
+    // Cập nhật lại thanh HP (nếu có)
+    updateHpbar();
+
+    // Xóa số sau khi hiệu ứng hoàn tất
+    setTimeout(() => {
+        effectNumberDiv.remove();
+    }, 1500);  // Sau 1.5s, số sẽ biến mất
+}
+
+
+//Hàm hiển thị số sát thương cộng thêm của burn/poison bay số ở User Main
 function effectNumberAtAttack(skillId, dameSkill, effect, isCrit) {
     const effectNumberDiv = document.createElement('div');
 
@@ -5859,6 +6228,28 @@ function nextStepGame1() {
     endLoading();
 }
 
+
+let hpAll5Mon = {
+    skill1A: 0,
+    skill2A: 0,
+    skill3A: 0,
+    skill4A: 0,
+    skill5A: 0,
+    skill6A: 0,
+    skill7A: 0,
+    skill8A: 0,
+    skill9A: 0,
+
+    skill1B: 0,
+    skill2B: 0,
+    skill3B: 0,
+    skill4B: 0,
+    skill5B: 0,
+    skill6B: 0,
+    skill7B: 0,
+    skill8B: 0,
+    skill9B: 0,
+}
 function startBattle() {
     startLoading();
     infoStartGame.stepGame = 3;
@@ -5873,6 +6264,14 @@ function startBattle() {
         nowShieldBattleComp = 0;
         nowBurnBattleComp = 0;
         nowPoisonBattleComp = 0;
+
+        //Tính HP cho tất cả các 5Mon 2 bên
+        Object.keys(hpAll5Mon).forEach((skill) => {
+            if (typeGameConquest.skillBattle[skill] && typeGameConquest.skillBattle[skill].POWER) {
+                hpAll5Mon[skill] = typeGameConquest.skillBattle[skill].POWER.HP || 0;
+            }
+        });
+        console.log("hpAll5Mon",hpAll5Mon)
 
         //Chuyển tất cả skill không kéo được
         const skillBattleOn = document.querySelectorAll('.skill');
@@ -5889,8 +6288,8 @@ function startBattle() {
         updateHpbar();
         setTimeout(() => {
             battleStartTime(true);
-            cooldownSkillBattleB();
-            cooldownSkillBattleA();
+            // cooldownSkillBattleB();
+            // cooldownSkillBattleA();
         }, 3000);
         const shopZone = document.getElementById('shopZone');
         const compZone = document.getElementById('compZone');
@@ -5908,41 +6307,27 @@ function startBattle() {
         //Hiện timeZone 
         timeZone.style.display = "flex";
 
-        //Xóa item trong shop => null
+        // Bắt đầu vòng lặp cooldown skill
+        for (let s = 1; s <= 9; s++) {
 
-        //chuyển overlay cooldown thành có màu:
-        // const overlays = document.querySelectorAll('.skillCooldownOverlay');
+            const skillB = typeGameConquest.skillBattle[`skill${s}B`];
+            if (skillB.COOLDOWN[0] > 0) {
+                console.log("vào 1111")
+                baseAttack(`skill${s}B`, false);
+            }
 
-        // // Duyệt qua từng phần tử và thay đổi trực tiếp thuộc tính background
-        // overlays.forEach((overlay) => {
-        //   overlay.style.background = 'linear-gradient(to bottom, #f9ff04,#f9ff0438,#f9ff0438,#f9ff0438,#f9ff0438,#f9ff0438,#f9ff04)';
-        // });
-
-
-        //Bắt đầu vòng lặp cooldown skill
-        // for (s = 2; s <= 9; s++) { //8 skill -> tính từ ô thứ 2 trước
-
-        //    //skill của mình cooldown trước
-        //   if (typeGameConquest.skillBattle[`skill${s}B`].COOLDOWN[0] == 0) { //Lọc các skill cooldown == 0 và có cooldown
-
-        //   } else {
-        //     triggerCooldown(`skill${s}B`);
-        //   }
-
-        //   //skill của đối thủ cooldown sau
-        //   if (typeGameConquest.skillBattle[`skill${s}A`].COOLDOWN[0] == 0) { //Lọc các skill cooldown == 0 và có cooldown
-
-        //   } else {
-        //     triggerCooldown(`skill${s}A`);
-        //   }
-        // }
+            const skillA = typeGameConquest.skillBattle[`skill${s}A`];
+            if (skillA.COOLDOWN[0] > 0) {
+                console.log("vào 22222")
+                baseAttack(`skill${s}A`, true);
+            }
+        }
 
         //đạt điều kiện thì chiến thắng và gọi endBattle() => dừng tất cả cooldown và trừ máu
 
         //Đổi nút tiếp tục thành => onclick="startBattle()"
+        endLoading();
     }, 1000);
-
-    endLoading();
 }
 
 let intervalID = null;
@@ -7416,6 +7801,8 @@ function cooldownSkillBattleB() {
     updateCooldown(cooldownSkillBarB, cooldownSkillTimeB, skillMyStates, false);
 }
 
+
+
 function startSkill(skillKey, overlayDiv, isComp) {
     //Tính mutilcast=> đánh liên tiếp
     let doubleSkill = Math.max(typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1)
@@ -7767,6 +8154,42 @@ function updateRage(skillKey, overlayDiv, isComp) {
     }
 }
 
+function userSkillA(skillKey, overlayDiv, isComp) {
+    // Kiểm tra typeGameConquest.skillBattle[skillKey]
+    if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
+        return;
+    }
+    // Kiểm tra overlayDiv
+    if (!overlayDiv) {
+        return;
+    }
+
+    // Ưu tiên kiểm tra trạng thái Sleep/delete
+    let skillsSleep = isComp ? skillsSleepA : skillsSleepB
+    let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB
+
+    if (skillsDelete[skillKey] === 1) {
+        return; // Bỏ qua skill này
+    }
+
+    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) {  // Kiểm tra nộ đã đạt hoặc vượt 100
+        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;  // Trừ 100 nộ
+        if (skillsSleep[skillKey] === 1) {
+            skillsSleep[skillKey] = 0
+            const skillElement = document.getElementById(skillKey);
+            if (skillElement) {
+                const skillChild = skillElement.querySelector('.skill');
+                if (skillChild && skillChild.classList.contains('sleep')) {
+                    skillChild.classList.remove('sleep');
+                }
+            }
+        } else {
+            startSkill(skillKey, overlayDiv, isComp);
+        }
+    }
+}
+
+
 function useSkillLV(skillKey, overlayDiv, isComp) {
     // Kiểm tra typeGameConquest.skillBattle[skillKey]
     if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
@@ -7956,9 +8379,9 @@ function useSkill(skillKey, effect, overlayDiv, isComp) {
             console.warn(`Effect skill ${effect} chưa có xử lý cụ thể`);
     }
     // Cập nhật rage (chung cho tất cả các skill)
-    if (!skillKey.startsWith("skill9")) {
-        updateRage(skillKey, overlayDiv, isComp);
-    }
+    // if (!skillKey.startsWith("skill9")) {
+    //     updateRage(skillKey, overlayDiv, isComp);
+    // }
     startSkillMirror(skillKey, isComp, effect);
     startSkillResonance(skillKey, isComp, effect);
 }
