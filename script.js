@@ -9137,8 +9137,8 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             Thuộc tính: 
                 <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
             </span>
-            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
-            <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
+            <span >Gây <a style="color: red; font-weight: bold;">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
             
             let descInfo = "";
@@ -9192,7 +9192,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
+                    `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
                 <span>${critInfo.trim()}</span>`;
             } else {
@@ -9201,7 +9201,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
 
             if (internalInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Kỹ năng bị động]</span>
+                    `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng bị động]</span>
                     <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
             } else {
                 descTextItem += "";
@@ -9602,8 +9602,8 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     Thuộc tính: 
         <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
     </span>
-    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
-    <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
+    <span>Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
     
     let descInfo = "";
@@ -9662,7 +9662,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -9671,7 +9671,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
 
     if (internalInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Kỹ năng bị động]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng bị động]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
     } else {
         descTextItem += "";
@@ -9702,7 +9702,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     }
 
     if (sellUpInfo !== "") {
-        descTextItem += `<span style="font-weight: bold">[Thả đi nhận được]</span>
+        descTextItem += `<span style="font-weight: bold; margin-top: 5px;">[Thả đi nhận được]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
     } else {
         descTextItem += "";
@@ -10586,8 +10586,8 @@ function setupPopupEventsExchangePage(itemList) {
             Thuộc tính: 
                 <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
             </span>
-            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
-            <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
+            <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
             
             let descInfo = "";
@@ -10641,7 +10641,7 @@ function setupPopupEventsExchangePage(itemList) {
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Kỹ năng chủ động][Liên kích: ???]</span>
+                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng chủ động][Liên kích: ???]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
     <span>${critInfo.trim()}</span>`;
             } else {
@@ -10650,7 +10650,7 @@ function setupPopupEventsExchangePage(itemList) {
 
             if (internalInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold">[Kỹ năng bị động]</span>
+                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng bị động]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
             } else {
                 descTextItem += "";
@@ -10679,7 +10679,7 @@ function setupPopupEventsExchangePage(itemList) {
             }
 
             if (sellUpInfo !== "") {
-                descTextItem += `<span style="font-weight: bold">[Thả đi nhận được]</span>
+                descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Thả đi nhận được]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
             } else {
                 descTextItem += "";
@@ -11843,8 +11843,8 @@ function catch5Mon() {
     Thuộc tính: 
         <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
     </span>
-    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
-    <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
+    <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
     
     let descInfo = "";
@@ -11923,7 +11923,7 @@ function catch5Mon() {
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Kỹ năng chủ động] [Liên kích: ???]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: ???]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -11932,7 +11932,7 @@ function catch5Mon() {
 
     if (internalInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Kỹ năng bị động]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng bị động]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
     } else {
         descTextItem += "";
@@ -11973,7 +11973,7 @@ function catch5Mon() {
     }
 
     if (sellUpInfo !== "") {
-        descTextItem += `<span style="font-weight: bold">[Thả đi nhận được]</span>
+        descTextItem += `<span style="font-weight: bold; margin-top: 5px;">[Thả đi nhận được]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
     } else {
         descTextItem += "";
