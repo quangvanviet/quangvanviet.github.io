@@ -399,7 +399,7 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, POWER: {ATK:0, DEF:0, AGI:0, INT:0, LUK:0, HP:0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
 };
 var price5MonConquest = 0;
@@ -3950,14 +3950,14 @@ function update5MonBattle(skill) {
     let agi = skill.POWER.AGI;
     let minC = 0;
     let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
-    
-    let scaleC = agi < 100 
+
+    let scaleC = agi < 100
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
-    
+
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
-    
+
     //tính crit
     let luk = skill.POWER.LUK;
     let maxCrit = 60;
@@ -3971,7 +3971,7 @@ function update5MonBattle(skill) {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
-    
+
     return {
         dame: dame,
         heal: heal,
@@ -5574,7 +5574,6 @@ function startGame() {
                 return;
             }
             openGameRank();
-            showOrHiddenDiv("Close")
         } else {
             messageOpen("Hãy lựa chọn tập luyện hoặc đánh thường hoặc xếp hạng")
         }
@@ -5608,12 +5607,13 @@ function startGame() {
 function openGameRank() {
     closePopupContinueGame();
 
-    if (typeGameConquest.battleUserPet.length < 20 && onGame === 0) {
+    if (Object.entries(typeGameConquest.battleUserPet).length < 20 && onGame === 0) {
         messageOpen("5Mon bạn mang theo không đủ, vui lòng chọn đủ 20 5Mon để tiến hành chiến đấu!")
+        showOrHiddenDiv("Close")
         openBag();
         return;
     }
-
+    showOrHiddenDiv("Close")
 
     console.log("Open Game executed");
     startLoading();
@@ -9115,7 +9115,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             // Type
             let typeInfo = "";
             item.TYPE.forEach(type => {
-                typeInfo += ` ${type}`;
+                typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`
             });
 
             // Cập nhật thông tin trong popup
@@ -9133,14 +9133,17 @@ function setupPopupInfo5MonBag(itemList, prefix) {
 
 
             descTextItem += `
-            <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
+            <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
+            justify-content: center;align-items: center;">
             Thuộc tính: 
-                <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+                <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
+                    ${typeInfo}
+                </span>
             </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
             <span >Gây <a style="color: red; font-weight: bold;">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
-            
+
             let descInfo = "";
             let countDescInfo = 1;
             if (item.EFFECT.length === 1) {
@@ -9580,7 +9583,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     // Type
     let typeInfo = "";
     skillInfo.TYPE.forEach(type => {
-        typeInfo += `[${type}]`;
+        typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`
     });
 
     // Cập nhật thông tin trong popup
@@ -9598,14 +9601,17 @@ function setupPopupInfo5MonInBattle(skillInfo) {
 
 
     descTextItem += `
-    <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
+    <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
+    justify-content: center;align-items: center;">
     Thuộc tính: 
-        <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+        <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
+            ${typeInfo}
+        </span>
     </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
     <span>Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
-    
+
     let descInfo = "";
     let countDescInfo = 1;
     if (skillInfo.EFFECT.length === 1) {
@@ -10194,12 +10200,12 @@ function gacha5Mon() {
 
 //Random 5mon
 var rareStats = {
-    D:   { min: 200,  max: 600 },
-    C:   { min: 601,  max: 1000 },
-    B:   { min: 1001, max: 1400 },
-    A:   { min: 1401, max: 1800 },
-    S:   { min: 1801, max: 2200 },
-    SS:  { min: 2201, max: 2600 },
+    D: { min: 200, max: 600 },
+    C: { min: 601, max: 1000 },
+    B: { min: 1001, max: 1400 },
+    A: { min: 1401, max: 1800 },
+    S: { min: 1801, max: 2200 },
+    SS: { min: 2201, max: 2600 },
     SSR: { min: 2601, max: 3000 }
 };
 
@@ -10242,9 +10248,9 @@ function randomPet5Mon() {
         hp = Math.floor(Math.random() * (total + 1));
 
     } while ((str + def + int + agi + luk + hp > total)
-        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
-        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
-        || str + def + int + agi + luk + hp > maxSTT
+    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
+    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
 
@@ -10306,11 +10312,11 @@ function getRandom5mon() {
     let agi = infoPetRandom.POWER.AGI;
     let minC = 0;
     let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
-    
-    let scaleC = agi < 100 
+
+    let scaleC = agi < 100
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
-    
+
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
 
@@ -10327,7 +10333,7 @@ function getRandom5mon() {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
-    
+
     //Gán info vào 5mon
     let final5mon = {
         IDcreate: newID,
@@ -10566,7 +10572,7 @@ function setupPopupEventsExchangePage(itemList) {
             // Type
             let typeInfo = "";
             item.TYPE.forEach(type => {
-                typeInfo += `[${type}]`;
+                typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`
             });
 
             // Cập nhật thông tin trong popup
@@ -10581,17 +10587,20 @@ function setupPopupEventsExchangePage(itemList) {
                     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ??</span>
                 </div>
             </div>`
-            
+
             // Cập nhật thông tin trong popup
             descTextItem += `
-            <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
+            <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
+            justify-content: center;align-items: center;">
             Thuộc tính: 
-                <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+                <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
+                    ${typeInfo}
+                </span>
             </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
             <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
-            
+
             let descInfo = "";
             let countDescInfo = 1;
             if (item.EFFECT.length === 1) {
@@ -10767,9 +10776,9 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         hp = Math.floor(Math.random() * (total + 1));
 
     } while ((str + def + int + agi + luk + hp > total)
-        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
-        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
-        || str + def + int + agi + luk + hp > maxSTT
+    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
+    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
 
@@ -10810,12 +10819,12 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     //Tính cooldown
     let minC = 0;
     let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
-    
-    let scaleC = agi < 100 
+
+    let scaleC = agi < 100
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
-    
-    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000; 
+
+    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
     //tính crit
     let maxCrit = 60;
@@ -10828,14 +10837,14 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
-    
+
     //Gán info vào 5mon
     let final5mon = {
         IDcreate: newID,
         ID: select5Mon.ID,
         LEVEL: 1,
         NAME: select5Mon.NAME,
-        POWER: { STR: str, AGI: agi, HP: hp },
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp },
         TYPE: select5Mon.TYPE,
         SELLUP: select5Mon.SELLUP,
         INTERNAL: select5Mon.INTERNAL,
@@ -11423,7 +11432,7 @@ function settingScreenBattle() {
     }
 }
 
-window.onload = function() {
+window.onload = function () {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
 
     if (isMobile) {
@@ -11726,9 +11735,9 @@ function catch5Mon() {
         hp = Math.floor(Math.random() * (total + 1));
 
     } while ((str + def + int + agi + luk + hp > total)
-        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
-        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
-        || str + def + int + agi + luk + hp > maxSTT
+    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
+    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
 
@@ -11769,11 +11778,11 @@ function catch5Mon() {
     //Tính cooldown
     let minC = 0;
     let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
-    
-    let scaleC = agi < 100 
+
+    let scaleC = agi < 100
         ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
         : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
-    
+
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
 
@@ -11788,14 +11797,14 @@ function catch5Mon() {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
-    
+
     //Gán info vào 5mon
     is5MonMeet = {
         IDcreate: newID,
         ID: e5mon.ID,
         LEVEL: 1,
         NAME: e5mon.NAME,
-        POWER: { STR: str, AGI: agi, HP: hp },
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp },
         TYPE: e5mon.TYPE,
         SELLUP: e5mon.SELLUP,
         INTERNAL: e5mon.INTERNAL,
@@ -11823,7 +11832,7 @@ function catch5Mon() {
     // Type
     let typeInfo = "";
     is5MonMeet.TYPE.forEach(type => {
-        typeInfo += ` ${type}`;
+        typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`;
     });
 
     // Cập nhật thông tin trong popup
@@ -11841,14 +11850,17 @@ function catch5Mon() {
 
 
     descTextItem += `
-    <span style=" font-weight: bold; font-size: 12px; padding: 2px 0px; color: black;">
+    <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
+    justify-content: center;align-items: center;">
     Thuộc tính: 
-        <a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+        <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
+            ${typeInfo}
+        </span>
     </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
     <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
-    
+
     let descInfo = "";
     let countDescInfo = 1;
     if (is5MonMeet.EFFECT.length === 1) {
