@@ -3947,6 +3947,7 @@ function update5MonBattle(skill) {
     }
 
     //Tính cooldown
+    let agi = skill.POWER.AGI;
     let minC = 0;
     let maxC = 50;
     let scaleC = 160;
@@ -10433,6 +10434,7 @@ function getRandom5mon() {
     }
 
     //Tính cooldown
+    let agi = infoPetRandom.POWER.AGI;
     let minC = 0;
     let maxC = 50;
     let scaleC = 160;
