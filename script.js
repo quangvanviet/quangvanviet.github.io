@@ -11470,7 +11470,7 @@ function settingScreenBattle() {
 
         // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
         battleScreen.style.transform = `scale(${scale2})`;
-        battleScreen.style.transformOrigin = "left";
+        battleScreen.style.transformOrigin = "center";
 
         // Tính toán marginLeft và marginTop để căn giữa
         const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
