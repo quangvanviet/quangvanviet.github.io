@@ -9187,7 +9187,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
             let critInfo = ""
             if (critPercent > 0) {
-                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%]</span>`;
+                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%</span>]`;
             }
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
@@ -9230,7 +9230,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             }
 
             if (sellUpInfo !== "") {
-                descTextItem += `<span style="font-weight: bold">[Thả đi nhận được]</span>
+                descTextItem += `<span style="font-weight: bold; margin-top: 5px;">[Thả đi nhận được]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
             } else {
                 descTextItem += "";
@@ -9656,7 +9656,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     let critPercent = skillInfo.CRIT.reduce((a, b) => a + b, 0)
     let critInfo = ""
     if (critPercent > 0) {
-        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%]</span>`;
+        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%</span>]`;
     }
 
     // Gán nội dung vào phần tử HTML
@@ -10636,7 +10636,7 @@ function setupPopupEventsExchangePage(itemList) {
             let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
             let critInfo = ""
             if (critPercent > 0) {
-                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???]</span>`;
+                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???</span>]`;
             }
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
