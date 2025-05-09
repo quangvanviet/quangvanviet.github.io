@@ -3949,17 +3949,14 @@ function update5MonBattle(skill) {
     //Tính cooldown
     let agi = skill.POWER.AGI;
     let minC = 0;
-    let maxC = 50;
-    let scaleC = 160;
+    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
     
-    if (agi <= 100) {
-        scaleC = 130;
-    } else {
-        let step = Math.floor((agi - 100) / 10);
-        scaleC = Math.max(45, 130 - step * 1);
-    }
+    let scaleC = agi < 100 
+        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
+        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+
     
     //tính crit
     let luk = skill.POWER.LUK;
@@ -9125,15 +9122,15 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             descTextItem += `
         <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
             <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${item.POWER.STR}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${item.POWER.DEF}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${item.POWER.INT}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${item.POWER.AGI}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${item.POWER.LUK}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${item.POWER.HP}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${item.POWER.STR}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${item.POWER.DEF}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${item.POWER.INT}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${item.POWER.AGI}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${item.POWER.LUK}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${item.POWER.HP}</span>
             </div>
             
-            <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
+            <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
         </div>`
 
 
@@ -9722,15 +9719,15 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     descTextItem += `
     <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
         <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${skillInfo.POWER.STR}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${skillInfo.POWER.DEF}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${skillInfo.POWER.INT}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i>: ${skillInfo.POWER.AGI}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${skillInfo.POWER.LUK}</span>
-            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${skillInfo.POWER.HP}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${skillInfo.POWER.STR}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${skillInfo.POWER.DEF}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${skillInfo.POWER.INT}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i>: ${skillInfo.POWER.AGI}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${skillInfo.POWER.LUK}</span>
+            <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${skillInfo.POWER.HP}</span>
         </div>
         
-        <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
+        <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
     </div>`
 
 
@@ -10436,17 +10433,14 @@ function getRandom5mon() {
     //Tính cooldown
     let agi = infoPetRandom.POWER.AGI;
     let minC = 0;
-    let maxC = 50;
-    let scaleC = 160;
+    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
     
-    if (agi <= 100) {
-        scaleC = 130;
-    } else {
-        let step = Math.floor((agi - 100) / 10);
-        scaleC = Math.max(45, 130 - step * 1);
-    }
+    let scaleC = agi < 100 
+        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
+        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+
 
     //tính crit
     let luk = infoPetRandom.POWER.LUK;
@@ -10929,17 +10923,13 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 50;
-    let scaleC = 160;
+    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
     
-    if (agi <= 100) {
-        scaleC = 130;
-    } else {
-        let step = Math.floor((agi - 100) / 10);
-        scaleC = Math.max(45, 130 - step * 1);
-    }
+    let scaleC = agi < 100 
+        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
+        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
 
     //tính crit
     let maxCrit = 60;
@@ -11892,17 +11882,14 @@ function catch5Mon() {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 50;
-    let scaleC = 160;
+    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
     
-    if (agi <= 100) {
-        scaleC = 130;
-    } else {
-        let step = Math.floor((agi - 100) / 10);
-        scaleC = Math.max(45, 130 - step * 1);
-    }
+    let scaleC = agi < 100 
+        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
+        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
     
-    let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = (maxC - minC) / (1 + agi / scaleC); // không cần *1000 nếu dùng đơn vị giây
+
 
     //tính crit
     let maxCrit = 60;
@@ -11957,19 +11944,20 @@ function catch5Mon() {
     descTextItem += `
 <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
 <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ???</span>
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ???</span>
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ???</span>
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ???</span>
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ???</span>
-    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ???</span>
+    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ???</span>
 </div>
-
-<span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
 </div>`
 
 
-    descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng] [Tốc độ: ??? giây] [Liên kích: ???]</span>`
+    descTextItem += `<span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">Thuộc tính: ${typeInfo}</span>
+    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
+    <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+    `
 
     let descInfo = "";
     let countDescInfo = 1;
@@ -12042,12 +12030,12 @@ function catch5Mon() {
     let critPercent = is5MonMeet.CRIT.reduce((a, b) => a + b, 0)
     let critInfo = ""
     if (critPercent > 0) {
-        critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}% </span>`;
+        critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold"> ??? </span>`;
     }
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Chủ động][+Nộ mỗi đòn: ???]</span>
+            `<span style="font-weight: bold">[Kỹ năng chủ động] [Liên kích: ???]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
