@@ -9129,13 +9129,18 @@ function setupPopupInfo5MonBag(itemList, prefix) {
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${item.POWER.LUK}</span>
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${item.POWER.HP}</span>
             </div>
-            
-            <span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</span>
         </div>`
 
 
-            descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng] [Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>`
-
+            descTextItem += `
+            <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+            Thuộc tính: 
+                <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+            </span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
+            <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            `
+            
             let descInfo = "";
             let countDescInfo = 1;
             if (item.EFFECT.length === 1) {
@@ -10697,15 +10702,27 @@ function setupPopupEventsExchangePage(itemList) {
 
             // Cập nhật thông tin trong popup
             descTextItem += `
-    <span style="display: flex; justify-content: space-between; flex-direction: row; align-items: center;">
-    <span style="display: flex; gap: 5px;">
-      <span style="color: #4504b3; font-weight: bold; font-size: 12px;">${typeInfo}</span>
-    </span>
-    </span>`
-
-
-            descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng] [Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây] [Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>`
-
+            <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
+                <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ???</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ???</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ???</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ???</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ???</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ???</span>
+                </div>
+            </div>`
+            
+            // Cập nhật thông tin trong popup
+            descTextItem += `
+            <span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+            Thuộc tính: 
+                <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+            </span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
+            <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            `
+            
             let descInfo = "";
             let countDescInfo = 1;
             if (item.EFFECT.length === 1) {
@@ -11954,11 +11971,14 @@ function catch5Mon() {
 </div>`
 
 
-    descTextItem += `<span style=" background: #b22222; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff;">Thuộc tính: ${typeInfo}</span>
+    descTextItem += `<span style=" font-weight: bold; font-size: 12px; padding: 2px 4px; color: #ffffff;">
+    Thuộc tính: 
+        <a style=" padding: 2px 4px; border-radius: 4px; color: #ffffff;">${typeInfo}</a>
+    </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường] [Tốc độ: ??? giây] [Liên kích: ???]</span>
     <span style="font-weight: bold;margin-top: 5px;">Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
-
+    
     let descInfo = "";
     let countDescInfo = 1;
     if (is5MonMeet.EFFECT.length === 1) {
@@ -12030,7 +12050,7 @@ function catch5Mon() {
     let critPercent = is5MonMeet.CRIT.reduce((a, b) => a + b, 0)
     let critInfo = ""
     if (critPercent > 0) {
-        critInfo = `Tỷ lệ chí mạng: <span style="color: red; font-weight: bold"> ??? </span>`;
+        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold"> ??? </span>]`;
     }
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
@@ -12044,7 +12064,7 @@ function catch5Mon() {
 
     if (internalInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold">[Bị động]</span>
+            `<span style="font-weight: bold">[Kỹ năng bị động]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
     } else {
         descTextItem += "";
