@@ -3912,49 +3912,55 @@ function loadEventSlotBattle() {
 
 function update5MonBattle(skill) {
 
-    let powerSTR = scalePower5Mon(skill.POWER.STR);
+    let powerINT = scalePower5Mon(skill.POWER.INT);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (skill.EFFECT.includes("Attacking")) {
-        dame = powerSTR.dame;  // Giảm dần khi STR tăng
+        dame = powerINT.dame;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Healing")) {
-        heal = powerSTR.heal;  // Giảm dần khi STR tăng
+        heal = powerINT.heal;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Shield")) {
-        shield = powerSTR.shield;  // Giảm dần khi STR tăng
+        shield = powerINT.shield;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Burn")) {
-        burn = powerSTR.burn;  // Giảm dần khi STR tăng
+        burn = powerINT.burn;  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Poison")) {
-        poison = powerSTR.poison;  // Giảm dần khi STR tăng
+        poison = powerINT.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 15;
-
-    let agi = skill.POWER.AGI;
+    let maxC = 45;  // tăng lên từ 15 → 45
     let scaleC = 160;
-
+    
     if (agi <= 100) {
         scaleC = 130;
     } else {
-        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
-        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
+        let step = Math.floor((agi - 100) / 10);
+        scaleC = Math.max(45, 130 - step * 1);
     }
-
+    
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
-
+    
+    //tính crit
+    let luk = infoPetRandom.POWER.LUK;
+    let maxCrit = 60;
+    let scale = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scale);
+    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    
     return {
         dame: dame,
         heal: heal,
         shield: shield,
         burn: burn,
         poison: poison,
+        crit: valueCrit,
         cooldown: valueC
     }
 }
@@ -10291,13 +10297,13 @@ function gacha5Mon() {
 
 //Random 5mon
 var rareStats = {
-    D: { min: 100, max: 350 },
-    C: { min: 300, max: 550 },
-    B: { min: 500, max: 750 },
-    A: { min: 700, max: 950 },
-    S: { min: 900, max: 1150 },
-    SS: { min: 1100, max: 1350 },
-    SSR: { min: 1300, max: 1500 }
+    D:   { min: 200,  max: 600 },
+    C:   { min: 601,  max: 1000 },
+    B:   { min: 1001, max: 1400 },
+    A:   { min: 1401, max: 1800 },
+    S:   { min: 1801, max: 2200 },
+    SS:  { min: 2201, max: 2600 },
+    SSR: { min: 2601, max: 3000 }
 };
 
 function randomPet5Mon() {
@@ -10326,27 +10332,30 @@ function randomPet5Mon() {
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
 
-    let str, agi, hp, total;
+    let str, def, int, agi, luk, hp, total;
 
     do {
         total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
 
         str = Math.floor(Math.random() * (total + 1));
+        def = Math.floor(Math.random() * (total + 1));
+        int = Math.floor(Math.random() * (total + 1));
         agi = Math.floor(Math.random() * (total + 1));
+        luk = Math.floor(Math.random() * (total + 1));
         hp = Math.floor(Math.random() * (total + 1));
 
-    } while ((str + agi + hp > total)
-    || str < 10 || agi < 10 || hp < 30
-    || str > 500 || agi > 500 || hp > 500
-    || str + agi + hp > maxSTT
-        || str + agi + hp < minSTT
+    } while ((str + def + int + agi + luk + hp > total)
+        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
+        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+        || str + def + int + agi + luk + hp > maxSTT
+        || str + def + int + agi + luk + hp < minSTT
     );
 
     return {
         ID: e5mon.ID,
         NAME: e5mon.NAME,
         URLimg: e5mon.URLimg,
-        POWER: { STR: str, AGI: agi, HP: hp },
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp },
         TYPE: e5mon.TYPE,
         SELLUP: e5mon.SELLUP,
         INTERNAL: e5mon.INTERNAL,
@@ -10375,43 +10384,48 @@ function getRandom5mon() {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let powerSTR = scalePower5Mon(infoPetRandom.POWER.STR);
+    let powerINT = scalePower5Mon(infoPetRandom.POWER.INT);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (infoPetRandom.EFFECT.includes("Attacking")) {
-        dame = powerSTR.dame;  // Giảm dần khi STR tăng
+        dame = powerINT.dame;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Healing")) {
-        heal = powerSTR.heal;  // Giảm dần khi STR tăng
+        heal = powerINT.heal;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Shield")) {
-        shield = powerSTR.shield;  // Giảm dần khi STR tăng
+        shield = powerINT.shield;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Burn")) {
-        burn = powerSTR.burn;  // Giảm dần khi STR tăng
+        burn = powerINT.burn;  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Poison")) {
-        poison = powerSTR.poison;  // Giảm dần khi STR tăng
+        poison = powerINT.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 15;
-
-    let agi = infoPetRandom.POWER.AGI;
+    let maxC = 45;  // tăng lên từ 15 → 45
     let scaleC = 160;
-
+    
     if (agi <= 100) {
         scaleC = 130;
     } else {
-        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
-        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
+        let step = Math.floor((agi - 100) / 10);
+        scaleC = Math.max(45, 130 - step * 1);
     }
-
+    
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
+    //tính crit
+    let luk = infoPetRandom.POWER.LUK;
+    let maxCrit = 60;
+    let scale = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scale);
+    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    
     //Gán info vào 5mon
     let final5mon = {
         IDcreate: newID,
@@ -10429,7 +10443,7 @@ function getRandom5mon() {
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
         POISON: [poison, 0, 0, 0, 0],
-        CRIT: [0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), infoPetRandom.COOLDOWN[1], 0, 0, 0],
         RARE: infoPetRandom.RARE
     }
@@ -10823,22 +10837,24 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
 
-    let str, agi, hp, total;
+    let str, def, int, agi, luk, hp, total;
 
     do {
         total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
 
         str = Math.floor(Math.random() * (total + 1));
+        def = Math.floor(Math.random() * (total + 1));
+        int = Math.floor(Math.random() * (total + 1));
         agi = Math.floor(Math.random() * (total + 1));
+        luk = Math.floor(Math.random() * (total + 1));
         hp = Math.floor(Math.random() * (total + 1));
 
-    } while ((str + agi + hp > total)
-    || str < 10 || agi < 10 || hp < 30
-    || str > 500 || agi > 500 || hp > 500
-    || str + agi + hp > maxSTT
-        || str + agi + hp < minSTT
+    } while ((str + def + int + agi + luk + hp > total)
+        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
+        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+        || str + def + int + agi + luk + hp > maxSTT
+        || str + def + int + agi + luk + hp < minSTT
     );
-
 
     //Lấy ID5mon mới
     let maxID = 0;
@@ -10853,42 +10869,48 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let powerSTR = scalePower5Mon(str);
+    let powerINT = scalePower5Mon(int);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (select5Mon.EFFECT.includes("Attacking")) {
-        dame = powerSTR.dame;  // Giảm dần khi STR tăng
+        dame = powerINT.dame;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Healing")) {
-        heal = powerSTR.heal;  // Giảm dần khi STR tăng
+        heal = powerINT.heal;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Shield")) {
-        shield = powerSTR.shield;  // Giảm dần khi STR tăng
+        shield = powerINT.shield;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Burn")) {
-        burn = powerSTR.burn;  // Giảm dần khi STR tăng
+        burn = powerINT.burn;  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Poison")) {
-        poison = powerSTR.poison;  // Giảm dần khi STR tăng
+        poison = powerINT.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 15;
-
+    let maxC = 45;  // tăng lên từ 15 → 45
     let scaleC = 160;
-
+    
     if (agi <= 100) {
         scaleC = 130;
     } else {
-        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
-        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
+        let step = Math.floor((agi - 100) / 10);
+        scaleC = Math.max(45, 130 - step * 1);
     }
-
+    
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
+    //tính crit
+    let luk = infoPetRandom.POWER.LUK;
+    let maxCrit = 60;
+    let scale = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scale);
+    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    
     //Gán info vào 5mon
     let final5mon = {
         IDcreate: newID,
@@ -10906,7 +10928,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
         POISON: [poison, 0, 0, 0, 0],
-        CRIT: [0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), select5Mon.COOLDOWN[1], 0, 0, 0],
         RARE: rare
     }
@@ -11772,20 +11794,23 @@ function catch5Mon() {
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
 
-    let str, agi, hp, total;
+    let str, def, int, agi, luk, hp, total;
 
     do {
         total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
 
         str = Math.floor(Math.random() * (total + 1));
+        def = Math.floor(Math.random() * (total + 1));
+        int = Math.floor(Math.random() * (total + 1));
         agi = Math.floor(Math.random() * (total + 1));
+        luk = Math.floor(Math.random() * (total + 1));
         hp = Math.floor(Math.random() * (total + 1));
 
-    } while ((str + agi + hp > total)
-    || str < 10 || agi < 10 || hp < 30
-    || str > 500 || agi > 500 || hp > 500
-    || str + agi + hp > maxSTT
-        || str + agi + hp < minSTT
+    } while ((str + def + int + agi + luk + hp > total)
+        || str < 10 || def < 10  || int < 10  || agi < 10 || luk < 10  || hp < 30
+        || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+        || str + def + int + agi + luk + hp > maxSTT
+        || str + def + int + agi + luk + hp < minSTT
     );
 
     //Lấy ID5mon mới
@@ -11801,42 +11826,48 @@ function catch5Mon() {
     let newID = `${username}ID${newNumber}`;
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
-    let powerSTR = scalePower5Mon(str);
+    let powerINT = scalePower5Mon(int);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (e5mon.EFFECT.includes("Attacking")) {
-        dame = powerSTR.dame;  // Giảm dần khi STR tăng
+        dame = powerINT.dame;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Healing")) {
-        heal = powerSTR.heal;  // Giảm dần khi STR tăng
+        heal = powerINT.heal;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Shield")) {
-        shield = powerSTR.shield;  // Giảm dần khi STR tăng
+        shield = powerINT.shield;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Burn")) {
-        burn = powerSTR.burn;  // Giảm dần khi STR tăng
+        burn = powerINT.burn;  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Poison")) {
-        poison = powerSTR.poison;  // Giảm dần khi STR tăng
+        poison = powerINT.poison;  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 15;
-
+    let maxC = 45;  // tăng lên từ 15 → 45
     let scaleC = 160;
-
+    
     if (agi <= 100) {
         scaleC = 130;
     } else {
-        let step = Math.floor((agi - 100) / 10); //Giảm 10 Agi mỗi bước
-        scaleC = Math.max(45, 130 - step * 1); // giảm 1 scale mỗi step
+        let step = Math.floor((agi - 100) / 10);
+        scaleC = Math.max(45, 130 - step * 1);
     }
-
+    
     let valueC = minC + (maxC - minC) / (1 + agi / scaleC) * 1000;
 
+    //tính crit
+    let luk = infoPetRandom.POWER.LUK;
+    let maxCrit = 60;
+    let scale = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scale);
+    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    
     //Gán info vào 5mon
     is5MonMeet = {
         IDcreate: newID,
@@ -11854,7 +11885,7 @@ function catch5Mon() {
         SHIELD: [shield, 0, 0, 0, 0],
         BURN: [burn, 0, 0, 0, 0],
         POISON: [poison, 0, 0, 0, 0],
-        CRIT: [0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), e5mon.COOLDOWN[1], 0, 0, 0],
         RARE: rare
     }
