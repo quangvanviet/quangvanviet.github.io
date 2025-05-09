@@ -11465,12 +11465,12 @@ function settingScreenBattle() {
         let scaleW2 = screenWidth / battleWidth2;
         let scaleH2 = screenHeight / battleHeight2;
 
-        let scale2 = Math.min(scaleW2, scaleH2) * 0.90; // Tỷ lệ tối đa là 90%
+        let scale2 = Math.min(scaleW2, scaleH2) * 0.97; // Tỷ lệ tối đa là 90%
         scale2 = Math.min(scale2, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
         battleScreen.style.transform = `scale(${scale2})`;
-        battleScreen.style.transformOrigin = "center";
+        battleScreen.style.transformOrigin = "left";
 
         // Tính toán marginLeft và marginTop để căn giữa
         const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
