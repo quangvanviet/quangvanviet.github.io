@@ -3106,6 +3106,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
@@ -3114,6 +3115,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
+                        typeGameConquest.skillBattle[slot.id].DEF[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0]
                         typeGameConquest.skillBattle[slot.id].HEAL[0] = typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0]
                         typeGameConquest.skillBattle[slot.id].SHIELD[0] = typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0]
                         typeGameConquest.skillBattle[slot.id].BURN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0]
@@ -3238,6 +3240,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
@@ -3246,6 +3249,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
+                        typeGameConquest.skillBattle[slot.id].DEF[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0]
                         typeGameConquest.skillBattle[slot.id].HEAL[0] = typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0]
                         typeGameConquest.skillBattle[slot.id].SHIELD[0] = typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0]
                         typeGameConquest.skillBattle[slot.id].BURN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0]
@@ -3384,6 +3388,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
@@ -3392,6 +3397,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
+                        typeGameConquest.skillBattle[slot.id].DEF[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DEF[0]
                         typeGameConquest.skillBattle[slot.id].HEAL[0] = typeGameConquest.battlePetUseSlotRound[slot.id].HEAL[0]
                         typeGameConquest.skillBattle[slot.id].SHIELD[0] = typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0]
                         typeGameConquest.skillBattle[slot.id].BURN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0]
@@ -3578,6 +3584,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetInInventory[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetInInventory[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
@@ -3667,6 +3674,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetInInventory[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetInInventory[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
@@ -3767,6 +3775,7 @@ function loadEventSlotBattle() {
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
                         typeGameConquest.battlePetInInventory[slot.id].DAME[0] = power5MonUpdate.dame
+                        typeGameConquest.battlePetInInventory[slot.id].DEF[0] = power5MonUpdate.def
                         typeGameConquest.battlePetInInventory[slot.id].HEAL[0] = power5MonUpdate.heal
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
