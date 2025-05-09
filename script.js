@@ -3097,13 +3097,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3111,6 +3110,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetUseSlotRound[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
@@ -3228,11 +3228,11 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
@@ -3242,6 +3242,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetUseSlotRound[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
@@ -3374,13 +3375,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -3388,6 +3388,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetUseSlotRound[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetUseSlotRound[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
                         typeGameConquest.skillBattle[slot.id].LEVEL = typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
                         typeGameConquest.skillBattle[slot.id].DAME[0] = typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0]
@@ -3567,11 +3568,11 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
@@ -3581,6 +3582,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
 
 
@@ -3655,11 +3657,11 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
@@ -3669,6 +3671,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
@@ -3754,11 +3757,11 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-
                         typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
-
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
                         typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
@@ -3768,6 +3771,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].SHIELD[0] = power5MonUpdate.shield
                         typeGameConquest.battlePetInInventory[slot.id].BURN[0] = power5MonUpdate.burn
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
+                        typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
@@ -3935,7 +3939,7 @@ function update5MonBattle(skill) {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 45;  // tăng lên từ 15 → 45
+    let maxC = 50;
     let scaleC = 160;
     
     if (agi <= 100) {
@@ -10407,7 +10411,7 @@ function getRandom5mon() {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 45;  // tăng lên từ 15 → 45
+    let maxC = 50;
     let scaleC = 160;
     
     if (agi <= 100) {
@@ -10892,7 +10896,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 45;  // tăng lên từ 15 → 45
+    let maxC = 50;
     let scaleC = 160;
     
     if (agi <= 100) {
@@ -11849,7 +11853,7 @@ function catch5Mon() {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 45;  // tăng lên từ 15 → 45
+    let maxC = 50;
     let scaleC = 160;
     
     if (agi <= 100) {
