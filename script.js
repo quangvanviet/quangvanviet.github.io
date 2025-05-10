@@ -964,7 +964,9 @@ function baseAttack(skillKey, isComp) {
 
                             // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                             let dameSkill = 10;
-                            if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
+                            if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                                
+                            } else {
                                 baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
                             }
                             
@@ -1028,8 +1030,11 @@ function baseAttack(skillKey, isComp) {
 
                                 // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                                 let dameSkill = 10;
-                                if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
-                                    skillAttacking(skillKey, dameSkill, isCrit)
+
+                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                                
+                                } else {
+                                    skillAttacking(skillKey, dameSkill, isCrit);
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -1076,7 +1081,9 @@ function baseAttack(skillKey, isComp) {
 
                                 // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                                 let dameSkill = 10;
-                                if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
+                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                                    
+                                } else {
                                     baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
                                 }
                             }, d * 200); // delay mỗi lần 200ms
@@ -1090,6 +1097,8 @@ function baseAttack(skillKey, isComp) {
                 return;
             }
         }
+        console.log("skillsDelete",skillsDelete)
+        console.log("skillsSleep",skillsSleep)
     }
 
     // Bắt đầu vòng lặp cập nhật cooldown
