@@ -1116,10 +1116,10 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
     const attackEffect = document.createElement('div');
     if (teamAorB === "TeamA") {
         // attackEffect.classList.add('attackEffectOfA');
-        attackEffect.classList.add('attackEffect')
+        attackEffect.classList.add('baseAttackEffect')
     } else {
         // attackEffect.classList.add('attackEffectOfB');
-        attackEffect.classList.add('attackEffect');
+        attackEffect.classList.add('baseAttackEffect');
         attackEffect.style.transform = "rotate(90deg)";
     }
 
