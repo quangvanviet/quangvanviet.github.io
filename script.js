@@ -1109,14 +1109,13 @@ function baseAttack(skillKey, isComp) {
                     }
 
                 }
-
+            //Cập nhật HP và Nộ cho 5Mon
+            updateHpAndRageBar5Mon();
             } else {
                 stopSkillGame()
                 return;
             }
         }
-        console.log("skillsDelete",skillsDelete)
-        console.log("skillsSleep",skillsSleep)
     }
 
     // Bắt đầu vòng lặp cập nhật cooldown
@@ -1202,18 +1201,56 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
                     skillChild.classList.add('delete');
                 }
             }
-
-            //Tăng nộ
-            updateRage(skillId, overlayDiv, isComp)
-
-            
         }, duration);
     };
-
 
     // Bắt đầu hiệu ứng di chuyển
     setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
 }
+
+//Hàm update HpBar5Mon và rageBar5Mon
+function updateHpAndRageBar5Mon() {
+    //cập nhật HP của 5Mon Comp trước
+    for (let i = 1; i <= 9; i++) {
+        const skillKey = `skill${i}A`;
+        
+        // Update HP Bar
+        const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
+        const hpElement = document.getElementById(`hp${skillKey}`);
+        if (hpElement) {
+            hpElement.style.width = `${hpPercent}%`;
+        }
+
+        // Update Rage Bar (dựa vào COOLDOWN[4])
+        const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
+        const ragePercent = Math.max(0, Math.min(100, rageData));
+        const rageElement = document.getElementById(`rage${skillKey}`);
+        if (rageElement) {
+            rageElement.style.width = `${ragePercent}%`;
+        }
+    }
+
+    //Cập nhật Hp của 5Mon mình
+    for (let i = 1; i <= 9; i++) {
+        const skillKey = `skill${i}B`;
+        
+        // Update HP Bar
+        const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
+        const hpElement = document.getElementById(`hp${skillKey}`);
+        if (hpElement) {
+            hpElement.style.width = `${hpPercent}%`;
+        }
+
+        // Update Rage Bar (dựa vào COOLDOWN[4])
+        const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
+        const ragePercent = Math.max(0, Math.min(100, rageData));
+        const rageElement = document.getElementById(`rage${skillKey}`);
+        if (rageElement) {
+            rageElement.style.width = `${ragePercent}%`;
+        }
+    }
+}
+
 
 
 // Hàm sử dụng skill Attacking
