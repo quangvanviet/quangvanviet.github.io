@@ -1029,6 +1029,9 @@ function baseAttack(skillKey, isComp) {
                                 skillAttacking(skillKey, dameSkill, isCrit)
                             }, d * 200); // delay mỗi lần 200ms
                         }
+                        if (endGame === false) {
+                            setTimeout(() => baseAttack(skillKey, isComp), doubleAttack * 200 + 50);
+                        }
                     } else {
 
                         // Tiếp tục tấn công như ở trên
@@ -1117,10 +1120,10 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
     if (teamAorB === "TeamA") {
         // attackEffect.classList.add('attackEffectOfA');
         attackEffect.classList.add('baseAttackEffect')
+        attackEffect.style.transform = "rotate(180deg)";
     } else {
         // attackEffect.classList.add('attackEffectOfB');
         attackEffect.classList.add('baseAttackEffect');
-        attackEffect.style.transform = "rotate(90deg)";
     }
 
     // new Audio('sound/attack.mp3').play(); //Âm thanh tấn công
