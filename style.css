@@ -135,6 +135,38 @@ body {
     height: 100%;
 }
 
+.baseAttackEffect {
+    z-index: 10;
+    /* Đảm bảo phần tử này ở trên các phần tử khác */
+    position: relative;
+    /* Cần thiết để định vị ::before */
+}
+
+.baseAttackEffect::before {
+    content: "\f255";
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Font Awesome 6 Free';
+    color: white;
+    /* Màu chữ chính */
+    text-shadow:
+        0px 0px 12px #ff6347,
+        /* Bóng sáng trung tâm (Đỏ nhạt) */
+        1px 1px 10px #ff4500,
+        /* Góc dưới bên phải (Đỏ rực) */
+        -1px -1px 10px #ff4500,
+        /* Góc trên bên trái */
+        2px 0px 14px #ff6347,
+        /* Trái phải (Đỏ nhạt) */
+        0px 2px 14px #ff0000;
+    /* Dưới (Đỏ đậm) */
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .healEffect {
     z-index: 10;
     /* Đảm bảo phần tử này ở trên các phần tử khác */
