@@ -1212,11 +1212,13 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
 
 //Hàm update HpBar5Mon và rageBar5Mon
 function updateHpAndRageBar5Mon(skillKey) {
+    console.log("skillKeyUD",skillKey)
     // Update HP Bar
     const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
     const hpElement = document.getElementById(`hp${skillKey}`);
     if (hpElement) {
         hpElement.style.width = `${hpPercent}%`;
+        console.log("hpPercent",hpPercent)
     }
 
     // Update Rage Bar (dựa vào COOLDOWN[4])
@@ -1225,6 +1227,7 @@ function updateHpAndRageBar5Mon(skillKey) {
     const rageElement = document.getElementById(`rage${skillKey}`);
     if (rageElement) {
         rageElement.style.width = `${ragePercent}%`;
+        console.log("ragePercent",ragePercent)
     }
 }
 
