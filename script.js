@@ -968,6 +968,13 @@ function baseAttack(skillKey, isComp) {
                                 
                             } else {
                                 baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                //Tăng nộ cho skillKey
+                                if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
+                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                    userSkillA(skillKey, isComp)
+                                } else {
+                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
+                                }
                             }
                             
                         }, d * 200); // delay mỗi lần 200ms
@@ -1035,6 +1042,13 @@ function baseAttack(skillKey, isComp) {
                                 
                                 } else {
                                     skillAttacking(skillKey, dameSkill, isCrit);
+                                    //Tăng nộ cho skillKey
+                                    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                        userSkillA(skillKey, isComp)
+                                    } else {
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
+                                    }
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -1082,6 +1096,13 @@ function baseAttack(skillKey, isComp) {
                                     
                                 } else {
                                     baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                    //Tăng nộ cho skillKey
+                                    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                        userSkillA(skillKey, isComp)
+                                    } else {
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
+                                    }
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -8168,39 +8189,28 @@ function updateRage(skillKey, overlayDiv, isComp) {
     }
 }
 
-function userSkillA(skillKey, overlayDiv, isComp) {
-    // Kiểm tra typeGameConquest.skillBattle[skillKey]
-    if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
-        return;
-    }
-    // Kiểm tra overlayDiv
-    if (!overlayDiv) {
-        return;
-    }
+function userSkillA(skillKey, isComp) {
+    const skillElement = document.getElementById(skillKey);
+    let overlayDiv = null;
 
-    // Ưu tiên kiểm tra trạng thái Sleep/delete
-    let skillsSleep = isComp ? skillsSleepA : skillsSleepB
-    let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB
-
-    if (skillsDelete[skillKey] === 1) {
-        return; // Bỏ qua skill này
-    }
-
-    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) {  // Kiểm tra nộ đã đạt hoặc vượt 100
-        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;  // Trừ 100 nộ
-        if (skillsSleep[skillKey] === 1) {
-            skillsSleep[skillKey] = 0
-            const skillElement = document.getElementById(skillKey);
-            if (skillElement) {
-                const skillChild = skillElement.querySelector('.skill');
-                if (skillChild && skillChild.classList.contains('sleep')) {
-                    skillChild.classList.remove('sleep');
-                }
+    // for (const child of skillElement.children) {
+    //     if (child.classList.contains("skillCooldownOverlay") || child.classList.contains("skillCooldownOverlayLV")) {
+    //         overlayDiv = child;
+    //         break;
+    //     }
+    // }
+    
+    //Tính mutilcast=> đánh liên tiếp
+    let doubleSkill = Math.max(typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1)
+    Object.keys(effectsSkill).forEach((effectSkill) => {
+        if (typeGameConquest.skillBattle[skillKey].EFFECT.includes(effectSkill)) {
+            for (let d = 1; d <= doubleSkill; d++) {
+                setTimeout(() => {
+                    useSkill(skillKey, effectSkill, overlayDiv, isComp);
+                }, 350 * (d - 1)); // Thực hiện sử dụng skill với delay tăng dần
             }
-        } else {
-            startSkill(skillKey, overlayDiv, isComp);
         }
-    }
+    });
 }
 
 
