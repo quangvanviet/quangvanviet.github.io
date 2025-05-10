@@ -1212,6 +1212,7 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
 
 //Hàm update HpBar5Mon và rageBar5Mon
 function updateHpAndRageBar5Mon(skillKey) {
+    skillKey = skillKey.charAt(0).toUpperCase() + skillKey.slice(1);
     console.log("skillKeyUD",skillKey)
     // Update HP Bar
     const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
