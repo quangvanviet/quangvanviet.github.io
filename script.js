@@ -1150,7 +1150,7 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
         
         // Tính góc giữa 2 điểm, đổi từ radian sang độ
         const angleInRadians = Math.atan2(deltaY, deltaX);
-        const angleInDegrees = angleInRadians * (180 / Math.PI);
+        const angleInDegrees = angleInRadians * (180 / Math.PI) + 90;
         
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${angleInDegrees}deg)`;
