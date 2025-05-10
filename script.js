@@ -1202,7 +1202,7 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
                     skillChild.classList.add('delete');
                 }
             }
-            updateHpAndRageBar5Mon(skillKey);
+            updateHpAndRageBar5Mon(targetAttack);
         }, duration);
     };
 
