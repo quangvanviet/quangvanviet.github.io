@@ -891,8 +891,8 @@ function baseAttack(skillKey, isComp) {
     let skillsSleep = isComp ? skillsSleepA : skillsSleepB;
     let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB;
 
-    if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
-        return; // Bỏ qua nếu bị xoá hoặc ngủ
+    if (skillsDelete[skillKey] === 1) {
+        return; // Bỏ qua nếu bị xoá
     }
 
     // Đặt lại trạng thái overlay ban đầu
@@ -964,8 +964,10 @@ function baseAttack(skillKey, isComp) {
 
                             // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                             let dameSkill = 10;
-
-                            baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                            if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
+                                baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                            }
+                            
                         }, d * 200); // delay mỗi lần 200ms
                     }
 
@@ -1026,7 +1028,9 @@ function baseAttack(skillKey, isComp) {
 
                                 // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                                 let dameSkill = 10;
-                                skillAttacking(skillKey, dameSkill, isCrit)
+                                if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
+                                    skillAttacking(skillKey, dameSkill, isCrit)
+                                }
                             }, d * 200); // delay mỗi lần 200ms
                         }
                         if (endGame === false) {
@@ -1072,8 +1076,9 @@ function baseAttack(skillKey, isComp) {
 
                                 // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
                                 let dameSkill = 10;
-
-                                baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                if (skillsDelete[skillKey] !== 1 || skillsSleep[skillKey] !== 1) {
+                                    baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                }
                             }, d * 200); // delay mỗi lần 200ms
                         }
                     }
