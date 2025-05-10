@@ -1038,9 +1038,6 @@ function baseAttack(skillKey, isComp) {
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
-                        if (endGame === false) {
-                            setTimeout(() => baseAttack(skillKey, isComp), doubleAttack * 200 + 50);
-                        }
                     } else {
 
                         // Tiếp tục tấn công như ở trên
