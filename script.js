@@ -975,6 +975,7 @@ function baseAttack(skillKey, isComp) {
                                 } else {
                                     typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                 }
+                                updateHpAndRageBar5Mon(skillKey);
                             }
                             
                         }, d * 200); // delay mỗi lần 200ms
@@ -1049,6 +1050,7 @@ function baseAttack(skillKey, isComp) {
                                     } else {
                                         typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                     }
+                                    updateHpAndRageBar5Mon(skillKey);
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -1103,14 +1105,13 @@ function baseAttack(skillKey, isComp) {
                                     } else {
                                         typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                     }
+                                    updateHpAndRageBar5Mon(skillKey);
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
                     }
 
                 }
-            //Cập nhật HP và Nộ cho 5Mon
-            updateHpAndRageBar5Mon();
             } else {
                 stopSkillGame()
                 return;
@@ -1126,9 +1127,9 @@ function baseAttack(skillKey, isComp) {
 
 
 // Hàm đánh thường baseAttack
-function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
-    const teamAorB = skillId.includes('A') ? 'TeamA' : 'TeamB';
-    const skill = document.getElementById(skillId);
+function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
+    const teamAorB = skillKey.includes('A') ? 'TeamA' : 'TeamB';
+    const skill = document.getElementById(skillKey);
     const skillsDelete = teamAorB==='TeamA'?skillsDeleteB:skillsDeleteA
     const isComp = teamAorB==='TeamA'?true:false
 
@@ -1201,6 +1202,7 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
                     skillChild.classList.add('delete');
                 }
             }
+            updateHpAndRageBar5Mon(skillKey);
         }, duration);
     };
 
@@ -1209,45 +1211,20 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
 }
 
 //Hàm update HpBar5Mon và rageBar5Mon
-function updateHpAndRageBar5Mon() {
-    //cập nhật HP của 5Mon Comp trước
-    for (let i = 1; i <= 9; i++) {
-        const skillKey = `skill${i}A`;
-        
-        // Update HP Bar
-        const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
-        const hpElement = document.getElementById(`hp${skillKey}`);
-        if (hpElement) {
-            hpElement.style.width = `${hpPercent}%`;
-        }
-
-        // Update Rage Bar (dựa vào COOLDOWN[4])
-        const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
-        const ragePercent = Math.max(0, Math.min(100, rageData));
-        const rageElement = document.getElementById(`rage${skillKey}`);
-        if (rageElement) {
-            rageElement.style.width = `${ragePercent}%`;
-        }
+function updateHpAndRageBar5Mon(skillKey) {
+    // Update HP Bar
+    const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
+    const hpElement = document.getElementById(`hp${skillKey}`);
+    if (hpElement) {
+        hpElement.style.width = `${hpPercent}%`;
     }
 
-    //Cập nhật Hp của 5Mon mình
-    for (let i = 1; i <= 9; i++) {
-        const skillKey = `skill${i}B`;
-        
-        // Update HP Bar
-        const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
-        const hpElement = document.getElementById(`hp${skillKey}`);
-        if (hpElement) {
-            hpElement.style.width = `${hpPercent}%`;
-        }
-
-        // Update Rage Bar (dựa vào COOLDOWN[4])
-        const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
-        const ragePercent = Math.max(0, Math.min(100, rageData));
-        const rageElement = document.getElementById(`rage${skillKey}`);
-        if (rageElement) {
-            rageElement.style.width = `${ragePercent}%`;
-        }
+    // Update Rage Bar (dựa vào COOLDOWN[4])
+    const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
+    const ragePercent = Math.max(0, Math.min(100, rageData));
+    const rageElement = document.getElementById(`rage${skillKey}`);
+    if (rageElement) {
+        rageElement.style.width = `${ragePercent}%`;
     }
 }
 
