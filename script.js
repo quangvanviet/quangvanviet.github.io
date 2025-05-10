@@ -1147,13 +1147,13 @@ function baseAttacking(skillId, dameSkill, isCrit, targetAttack) {
         const duration = 500; // Thời gian di chuyển (ms)
         const deltaX = targetX - (skillRect.left + skillRect.width / 2);
         const deltaY = targetY - (skillRect.top + skillRect.height / 2);
-
+        
+        // Tính góc giữa 2 điểm, đổi từ radian sang độ
+        const angleInRadians = Math.atan2(deltaY, deltaX);
+        const angleInDegrees = angleInRadians * (180 / Math.PI);
+        
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
-        if (teamAorB === "TeamA") {
-            attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        } else {
-            attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(90deg)`;
-        }
+        attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${angleInDegrees}deg)`;
 
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
