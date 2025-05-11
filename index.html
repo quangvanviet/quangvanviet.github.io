@@ -381,8 +381,7 @@
                     style="display: flex;flex-direction: column-reverse;gap: 5px;position: absolute;bottom: 6px;right: 10px;z-index: 3; max-width: 100px; width: 100px;">
                     <!-- Nút Mở rộng -->
                     <button id="toggleMenu" style="width: 100px; padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
-                        border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu
-                        gọn</button><!-- Các nút ẩn -->
+                        border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu gọn</button><!-- Các nút ẩn -->
 
                     <div id="menuButtons1"
                         style="display: flex;flex-direction: column-reverse;gap: 3px;font-weight: bold;">
@@ -421,7 +420,7 @@
                     style="display: flex; flex-direction: row-reverse; gap: 5px; position: absolute; bottom: 6px; right: 10px; z-index: 2;">
                     <button style="width: 100px;padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
                         border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">
-                        Mở rộng
+                        Thu gọn
                     </button>
 
                     <!-- Các nút ẩn -->
@@ -1206,16 +1205,32 @@
         min-height: 70%;
         min-width: 95%;
         justify-content: center;
-        padding: 10px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding: 20px 10px;
         border: 5px solid wheat;
         border-radius: 20px;
         box-shadow: 0px 0px 15px rgb(68 57 32 / 84%);
+        gap: 15px;
         ">
-                <div style="width: 30px;height: 30px;border-radius: 5px;color: black;background: wheat;position: absolute;top: -22px;left: 40px;
-                font-size: 20px;font-weight: bold;display: flex;flex-direction: column;align-content: center;justify-content: center;
-                align-items: center;text-align: center;cursor: pointer;" onclick="openFullscreen()">
+                <div style="
+                                width: 20px;
+                                height: 20px;
+                                padding: 2px;
+                                border-radius: 5px;
+                                color: black;
+                                background: wheat;
+                                position: absolute;
+                                top: 5px;
+                                left: 5px;
+                                font-size: 15px;
+                                font-weight: bold;
+                                display: flex;
+                                flex-direction: column;
+                                align-content: center;
+                                justify-content: center;
+                                align-items: center;
+                                text-align: center;
+                                cursor: pointer;
+                                " onclick="openFullscreen()">
                     [ ]
                 </div>
                 <!-- Vùng Top (Đối thủ + Shop) -->
@@ -1243,84 +1258,124 @@
                         <div>
                             <div style="display: flex; flex-direction: column">
                                 <!-- Thanh nộ -->
-                                <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;margin-top: 1px;">
-                                    <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;"> 
-                                        <div id="rageBarSkillA" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill1A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                <div
+                                    style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;">
+                                    <div
+                                        style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;">
+                                        <div id="rageBarSkillA"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill1A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil2A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill2A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil2A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill2A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil3A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill3A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil3A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill3A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil4A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill4A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil4A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill4A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil5A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill5A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil5A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill5A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil6A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill6A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil6A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill6A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil7A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill7A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil7A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill7A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil8A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill8A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil8A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill8A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil9A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill9A" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil9A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill9A"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Thanh Hp từng 5Mon -->
-                                <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;">
-                                    <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;"> 
-                                        <div id="hpBarSkillA" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill1A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                <div
+                                    style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center; margin-top: 1px;">
+                                    <div
+                                        style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;">
+                                        <div id="hpBarSkillA"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill1A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil2A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill2A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil2A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill2A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil3A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill3A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil3A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill3A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil4A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill4A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil4A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill4A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil5A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill5A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil5A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill5A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil6A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill6A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil6A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill6A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil7A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill7A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil7A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill7A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil8A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill8A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil8A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill8A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil9A" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill9A" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil9A"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill9A"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
                                     </div>
@@ -1517,7 +1572,7 @@
                 <!-- Vùng Bottom (Thông tin của người chơi) -->
                 <div style="display: flex; flex-direction: column; min-width: 70%; position: relative">
                     <div
-                        style="display: flex;flex-direction: column;font-family: Arial, sans-serif;position: absolute;z-index: 1; right: 5px; bottom: 5px;">
+                        style="display: flex;flex-direction: column;font-family: Arial, sans-serif;position: absolute;z-index: 1; right: -8px; bottom: -8px; text-shadow: 1px 1px 1px #000000b5;">
                         <!-- Nút setting trong battle -->
                         <i class="fa-solid fa-gear setting-button" onclick="openPopupSetting()"></i>
                     </div>
@@ -1612,90 +1667,130 @@
                                 </div>
 
                                 <!-- Thanh Hp từng 5Mon -->
-                                <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;">
-                                    <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;"> 
-                                        <div id="hpBarSkillB" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill1B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                <div
+                                    style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;">
+                                    <div
+                                        style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;">
+                                        <div id="hpBarSkillB"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill1B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil2B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill2B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil2B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill2B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil3B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill3B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil3B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill3B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil4B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill4B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil4B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill4B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil5B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill5B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil5B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill5B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil6B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill6B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil6B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill6B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil7B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill7B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil7B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill7B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil8B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill8B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil8B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill8B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="hpBarSkil9B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="hpSkill9B" style="width: 100%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
+                                        <div id="hpBarSkil9B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="hpSkill9B"
+                                                style="width: 0%; height: 100%; background-color: firebrick; transition: width 0.2s linear;">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Thanh nộ -->
-                                <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;margin-top: 1px;">
-                                    <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;"> 
-                                        <div id="rageBarSkillB" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill1B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                <div
+                                    style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;align-content: center;margin-top: 1px;">
+                                    <div
+                                        style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;width: 100%;height: 6px;gap: 10px;padding: 0px 5px;">
+                                        <div id="rageBarSkillB"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill1B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil2B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill2B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil2B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill2B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil3B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill3B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil3B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill3B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil4B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill4B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil4B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill4B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil5B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill5B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil5B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill5B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil6B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill6B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil6B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill6B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil7B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill7B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil7B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill7B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil8B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill8B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil8B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill8B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
-                                        <div id="rageBarSkil9B" style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px;">
-                                            <div id="rageSkill9B" style="width: 100%; height: 100%; background-color: darkcyan; transition: width 0.2s linear;">
+                                        <div id="rageBarSkil9B"
+                                            style="width: 65px;height: 100%;background-color: #00000047;position: relative;overflow: hidden;border-radius: 5px; box-shadow: 1px 1px 1px #0000008a;">
+                                            <div id="rageSkill9B"
+                                                style="width: 0%; height: 100%; background-color: #fddc32; transition: width 0.2s linear;">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
+
+
                             </div>
                         </div>
                     </div>
