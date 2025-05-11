@@ -1649,7 +1649,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);
+    /* background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04); */
     transform-origin: bottom;
     /* Hiệu ứng bắt đầu từ dưới lên trên */
     transform: scaleY(0);
