@@ -890,6 +890,7 @@ function baseAttack(skillKey, isComp) {
     // Ưu tiên kiểm tra trạng thái Sleep/delete
     let skillsSleep = isComp ? skillsSleepA : skillsSleepB;
     let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB;
+    let skillsSpeed = isComp ? skillsSpeedA : skillsSpeedB;
 
     if (skillsDelete[skillKey] === 1) {
         return; // Bỏ qua nếu bị xoá
@@ -900,21 +901,61 @@ function baseAttack(skillKey, isComp) {
     overlay.style.transform = 'scaleY(1)';    // Đặt overlay đầy (hiện full)
 
     // Khởi tạo thời gian bắt đầu hồi chiêu
-    const startTime = Date.now();
+    let startTime = Date.now();
+    let elapsedTime = 0;
 
     function updateCooldown() {
-        const elapsedTime = Date.now() - startTime; // Tính thời gian đã trôi qua
+        // Nếu game đã kết thúc, không làm gì nữa
+        if (endGame) return;
 
-        // Tính tỉ lệ hồi chiêu (từ 0 đến 1)
+        if (skillsSleep[skillKey] > 0) {
+            // Đang bị sleep, không cập nhật elapsedTime, giữ nguyên startTime
+            setTimeout(updateCooldown, 100); // Kiểm tra lại sau 100ms
+            return;
+        } else {
+            const skillChild = skill.querySelector('.skill');
+            if (skillChild && skillChild.classList.contains('sleep')) {
+                skillChild.classList.remove('sleep');
+                console.log(`${skillKey} đã hết sleep và class 'sleep' đã được xóa`);
+            }
+        }
+
+        const now = Date.now();
+        const delta = now - startTime;
+        startTime = now;
+        
+        //Khởi tạo biến cooldown
+        let hasteMultiplier = 1;
+        if (skillsSpeed[skillKey] > 0) { //Nếu tăng tốc
+            hasteMultiplier = 2;
+            const skillChild = skill.querySelector('.skillCooldownOverlay');
+            if (skillChild) {
+                skillChild.style.setProperty('background', 'linear-gradient(to bottom, rgb(255, 4, 4), rgba(255, 4, 4, 0.22), rgrgba(255, 4, 4, 0.22)rgba(255, 4, 4, 0.22), rgba(255, 4, 4, 0.22), rgba(255, 4, 4, 0.22), rgb(255, 4, 4))', 'important');
+                console.log("??")
+            }
+        } else if (skillsSpeed[skillKey] < 0) { //Nếu slow
+            hasteMultiplier = 0.5;
+            const skillChild = skill.querySelector('.skillCooldownOverlay');
+            if (skillChild) {
+                skillChild.style.setProperty('background', 'linear-gradient(to bottom, rgb(4, 255, 251), rgba(4, 255, 251, 0.22), rgba(4, 238, 255, 0.22), rgba(4, 247, 255, 0.22), rgba(4, 247, 255, 0.22), rgba(4, 255, 251, 0.22), rgb(4, 247, 255))', 'important');
+            }
+
+        } else { //Không gì
+            hasteMultiplier = 1;
+            const skillChild = skill.querySelector('.skillCooldownOverlay');
+            if (skillChild) {
+                skillChild.style.setProperty('background', 'linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04)', 'important');
+            }
+        }
+
+        elapsedTime += delta * hasteMultiplier;
+
         const progress = Math.min(elapsedTime / cooldownTime, 1);
-
-        // Điều chỉnh overlay dựa trên tỉ lệ đã trôi qua
         overlay.style.transform = `scaleY(${1 - progress})`;
 
-        if (elapsedTime < cooldownTime) {
-            // Tiếp tục cập nhật khi chưa hết thời gian hồi chiêu
+        if (progress < 1) {
             const frameId = requestAnimationFrame(updateCooldown);
-            animationFrameIds.push(frameId); // Lưu ID
+            animationFrameIds.push(frameId);
         } else {
             //Kiểm tra xem endgame chưa, nếu chưa => Tiếp tục vòng hồi chiêu
             if (endGame === false) {
@@ -924,7 +965,7 @@ function baseAttack(skillKey, isComp) {
                 let targetAttackFirst = isComp ? skillKey.slice(0, -1) + "B" : skillKey.slice(0, -1) + "A";
 
                 // Nếu mục tiêu đầu tiên còn sống
-                if (hpAll5Mon[targetAttackFirst] > 0) {
+                if (curentHpAll5Mon[targetAttackFirst] > 0) {
                     console.log(`Tấn công mục tiêu: ${targetAttackFirst}`);
                     // Tính số lần đánh
                     let doubleAttack = Math.max(
@@ -935,7 +976,12 @@ function baseAttack(skillKey, isComp) {
 
                     for (let d = 1; d <= doubleAttack; d++) {
                         setTimeout(() => {
-                            let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                            const baseScale = 1;
+                            const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
+                            let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+
+                            let baseDame = Math.round(valuePower * 0.18);
+
                             let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
                             let critDame = 1;
@@ -962,20 +1008,20 @@ function baseAttack(skillKey, isComp) {
                                 isCrit = false;
                             }
 
-                            // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
-                            let dameSkill = 10;
-                            if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                            let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+
+                            if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                 
                             } else {
                                 baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
+                                typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += rageGain / doubleAttack;
                                 //Tăng nộ cho skillKey
                                 if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
-                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;
                                     userSkillA(skillKey, isComp)
-                                } else {
-                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                 }
-                                updateHpAndRageBar5Mon(skillKey);
+                                updateHpAndRageBar5Mon();
                             }
                             
                         }, d * 200); // delay mỗi lần 200ms
@@ -993,7 +1039,7 @@ function baseAttack(skillKey, isComp) {
                     let found = false;
                     for (let i of indices) {
                         let targetKey = `skill${i}${side}`;
-                        if (typeGameConquest.skillBattle[targetKey] && hpAll5Mon[targetKey] > 0) {
+                        if (typeGameConquest.skillBattle[targetKey] && curentHpAll5Mon[targetKey] > 0) {
                             targetAttackFirst = targetKey;
                             found = true;
                             break;
@@ -1009,7 +1055,12 @@ function baseAttack(skillKey, isComp) {
 
                         for (let d = 1; d <= doubleAttack; d++) {
                             setTimeout(() => {
-                                let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                                const baseScale = 1;
+                                const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
+                                let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+
+                                let baseDame = Math.round(valuePower * 0.18);
+
                                 let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
                                 let critDame = 1;
@@ -1036,21 +1087,21 @@ function baseAttack(skillKey, isComp) {
                                     isCrit = false;
                                 }
 
-                                // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
-                                let dameSkill = 10;
+                                // let dameSkill = Math.ceil(baseDame * critDame);
+                                let dameSkill = Math.ceil(baseDame / 2);
 
-                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                 
                                 } else {
                                     skillAttacking(skillKey, dameSkill, isCrit);
+                                    let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
+                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += rageGain / doubleAttack;
                                     //Tăng nộ cho skillKey
                                     if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
-                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;
                                         userSkillA(skillKey, isComp)
-                                    } else {
-                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                     }
-                                    updateHpAndRageBar5Mon(skillKey);
+                                    updateHpAndRageBar5Mon();
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -1065,7 +1116,12 @@ function baseAttack(skillKey, isComp) {
 
                         for (let d = 1; d <= doubleAttack; d++) {
                             setTimeout(() => {
-                                let baseDame = Math.round(typeGameConquest.skillBattle[targetAttackFirst].POWER.STR * 0.48);
+                                const baseScale = 1;
+                                const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
+                                let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+
+                                let baseDame = Math.round(valuePower * 0.18);
+
                                 let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
                                 let critDame = 1;
@@ -1092,20 +1148,20 @@ function baseAttack(skillKey, isComp) {
                                     isCrit = false;
                                 }
 
-                                // let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
-                                let dameSkill = 10;
-                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] === 1) {
+                                let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+
+                                if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                     
                                 } else {
                                     baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
+                                    let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
+                                    typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += rageGain / doubleAttack;
                                     //Tăng nộ cho skillKey
                                     if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) { //Đủ nộ
-                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] = 0;
+                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;
                                         userSkillA(skillKey, isComp)
-                                    } else {
-                                        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += 30
                                     }
-                                    updateHpAndRageBar5Mon(skillKey);
+                                    updateHpAndRageBar5Mon();
                                 }
                             }, d * 200); // delay mỗi lần 200ms
                         }
@@ -1124,6 +1180,33 @@ function baseAttack(skillKey, isComp) {
     animationFrameIds.push(frameId); // Lưu ID
 
 }
+
+function calculateRageGainFromSkill(skillData) {
+    function getScaledRage(stat, multiplier) {
+        return multiplier * Math.sqrt(stat || 0);
+    }
+
+    function getInvertedRage(stat, multiplier) {
+        // Nếu stat thấp → giá trị cao
+        const maxStat = 1000; // giới hạn max giả định (có thể điều chỉnh)
+        const safeStat = Math.min(stat || 0, maxStat);
+        return multiplier * Math.sqrt(maxStat - safeStat);
+    }
+
+    const stats = skillData.POWER || {};
+
+    let rageGain = Math.floor(
+        getScaledRage(stats.STR, 0.3) +
+        getScaledRage(stats.DEF, 0.5) +
+        getScaledRage(stats.INT, 0.3) +
+        getInvertedRage(stats.AGI, 0.4) + // dùng hệ số mới và công thức ngược
+        getScaledRage(stats.LUK, 0.3) +
+        getScaledRage(stats.HP, 0.6)
+    );
+
+    return rageGain;
+}
+
 
 
 // Hàm đánh thường baseAttack
@@ -1193,16 +1276,16 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
             effectNumberAtBaseAttack(targetAttack, dameSkill, "Attacking", isCrit);
 
             //Trừ máu target
-            hpAll5Mon[targetAttack] -= dameSkill
+            curentHpAll5Mon[targetAttack] -= dameSkill
 
-            if (hpAll5Mon[targetAttack] <= 0) {
+            if (curentHpAll5Mon[targetAttack] <= 0) {
                 skillsDelete[targetAttack] = 1
                 const skillChild = target.querySelector('.skill');
                 if (skillChild) {
                     skillChild.classList.add('delete');
                 }
             }
-            updateHpAndRageBar5Mon(targetAttack);
+            updateHpAndRageBar5Mon();
         }, duration);
     };
 
@@ -1211,28 +1294,35 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
 }
 
 //Hàm update HpBar5Mon và rageBar5Mon
-function updateHpAndRageBar5Mon(skillKey) {
-    skillKey = skillKey.charAt(0).toUpperCase() + skillKey.slice(1);
-    console.log("skillKeyUD",skillKey)
-    // Update HP Bar
-    const hpPercent = Math.max(0, Math.min(100, hpAll5Mon[skillKey])); // đảm bảo trong khoảng 0–100
-    const hpElement = document.getElementById(`hp${skillKey}`);
-    if (hpElement) {
-        hpElement.style.width = `${hpPercent}%`;
-        console.log("hpPercent",hpPercent)
-    }
+function updateHpAndRageBar5Mon() {
+    for (let i = 1; i <= 9; i++) {
+        const keyA = `skill${i}A`;
+        const keyB = `skill${i}B`;
 
-    // Update Rage Bar (dựa vào COOLDOWN[4])
-    const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
-    const ragePercent = Math.max(0, Math.min(100, rageData));
-    const rageElement = document.getElementById(`rage${skillKey}`);
-    if (rageElement) {
-        rageElement.style.width = `${ragePercent}%`;
-        console.log("ragePercent",ragePercent)
+        [keyA, keyB].forEach(skillKey => {
+            const skillKeyS = skillKey.charAt(0).toUpperCase() + skillKey.slice(1);
+
+            // Lấy currentHp và maxHp từ maxHpAll5Mon và curentHpAll5Mon
+            const currentHp = curentHpAll5Mon[skillKey] || 0;
+            const maxHp = maxHpAll5Mon[skillKey] || 1; // Dùng maxHpAll5Mon để tính
+
+            // Tính phần trăm HP chính xác
+            const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
+            const hpElement = document.getElementById(`hp${skillKeyS}`);
+            if (hpElement) {
+                hpElement.style.width = `${hpPercent}%`;
+            }
+
+            // Update Rage Bar
+            const rageData = typeGameConquest?.skillBattle?.[skillKey]?.COOLDOWN?.[4] ?? 0;
+            const ragePercent = Math.max(0, Math.min(100, rageData));
+            const rageElement = document.getElementById(`rage${skillKeyS}`);
+            if (rageElement) {
+                rageElement.style.width = `${ragePercent}%`;
+            }
+        });
     }
 }
-
-
 
 // Hàm sử dụng skill Attacking
 function skillAttacking(skillId, dameSkill, isCrit) {
@@ -2348,7 +2438,7 @@ function skillUpShieldWithNowShield(isComp) {
 }
 
 //Skill vô hiệu hóa (đóng băng) skill địch
-function skillSleepSkills(skillKey, dameSkill, isComp) {
+function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
     const teamAorB = skillKey.includes('A') ? 'TeamA' : 'TeamB';
     var imgTeam = skillKey.includes('A') ? 'TeamB' : 'TeamA';
     const skill = document.getElementById(skillKey);
@@ -2372,24 +2462,17 @@ function skillSleepSkills(skillKey, dameSkill, isComp) {
     let skillsSleep = isComp ? skillsSleepB : skillsSleepA; // Tự động chọn mảng phù hợp
     let skillsDelete = isComp ? skillsDeleteB : skillsDeleteA; // Tự động chọn mảng phù hợp
 
-    // Lặp qua đối tượng skillsSleep để chọn các chỉ số có giá trị 0 (chưa bị sleep)
+    // Lặp qua đối tượng skillsSleep để chọn các skill (không cần kiểm tra đã bị sleep hay chưa)
     for (let skill in skillsSleep) {
-        if (skillsSleep[skill] === 0 && typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0 && !typeGameConquest.skillBattle[skill].EFFECT.includes("BKBSleep")) {
-            sleepSkills.push(skill);  // Thêm key vào danh sách skill có thể sleep
-            console.log(`Skill có thể sleep:`, skill);
+        if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0) {
+            sleepSkills.push(skill);
+            console.log("Skill có thể sleep:", skill);
         }
-    }
-
-    let countDameSkill = 0;
-    if (dameSkill >= sleepSkills.length) {
-        countDameSkill = sleepSkills.length
-    } else {
-        countDameSkill = dameSkill
     }
 
     // Lấy các skill ngẫu nhiên từ sleepSkills để thay đổi giá trị thành 1 (sleep)
     let selectedSkills = [];
-    while (selectedSkills.length < countDameSkill && sleepSkills.length > 0) {
+    while (selectedSkills.length < qtyTarget && sleepSkills.length > 0) { //sleep với số lượng qtyTarget
         let randIndex = Math.floor(Math.random() * sleepSkills.length); // Chọn một index ngẫu nhiên
         const selectedSkill = sleepSkills[randIndex]; // Lấy key skill từ mảng sleepSkills
         selectedSkills.push(selectedSkill); // Thêm key skill vào danh sách đã chọn
@@ -2399,9 +2482,9 @@ function skillSleepSkills(skillKey, dameSkill, isComp) {
     // In ra các kỹ năng được chọn
     console.log("selectedSkills", selectedSkills);
 
-    // Đổi giá trị trong skillsSleep tại các skill đã chọn từ 0 thành 1
+    // Đổi giá trị trong skillsSleep tại các skill đã chọn từ 0 thành 1, và tăng dần theo dameSkill
     selectedSkills.forEach(skill => {
-        skillsSleep[skill] = 1; // Vô hiệu hóa skill
+        skillsSleep[skill] += dameSkill; // Thêm dameSkill vào skillsSleep[skill] (tăng thời gian ngủ)
         console.log("Skill đã Sleep:", skill, skillsSleep); // Kiểm tra skill bị Sleep
     });
 
@@ -2455,10 +2538,63 @@ function skillSleepSkills(skillKey, dameSkill, isComp) {
 
             // Bắt đầu hiệu ứng di chuyển
             setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+
+            // Xác định skillSleep object đang dùng
+            const skillsSleep = isComp ? skillsSleepB : skillsSleepA;
+
+            // Kiểm tra nếu đã có sleepTimerElement thì không tạo lại
+            let sleepTimerElement = targetSkill.querySelector('.sleepTimer');
+
+            if (!sleepTimerElement) {
+                // Nếu chưa có, tạo mới
+                sleepTimerElement = document.createElement('div');
+                sleepTimerElement.classList.add('sleepTimer');
+
+                // Style trực tiếp
+                sleepTimerElement.style.position = 'absolute';
+                sleepTimerElement.style.top = '60%';
+                sleepTimerElement.style.left = '50%';
+                sleepTimerElement.style.transform = 'translate(-50%, -50%)';
+                sleepTimerElement.style.fontSize = '12px';
+                sleepTimerElement.style.color = 'white';
+                sleepTimerElement.style.background = 'rgba(183, 179, 179, 0.62)';
+                sleepTimerElement.style.padding = '1px 3px';
+                sleepTimerElement.style.borderRadius = '4px';
+                sleepTimerElement.style.zIndex = '2';
+                sleepTimerElement.style.pointerEvents = 'none';
+                sleepTimerElement.style.fontWeight = 'bold';
+
+                targetSkill.appendChild(sleepTimerElement);
+            }
+
+            // Trước khi setInterval mới
+            if (targetSkill.sleepIntervalId) {
+                clearInterval(targetSkill.sleepIntervalId);
+            }
+
+            // Cập nhật hiệu ứng và lưu ID interval
+            targetSkill.sleepIntervalId = setInterval(() => {
+            const currentSleep = skillsSleep[skillKeyToSleep];
+
+            if (currentSleep > 0) {
+                sleepTimerElement.textContent = Math.ceil(currentSleep / 1000);
+                let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA
+                if (skillsSpeed[skillKeyToSleep] > 0) {
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500 * 2);
+                } else {
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500);
+                }
+                
+            } else {
+                clearInterval(targetSkill.sleepIntervalId);
+                targetSkill.sleepIntervalId = null;
+                sleepTimerElement.remove();
+            }
+        }, 500);
+
         }
     });
 }
-
 
 //Skill vô hiệu hóa (đóng băng) skill địch
 function skillDeleteSkills(skillKey, dameSkill, isComp) {
@@ -2576,13 +2712,14 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
 }
 
 //Skill tăng tốc 
-let totalSpeedUpTimeA = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team A
-let totalSpeedUpTimeB = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team B
-function skillSpeedUp(skillKey, dameSkill, isComp) {
-    const cooldownBarTime = isComp ? document.getElementById("cooldownSkillA") : document.getElementById("cooldownSkillB")
-    const targetRect = cooldownBarTime.getBoundingClientRect(); // Lấy vị trí của skill bị delete
+let skillsSpeedA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
+let skillsSpeedB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
+
+function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
+
     const skill = document.getElementById(skillKey)
     const teamAorB = skillKey.includes('A') ? 'TeamA' : 'TeamB';
+    var imgTeam = skillKey.includes('A') ? 'TeamA' : 'TeamB';
 
     // Hiệu ứng cho thanh skill 
     if (teamAorB == 'TeamA') { //bên A
@@ -2593,82 +2730,140 @@ function skillSpeedUp(skillKey, dameSkill, isComp) {
         setTimeout(() => skill.classList.remove('attackingSkillB'), 500);
     }
 
-    // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
-    if (isComp) {
-        attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
-    } else {
-        attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
+    // Mảng chứa các chỉ số của skillsHaste có giá trị là 0
+    let hasteSkills = [];
+    let skillsSpeed = isComp ? skillsSpeedA : skillsSpeedB; // Tự động chọn mảng phù hợp
+    let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB; // Tự động chọn mảng phù hợp
+
+    // Lặp qua đối tượng skillsSpeed để chọn các skill (không cần kiểm tra đã tăng tốc hay chưa)
+    for (let skill in skillsSpeed) {
+        if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0) {
+            hasteSkills.push(skill);
+            console.log("Skill có thể tăng tốc:", skill);
+        }
     }
 
-    document.body.appendChild(attackEffect);
+    // Lấy các skill ngẫu nhiên từ hasteSkills để thay đổi giá trị thành 1
+    let selectedSkills = [];
+    while (selectedSkills.length < qtyTarget && hasteSkills.length > 0) { //haste với số lượng qtyTarget
+        let randIndex = Math.floor(Math.random() * hasteSkills.length); // Chọn một index ngẫu nhiên
+        const selectedSkill = hasteSkills[randIndex]; // Lấy key skill từ mảng hasteSkills
+        selectedSkills.push(selectedSkill); // Thêm key skill vào danh sách đã chọn
+        hasteSkills.splice(randIndex, 1); // Xóa skill đã chọn khỏi mảng
+    }
 
-    // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // In ra các kỹ năng được chọn
+    console.log("selectedSkills", selectedSkills);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
-    attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top;
+    // Đổi giá trị trong skillsSpeed tại các skill đã chọn từ 0 thành 1, và tăng dần theo dameSkill
+    selectedSkills.forEach(skill => {
+        skillsSpeed[skill] += dameSkill; // Thêm dameSkill vào skillsSpeed[skill] (tăng thời gian ngủ)
+        console.log("Skill đã tăng tốc:", skill, skillsSpeed); // Kiểm tra skill tăng tốc
+    });
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
-    const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+    // Tạo hiệu ứng mũi tên/nắm đấm cho các chỉ số HasteSkills bị chọn
+    selectedSkills.forEach(skillKeyToHaste => {
+        const targetSkill = document.getElementById(skillKeyToHaste); // Lấy id tương ứng của skill đối phương
+        if (targetSkill) {
+            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill được tăng tốc haste
 
-        attackEffect.style.transition = `transform ${duration}ms ease-out`;
-        attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-        // Cập nhật thời gian tăng tốc cho team A hoặc B
-        if (isComp) {
-            // Tăng thời gian hiệu lực của tăng tốc cho Team A
-            if (totalSpeedDownTimeA > 0) {
-                const remainingDame = totalSpeedDownTimeA - dameSkill
-                if (remainingDame > 0) {
-                    totalSpeedDownTimeA = remainingDame;
-                } else {
-                    totalSpeedDownTimeA = 0;
-                    totalSpeedUpTimeA += Math.abs(remainingDame);
-                }
+            // Tạo mũi tên/nắm đấm
+            const attackEffect = document.createElement('div');
+            if (imgTeam === "TeamB") {
+                attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
             } else {
-                totalSpeedUpTimeA += dameSkill;
+                attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
             }
-        } else {
-            // Tăng thời gian hiệu lực của tăng tốc cho Team B
-            if (totalSpeedDownTimeB > 0) {
-                const remainingDame = totalSpeedDownTimeB - dameSkill
-                if (remainingDame > 0) {
-                    totalSpeedDownTimeB = remainingDame;
-                } else {
-                    totalSpeedDownTimeB = 0;
-                    totalSpeedUpTimeB += Math.abs(remainingDame);
+
+            document.body.appendChild(attackEffect);
+
+            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
+            const skillRect = skill.getBoundingClientRect();
+
+            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            attackEffect.style.position = 'absolute';
+            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
+            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+
+            // Tính toán độ di chuyển tới mục tiêu
+            const targetX = targetRect.left + targetRect.width / 2;
+            const targetY = targetRect.top + targetRect.height / 2;
+
+            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            const moveEffect = () => {
+                const duration = 500; // Thời gian di chuyển (ms)
+                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
+                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+
+                attackEffect.style.transition = `transform ${duration}ms ease-out`;
+                attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+                // Xóa phần tử sau khi hiệu ứng kết thúc
+                setTimeout(() => {
+                    attackEffect.remove();
+                }, duration);
+            };
+
+            // Bắt đầu hiệu ứng di chuyển
+            setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+
+            // Kiểm tra nếu đã có hasteTimerElement thì không tạo lại
+            let hasteTimerElement = targetSkill.querySelector('.hasteTimer');
+
+            if (!hasteTimerElement) {
+                // Nếu chưa có, tạo mới
+                hasteTimerElement = document.createElement('div');
+                hasteTimerElement.classList.add('hasteTimer');
+
+                // Style trực tiếp
+                hasteTimerElement.style.position = 'absolute';
+                hasteTimerElement.style.top = '40%';
+                hasteTimerElement.style.left = '50%';
+                hasteTimerElement.style.transform = 'translate(-50%, -50%)';
+                hasteTimerElement.style.fontSize = '12px';
+                hasteTimerElement.style.color = 'white';
+                hasteTimerElement.style.background = 'rgba(244, 48, 48, 0.62)';
+                hasteTimerElement.style.padding = '1px 3px';
+                hasteTimerElement.style.borderRadius = '4px';
+                hasteTimerElement.style.zIndex = '2';
+                hasteTimerElement.style.pointerEvents = 'none';
+                hasteTimerElement.style.fontWeight = 'bold';
+
+                targetSkill.appendChild(hasteTimerElement);
+            }
+            // Trước khi setInterval mới
+            if (targetSkill.hasteIntervalId) {
+                clearInterval(targetSkill.hasteIntervalId);
+            }
+
+            // Cập nhật hiệu ứng và lưu ID interval
+            targetSkill.hasteIntervalId = setInterval(() => {
+                const currentHaste = skillsSpeed[skillKeyToHaste];
+
+                // Giảm dần nhưng không vượt qua 0
+                skillsSpeed[skillKeyToHaste] = Math.max(0, currentHaste - 500);
+
+                // Cập nhật hiển thị thời gian còn lại
+                hasteTimerElement.textContent = Math.ceil(skillsSpeed[skillKeyToHaste] / 1000);
+
+                // Nếu skillsSpeed đã về 0, dừng hiệu ứng và xóa timer
+                if (skillsSpeed[skillKeyToHaste] === 0) {
+                    clearInterval(targetSkill.hasteIntervalId);
+                    targetSkill.hasteIntervalId = null;
+                    hasteTimerElement.remove();
                 }
-            } else {
-                totalSpeedUpTimeB += dameSkill;
-            }
+            }, 500);
+
+
         }
-        // Xóa phần tử sau khi hiệu ứng kết thúc
-        setTimeout(() => {
-            attackEffect.remove();
-        }, duration);
-    };
-    // Bắt đầu hiệu ứng di chuyển
-    setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+    });
 }
 
-//Skill giảm tốc
-let totalSpeedDownTimeA = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team A
-let totalSpeedDownTimeB = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team B
 
-function skillSpeedDown(skillKey, dameSkill, isComp) {
-    const cooldownBarTime = isComp ? document.getElementById("cooldownSkillB") : document.getElementById("cooldownSkillA")
-    const targetRect = cooldownBarTime.getBoundingClientRect(); // Lấy vị trí của skill bị
+function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
     const skill = document.getElementById(skillKey)
     const teamAorB = skillKey.includes('A') ? 'TeamA' : 'TeamB';
+    var imgTeam = skillKey.includes('A') ? 'TeamB' : 'TeamA';
 
     // Hiệu ứng cho thanh skill 
     if (teamAorB == 'TeamA') { //bên A
@@ -2679,72 +2874,129 @@ function skillSpeedDown(skillKey, dameSkill, isComp) {
         setTimeout(() => skill.classList.remove('attackingSkillB'), 500);
     }
 
-    // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
-    if (isComp) {
-        attackEffect.classList.add('speedDownEffect'); // Class CSS để định dạng hiệu ứng
-    } else {
-        attackEffect.classList.add('speedDownEffect'); // Class CSS để định dạng hiệu ứng
+    // Mảng chứa các chỉ số của skillsSlow có giá trị là 0
+    let slowSkills = [];
+    let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA; // Tự động chọn mảng phù hợp
+    let skillsDelete = isComp ? skillsDeleteB : skillsDeleteA; // Tự động chọn mảng phù hợp
+
+    // Lặp qua đối tượng skillsSpeed để chọn các skill
+    for (let skill in skillsSpeed) {
+        if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0) {
+            slowSkills.push(skill);
+            console.log("Skill có thể tăng tốc:", skill);
+        }
     }
 
-    document.body.appendChild(attackEffect);
+    // Lấy các skill ngẫu nhiên từ slowSkills để thay đổi giá trị thành 1
+    let selectedSkills = [];
+    while (selectedSkills.length < qtyTarget && slowSkills.length > 0) { //slow với số lượng qtyTarget
+        let randIndex = Math.floor(Math.random() * slowSkills.length); // Chọn một index ngẫu nhiên
+        const selectedSkill = slowSkills[randIndex]; // Lấy key skill từ mảng slowSkills
+        selectedSkills.push(selectedSkill); // Thêm key skill vào danh sách đã chọn
+        slowSkills.splice(randIndex, 1); // Xóa skill đã chọn khỏi mảng
+    }
 
-    // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // In ra các kỹ năng được chọn
+    console.log("selectedSkills", selectedSkills);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
-    attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    // Đổi giá trị trong skillsSpeed tại các skill đã chọn từ 0 thành 1, và tăng dần theo dameSkill
+    selectedSkills.forEach(skill => {
+        skillsSpeed[skill] -= dameSkill; // Thêm dameSkill vào skillsSpeed[skill] (tăng thời gian ngủ)
+        console.log("Skill đã làm chậm:", skill, skillsSpeed); // Kiểm tra skill tăng tốc
+    });
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
-    const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+    // Tạo hiệu ứng mũi tên/nắm đấm cho các chỉ số SlowSkills bị chọn
+    selectedSkills.forEach(skillKeyToSlow => {
+        const targetSkill = document.getElementById(skillKeyToSlow); // Lấy id tương ứng của skill đối phương
+        if (targetSkill) {
+            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill được tăng tốc slow
 
-        attackEffect.style.transition = `transform ${duration}ms ease-out`;
-        attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-        // Cập nhật thời gian tăng tốc cho team A hoặc B
-        if (isComp) {
-            // Tăng thời gian hiệu lực của tăng tốc hoặc giảm tốc cho Team A
-            if (totalSpeedUpTimeB > 0) {
-                const remainingDame = totalSpeedUpTimeB - dameSkill;
-                if (remainingDame > 0) {
-                    totalSpeedUpTimeB = remainingDame; // Vẫn còn tăng tốc
-                } else {
-                    totalSpeedUpTimeB = 0; // Hết tăng tốc
-                    totalSpeedDownTimeB += Math.abs(remainingDame); // Phần dư chuyển sang giảm tốc
-                }
+            // Tạo mũi tên/nắm đấm
+            const attackEffect = document.createElement('div');
+            if (imgTeam === "TeamB") {
+                attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             } else {
-                totalSpeedDownTimeB += dameSkill;
+                attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             }
-        } else {
-            // Tăng thời gian hiệu lực của tăng tốc hoặc giảm tốc cho Team B
-            if (totalSpeedUpTimeA > 0) {
-                const remainingDame = totalSpeedUpTimeA - dameSkill;
-                if (remainingDame > 0) {
-                    totalSpeedUpTimeA = remainingDame; // Vẫn còn tăng tốc
+
+            document.body.appendChild(attackEffect);
+
+            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
+            const skillRect = skill.getBoundingClientRect();
+
+            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            attackEffect.style.position = 'absolute';
+            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
+            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+
+            // Tính toán độ di chuyển tới mục tiêu
+            const targetX = targetRect.left + targetRect.width / 2;
+            const targetY = targetRect.top + targetRect.height / 2;
+
+            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            const moveEffect = () => {
+                const duration = 500; // Thời gian di chuyển (ms)
+                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
+                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+
+                attackEffect.style.transition = `transform ${duration}ms ease-out`;
+                attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+                // Xóa phần tử sau khi hiệu ứng kết thúc
+                setTimeout(() => {
+                    attackEffect.remove();
+                }, duration);
+            };
+
+            // Bắt đầu hiệu ứng di chuyển
+            setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+
+            // Kiểm tra nếu đã có slowTimerElement thì không tạo lại
+            let slowTimerElement = targetSkill.querySelector('.slowTimer');
+
+            if (!slowTimerElement) {
+                // Nếu chưa có, tạo mới
+                slowTimerElement = document.createElement('div');
+                slowTimerElement.classList.add('slowTimer');
+
+                // Style trực tiếp
+                slowTimerElement.style.position = 'absolute';
+                slowTimerElement.style.top = '40%';
+                slowTimerElement.style.left = '50%';
+                slowTimerElement.style.transform = 'translate(-50%, -50%)';
+                slowTimerElement.style.fontSize = '12px';
+                slowTimerElement.style.color = 'white';
+                slowTimerElement.style.background = 'rgba(78, 207, 246, 0.62)';
+                slowTimerElement.style.padding = '1px 3px';
+                slowTimerElement.style.borderRadius = '4px';
+                slowTimerElement.style.zIndex = '2';
+                slowTimerElement.style.pointerEvents = 'none';
+                slowTimerElement.style.fontWeight = 'bold';
+
+                targetSkill.appendChild(slowTimerElement);
+            }
+
+            // Trước khi setInterval mới
+            if (targetSkill.slowIntervalId) {
+                clearInterval(targetSkill.slowIntervalId);
+            }
+
+            // Cập nhật hiệu ứng và lưu ID interval
+            targetSkill.slowIntervalId = setInterval(() => {
+                const currentSlow = skillsSpeed[skillKeyToSlow];
+
+                if (currentSlow < 0) {
+                    skillsSpeed[skillKeyToSlow] = Math.min(0, currentSlow + 500);
+                    slowTimerElement.textContent = Math.ceil(Math.abs(skillsSpeed[skillKeyToSlow] / 1000).toFixed(0));
                 } else {
-                    totalSpeedUpTimeA = 0; // Hết tăng tốc
-                    totalSpeedDownTimeA += Math.abs(remainingDame); // Phần dư chuyển sang giảm tốc
+                    clearInterval(targetSkill.slowIntervalId);
+                    targetSkill.slowIntervalId = null;
+                    slowTimerElement.remove();
                 }
-            } else {
-                totalSpeedDownTimeA += dameSkill;
-            }
+            }, 500);
+
         }
-
-        // Xóa phần tử sau khi hiệu ứng kết thúc
-        setTimeout(() => {
-            attackEffect.remove();
-        }, duration);
-    };
-    // Bắt đầu hiệu ứng di chuyển
-    setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
+    });
 }
 
 //Hàm hiển thị số sát thương đánh thường baseAttack
@@ -3934,6 +4186,8 @@ function loadEventSlotBattle() {
             }
             //Cập nhật chỉ số tăng từ bị động Internal [2]
             internalUp();
+            resetHp5Mon();
+            updateHpAndRageBar5Mon();
         });
     });
 
@@ -4286,6 +4540,8 @@ function loadEventSlotBattle() {
                     updateSttForSkillAffter();
                 }
                 internalUp();
+                resetHp5Mon();
+                updateHpAndRageBar5Mon();
             } else {
                 slot.style.backgroundColor = "";
             }
@@ -4371,11 +4627,9 @@ function update5MonBattle(skill) {
     //Tính cooldown
     let agi = skill.POWER.AGI;
     let minC = 0;
-    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
+    let maxC = 20;
 
-    let scaleC = agi < 100
-        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
-        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
@@ -6193,6 +6447,8 @@ function openGameRank() {
         //Load cho các slot skill
         loadEventSlotBattle();
         internalUp();
+        resetHp5Mon();
+        updateHpAndRageBar5Mon();
         updateHpbar();
 
         price5MonConquest = typeGameConquest.price5Mon + typeGameConquest.selectSkillShop
@@ -6217,15 +6473,14 @@ function openGameRank() {
 }
 
 function resetMaxHpBattle() {
-    let allHP5Mon = 0;
+    // let allHP5Mon = 0;
+    // Object.values(typeGameConquest.battlePetUseSlotRound).forEach(slot => {
+    //     if (slot.POWER && typeof slot.POWER.HP === "number") {
+    //         allHP5Mon += slot.POWER.HP;
+    //     }
+    // });
 
-    Object.values(typeGameConquest.battlePetUseSlotRound).forEach(slot => {
-        if (slot.POWER && typeof slot.POWER.HP === "number") {
-            allHP5Mon += slot.POWER.HP;
-        }
-    });
-
-    typeGameConquest.maxHpBattle = defaultHP + allHP5Mon + maxHpUp;
+    typeGameConquest.maxHpBattle = defaultHP + maxHpUp;
 }
 
 
@@ -6282,7 +6537,7 @@ function nextStepGame1() {
 }
 
 
-let hpAll5Mon = {
+let curentHpAll5Mon = {
     skill1A: 0,
     skill2A: 0,
     skill3A: 0,
@@ -6303,6 +6558,68 @@ let hpAll5Mon = {
     skill8B: 0,
     skill9B: 0,
 }
+
+let maxHpAll5Mon = {
+    skill1A: 0,
+    skill2A: 0,
+    skill3A: 0,
+    skill4A: 0,
+    skill5A: 0,
+    skill6A: 0,
+    skill7A: 0,
+    skill8A: 0,
+    skill9A: 0,
+
+    skill1B: 0,
+    skill2B: 0,
+    skill3B: 0,
+    skill4B: 0,
+    skill5B: 0,
+    skill6B: 0,
+    skill7B: 0,
+    skill8B: 0,
+    skill9B: 0,
+}
+
+function resetHp5Mon() {
+    Object.keys(maxHpAll5Mon).forEach((skill) => {
+        if (
+            typeGameConquest.skillBattle[skill] &&
+            typeGameConquest.skillBattle[skill].POWER
+        ) {
+            if (typeGameConquest.skillBattle[skill].POWER.HP <= 0) {
+                maxHpAll5Mon[skill] = 0;
+            } else {
+                const baseScale = 1;
+                const scaleHP = baseScale * Math.log10(typeGameConquest.skillBattle[skill].POWER.HP);
+                let valuePower = 1.62 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 83.8;
+
+                let baseHP = Math.round(valuePower);
+
+                maxHpAll5Mon[skill] = baseHP || 0;
+            }
+        }
+    });
+
+    // ✅ Sao chép kết quả sau khi tính toán
+    curentHpAll5Mon = { ...maxHpAll5Mon};
+
+    
+    [typeGameConquest.skillBattle, typeGameConquest.battlePetUseSlotRound].forEach((obj) => {
+        Object.values(obj).forEach((skill) => {
+            skill.COOLDOWN[4] = 0;
+            skill.DAME[3] = 0;
+            skill.HEAL[3] = 0;
+            skill.SHIELD[3] = 0;
+            skill.BURN[3] = 0;
+            skill.POISON[3] = 0;
+            skill.CRIT[3] = 0;
+        });
+    });
+
+    updateHpAndRageBar5Mon();
+}
+
 function startBattle() {
     startLoading();
     infoStartGame.stepGame = 3;
@@ -6319,12 +6636,7 @@ function startBattle() {
         nowPoisonBattleComp = 0;
 
         //Tính HP cho tất cả các 5Mon 2 bên
-        Object.keys(hpAll5Mon).forEach((skill) => {
-            if (typeGameConquest.skillBattle[skill] && typeGameConquest.skillBattle[skill].POWER) {
-                hpAll5Mon[skill] = typeGameConquest.skillBattle[skill].POWER.HP || 0;
-            }
-        });
-        console.log("hpAll5Mon",hpAll5Mon)
+        resetHp5Mon();
 
         //Chuyển tất cả skill không kéo được
         const skillBattleOn = document.querySelectorAll('.skill');
@@ -6362,16 +6674,13 @@ function startBattle() {
 
         // Bắt đầu vòng lặp cooldown skill
         for (let s = 1; s <= 9; s++) {
-
             const skillB = typeGameConquest.skillBattle[`skill${s}B`];
             if (skillB.COOLDOWN[0] > 0) {
-                console.log("vào 1111")
                 baseAttack(`skill${s}B`, false);
             }
 
             const skillA = typeGameConquest.skillBattle[`skill${s}A`];
             if (skillA.COOLDOWN[0] > 0) {
-                console.log("vào 22222")
                 baseAttack(`skill${s}A`, true);
             }
         }
@@ -6379,9 +6688,12 @@ function startBattle() {
         //đạt điều kiện thì chiến thắng và gọi endBattle() => dừng tất cả cooldown và trừ máu
 
         //Đổi nút tiếp tục thành => onclick="startBattle()"
-        endLoading();
-    }, 1000);
+        
+    }, 2000);
+    endLoading();
 }
+
+
 
 let intervalID = null;
 let intervalIdOverTime = null;
@@ -6434,14 +6746,13 @@ function endBattle(whoWin, pointsThisRound) {
     countSkillQueue = 0;
     countSkillQueueMirror = 0;
 
-    totalSpeedUpTimeA = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team A
-    totalSpeedUpTimeB = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team B
-    totalSpeedDownTimeA = 0;
-    totalSpeedDownTimeB = 0;
+    skillsSpeedA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
+    skillsSpeedB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
     speedUpA = 1;
     speedUpB = 1;
-    document.getElementById("cooldownSkillA").style.backgroundColor = "rgb(0 0 0 / 25%)";
-    document.getElementById("cooldownSkillB").style.backgroundColor = "rgb(0 0 0 / 25%)";
+
+    //reset Hp5Mon
+    resetHp5Mon();
 
     console.log("skillQueueMirror", skillQueueMirror, skillQueue)
     Object.keys(typeGameConquest.skillBattle).forEach((skill) => {
@@ -6465,7 +6776,7 @@ function endBattle(whoWin, pointsThisRound) {
     });
 
     //Reset thời gian chiến đấu
-    cooldownDuration = 200; //++++++++
+    cooldownDuration = 90; //++++++++
     decrementPercent = 100;
     cooldownRemaining = cooldownDuration; // Thời gian còn lại
 
@@ -6695,16 +7006,7 @@ function stopSkillGame() {
 
     // Duyệt qua từng phần tử và thay đổi trực tiếp thuộc tính background
     overlays.forEach((overlay) => {
-        overlay.style.background = 'none'; // Thay đổi trực tiếp background
         overlay.style.transitionDuration = '0ms'; // Không có hiệu ứng chuyển tiếp ban đầu
-        overlay.style.transform = 'scaleY(0)';    // Đặt overlay đầy (hiện full)
-    });
-
-    const overlaysLV = document.querySelectorAll('.skillCooldownOverlayLV');
-
-    // Duyệt qua từng phần tử và thay đổi trực tiếp thuộc tính background
-    overlaysLV.forEach((overlay) => {
-        overlay.style.background = 'none'; // Thay đổi trực tiếp background
         overlay.style.transform = 'scaleY(0)';    // Đặt overlay đầy (hiện full)
     });
 
@@ -7184,7 +7486,7 @@ function updateSttForSkillAffter() {
 
 
 
-let cooldownDuration = 200; // Số giây thanh sẽ giảm từ đầy đến hết //++++++++++
+let cooldownDuration = 90; // Số giây thanh sẽ giảm từ đầy đến hết //++++++++++
 let decrementPercent = 100;
 let cooldownRemaining = cooldownDuration; // Thời gian còn lại
 let damageOverTime = 1; // Sát thương ban đầu
@@ -7244,6 +7546,24 @@ function battleStartTime(init = true) {
         if (nowBurnBattleMy > 0) {
             applyBurn("hpBarB");
         }
+
+        //Tăng nộ cho 5Mon 2 bên
+        Object.keys(typeGameConquest.skillBattle).forEach((skillKey) => {
+            const skill = typeGameConquest.skillBattle[skillKey];
+
+            if (skill.ID && skill.IDcreate) {
+                const cooldown0 = skill.COOLDOWN?.[0] || 0;
+
+                // Dùng sqrt-based scale, tối đa cộng 10
+                const scaledGain = Math.max(1, Math.floor(10 * Math.sqrt(cooldown0) / Math.sqrt(20000)));
+
+                skill.COOLDOWN[4] += scaledGain;
+            }
+        });
+
+        updateHpAndRageBar5Mon();
+
+        
 
         if (endGame === true) {
             clearInterval(intervalIDBurnOrPoison); // Dừng cập nhật
@@ -7432,6 +7752,7 @@ function checkWinOrLose() {
         endGame = true;
 
         updateHpbar();
+        resetHp5Mon();
         updateSttForSkillAffter();
 
         if (typeGameConquest.winBattle < winLoseDefault) {
@@ -7449,6 +7770,7 @@ function checkWinOrLose() {
         infoStartGame.winStreak = 0;
 
         updateHpbar();
+        resetHp5Mon();
         updateSttForSkillAffter();
         if (typeGameConquest.loseBattle < winLoseDefault) {
             randomSkillinShop();
@@ -7888,9 +8210,18 @@ function startSkillMirror(skillKey, isComp, effect) {
         { mirrorEffect: "MirrorBurn", baseEffect: "Burn" },
         { mirrorEffect: "MirrorPoison", baseEffect: "Poison" },
         { mirrorEffect: "MirrorFreeze", baseEffect: "Freeze" },
-        { mirrorEffect: "MirrorSleepSkills", baseEffect: "SleepSkills" },
-        { mirrorEffect: "MirrorSpeedUp", baseEffect: "SpeedUp" },
-        { mirrorEffect: "MirrorSpeedDown", baseEffect: "SpeedDown" },
+        { mirrorEffect: "MirrorSleepSkills", baseEffect: "SleepSkill1" },
+        { mirrorEffect: "MirrorSleepSkills", baseEffect: "SleepSkill2" },
+        { mirrorEffect: "MirrorSleepSkills", baseEffect: "SleepSkill3" },
+        { mirrorEffect: "MirrorSleepSkills", baseEffect: "SleepSkill4" },
+        { mirrorEffect: "MirrorSpeedUp", baseEffect: "SpeedUp1" },
+        { mirrorEffect: "MirrorSpeedUp", baseEffect: "SpeedUp2" },
+        { mirrorEffect: "MirrorSpeedUp", baseEffect: "SpeedUp3" },
+        { mirrorEffect: "MirrorSpeedUp", baseEffect: "SpeedUp4" },
+        { mirrorEffect: "MirrorSlowSkill", baseEffect: "SlowSkill1" },
+        { mirrorEffect: "MirrorSlowSkill", baseEffect: "SlowSkill2" },
+        { mirrorEffect: "MirrorSlowSkill", baseEffect: "SlowSkill3" },
+        { mirrorEffect: "MirrorSlowSkill", baseEffect: "SlowSkill4" },
     ];
 
     if (!effectPairs.some(({ baseEffect }) => baseEffect === effect)) {
@@ -7972,8 +8303,14 @@ function startSkillResonance(skillKey, isComp, effect) {
         { reEffect: "ReAfterSkill", baseEffect: "AfterSkill" },
         { reEffect: "ReBeforeAfterSkill", baseEffect: "BeforeAfterSkill" },
         { reEffect: "ReType", baseEffect: "TypeSkill" },
-        { reEffect: "ReSpeedUp", baseEffect: "SpeedUp" },
-        { reEffect: "ReSpeedDown", baseEffect: "SpeedDown" },
+        { reEffect: "ReSpeedUp", baseEffect: "SpeedUp1" },
+        { reEffect: "ReSpeedUp", baseEffect: "SpeedUp2" },
+        { reEffect: "ReSpeedUp", baseEffect: "SpeedUp3" },
+        { reEffect: "ReSpeedUp", baseEffect: "SpeedUp4" },
+        { reEffect: "ReSlowSkill", baseEffect: "SlowSkill1" },
+        { reEffect: "ReSlowSkill", baseEffect: "SlowSkill2" },
+        { reEffect: "ReSlowSkill", baseEffect: "SlowSkill3" },
+        { reEffect: "ReSlowSkill", baseEffect: "SlowSkill4" },
     ];
 
     Object.keys(typeGameConquest.skillBattle).forEach((key) => {
@@ -8257,7 +8594,7 @@ function useSkillLV(skillKey, overlayDiv, isComp) {
 
     if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) {  // Kiểm tra nộ đã đạt hoặc vượt 100
         typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;  // Trừ 100 nộ
-        if (skillsSleep[skillKey] === 1) {
+        if (skillsSleep[skillKey] > 0) {
             skillsSleep[skillKey] = 0
             const skillElement = document.getElementById(skillKey);
             if (skillElement) {
@@ -8409,14 +8746,33 @@ function useSkill(skillKey, effect, overlayDiv, isComp) {
             break;
         case "UpCritType": skillUpCrit(skillKey, dameSkill, isComp, "Type");
             break;
-        case "SleepSkills": skillSleepSkills(skillKey, dameSkill, isComp);
+        case "SleepSkill1": skillSleepSkills(skillKey, dameSkill, isComp, 1);
+            break;
+        case "SleepSkill2": skillSleepSkills(skillKey, dameSkill, isComp, 2);
+            break;
+        case "SleepSkill3": skillSleepSkills(skillKey, dameSkill, isComp, 3);
+            break;
+        case "SleepSkill4": skillSleepSkills(skillKey, dameSkill, isComp, 4);
             break;
         case "DeleteSkills": skillDeleteSkills(skillKey, dameSkill, isComp);
             break;
-        case "SpeedUp": skillSpeedUp(skillKey, dameSkill, isComp);
+        case "SpeedUp1": skillSpeedUp(skillKey, dameSkill, isComp, 1);
             break;
-        case "SpeedDown": skillSpeedDown(skillKey, dameSkill, isComp);
+        case "SpeedUp2": skillSpeedUp(skillKey, dameSkill, isComp, 2);
             break;
+        case "SpeedUp3": skillSpeedUp(skillKey, dameSkill, isComp, 3);
+            break;
+        case "SpeedUp4": skillSpeedUp(skillKey, dameSkill, isComp, 4);
+            break;
+        case "SlowSkill1": skillSlow(skillKey, dameSkill, isComp, 1);
+            break;
+        case "SlowSkill2": skillSlow(skillKey, dameSkill, isComp, 2);
+            break;
+        case "SlowSkill3": skillSlow(skillKey, dameSkill, isComp, 3);
+            break;
+        case "SlowSkill4": skillSlow(skillKey, dameSkill, isComp, 4);
+            break;
+
         default:
             console.warn(`Effect skill ${effect} chưa có xử lý cụ thể`);
     }
@@ -8436,7 +8792,7 @@ function showResultScreen(isWin) {
 
     typeGameConquest.reRoll = 0;
     typeGameConquest.reRollPrice = 0;
-    typeGameConquest.starUser += infoStartGame.roundGame;
+    typeGameConquest.starUser += infoStartGame.roundGame * 2;
 
     if (infoStartGame.roundGame <= 1) {
         typeGameConquest.price5Mon += 1;
@@ -8724,14 +9080,23 @@ function createNewComp(isWin) {
                 // Clone sâu để tránh ảnh hưởng dữ liệu gốc
                 let clonedSkillData = JSON.parse(JSON.stringify(skillData));
 
-                // Xử lý các trường dạng mảng để loại bỏ Infinity/NaN
-                ['COOLDOWN', 'HEAL', 'DAME', 'EFFECT', 'SHIELD', 'POISON'].forEach(field => {
+                // Các field dạng số cần kiểm tra NaN/Infinity
+                const numericFields = ['COOLDOWN', 'HEAL', 'DAME', 'SHIELD', 'POISON', 'CRIT', 'DEF'];
+
+                numericFields.forEach(field => {
                     if (Array.isArray(clonedSkillData[field])) {
                         clonedSkillData[field] = clonedSkillData[field].map(val =>
                             isFinite(val) ? val : 0
                         );
                     }
                 });
+
+                // Các field như EFFECT thì giữ nguyên
+                if (Array.isArray(clonedSkillData['EFFECT'])) {
+                    clonedSkillData['EFFECT'] = clonedSkillData['EFFECT'].map(val =>
+                        typeof val === 'string' ? val : ''
+                    );
+                }
 
                 newObj[newKey] = clonedSkillData;
                 return newObj;
@@ -8770,8 +9135,6 @@ function createNewComp(isWin) {
             console.error("Lỗi khi lấy dữ liệu allComps:", error);
         });
 }
-
-
 
 
 function startLoading() {
@@ -9586,7 +9949,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             // Cập nhật thông tin trong popup
             descTextItem += `
         <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
-            <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
+            <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${item.POWER.STR}</span>
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${item.POWER.DEF}</span>
                 <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${item.POWER.INT}</span>
@@ -9596,17 +9959,23 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             </div>
         </div>`
 
+            let baseDame = Math.round((1 + item.POWER.STR / Math.log10(item.POWER.STR)) * 0.18);
+            let baseHP = Math.round((1.62 * item.POWER.HP / Math.log10(item.POWER.HP)) + 83.8);
 
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
-            justify-content: center;align-items: center;">
-            Thuộc tính: 
+            justify-content: space-between;align-items: center; width: 100%;">
+            <span>
+                [Máu: <a style="color:red; font-weight: bold;">${baseHP}</a>]
+            </span>
+            <span style="display: flex; gap: 5px;"> 
                 <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
                     ${typeInfo}
                 </span>
             </span>
+            </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
-            <span >Gây <a style="color: red; font-weight: bold;">${item.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            <span >Gây <a style="color: red; font-weight: bold;">${baseDame} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
 
             let descInfo = "";
@@ -9658,9 +10027,12 @@ function setupPopupInfo5MonBag(itemList, prefix) {
                 critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%</span>]`;
             }
             // Gán nội dung vào phần tử HTML
+            let rageGain = calculateRageGainFromSkill(item);
+            rageGain = parseFloat(rageGain.toFixed(2));
+
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
+                    `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ${rageGain}][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
                 <span>${critInfo.trim()}</span>`;
             } else {
@@ -9932,6 +10304,9 @@ function resetOutGame() {
     skillsDeleteB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
     // limitSkillsA = {skill1A: 0,skill2A: 0,skill3A: 0,skill4A: 0,skill5A: 0,skill6A: 0,skill7A: 0,skill8A: 0,skill9A: 0};
     // limitSkillsB = {skill1B: 0,skill2B: 0,skill3B: 0,skill4B: 0,skill5B: 0,skill6B: 0,skill7B: 0,skill8B: 0,skill9B: 0};
+    skillsSpeedA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
+    skillsSpeedB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
+
     skillQueueMirror = {};
     skillQueue = {};
     countSkillQueue = 0;
@@ -9957,14 +10332,9 @@ function resetOutGame() {
         }
     });
 
-    totalSpeedUpTimeA = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team A
-    totalSpeedUpTimeB = 0; // Thời gian tổng cộng hiệu lực tăng tốc cho team B
-    totalSpeedDownTimeA = 0;
-    totalSpeedDownTimeB = 0;
     speedUpA = 1;
     speedUpB = 1;
-    document.getElementById("cooldownSkillA").style.backgroundColor = "rgb(0 0 0 / 25%)";
-    document.getElementById("cooldownSkillB").style.backgroundColor = "rgb(0 0 0 / 25%)";
+
     typeGameConquest.slowB = 0;
     typeGameConquest.dameCritB = 0;
     typeGameConquest.upCooldownB = 0;
@@ -10054,7 +10424,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     // Cập nhật thông tin trong popup
     descTextItem += `
     <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
-        <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
+        <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${skillInfo.POWER.STR}</span>
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${skillInfo.POWER.DEF}</span>
             <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${skillInfo.POWER.INT}</span>
@@ -10064,17 +10434,23 @@ function setupPopupInfo5MonInBattle(skillInfo) {
         </div>
     </div>`
 
+    let baseDame = Math.round((1 + skillInfo.POWER.STR / Math.log10(skillInfo.POWER.STR)) * 0.18);
+    let baseHP = Math.round((1.62 * skillInfo.POWER.HP / Math.log10(skillInfo.POWER.HP)) + 83.8);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
-    justify-content: center;align-items: center;">
-    Thuộc tính: 
+    justify-content: space-between;align-items: center; width: 100%;">
+    <span>
+        [Máu: <a style="color:red; font-weight: bold;">${baseHP}</a>]
+    </span>
+    <span style="display: flex; gap: 5px;"> 
         <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
             ${typeInfo}
         </span>
     </span>
+    </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${skillInfo.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
-    <span>Gây <a style="color: red; font-weight: bold">${skillInfo.POWER.STR} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+    <span>Gây <a style="color: red; font-weight: bold">${baseDame} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
 
     let descInfo = "";
@@ -10131,9 +10507,12 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     }
 
     // Gán nội dung vào phần tử HTML
+    let rageGain = calculateRageGainFromSkill(skillInfo);
+    rageGain = parseFloat(rageGain.toFixed(2));
+
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ${rageGain}][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -10776,11 +11155,9 @@ function getRandom5mon() {
     //Tính cooldown
     let agi = infoPetRandom.POWER.AGI;
     let minC = 0;
-    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
+    let maxC = 20;
 
-    let scaleC = agi < 100
-        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
-        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
@@ -11043,7 +11420,7 @@ function setupPopupEventsExchangePage(itemList) {
             // Cập nhật thông tin trong popup
             descTextItem += `
             <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
-                <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
+                <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
                     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ??</span>
                     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ??</span>
                     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ??</span>
@@ -11056,11 +11433,15 @@ function setupPopupEventsExchangePage(itemList) {
             // Cập nhật thông tin trong popup
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
-            justify-content: center;align-items: center;">
-            Thuộc tính: 
+            justify-content: space-between;align-items: center; width: 100%;">
+            <span>
+                [Máu: <a style="color:red; font-weight: bold;">???</a>]
+            </span>
+            <span style="display: flex; gap: 5px;">
                 <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
                     ${typeInfo}
                 </span>
+            </span>
             </span>
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
             <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
@@ -11073,7 +11454,19 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsSkill[effect]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                        descInfo += dynamicDescription(item)
+                        let rawDescription = dynamicDescription(item);
+                        
+                        // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                        let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                        // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                        hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                        // Thay thế "mon" bằng "5mon" nếu có
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        // Bây giờ hiddenDescription đã được cập nhật với các thay thế
+                        descInfo += hiddenDescription
                     }
                 });
             } else {
@@ -11081,7 +11474,19 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsSkill[effect]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                        descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item)}</span>`;
+                        let rawDescription = dynamicDescription(item);
+                        // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                        let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                        // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                        hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                        // Thay thế "mon" bằng "5mon" nếu có
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        // Bây giờ hiddenDescription đã được cập nhật với các thay thế
+
+                        descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${hiddenDescription}</span>`;
                         countDescInfo += 1;
                     }
                 });
@@ -11094,7 +11499,11 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsInternal[internal]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                        internalInfo += dynamicDescription(item)
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+                        internalInfo += hiddenDescription
                     }
                 });
             } else {
@@ -11102,22 +11511,24 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsInternal[internal]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                        internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(item)}</span>`;
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${hiddenDescription}</span>`;
                         countInternalInfo += 1;
                     }
                 });
             }
 
             //Chí mạng info
-            let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
-            let critInfo = ""
-            if (critPercent > 0) {
-                critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???</span>]`;
-            }
+            let critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???</span>]`;
+
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
-                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng chủ động][Liên kích: ???]</span>
+                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ???][Liên kích: ???]</span>
     <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
     <span>${critInfo.trim()}</span>`;
             } else {
@@ -11140,7 +11551,12 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsSellUp[sellup]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                        sellUpInfo += dynamicDescription(item)
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        sellUpInfo += hiddenDescription
                     }
                 });
             } else {
@@ -11148,7 +11564,12 @@ function setupPopupEventsExchangePage(itemList) {
                     if (effectsSellUp[sellup]) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                        sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(item)}</span>`;
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${hiddenDescription}</span>`;
                         countSellUpInfo += 1;
                     }
                 });
@@ -11283,11 +11704,9 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
+    let maxC = 20;
 
-    let scaleC = agi < 100
-        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
-        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
@@ -11955,7 +12374,7 @@ document.getElementById("toggleMenu").addEventListener("click", () => {
     if (document.getElementById("menuButtons1").style.display === "flex") {
         document.getElementById("menuButtons1").style.display = "none";
         document.getElementById("menuButtons2").style.display = "none";
-        document.getElementById("toggleMenu").textContent = "Mở rộng";
+        document.getElementById("toggleMenu").textContent = "Tính năng";
     } else {
         document.getElementById("menuButtons1").style.display = "flex";
         document.getElementById("menuButtons2").style.display = "flex";
@@ -12072,6 +12491,14 @@ function movePlayer(timestamp) {
         startY = playerY;
     }
 
+    if (meet5Mon) {
+        // Ngắt animation ngay nếu đã gặp
+        moveStartTime = null;
+        animationId = null;
+        movedDistance = 0;
+        return;
+    }
+
     let luckUp = 0
     if (staminaUser <= 0) {
         luckUp = 0.2;
@@ -12141,14 +12568,14 @@ function movePlayer(timestamp) {
     }
 
     // Tiếp tục animation nếu chưa đến đích
-    if (progress < 1 || meet5Mon) {
+    if (progress < 1 && !meet5Mon) {
         animationId = requestAnimationFrame(movePlayer);
     } else {
         moveStartTime = null;
         animationId = null;
         playerX = targetX;
         playerY = targetY;
-        movedDistance = 0; // Reset luôn khi đến đích
+        movedDistance = 0;
         updateView();
     }
 }
@@ -12242,11 +12669,9 @@ function catch5Mon() {
 
     //Tính cooldown
     let minC = 0;
-    let maxC = 5; // giảm xuống từ 50 → 5 giây (vì bạn muốn AGI=10 là 5 giây)
+    let maxC = 20;
 
-    let scaleC = agi < 100
-        ? 10 + (agi / 100) * 90  // scale từ 10 đến 100 khi agi = 0 → 100
-        : Math.max(5, 100 - Math.floor((agi - 100) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
     let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
 
@@ -12303,7 +12728,7 @@ function catch5Mon() {
     // Cập nhật thông tin trong popup
     descTextItem += `
 <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
-<div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px;">
+<div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ??</span>
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ??</span>
     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ??</span>
@@ -12316,11 +12741,15 @@ function catch5Mon() {
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
-    justify-content: center;align-items: center;">
-    Thuộc tính: 
+    justify-content: space-between;align-items: center; width: 100%;">
+    <span>
+        [Máu: <a style="color:red; font-weight: bold;">???</a>]
+    </span>
+    <span style="display: flex; gap: 5px;">
         <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
             ${typeInfo}
         </span>
+    </span>
     </span>
     <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
     <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
@@ -12336,9 +12765,16 @@ function catch5Mon() {
 
                 let rawDescription = dynamicDescription(is5MonMeet);
 
-                // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
-                let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                // Thay thế "mon" bằng "5mon" nếu có
                 hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                // Bây giờ hiddenDescription đã được cập nhật với các thay thế
 
                 descInfo += hiddenDescription
             }
@@ -12349,9 +12785,17 @@ function catch5Mon() {
                 // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                 const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
                 let rawDescription = dynamicDescription(is5MonMeet);
-                // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
-                let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                // Thay thế "mon" bằng "5mon" nếu có
                 hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                // Bây giờ hiddenDescription đã được cập nhật với các thay thế
 
                 descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${hiddenDescription}</span>`;
                 countDescInfo += 1;
@@ -12402,7 +12846,7 @@ function catch5Mon() {
     // Gán nội dung vào phần tử HTML
     if (descInfo !== "") {
         descTextItem +=
-            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][Liên kích: ???]</span>
+            `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ???][Liên kích: ???]</span>
 <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
 <span>${critInfo.trim()}</span>`;
     } else {
@@ -12558,6 +13002,7 @@ let isAutoHunter = false; //Trạng thái đang auto
 let timeMoveAuto = 2000;
 let autoInterval;
 
+//Tự động săn 5Mon
 function toggleAutoMovement() {
     if (staminaUser <= 0) {
         messageOpen('Hết thể lực')
@@ -12752,7 +13197,7 @@ function upStamina() {
     }
 }
 
-// ---- Pet random xuất hiện ---- //
+// ---- tạo ra 5Mon random xuất hiện ---- //
 let count5MonSpawn = 0;
 function spawnRandomPets() {
     const mapWidth = map.offsetWidth;
@@ -12782,6 +13227,7 @@ function spawnRandomPets() {
 function click5MonMeet(pet) {
     pet.classList.add("pet-catching");
     count5MonSpawn -= 1
+    meet5Mon = true;
     catch5Mon();
     setTimeout(() => {
         pet.remove();
@@ -12829,8 +13275,8 @@ function scalePower5Mon(INT) {
     dame = Math.round(valuePower * 0.48)
     heal = Math.round(valuePower * 0.45)
     shield = Math.round(valuePower * 0.43)
-    burn = Math.round(valuePower * 0.09)
-    poison = Math.round(valuePower * 0.08)
+    burn = Math.round(valuePower * 0.12)
+    poison = Math.round(valuePower * 0.1)
 
     return { dame, heal, shield, burn, poison }
 }
@@ -13019,3 +13465,4 @@ window.hideOrShowInfoGoldDiamond = hideOrShowInfoGoldDiamond;
 window.openPopupSettingMain = openPopupSettingMain;
 window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
+window.checkGiftQuest = checkGiftQuest;
