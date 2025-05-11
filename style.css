@@ -1,4 +1,3 @@
-
 html,
 body {
     margin: 0;
@@ -35,7 +34,7 @@ body {
     border-radius: 10px;
     /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); */
     width: 100%;
-/*     margin: auto; */
+    /*     margin: auto; */
     padding: 10px;
 
     /* position: absolute;
@@ -145,7 +144,7 @@ body {
 .baseAttackEffect::before {
     content: "\f255";
     font-weight: bold;
-    font-size: 20px;
+    font-size: 14px;
     font-family: 'Font Awesome 6 Free';
     color: white;
     /* Màu chữ chính */
@@ -427,7 +426,7 @@ body {
     height: 100%;
 }
 
-.speedDownEffect {
+.slowEffect {
     z-index: 10;
     /* Đảm bảo phần tử này ở trên các phần tử khác */
     position: relative;
@@ -436,7 +435,7 @@ body {
     height: 50px; */
 }
 
-.speedDownEffect::before {
+.slowEffect::before {
     content: "\f2dc";
     /* Mã Unicode của biểu tượng X */
     font-weight: bold;
@@ -983,6 +982,7 @@ body {
     height: 100%;
     /* Để chữ căn giữa cả về chiều ngang và chiều dọc */
 }
+
 
 
 .skill.delete {
@@ -2063,19 +2063,20 @@ body {
     transition: background-color 0.3s ease;
     border: 2px solid #ffffff40;
     box-shadow: 1px 1px 1px 1px #961862;
-  }
+}
 
-  #autoButton.active {
+#autoButton.active {
     background-color: #f44336;
-  }
+}
 
-  #autoButton:hover {
+#autoButton:hover {
     transform: scale(1.05);
-  }
+}
 
-  /* Style for the modal */
-  .popup-modal {
-    display: none; /* Ẩn mặc định */
+/* Style for the modal */
+.popup-modal {
+    display: none;
+    /* Ẩn mặc định */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -2083,11 +2084,12 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4); /* Nền mờ */
-  }
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Nền mờ */
+}
 
-  /* Modal content */
-  .popup-content {
+/* Modal content */
+.popup-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -2095,50 +2097,53 @@ body {
     width: 80%;
     max-width: 300px;
     text-align: center;
-  }
+}
 
-  /* Close button */
-  .close {
+/* Close button */
+.close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
+}
 
-  .close:hover,
-  .close:focus {
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-  #menuButtons {
+}
+
+#menuButtons {
     transition: opacity 0.3s ease;
     opacity: 0;
-  }
-  #menuButtons.show {
+}
+
+#menuButtons.show {
     opacity: 1;
-  }
+}
 
 .wildPet {
-      position: absolute;
-      width: 32px;
-      height: 32px;
-      z-index: 1;
-      transition: top 1s linear, left 1s linear;
-      cursor: pointer;
-    }
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    z-index: 1;
+    transition: top 1s linear, left 1s linear;
+    cursor: pointer;
+}
 
-    .pet-catching {
-      animation: catchEffect 0.8s ease-out forwards;
-    }
+.pet-catching {
+    animation: catchEffect 0.8s ease-out forwards;
+}
 
-    @keyframes catchEffect {
-      0% {
+@keyframes catchEffect {
+    0% {
         transform: scale(1) rotate(0deg);
         opacity: 1;
-      }
-      100% {
+    }
+
+    100% {
         transform: scale(0) rotate(720deg);
         opacity: 0;
-      }
     }
+}
