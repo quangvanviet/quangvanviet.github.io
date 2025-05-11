@@ -929,22 +929,23 @@ function baseAttack(skillKey, isComp) {
         if (skillsSpeed[skillKey] > 0) { //Nếu tăng tốc
             hasteMultiplier = 2;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
+            console.log("??skill", skill)
             if (skillChild) {
-                skillChild.style.setProperty('background', 'linear-gradient(to bottom, rgb(255, 4, 4), rgba(255, 4, 4, 0.22), rgrgba(255, 4, 4, 0.22)rgba(255, 4, 4, 0.22), rgba(255, 4, 4, 0.22), rgba(255, 4, 4, 0.22), rgb(255, 4, 4))', 'important');
+                skillChild.style.background = 'linear-gradient(to bottom, #ff0404, #ff040438, #ff040438, #ff040438, #ff040438, #ff040438, #ff0404)'
                 console.log("??")
             }
         } else if (skillsSpeed[skillKey] < 0) { //Nếu slow
             hasteMultiplier = 0.5;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
             if (skillChild) {
-                skillChild.style.setProperty('background', 'linear-gradient(to bottom, rgb(4, 255, 251), rgba(4, 255, 251, 0.22), rgba(4, 238, 255, 0.22), rgba(4, 247, 255, 0.22), rgba(4, 247, 255, 0.22), rgba(4, 255, 251, 0.22), rgb(4, 247, 255))', 'important');
+                skillChild.style.background = 'linear-gradient(to bottom, #04b7ff, #04a0ff38, #04a0ff38, #04a0ff38, #04a0ff38, #04a0ff38, #04b7ff)';
             }
 
-        } else { //Không gì
+        } else if (skillsSpeed[skillKey] === 0) { //Không gì
             hasteMultiplier = 1;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
             if (skillChild) {
-                skillChild.style.setProperty('background', 'linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04)', 'important');
+                skillChild.style.background = 'linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04)';
             }
         }
 
@@ -2737,7 +2738,7 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
 
     // Lặp qua đối tượng skillsSpeed để chọn các skill (không cần kiểm tra đã tăng tốc hay chưa)
     for (let skill in skillsSpeed) {
-        if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0) {
+        if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0 && skill !== skillKey) {
             hasteSkills.push(skill);
             console.log("Skill có thể tăng tốc:", skill);
         }
@@ -2883,7 +2884,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
     for (let skill in skillsSpeed) {
         if (typeGameConquest.skillBattle[skill]?.ID && skillsDelete[skill] === 0) {
             slowSkills.push(skill);
-            console.log("Skill có thể tăng tốc:", skill);
+            console.log("Skill có thể làm chậm:", skill);
         }
     }
 
