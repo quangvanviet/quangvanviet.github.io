@@ -984,7 +984,7 @@ function baseAttack(skillKey, isComp) {
                         setTimeout(() => {
                             const baseScale = 1;
                             const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                            let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
+                            let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
                             let baseDame = Math.round(valuePower);
 
@@ -1063,7 +1063,7 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
+                                let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
                                 let baseDame = Math.round(valuePower);
 
@@ -1124,7 +1124,7 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
+                                let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
                                 let baseDame = Math.round(valuePower);
 
@@ -2519,8 +2519,8 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
 
             // Tính toán độ di chuyển tới mục tiêu
-            const targetX = (targetRect.left + targetRect.width / 2) - attackEffect.style.width / 2;
-            const targetY = targetRect.top + targetRect.height / 2 - attackEffect.style.height / 2;
+            const targetX = (targetRect.left + targetRect.width / 2) - attackEffect.style.width;
+            const targetY = targetRect.top + targetRect.height / 2 - attackEffect.style.height;
 
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
@@ -9968,7 +9968,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         </div>`
 
             const scaleSTR = 1 * Math.log10(item.POWER.STR);
-            let valuePowerSTR = 0.12 * item.POWER.STR / scaleSTR + 5
+            let valuePowerSTR = 0.12 * item.POWER.STR / scaleSTR + 1
             let baseDame = Math.round(valuePowerSTR);
             
             const scaleHP = 1 * Math.log10(item.POWER.HP);
@@ -10448,7 +10448,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     </div>`
 
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
-    let valuePowerSTR = 0.12 * skillInfo.POWER.STR / scaleSTR + 5
+    let valuePowerSTR = 0.12 * skillInfo.POWER.STR / scaleSTR + 1
     let baseDame = Math.round(valuePowerSTR);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
