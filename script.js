@@ -907,7 +907,12 @@ function baseAttack(skillKey, isComp) {
     function updateCooldown() {
         // Nếu game đã kết thúc, không làm gì nữa
         if (endGame) return;
-
+        
+        if (pauseBattle) {
+            setTimeout(updateCooldown, 100); // Kiểm tra lại sau 100ms
+            return;
+        }
+        
         if (skillsSleep[skillKey] > 0) {
             // Đang bị sleep, không cập nhật elapsedTime, giữ nguyên startTime
             setTimeout(updateCooldown, 100); // Kiểm tra lại sau 100ms
@@ -6598,7 +6603,7 @@ function resetHp5Mon() {
                 let valuePower = 1.62 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 83.8;
 
                 let baseHP = Math.round(valuePower);
-
+                
                 maxHpAll5Mon[skill] = baseHP || 0;
             }
         }
@@ -9963,7 +9968,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         </div>`
 
             let baseDame = Math.round((1 + item.POWER.STR / Math.log10(item.POWER.STR)) * 0.18);
-            let baseHP = Math.round((1.62 * item.POWER.HP / Math.log10(item.POWER.HP)) + 83.8);
+            let baseHP = Math.round((1.62 * item.POWER.HP / Math.log10(item.POWER.HP) / (1 * Math.log10(item.POWER.HP))) + 83.8);
 
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -10438,7 +10443,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     </div>`
 
     let baseDame = Math.round((1 + skillInfo.POWER.STR / Math.log10(skillInfo.POWER.STR)) * 0.18);
-    let baseHP = Math.round((1.62 * skillInfo.POWER.HP / Math.log10(skillInfo.POWER.HP)) + 83.8);
+    let baseHP = Math.round((1.62 * skillInfo.POWER.HP / Math.log10(skillInfo.POWER.HP) / (1 * Math.log10(skillInfo.POWER.HP))) + 83.8);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
