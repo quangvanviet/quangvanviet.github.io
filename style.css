@@ -137,7 +137,7 @@ body {
 .baseAttackEffect {
     z-index: 10;
     /* Đảm bảo phần tử này ở trên các phần tử khác */
-    position: relative;
+    position: absolute;
     /* Cần thiết để định vị ::before */
 }
 
