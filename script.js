@@ -12223,8 +12223,8 @@ function settingMap() {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "75vh";
-        screenMain.style.width = "98%";
+        screenMain.style.height = "80vh";
+        screenMain.style.width = "99%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -12239,7 +12239,7 @@ function settingMap() {
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
 
-        let scale = Math.min(scaleW, scaleH) * 0.95; // Tỷ lệ tối đa là 90%
+        let scale = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
         scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ cho gameScreen
@@ -12306,9 +12306,9 @@ function settingScreenBattle() {
         // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
         battleScreen.style.transform = `scale(${scale2})`;
 
-        // Tính toán marginLeft và marginTop để căn giữa
-        const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
-        battleScreen.style.marginLeft = `${marginLeft2}px`;
+        // // Tính toán marginLeft và marginTop để căn giữa
+        // const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
+        // battleScreen.style.marginLeft = `${marginLeft2}px`;
 
     } else {
         // Cần áp dụng tương tự cho battleScreen nếu cần
@@ -12322,8 +12322,8 @@ window.onload = function () {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "90vh";
-        screenMain.style.width = "98%";
+        screenMain.style.height = "80vh";
+        screenMain.style.width = "99%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -12338,7 +12338,7 @@ window.onload = function () {
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
 
-        let scale = Math.min(scaleW, scaleH) * 0.95; // Tỷ lệ tối đa là 90%
+        let scale = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
         scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ cho gameScreen
