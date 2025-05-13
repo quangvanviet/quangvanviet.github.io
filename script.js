@@ -10448,12 +10448,12 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     </div>`
 
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
-    let valuePower = 1 + skillInfo.POWER.STR / scaleSTR
-    let baseDame = Math.round(valuePower * 0.18);
+    let valuePowerSTR = 1 + skillInfo.POWER.STR / scaleSTR
+    let baseDame = Math.round(valuePowerSTR * 0.18);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
-    let valuePower = 1.62 * skillInfo.POWER.HP / scaleHP + 83.8;
-    let baseHP = Math.round(valuePower);
+    let valuePowerHP = 1.62 * skillInfo.POWER.HP / scaleHP + 83.8;
+    let baseHP = Math.round(valuePowerHP);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
