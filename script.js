@@ -934,27 +934,27 @@ function baseAttack(skillKey, isComp) {
         if (skillsSpeed[skillKey] > 0) { //Nếu tăng tốc
             hasteMultiplier = 2;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
+            skill.style.boxShadow = '0 0 10px 3px rgba(255, 0, 0, 0.75)';
+            skill.style.animation = 'speedGlow 1.5s infinite alternate';
             if (skillChild) {
                 skillChild.style.background = 'linear-gradient(to bottom, #ff0404, #ff040438, #ff040438, #ff040438, #ff040438, #ff040438, #ff0404)'
-                skillChild.style.boxShadow = '0 0 10px 3px rgba(255, 0, 0, 0.75)';
-                skillChild.style.animation = 'speedGlow 1.5s infinite alternate';
             }
         } else if (skillsSpeed[skillKey] < 0) { //Nếu slow
             hasteMultiplier = 0.5;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
+            skill.style.boxShadow = '0 0 10px 3px rgba(0, 233, 255, 0.75)';
+            skill.style.animation = 'slowGlow 1.5s infinite alternate';
             if (skillChild) {
                 skillChild.style.background = 'linear-gradient(to bottom, #04b7ff, #04a0ff38, #04a0ff38, #04a0ff38, #04a0ff38, #04a0ff38, #04b7ff)';
-                skillChild.style.boxShadow = '0 0 10px 3px rgba(0, 233, 255, 0.75)';
-                skillChild.style.animation = 'slowGlow 1.5s infinite alternate';
             }
 
         } else if (skillsSpeed[skillKey] === 0) { //Không gì
             hasteMultiplier = 1;
             const skillChild = skill.querySelector('.skillCooldownOverlay');
+            skill.style.boxShadow = '';
+            skill.style.animation = '';
             if (skillChild) {
                 skillChild.style.background = 'linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04)';
-                skillChild.style.boxShadow = '';
-                skillChild.style.animation = '';
             }
         }
 
