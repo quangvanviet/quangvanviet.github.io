@@ -12223,7 +12223,7 @@ function settingMap() {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "90vh";
+        screenMain.style.height = "75vh";
         screenMain.style.width = "98%";
 
         const screenWidth = window.innerWidth;
