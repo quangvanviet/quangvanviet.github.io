@@ -2519,14 +2519,14 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
 
             // Tính toán độ di chuyển tới mục tiêu
-            const targetX = targetRect.left + targetRect.width / 2;
-            const targetY = targetRect.top + targetRect.height / 2;
+            const targetX = (targetRect.left + targetRect.width / 2) - attackEffect.style.width / 2;
+            const targetY = targetRect.top + targetRect.height / 2 - attackEffect.style.height / 2;
 
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
                 const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2) - attackEffect.style.width / 2;
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2) - attackEffect.style.height / 2;
+                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
+                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2536,10 +2536,10 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 if (skillChild) {
                     skillChild.classList.add('sleep');
                 }
-                // Xóa phần tử sau khi hiệu ứng kết thúc
-                // setTimeout(() => {
-                //     attackEffect.remove();
-                // }, duration);
+                Xóa phần tử sau khi hiệu ứng kết thúc
+                setTimeout(() => {
+                    attackEffect.remove();
+                }, duration);
             };
 
             // Bắt đầu hiệu ứng di chuyển
