@@ -6752,7 +6752,9 @@ function endBattle(whoWin, pointsThisRound) {
 
     //Tìm nhân vật để tăng chỉ số mỗi round cho người chơi user
     upSTTRoundWithCharacter();
-
+    
+    typeGameConquest.starUser += infoStartGame.roundGame * 2;
+    
     //Tăng round
     infoStartGame.roundGame += 1 //Tăng round sau khi endBattle
     //Reset Battle time
@@ -8828,7 +8830,6 @@ function showResultScreen(isWin) {
 
     typeGameConquest.reRoll = 0;
     typeGameConquest.reRollPrice = 0;
-    typeGameConquest.starUser += infoStartGame.roundGame * 2;
 
     if (infoStartGame.roundGame <= 1) {
         typeGameConquest.price5Mon += 1;
