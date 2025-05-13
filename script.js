@@ -691,6 +691,67 @@ function loadDataForUser() {
                             // Gán lại POWER.SCALE theo allPets
                             if (!item.POWER) item.POWER = {};
                             item.POWER.SCALE = matchedPet.POWER.SCALE;
+
+                            let powerINT = scalePower5Mon(item.POWER.INT);
+
+                            if (item.EFFECT.includes("Attacking")) {
+                                item.DAME[0] = Math.round(powerINT.dame * item.POWER.SCALE)
+                            } else {
+                                item.DAME[0] = 0
+                            }
+
+                            if (item.EFFECT.includes("Healing")) {
+                                item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
+                            } else {
+                                item.HEAL[0] = 0
+                            } 
+
+                            if (item.EFFECT.includes("Shield")) {
+                                item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
+                            }else {
+                                item.SHIELD[0] = 0
+                            }
+
+                            if (item.EFFECT.includes("Burn")) {
+                                item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
+                            }else {
+                                item.BURN[0] = 0
+                            }
+
+                            if (item.EFFECT.includes("Poison")) {
+                                item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
+                            }else {
+                                item.POISON[0] = 0
+                            }
+                            
+                            //Tính cooldown
+                            let agi = item.POWER.AGI;
+                            let minC = 0;
+                            let maxC = 20;
+
+                            let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+
+                            let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
+
+                            //tính crit
+                            let luk = item.POWER.LUK;
+                            let maxCrit = 60;
+                            let scaleCrit = 475; // tùy chỉnh
+                            let valueCrit = maxCrit * luk / (luk + scaleCrit);
+                            valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+                            valueCrit = Math.round(valueCrit * item.POWER.SCALE);
+
+                            //tính def
+                            let def = item.POWER.DEF;
+                            let maxDef = 90;
+                            let scaleDef = 475; // tùy chỉnh
+                            let valueDef = maxDef * def / (def + scaleDef);
+                            valueDef = Math.min(maxDef, Math.max(0, valueDef));
+                            valueDef = Math.round(valueDef * item.POWER.SCALE);
+
+                            item.DEF[0] = valueDef
+                            item.CRIT[0] = valueCrit
+                            item.COOLDOWN[0] = valueC
                         }
                     });
                 }
@@ -703,6 +764,8 @@ function loadDataForUser() {
                 typeGameConquest.battleUserPetRound,
                 userPet
             ]);
+
+
 
             userDataOld = {
                 passwordUser: password,
