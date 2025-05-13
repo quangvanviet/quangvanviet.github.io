@@ -2522,9 +2522,13 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
             attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
 
+            const effectRect = attackEffect.getBoundingClientRect();
+            const effectWidth = effectRect.width;
+            const effectHeight = effectRect.height;
+            
             // Tính toán độ di chuyển tới mục tiêu
-            const targetX = (targetRect.left + targetRect.width / 2) - attackEffect.style.width;
-            const targetY = targetRect.top + targetRect.height / 2 - attackEffect.style.height;
+            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
+            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
