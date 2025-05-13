@@ -12286,7 +12286,7 @@ function settingMap() {
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
 
-        let scaleGameScreen = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
+        scaleGameScreen = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
         scaleGameScreen = Math.min(scaleGameScreen, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ cho gameScreen
