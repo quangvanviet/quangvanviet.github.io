@@ -907,12 +907,7 @@ function baseAttack(skillKey, isComp) {
     function updateCooldown() {
         // Nếu game đã kết thúc, không làm gì nữa
         if (endGame) return;
-        
-        if (pauseBattle) {
-            setTimeout(updateCooldown, 100); // Kiểm tra lại sau 100ms
-            return;
-        }
-        
+
         if (skillsSleep[skillKey] > 0) {
             // Đang bị sleep, không cập nhật elapsedTime, giữ nguyên startTime
             setTimeout(updateCooldown, 100); // Kiểm tra lại sau 100ms
@@ -1238,8 +1233,6 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(targetAttack);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (teamAorB === "TeamA") {
@@ -1256,23 +1249,24 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Tọa độ tương đối của skill và target so với battleScreen
-    const skillX = skill.offsetLeft + skill.offsetWidth / 2;
-    const skillY = skill.offsetTop + skill.offsetHeight / 2;
-    
-    const targetX = target.offsetLeft + target.offsetWidth / 2;
-    const targetY = target.offsetTop + target.offsetHeight / 2;
-    
-    // Vị trí ban đầu
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
+
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
     attackEffect.style.left = `${skillX}px`;
     attackEffect.style.top = `${skillY}px`;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
+
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - skillX;
-        const deltaY = targetY - skillY;
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
         
         // Tính góc giữa 2 điểm, đổi từ radian sang độ
         const angleInRadians = Math.atan2(deltaY, deltaX);
@@ -1303,6 +1297,27 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     // Bắt đầu hiệu ứng di chuyển
     setTimeout(moveEffect, 100); // Chờ một chút sau khi hiệu ứng skill bắt đầu
 }
+
+//Hàm tính tọa độ mục tiêu mũi tên/nắm đấm
+const getCenterRelativeToContainer = (el, container) => {
+    let offsetX = 0;
+    let offsetY = 0;
+    let current = el;
+
+    // Cộng dồn tất cả offset từ el đến container
+    while (current && current !== container) {
+        offsetX += current.offsetLeft;
+        offsetY += current.offsetTop;
+        current = current.offsetParent;
+    }
+
+    return {
+        x: offsetX + el.offsetWidth / 2,
+        y: offsetY + el.offsetHeight / 2
+    };
+};
+
+
 
 //Hàm update HpBar5Mon và rageBar5Mon
 function updateHpAndRageBar5Mon() {
@@ -1357,8 +1372,6 @@ function skillAttacking(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
@@ -1373,23 +1386,24 @@ function skillAttacking(skillId, dameSkill, isCrit) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         if (imgTeam === "TeamB") {
@@ -1439,8 +1453,6 @@ function skillHealing(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamA") {
@@ -1452,23 +1464,24 @@ function skillHealing(skillId, dameSkill, isCrit) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1513,8 +1526,6 @@ function skillShield(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamA") {
@@ -1526,23 +1537,24 @@ function skillShield(skillId, dameSkill, isCrit) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1593,8 +1605,6 @@ function skillBurn(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
@@ -1606,23 +1616,24 @@ function skillBurn(skillId, dameSkill, isCrit) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1676,8 +1687,6 @@ function skillPoison(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
@@ -1689,23 +1698,24 @@ function skillPoison(skillId, dameSkill, isCrit) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1762,8 +1772,6 @@ function skillFreeze(skillId, timeFreeze, isComp) {
     // Tạo hiệu ứng mũi tên/nắm đấm
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
-    const targetRect = target.getBoundingClientRect();  // Lấy vị trí của đối tượng
-
     // Tạo mũi tên/nắm đấm
     const attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
@@ -1775,23 +1783,24 @@ function skillFreeze(skillId, timeFreeze, isComp) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
+    // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+    const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+    const { x: targetX, y: targetY } = getCenterRelativeToContainer(target, battleScreen);
 
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
+    // Đặt vị trí ban đầu của mũi tên
     attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const effectRect = attackEffect.getBoundingClientRect();
+    const effectWidth = effectRect.width;
+    const effectHeight = effectRect.height;
 
-    // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+    // Tạo hiệu ứng bay
     const moveEffect = () => {
-        const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const duration = 500;
+        const deltaX = targetX - skillX - effectWidth/2;
+        const deltaY = targetY - skillY - effectHeight/2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2509,7 +2518,6 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
     selectedSkills.forEach(skillKeyToSleep => {
         const targetSkill = document.getElementById(skillKeyToSleep); // Lấy id tương ứng của skill đối phương
         if (targetSkill) {
-            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill bị Sleep
 
             // Tạo mũi tên/nắm đấm
             const attackEffect = document.createElement('div');
@@ -2522,27 +2530,24 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             const battleScreen = document.getElementById('battleScreen');
             battleScreen.appendChild(attackEffect);
 
-            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-            const skillRect = skill.getBoundingClientRect();
+            // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+            const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+            const { x: targetX, y: targetY } = getCenterRelativeToContainer(targetSkill, battleScreen);
 
-            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            // Đặt vị trí ban đầu của mũi tên
             attackEffect.style.position = 'absolute';
-            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+            attackEffect.style.left = `${skillX}px`;
+            attackEffect.style.top = `${skillY}px`;
 
             const effectRect = attackEffect.getBoundingClientRect();
             const effectWidth = effectRect.width;
             const effectHeight = effectRect.height;
-            
-            // Tính toán độ di chuyển tới mục tiêu
-            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
-            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
-            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            // Tạo hiệu ứng bay
             const moveEffect = () => {
-                const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+                const duration = 500;
+                const deltaX = targetX - skillX - effectWidth/2;
+                const deltaY = targetY - skillY - effectHeight/2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2602,11 +2607,11 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 sleepTimerElement.textContent = Math.ceil(currentSleep / 1000);
                 let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA
                 if (skillsSpeed[skillKeyToSleep] > 0) {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500 * 2);
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 * 2);
                 } else if (skillsSpeed[skillKeyToSleep] < 0) {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500 / 2);
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 / 2);
                 } else {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500);
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200);
                 }
                 
             } else {
@@ -2614,7 +2619,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 targetSkill.sleepIntervalId = null;
                 sleepTimerElement.remove();
             }
-        }, 500);
+        }, 200);
 
         }
     });
@@ -2685,7 +2690,6 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
     selectedSkills.forEach(skillKeyToDelete => {
         const targetSkill = document.getElementById(skillKeyToDelete); // Lấy id tương ứng của skill đối phương
         if (targetSkill) {
-            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill bị delete
 
             // Tạo mũi tên/nắm đấm
             const attackEffect = document.createElement('div');
@@ -2698,23 +2702,24 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
             const battleScreen = document.getElementById('battleScreen');
             battleScreen.appendChild(attackEffect);
 
-            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-            const skillRect = skill.getBoundingClientRect();
+            // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+            const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+            const { x: targetX, y: targetY } = getCenterRelativeToContainer(targetSkill, battleScreen);
 
-            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            // Đặt vị trí ban đầu của mũi tên
             attackEffect.style.position = 'absolute';
-            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+            attackEffect.style.left = `${skillX}px`;
+            attackEffect.style.top = `${skillY}px`;
 
-            // Tính toán độ di chuyển tới mục tiêu
-            const targetX = targetRect.left + targetRect.width / 2;
-            const targetY = targetRect.top + targetRect.height / 2;
+            const effectRect = attackEffect.getBoundingClientRect();
+            const effectWidth = effectRect.width;
+            const effectHeight = effectRect.height;
 
-            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            // Tạo hiệu ứng bay
             const moveEffect = () => {
-                const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+                const duration = 500;
+                const deltaX = targetX - skillX - effectWidth/2;
+                const deltaY = targetY - skillY - effectHeight/2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2790,7 +2795,6 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
     selectedSkills.forEach(skillKeyToHaste => {
         const targetSkill = document.getElementById(skillKeyToHaste); // Lấy id tương ứng của skill đối phương
         if (targetSkill) {
-            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill được tăng tốc haste
 
             // Tạo mũi tên/nắm đấm
             const attackEffect = document.createElement('div');
@@ -2803,27 +2807,24 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
             const battleScreen = document.getElementById('battleScreen');
             battleScreen.appendChild(attackEffect);
 
-            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-            const skillRect = skill.getBoundingClientRect();
+            // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+            const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+            const { x: targetX, y: targetY } = getCenterRelativeToContainer(targetSkill, battleScreen);
 
-            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            // Đặt vị trí ban đầu của mũi tên
             attackEffect.style.position = 'absolute';
-            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+            attackEffect.style.left = `${skillX}px`;
+            attackEffect.style.top = `${skillY}px`;
 
             const effectRect = attackEffect.getBoundingClientRect();
             const effectWidth = effectRect.width;
             const effectHeight = effectRect.height;
-            
-            // Tính toán độ di chuyển tới mục tiêu
-            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
-            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
-            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            // Tạo hiệu ứng bay
             const moveEffect = () => {
-                const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+                const duration = 500;
+                const deltaX = targetX - skillX - effectWidth/2;
+                const deltaY = targetY - skillY - effectHeight/2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2939,41 +2940,36 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
     selectedSkills.forEach(skillKeyToSlow => {
         const targetSkill = document.getElementById(skillKeyToSlow); // Lấy id tương ứng của skill đối phương
         if (targetSkill) {
-            const targetRect = targetSkill.getBoundingClientRect(); // Lấy vị trí của skill được tăng tốc slow
 
             // Tạo mũi tên/nắm đấm
             const attackEffect = document.createElement('div');
-            
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             } else {
                 attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             }
-            
+
             const battleScreen = document.getElementById('battleScreen');
             battleScreen.appendChild(attackEffect);
 
-            // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
-            const skillRect = skill.getBoundingClientRect();
+            // Tính tọa độ trung tâm skill và target tương đối với battleScreen
+            const { x: skillX, y: skillY } = getCenterRelativeToContainer(skill, battleScreen);
+            const { x: targetX, y: targetY } = getCenterRelativeToContainer(targetSkill, battleScreen);
 
-            // Đặt vị trí ban đầu của mũi tên/nắm đấm
+            // Đặt vị trí ban đầu của mũi tên
             attackEffect.style.position = 'absolute';
-            attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-            attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+            attackEffect.style.left = `${skillX}px`;
+            attackEffect.style.top = `${skillY}px`;
 
             const effectRect = attackEffect.getBoundingClientRect();
             const effectWidth = effectRect.width;
             const effectHeight = effectRect.height;
-            
-            // Tính toán độ di chuyển tới mục tiêu
-            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
-            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
-            // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
+            // Tạo hiệu ứng bay
             const moveEffect = () => {
-                const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+                const duration = 500;
+                const deltaX = targetX - skillX - effectWidth/2;
+                const deltaY = targetY - skillY - effectHeight/2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -6754,7 +6750,7 @@ function endBattle(whoWin, pointsThisRound) {
     upSTTRoundWithCharacter();
     
     typeGameConquest.starUser += infoStartGame.roundGame * 2;
-    
+
     //Tăng round
     infoStartGame.roundGame += 1 //Tăng round sau khi endBattle
     //Reset Battle time
