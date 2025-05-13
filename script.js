@@ -12259,16 +12259,16 @@ function settingMap() {
     }
 
     // Cập nhật lại các thông số kích thước map và player
-    map.style.width = (viewport.offsetWidth * 2) + 'px';
-    map.style.height = (viewport.offsetWidth * 2) + 'px';
+    map.style.width = (viewport.offsetWidth * 2.5) + 'px';
+    map.style.height = (viewport.offsetWidth * 2.5) + 'px';
     viewWidth = viewport.offsetWidth;
     viewHeight = viewport.offsetHeight;
-    mapWidth = viewport.offsetWidth * 2;
-    mapHeight = viewport.offsetWidth * 2;
+    mapWidth = viewport.offsetWidth * 2.5;
+    mapHeight = viewport.offsetWidth * 2.5;
 
     // Cập nhật kích thước của player và các yếu tố khác
-    player.style.width = (mapWidth / 9) + "px";
-    player.style.height = (mapWidth / 9) + "px";
+    player.style.width = (mapWidth / 10) + "px";
+    player.style.height = (mapWidth / 10) + "px";
 
     // Cập nhật lại kích thước của các Wild Pets
     document.querySelectorAll('.wildPet').forEach(el => {
