@@ -12244,12 +12244,12 @@ function settingMap() {
 
         // Áp dụng tỷ lệ cho gameScreen
         gameScreen.style.transform = `scale(${scale})`;
-        gameScreen.style.transformOrigin = "left";
+        gameScreen.style.transformOrigin = "center";
 
-        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        gameScreen.style.marginLeft = `${marginLeft}px`;
-        const marginTop = (screenHeight - (battleHeight * scale)) / 2;
-        gameScreen.style.marginTop = `${marginTop}px`;
+        // const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        // gameScreen.style.marginLeft = `${marginLeft}px`;
+        // const marginTop = (screenHeight - (battleHeight * scale)) / 2;
+        // gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
         // Nếu không phải trên thiết bị di động, sử dụng kích thước chuẩn
