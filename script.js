@@ -1256,17 +1256,17 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     const battleScreen = document.getElementById('battleScreen');
     battleScreen.appendChild(attackEffect);
 
-    // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
-    const skillRect = skill.getBoundingClientRect();
-
-    // Đặt vị trí ban đầu của mũi tên/nắm đấm
-    attackEffect.style.position = 'absolute';
-    attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
-    attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
+    // Tọa độ tương đối của skill và target so với battleScreen
+    const skillX = skill.offsetLeft + skill.offsetWidth / 2;
+    const skillY = skill.offsetTop + skill.offsetHeight / 2;
     
-    // Tính toán độ di chuyển tới mục tiêu
-    const targetX = (targetRect.left + targetRect.width / 2)/scaleBattleScreen;
-    const targetY = (targetRect.top + targetRect.height / 2)/scaleBattleScreen;
+    const targetX = target.offsetLeft + target.offsetWidth / 2;
+    const targetY = target.offsetTop + target.offsetHeight / 2;
+    
+    // Vị trí ban đầu
+    attackEffect.style.position = 'absolute';
+    attackEffect.style.left = `${skillX}px`;
+    attackEffect.style.top = `${skillY}px`;
 
     // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
     const moveEffect = () => {
