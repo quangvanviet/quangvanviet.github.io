@@ -1263,10 +1263,10 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     attackEffect.style.position = 'absolute';
     attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
     attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
-
+    
     // Tính toán độ di chuyển tới mục tiêu
-    const targetX = targetRect.left + targetRect.width / 2;
-    const targetY = targetRect.top + targetRect.height / 2;
+    const targetX = (targetRect.left + targetRect.width / 2)/scaleBattleScreen;
+    const targetY = (targetRect.top + targetRect.height / 2)/scaleBattleScreen;
 
     // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
     const moveEffect = () => {
@@ -12260,6 +12260,7 @@ function loadMap(isMap) {
     spawnRandomPets();
 }
 
+let scaleGameScreen = 0;
 function settingMap() {
     // Ghi lại phần trăm vị trí hiện tại của player trước khi map thay đổi
     const percentX = playerX / mapWidth;
@@ -12285,16 +12286,16 @@ function settingMap() {
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
 
-        let scale = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
-        scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
+        let scaleGameScreen = Math.min(scaleW, scaleH) * 0.98; // Tỷ lệ tối đa là 90%
+        scaleGameScreen = Math.min(scaleGameScreen, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ cho gameScreen
-        gameScreen.style.transform = `scale(${scale})`;
+        gameScreen.style.transform = `scale(${scaleGameScreen})`;
         gameScreen.style.transformOrigin = "center";
 
-        // const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        // const marginLeft = (screenWidth - (battleWidth * scaleGameScreen)) / 2;
         // gameScreen.style.marginLeft = `${marginLeft}px`;
-        // const marginTop = (screenHeight - (battleHeight * scale)) / 2;
+        // const marginTop = (screenHeight - (battleHeight * scaleGameScreen)) / 2;
         // gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
@@ -12332,6 +12333,7 @@ function settingMap() {
     settingScreenBattle();
 }
 
+let scaleBattleScreen = 0;
 function settingScreenBattle() {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 1000;
 
@@ -12346,14 +12348,14 @@ function settingScreenBattle() {
         let scaleW2 = screenWidth / battleWidth2;
         let scaleH2 = screenHeight / battleHeight2;
 
-        let scale2 = Math.min(scaleW2, scaleH2) * 1; // Tỷ lệ tối đa là 90%
-        scale2 = Math.min(scale2, 1); // Đảm bảo tỷ lệ không vượt quá 1
+        let scaleBattleScreen = Math.min(scaleW2, scaleH2) * 1; // Tỷ lệ tối đa là 90%
+        scaleBattleScreen = Math.min(scale2, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
-        battleScreen.style.transform = `scale(${scale2})`;
+        battleScreen.style.transform = `scale(${scaleBattleScreen})`;
 
         // // Tính toán marginLeft và marginTop để căn giữa
-        // const marginLeft2 = (screenWidth - (battleWidth2 * scale2)) / 2;
+        // const marginLeft2 = (screenWidth - (battleWidth2 * scaleBattleScreen)) / 2;
         // battleScreen.style.marginLeft = `${marginLeft2}px`;
 
     } else {
