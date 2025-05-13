@@ -2536,7 +2536,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 if (skillChild) {
                     skillChild.classList.add('sleep');
                 }
-                Xóa phần tử sau khi hiệu ứng kết thúc
+                // Xóa phần tử sau khi hiệu ứng kết thúc
                 setTimeout(() => {
                     attackEffect.remove();
                 }, duration);
