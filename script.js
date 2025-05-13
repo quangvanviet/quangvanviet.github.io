@@ -12223,7 +12223,7 @@ function settingMap() {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "80vh";
+        screenMain.style.height = "85vh";
         screenMain.style.width = "99%";
 
         const screenWidth = window.innerWidth;
@@ -12322,7 +12322,7 @@ window.onload = function () {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "80vh";
+        screenMain.style.height = "85vh";
         screenMain.style.width = "99%";
 
         const screenWidth = window.innerWidth;
@@ -12343,12 +12343,12 @@ window.onload = function () {
 
         // Áp dụng tỷ lệ cho gameScreen
         gameScreen.style.transform = `scale(${scale})`;
-        gameScreen.style.transformOrigin = "left";
+        gameScreen.style.transformOrigin = "center";
 
-        const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
-        gameScreen.style.marginLeft = `${marginLeft}px`;
-        const marginTop = (screenHeight - (battleHeight * scale)) / 2;
-        gameScreen.style.marginTop = `${marginTop}px`;
+        // const marginLeft = (screenWidth - (battleWidth * scale)) / 2;
+        // gameScreen.style.marginLeft = `${marginLeft}px`;
+        // const marginTop = (screenHeight - (battleHeight * scale)) / 2;
+        // gameScreen.style.marginTop = `${marginTop}px`;
 
     } else {
         // Nếu không phải trên thiết bị di động, sử dụng kích thước chuẩn
