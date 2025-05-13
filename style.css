@@ -1150,7 +1150,24 @@ body {
         box-shadow: 0 0 10px 3px rgba(255, 191, 0, 0.9);
     }
 }
+@keyframes speedGlow {
+    0% {
+        box-shadow: 0 0 0px 0px rgba(255, 0, 0, 0.5);
+    }
 
+    100% {
+        box-shadow: 0 0 10px 3px rgba(255, 0, 0, 0.9);
+    }
+}
+@keyframes slowGlow {
+    0% {
+        box-shadow: 0 0 0px 0px rgba(0, 233, 255, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 0 10px 3px rgba(0, 233, 255, 0.9);
+    }
+}
 @keyframes platinumGlow {
     0% {
         box-shadow: 0 0 0px 0px rgba(255, 0, 0, 0.5);
