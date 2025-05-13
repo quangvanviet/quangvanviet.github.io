@@ -2532,9 +2532,9 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                     skillChild.classList.add('sleep');
                 }
                 // Xóa phần tử sau khi hiệu ứng kết thúc
-                setTimeout(() => {
-                    attackEffect.remove();
-                }, duration);
+                // setTimeout(() => {
+                //     attackEffect.remove();
+                // }, duration);
             };
 
             // Bắt đầu hiệu ứng di chuyển
@@ -2582,6 +2582,8 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA
                 if (skillsSpeed[skillKeyToSleep] > 0) {
                     skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500 * 2);
+                } else if (skillsSpeed[skillKeyToSleep] < 0) {
+                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500 / 2);
                 } else {
                     skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 500);
                 }
