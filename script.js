@@ -400,7 +400,7 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0 }, HP: 0, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
 };
 var price5MonConquest = 0;
@@ -981,11 +981,13 @@ function baseAttack(skillKey, isComp) {
 
                     for (let d = 1; d <= doubleAttack; d++) {
                         setTimeout(() => {
+                            let scalePower = checkScalePower5Mon(typeGameConquest.skillBattle[skillKey].ID)
+
                             const baseScale = 1;
                             const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
                             let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
-                            let baseDame = Math.round(valuePower);
+                            let baseDame = Math.round(valuePower * scalePower);
 
                             let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
@@ -1013,7 +1015,7 @@ function baseAttack(skillKey, isComp) {
                                 isCrit = false;
                             }
 
-                            let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+                            let dameSkill = Math.round(baseDame * (1 - defTargetAttack) * critDame);
 
                             if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                 
@@ -1060,13 +1062,13 @@ function baseAttack(skillKey, isComp) {
 
                         for (let d = 1; d <= doubleAttack; d++) {
                             setTimeout(() => {
+                                let scalePower = checkScalePower5Mon(typeGameConquest.skillBattle[skillKey].ID)
+
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
                                 let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
-                                let baseDame = Math.round(valuePower);
-
-                                let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
+                                let baseDame = Math.round(valuePower * scalePower);
 
                                 let critDame = 1;
                                 let upCritDame = isComp ? typeGameConquest.dameCritA : typeGameConquest.dameCritB
@@ -1093,7 +1095,7 @@ function baseAttack(skillKey, isComp) {
                                 }
 
                                 // let dameSkill = Math.ceil(baseDame * critDame);
-                                let dameSkill = Math.ceil(baseDame / 2);
+                                let dameSkill = Math.round(baseDame);
 
                                 if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                 
@@ -1121,11 +1123,13 @@ function baseAttack(skillKey, isComp) {
 
                         for (let d = 1; d <= doubleAttack; d++) {
                             setTimeout(() => {
+                                let scalePower = checkScalePower5Mon(typeGameConquest.skillBattle[skillKey].ID)
+
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
                                 let valuePower = 0.12 * typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 1
 
-                                let baseDame = Math.round(valuePower);
+                                let baseDame = Math.round(valuePower * scalePower);
 
                                 let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
@@ -1153,7 +1157,7 @@ function baseAttack(skillKey, isComp) {
                                     isCrit = false;
                                 }
 
-                                let dameSkill = Math.ceil(baseDame * (1 - defTargetAttack) * critDame);
+                                let dameSkill = Math.round(baseDame * (1 - defTargetAttack) * critDame);
 
                                 if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
                                     
@@ -4633,27 +4637,39 @@ function loadEventSlotBattle() {
     });
 };
 
+//Hàm lấy thông tin SCALE từ allPets
+function checkScalePower5Mon(id5Mon) {
+    // Tìm pet có ID trùng khớp trong allPets
+    const pet = allPets.find(p => p.ID === id5Mon);
+
+    // Nếu tìm thấy, trả về giá trị POWER.SCALE, ngược lại trả về null hoặc giá trị mặc định
+    return pet ? pet.POWER.SCALE : null;
+}
+
+
+//Hàm update 5Mon trong battle
 function update5MonBattle(skill) {
 
     let powerINT = scalePower5Mon(skill.POWER.INT);
+    let scalePower = checkScalePower5Mon(skill.ID)
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (skill.EFFECT.includes("Attacking")) {
-        dame = powerINT.dame;  // Giảm dần khi STR tăng
+        dame = Math.round(powerINT.dame * scalePower);  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Healing")) {
-        heal = powerINT.heal;  // Giảm dần khi STR tăng
+        heal = Math.round(powerINT.heal * scalePower);  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Shield")) {
-        shield = powerINT.shield;  // Giảm dần khi STR tăng
+        shield = Math.round(powerINT.shield * scalePower);  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Burn")) {
-        burn = powerINT.burn;  // Giảm dần khi STR tăng
+        burn = Math.round(powerINT.burn * scalePower);  // Giảm dần khi STR tăng
     }
     if (skill.EFFECT.includes("Poison")) {
-        poison = powerINT.poison;  // Giảm dần khi STR tăng
+        poison = Math.round(powerINT.poison * scalePower);  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -4663,7 +4679,7 @@ function update5MonBattle(skill) {
 
     let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
-    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - scalePower);
 
 
     //tính crit
@@ -4672,6 +4688,7 @@ function update5MonBattle(skill) {
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    valueCrit = Math.round(valueCrit * scalePower);
 
     //tính def
     let def = skill.POWER.DEF;
@@ -4679,6 +4696,7 @@ function update5MonBattle(skill) {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
+    valueDef = Math.round(valueDef * scalePower);
 
     return {
         dame: dame,
@@ -6749,7 +6767,9 @@ function endBattle(whoWin, pointsThisRound) {
     //Tìm nhân vật để tăng chỉ số mỗi round cho người chơi user
     upSTTRoundWithCharacter();
     
-    typeGameConquest.starUser += infoStartGame.roundGame * 2;
+    //Cộng star mỗi round
+    const bonusStars = Math.floor(typeGameConquest.starUser / 5);
+    typeGameConquest.starUser += infoStartGame.roundGame * 2 + bonusStars;
 
     //Tăng round
     infoStartGame.roundGame += 1 //Tăng round sau khi endBattle
@@ -7154,6 +7174,101 @@ function reRollShop() { //++++++++++++++
 }
 //Hàm random skill
 function randomSkillinShop() {
+    const battleUserPetRound1 = structuredClone(typeGameConquest.battleUserPetRound);
+
+    // Khởi tạo các slot shop
+    typeGameConquest.battlePetInShop = {
+        battleShop1: defaultSTT5Mon,
+        battleShop2: defaultSTT5Mon,
+        battleShop3: defaultSTT5Mon,
+        battleShop4: defaultSTT5Mon,
+    };
+
+    // Lấy toàn bộ danh sách kỹ năng
+    const allSkills = Object.values(battleUserPetRound1);
+
+    // Lưu trữ danh sách kỹ năng đã chọn theo ID (để tránh trùng)
+    let selectedSkillIDs = [];
+
+    for (let i = 0; i < 4; i++) {
+        const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
+
+        if (availableSkills.length === 0) {
+            console.warn("Không còn kỹ năng nào để chọn!");
+            break;
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableSkills.length);
+        const selectedSkill = availableSkills[randomIndex];
+
+        selectedSkillIDs.push(selectedSkill.ID); // Ghi lại ID đã chọn
+
+        // Đặt vào UI
+        const shopSlot = `battleShop${i + 1}`;
+        const shopDiv = document.querySelector(`#${shopSlot}`);
+
+        if (shopDiv) {
+            shopDiv.innerHTML = `
+<div 
+  id="skill${idSkillRND}" 
+  class="skill"
+  draggable="true"
+  style="background-image: url('${selectedSkill.URLimg}')"
+  data-skill='{"ID": "${selectedSkill.ID}", "LEVEL": ${selectedSkill.LEVEL}}'>
+</div>`;
+
+            let dameSkillText = ``;
+            const dameSkillDiv = document.querySelector(`#skill${idSkillRND}`);
+
+            if (dameSkillDiv) {
+                if (selectedSkill.DAME[0] > 0) {
+                    dameSkillText += `<div class="skill-dame">${Number(selectedSkill.DAME[0])}</div>`;
+                }
+                if (selectedSkill.HEAL[0] > 0) {
+                    dameSkillText += `<div class="skill-heal">${Number(selectedSkill.HEAL[0])}</div>`;
+                }
+                if (selectedSkill.SHIELD[0] > 0) {
+                    dameSkillText += `<div class="skill-shield">${Number(selectedSkill.SHIELD[0])}</div>`;
+                }
+                if (selectedSkill.BURN[0] > 0) {
+                    dameSkillText += `<div class="skill-burn">${Number(selectedSkill.BURN[0])}</div>`;
+                }
+                if (selectedSkill.POISON[0] > 0) {
+                    dameSkillText += `<div class="skill-poison">${Number(selectedSkill.POISON[0])}</div>`;
+                }
+                if (selectedSkill.EFFECT.includes("Freeze")) {
+                    dameSkillText += `<div class="skill-freeze">${Number(selectedSkill.COOLDOWN[0] / 2 / 1000 * selectedSkill.LEVEL)}</div>`;
+                }
+
+                dameSkillDiv.innerHTML = `
+<div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+  <i class="fa-solid fa-diamond"></i>
+  <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
+</div>
+
+<div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+${dameSkillText}
+</div>`;
+            }
+        }
+
+        typeGameConquest.battlePetInShop[shopSlot] = selectedSkill;
+        console.log("battlePetInShop2", typeGameConquest.battlePetInShop);
+
+        idSkillRND += 1;
+    }
+
+    //Tạo highlight cho skill theo level
+    highlightSkillLevel();
+
+    //Load event cho các slot
+    loadEventSkillBattle();
+
+    //Load event click hiện info cho các skill
+    createInfo5mon();
+}
+
+function randomSkillinShop1() {
     //Copy tạo ra các skill để random từ battleUserPetRound
     console.log("battleUserPet", typeGameConquest.battleUserPet)
     console.log("battleUserPetRound", typeGameConquest.battleUserPetRound)
@@ -8827,15 +8942,10 @@ function showResultScreen(isWin) {
     typeGameConquest.reRoll = 0;
     typeGameConquest.reRollPrice = 0;
 
-    if (infoStartGame.roundGame <= 1) {
+    if (infoStartGame.roundGame % 2 === 0) {
         typeGameConquest.price5Mon += 1;
-    } else {
-        if (isWin) {
-            typeGameConquest.price5Mon += 1;
-        } else {
-
-        }
     }
+
 
     typeGameConquest.selectSkillShop = 0;
 
@@ -8870,7 +8980,7 @@ function showResultScreen(isWin) {
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (+${pointsThisRound})`;
 
         // Chuyển onclick thành hàm gọi endBattle với tham số "My"
-        if (typeGameConquest.winBattle >= winLoseDefault - 1) {
+        if (typeGameConquest.winBattle >= winLoseDefault) {
             buttonEndGame.onclick = () => finalGame("win", pointsThisRound);
         } else {
             buttonEndGame.onclick = () => endBattle("My", pointsThisRound);
@@ -8885,7 +8995,7 @@ function showResultScreen(isWin) {
         // Hiển thị điểm mới với điểm bị trừ
         pointResultText.innerText = `Điểm hiện có: ${typeGameConquest.pointBattle} (-${pointsThisRound})`;
 
-        if (typeGameConquest.loseBattle >= winLoseDefault - 1) {
+        if (typeGameConquest.loseBattle >= winLoseDefault) {
             buttonEndGame.onclick = () => finalGame("lose", pointsThisRound);
         } else {
             // Chuyển onclick thành hàm gọi endBattle với tham số "Comp"
@@ -9992,13 +10102,15 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             </div>
         </div>`
 
+            let scalePower = checkScalePower5Mon(item.ID)
+
             const scaleSTR = 1 * Math.log10(item.POWER.STR);
             let valuePowerSTR = 0.12 * item.POWER.STR / scaleSTR + 1
-            let baseDame = Math.round(valuePowerSTR);
+            let baseDame = Math.round(valuePowerSTR * scalePower);
             
             const scaleHP = 1 * Math.log10(item.POWER.HP);
             let valuePowerHP = 2 * item.POWER.HP / scaleHP + 180;
-            let baseHP = Math.round(valuePowerHP);
+            let baseHP = Math.round(valuePowerHP * scalePower);
 
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -10310,8 +10422,6 @@ function resetOutGame() {
     infoStartGame.modeGame = "No";
     infoStartGame.difficultyGame = "No";
 
-
-
     onGame = 0;
     infoStartGame.stepGame = 0;
     endGame = true;
@@ -10472,13 +10582,15 @@ function setupPopupInfo5MonInBattle(skillInfo) {
         </div>
     </div>`
 
+    let scalePower = checkScalePower5Mon(skillInfo.ID)
+
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
     let valuePowerSTR = 0.12 * skillInfo.POWER.STR / scaleSTR + 1
-    let baseDame = Math.round(valuePowerSTR);
+    let baseDame = Math.round(valuePowerSTR * scalePower);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
     let valuePowerHP = 2 * skillInfo.POWER.HP / scaleHP + 180;
-    let baseHP = Math.round(valuePowerHP);
+    let baseHP = Math.round(valuePowerHP * scalePower);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -11151,7 +11263,7 @@ function randomPet5Mon() {
         INTERNAL: e5mon.INTERNAL,
         EFFECT: e5mon.EFFECT,
         COOLDOWN: e5mon.COOLDOWN,
-        RARE: rare
+        RARE: rare,
     }
 }
 
@@ -11175,24 +11287,25 @@ function getRandom5mon() {
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
     let powerINT = scalePower5Mon(infoPetRandom.POWER.INT);
+    let scalePower = checkScalePower5Mon(infoPetRandom.ID);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (infoPetRandom.EFFECT.includes("Attacking")) {
-        dame = powerINT.dame;  // Giảm dần khi STR tăng
+        dame = Math.round(powerINT.dame * scalePower);  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Healing")) {
-        heal = powerINT.heal;  // Giảm dần khi STR tăng
+        heal = Math.round(powerINT.heal * scalePower);  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Shield")) {
-        shield = powerINT.shield;  // Giảm dần khi STR tăng
+        shield = Math.round(powerINT.shield * scalePower);  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Burn")) {
-        burn = powerINT.burn;  // Giảm dần khi STR tăng
+        burn = Math.round(powerINT.burn * scalePower);  // Giảm dần khi STR tăng
     }
     if (infoPetRandom.EFFECT.includes("Poison")) {
-        poison = powerINT.poison;  // Giảm dần khi STR tăng
+        poison = Math.round(powerINT.poison * scalePower);  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -11202,8 +11315,7 @@ function getRandom5mon() {
 
     let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
-    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
-
+    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - scalePower);
 
     //tính crit
     let luk = infoPetRandom.POWER.LUK;
@@ -11211,6 +11323,7 @@ function getRandom5mon() {
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    valueCrit = Math.round(valueCrit * scalePower);
 
     //tính def
     let def = infoPetRandom.POWER.DEF;
@@ -11218,6 +11331,7 @@ function getRandom5mon() {
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
+    valueDef = Math.round(valueDef * scalePower);
 
     //Gán info vào 5mon
     let final5mon = {
@@ -11725,24 +11839,25 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
     let powerINT = scalePower5Mon(int);
+    let scalePower = checkScalePower5Mon(select5Mon.ID);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (select5Mon.EFFECT.includes("Attacking")) {
-        dame = powerINT.dame;  // Giảm dần khi STR tăng
+        dame = Math.round(powerINT.dame * scalePower);  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Healing")) {
-        heal = powerINT.heal;  // Giảm dần khi STR tăng
+        heal = Math.round(powerINT.heal * scalePower);  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Shield")) {
-        shield = powerINT.shield;  // Giảm dần khi STR tăng
+        shield = Math.round(powerINT.shield * scalePower);  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Burn")) {
-        burn = powerINT.burn;  // Giảm dần khi STR tăng
+        burn = Math.round(powerINT.burn * scalePower);  // Giảm dần khi STR tăng
     }
     if (select5Mon.EFFECT.includes("Poison")) {
-        poison = powerINT.poison;  // Giảm dần khi STR tăng
+        poison = Math.round(powerINT.poison * scalePower);  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -11751,19 +11866,21 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
-    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - scalePower);
 
     //tính crit
     let maxCrit = 60;
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    valueCrit = Math.round(valueCrit * scalePower);
 
     //tính def
     let maxDef = 90;
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
+    valueDef = Math.round(valueDef * scalePower);
 
     //Gán info vào 5mon
     let final5mon = {
@@ -12692,24 +12809,25 @@ function catch5Mon() {
 
     //Quy đổi sang DAME HEAL SHIELD BURN POISON COOLDOWN
     let powerINT = scalePower5Mon(int);
+    let scalePower = checkScalePower5Mon(e5mon.ID)
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (e5mon.EFFECT.includes("Attacking")) {
-        dame = powerINT.dame;  // Giảm dần khi STR tăng
+        dame = Math.round(powerINT.dame * scalePower);  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Healing")) {
-        heal = powerINT.heal;  // Giảm dần khi STR tăng
+        heal = Math.round(powerINT.heal * scalePower);  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Shield")) {
-        shield = powerINT.shield;  // Giảm dần khi STR tăng
+        shield = Math.round(powerINT.shield * scalePower);  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Burn")) {
-        burn = powerINT.burn;  // Giảm dần khi STR tăng
+        burn = Math.round(powerINT.burn * scalePower);  // Giảm dần khi STR tăng
     }
     if (e5mon.EFFECT.includes("Poison")) {
-        poison = powerINT.poison;  // Giảm dần khi STR tăng
+        poison = Math.round(powerINT.poison * scalePower);  // Giảm dần khi STR tăng
     }
 
     //Tính cooldown
@@ -12718,7 +12836,7 @@ function catch5Mon() {
 
     let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
 
-    let valueC = (maxC - minC) / (1 + agi / scaleC) * 1000;
+    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - scalePower);
 
 
     //tính crit
@@ -12726,12 +12844,14 @@ function catch5Mon() {
     let scaleCrit = 475; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    valueCrit = Math.round(valueCrit * scalePower);
 
     //tính def
     let maxDef = 90;
     let scaleDef = 475; // tùy chỉnh
     let valueDef = maxDef * def / (def + scaleDef);
     valueDef = Math.min(maxDef, Math.max(0, valueDef));
+    valueDef = Math.round(valueDef * scalePower);
 
     //Gán info vào 5mon
     is5MonMeet = {
