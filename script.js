@@ -1253,7 +1253,8 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
 
     // new Audio('sound/attack.mp3').play(); //Âm thanh tấn công
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1369,7 +1370,8 @@ function skillAttacking(skillId, dameSkill, isCrit) {
         attackEffect.style.transform = "rotate(90deg)";
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1447,7 +1449,8 @@ function skillHealing(skillId, dameSkill, isCrit) {
         attackEffect.classList.add('healEffect'); // Class CSS để định dạng hiệu ứng
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1520,7 +1523,8 @@ function skillShield(skillId, dameSkill, isCrit) {
         attackEffect.classList.add('shieldEffect'); // Class CSS để định dạng hiệu ứng
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1599,7 +1603,8 @@ function skillBurn(skillId, dameSkill, isCrit) {
         attackEffect.classList.add('burnEffect'); // Class CSS để định dạng hiệu ứng
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1681,7 +1686,8 @@ function skillPoison(skillId, dameSkill, isCrit) {
         attackEffect.classList.add('poisonEffect'); // Class CSS để định dạng hiệu ứng
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -1766,7 +1772,8 @@ function skillFreeze(skillId, timeFreeze, isComp) {
         attackEffect.classList.add('freezeEffect'); // Class CSS để định dạng hiệu ứng
     }
 
-    document.body.appendChild(attackEffect);
+    const gameScreen = document.getElementById('gameScreen');
+    gameScreen.appendChild(attackEffect);
 
     // Lấy vị trí của skill để tạo mũi tên bắt đầu từ đó
     const skillRect = skill.getBoundingClientRect();
@@ -2512,7 +2519,8 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 attackEffect.classList.add('sleepEffect'); // Class CSS để định dạng hiệu ứng
             }
 
-            document.body.appendChild(attackEffect);
+            const gameScreen = document.getElementById('gameScreen');
+            gameScreen.appendChild(attackEffect);
 
             // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
             const skillRect = skill.getBoundingClientRect();
@@ -2687,7 +2695,8 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
                 attackEffect.classList.add('deleteEffect'); // Class CSS để định dạng hiệu ứng
             }
 
-            document.body.appendChild(attackEffect);
+            const gameScreen = document.getElementById('gameScreen');
+            gameScreen.appendChild(attackEffect);
 
             // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
             const skillRect = skill.getBoundingClientRect();
@@ -2791,7 +2800,8 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
                 attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
             }
 
-            document.body.appendChild(attackEffect);
+            const gameScreen = document.getElementById('gameScreen');
+            gameScreen.appendChild(attackEffect);
 
             // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
             const skillRect = skill.getBoundingClientRect();
@@ -2801,9 +2811,13 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
             attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
             attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
 
+            const effectRect = attackEffect.getBoundingClientRect();
+            const effectWidth = effectRect.width;
+            const effectHeight = effectRect.height;
+            
             // Tính toán độ di chuyển tới mục tiêu
-            const targetX = targetRect.left + targetRect.width / 2;
-            const targetY = targetRect.top + targetRect.height / 2;
+            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
+            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
@@ -2929,13 +2943,15 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
 
             // Tạo mũi tên/nắm đấm
             const attackEffect = document.createElement('div');
+            
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             } else {
                 attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             }
-
-            document.body.appendChild(attackEffect);
+            
+            const gameScreen = document.getElementById('gameScreen');
+            gameScreen.appendChild(attackEffect);
 
             // Lấy vị trí của skill tấn công để tạo mũi tên bắt đầu từ đó
             const skillRect = skill.getBoundingClientRect();
@@ -2945,9 +2961,13 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
             attackEffect.style.left = `${skillRect.left + skillRect.width / 2}px`;
             attackEffect.style.top = `${skillRect.top + skillRect.height / 2}px`;
 
+            const effectRect = attackEffect.getBoundingClientRect();
+            const effectWidth = effectRect.width;
+            const effectHeight = effectRect.height;
+            
             // Tính toán độ di chuyển tới mục tiêu
-            const targetX = targetRect.left + targetRect.width / 2;
-            const targetY = targetRect.top + targetRect.height / 2;
+            const targetX = (targetRect.left + targetRect.width / 2) - effectWidth/2;
+            const targetY = targetRect.top + targetRect.height / 2 - effectHeight/2;
 
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
