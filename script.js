@@ -1271,8 +1271,8 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
     const moveEffect = () => {
         const duration = 500; // Thời gian di chuyển (ms)
-        const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-        const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+        const deltaX = targetX - skillX;
+        const deltaY = targetY - skillY;
         
         // Tính góc giữa 2 điểm, đổi từ radian sang độ
         const angleInRadians = Math.atan2(deltaY, deltaX);
