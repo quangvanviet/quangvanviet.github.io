@@ -12223,7 +12223,7 @@ function settingMap() {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "95vh";
+        screenMain.style.height = "90vh";
         screenMain.style.width = "98%";
 
         const screenWidth = window.innerWidth;
@@ -12322,8 +12322,8 @@ window.onload = function () {
 
     if (isMobile) {
         // Đảm bảo screenMain có kích thước chính xác khi xoay màn hình
-        screenMain.style.height = "70vh";
-        screenMain.style.width = "95%";
+        screenMain.style.height = "90vh";
+        screenMain.style.width = "98%";
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -12338,7 +12338,7 @@ window.onload = function () {
         let scaleW = screenWidth / battleWidth;
         let scaleH = screenHeight / battleHeight;
 
-        let scale = Math.min(scaleW, scaleH) * 0.90; // Tỷ lệ tối đa là 90%
+        let scale = Math.min(scaleW, scaleH) * 0.95; // Tỷ lệ tối đa là 90%
         scale = Math.min(scale, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ cho gameScreen
