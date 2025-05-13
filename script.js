@@ -984,9 +984,9 @@ function baseAttack(skillKey, isComp) {
                         setTimeout(() => {
                             const baseScale = 1;
                             const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                            let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                            let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
 
-                            let baseDame = Math.round(valuePower * 0.18);
+                            let baseDame = Math.round(valuePower);
 
                             let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
@@ -1063,9 +1063,9 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                                let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
 
-                                let baseDame = Math.round(valuePower * 0.18);
+                                let baseDame = Math.round(valuePower);
 
                                 let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
@@ -1124,9 +1124,9 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 1 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                                let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
 
-                                let baseDame = Math.round(valuePower * 0.18);
+                                let baseDame = Math.round(valuePower);
 
                                 let defTargetAttack = typeGameConquest.skillBattle[targetAttackFirst].DEF.reduce((a, b) => a + b, 0) / 100;
 
@@ -6600,7 +6600,7 @@ function resetHp5Mon() {
             } else {
                 const baseScale = 1;
                 const scaleHP = baseScale * Math.log10(typeGameConquest.skillBattle[skill].POWER.HP);
-                let valuePower = 4 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 260;
+                let valuePower = 2 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 180;
 
                 let baseHP = Math.round(valuePower);
                 
@@ -9968,11 +9968,11 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         </div>`
 
             const scaleSTR = 1 * Math.log10(item.POWER.STR);
-            let valuePowerSTR = 1 + item.POWER.STR / scaleSTR
-            let baseDame = Math.round(valuePowerSTR * 0.18);
+            let valuePowerSTR = 0.3 + item.POWER.STR / scaleSTR
+            let baseDame = Math.round(valuePowerSTR);
             
             const scaleHP = 1 * Math.log10(item.POWER.HP);
-            let valuePowerHP = 4 * item.POWER.HP / scaleHP + 260;
+            let valuePowerHP = 2 * item.POWER.HP / scaleHP + 180;
             let baseHP = Math.round(valuePowerHP);
 
             descTextItem += `
@@ -10448,11 +10448,11 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     </div>`
 
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
-    let valuePowerSTR = 1 + skillInfo.POWER.STR / scaleSTR
-    let baseDame = Math.round(valuePowerSTR * 0.18);
+    let valuePowerSTR = 0.3 + skillInfo.POWER.STR / scaleSTR
+    let baseDame = Math.round(valuePowerSTR);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
-    let valuePowerHP = 4 * skillInfo.POWER.HP / scaleHP + 260;
+    let valuePowerHP = 2 * skillInfo.POWER.HP / scaleHP + 180;
     let baseHP = Math.round(valuePowerHP);
 
     descTextItem += `
