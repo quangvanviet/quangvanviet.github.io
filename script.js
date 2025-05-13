@@ -6600,9 +6600,9 @@ function resetHp5Mon() {
             } else {
                 const baseScale = 1;
                 const scaleHP = baseScale * Math.log10(typeGameConquest.skillBattle[skill].POWER.HP);
-                let valuePower = 1.62 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 83.8;
+                let valuePower = 4 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 260;
 
-                let baseHP = Math.round(valuePower * 2.5);
+                let baseHP = Math.round(valuePower);
                 
                 maxHpAll5Mon[skill] = baseHP || 0;
             }
@@ -9972,8 +9972,8 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             let baseDame = Math.round(valuePowerSTR * 0.18);
             
             const scaleHP = 1 * Math.log10(item.POWER.HP);
-            let valuePowerHP = 1.62 * item.POWER.HP / scaleHP + 83.8;
-            let baseHP = Math.round(valuePowerHP * 2.5);
+            let valuePowerHP = 4 * item.POWER.HP / scaleHP + 260;
+            let baseHP = Math.round(valuePowerHP);
 
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -10452,8 +10452,8 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     let baseDame = Math.round(valuePowerSTR * 0.18);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
-    let valuePowerHP = 1.62 * skillInfo.POWER.HP / scaleHP + 83.8;
-    let baseHP = Math.round(valuePowerHP * 2.5);
+    let valuePowerHP = 4 * skillInfo.POWER.HP / scaleHP + 260;
+    let baseHP = Math.round(valuePowerHP);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
