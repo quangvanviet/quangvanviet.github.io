@@ -9967,8 +9967,15 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             </div>
         </div>`
 
-            let baseDame = Math.round((1 + item.POWER.STR / Math.log10(item.POWER.STR)) * 0.18);
-            let baseHP = Math.round((1.62 * item.POWER.HP / Math.log10(item.POWER.HP) / (1 * Math.log10(item.POWER.HP))) + 83.8);
+            const baseScale = 1;
+            const scaleSTR = baseScale * Math.log10(item.POWER.STR);
+            let valuePower = 1 + item.POWER.STR / scaleSTR
+            let baseDame = Math.round(valuePower * 0.18);
+            
+            const baseScale = 1;
+            const scaleHP = baseScale * Math.log10(item.POWER.HP);
+            let valuePower = 1.62 * item.POWER.HP / scaleHP + 83.8;
+            let baseHP = Math.round(valuePower);
 
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -10442,8 +10449,15 @@ function setupPopupInfo5MonInBattle(skillInfo) {
         </div>
     </div>`
 
-    let baseDame = Math.round((1 + skillInfo.POWER.STR / Math.log10(skillInfo.POWER.STR)) * 0.18);
-    let baseHP = Math.round((1.62 * skillInfo.POWER.HP / Math.log10(skillInfo.POWER.HP) / (1 * Math.log10(skillInfo.POWER.HP))) + 83.8);
+    const baseScale = 1;
+    const scaleSTR = baseScale * Math.log10(skillInfo.POWER.STR);
+    let valuePower = 1 + skillInfo.POWER.STR / scaleSTR
+    let baseDame = Math.round(valuePower * 0.18);
+    
+    const baseScale = 1;
+    const scaleHP = baseScale * Math.log10(skillInfo.POWER.HP);
+    let valuePower = 1.62 * skillInfo.POWER.HP / scaleHP + 83.8;
+    let baseHP = Math.round(valuePower);
 
     descTextItem += `
     <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
