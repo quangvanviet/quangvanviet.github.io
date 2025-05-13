@@ -984,7 +984,7 @@ function baseAttack(skillKey, isComp) {
                         setTimeout(() => {
                             const baseScale = 1;
                             const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                            let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                            let valuePower = 0.12 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
 
                             let baseDame = Math.round(valuePower);
 
@@ -1063,7 +1063,7 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                                let valuePower = 0.12 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
 
                                 let baseDame = Math.round(valuePower);
 
@@ -1124,7 +1124,7 @@ function baseAttack(skillKey, isComp) {
                             setTimeout(() => {
                                 const baseScale = 1;
                                 const scaleSTR = baseScale * Math.log10(typeGameConquest.skillBattle[skillKey].POWER.STR);
-                                let valuePower = 0.3 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR
+                                let valuePower = 0.12 + typeGameConquest.skillBattle[skillKey].POWER.STR / scaleSTR + 5
 
                                 let baseDame = Math.round(valuePower);
 
@@ -2525,8 +2525,8 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             // Tạo hiệu ứng di chuyển (mũi tên bay tới mục tiêu)
             const moveEffect = () => {
                 const duration = 500; // Thời gian di chuyển (ms)
-                const deltaX = targetX - (skillRect.left + skillRect.width / 2);
-                const deltaY = targetY - (skillRect.top + skillRect.height / 2);
+                const deltaX = targetX - (skillRect.left + skillRect.width / 2) - attackEffect.style.width / 2;
+                const deltaY = targetY - (skillRect.top + skillRect.height / 2) - attackEffect.style.height / 2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -9968,7 +9968,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         </div>`
 
             const scaleSTR = 1 * Math.log10(item.POWER.STR);
-            let valuePowerSTR = 0.3 + item.POWER.STR / scaleSTR
+            let valuePowerSTR = 0.12 + item.POWER.STR / scaleSTR + 5
             let baseDame = Math.round(valuePowerSTR);
             
             const scaleHP = 1 * Math.log10(item.POWER.HP);
@@ -10448,7 +10448,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     </div>`
 
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
-    let valuePowerSTR = 0.3 + skillInfo.POWER.STR / scaleSTR
+    let valuePowerSTR = 0.12 + skillInfo.POWER.STR / scaleSTR + 5
     let baseDame = Math.round(valuePowerSTR);
     
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
