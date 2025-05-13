@@ -12349,7 +12349,7 @@ function settingScreenBattle() {
         let scaleH2 = screenHeight / battleHeight2;
 
         scaleBattleScreen = Math.min(scaleW2, scaleH2) * 1; // Tỷ lệ tối đa là 90%
-        scaleBattleScreen = Math.min(scale2, 1); // Đảm bảo tỷ lệ không vượt quá 1
+        scaleBattleScreen = Math.min(scaleBattleScreen, 1); // Đảm bảo tỷ lệ không vượt quá 1
 
         // Áp dụng tỷ lệ và căn chỉnh lại battleScreen
         battleScreen.style.transform = `scale(${scaleBattleScreen})`;
