@@ -944,8 +944,6 @@ body {
     border: 2px solid rebeccapurple;
     
     touch-action: none;
-    -webkit-user-drag: none;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .dameSkillText {
@@ -996,8 +994,6 @@ body {
 
 .skill5MonInBag {
     touch-action: none;
-    -webkit-user-drag: none;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .skill.delete {
