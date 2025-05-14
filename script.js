@@ -13651,6 +13651,27 @@ toggleMusicClick.addEventListener("click", () => {
     }
 });
 
+//Chặn người dùng bôi đen, copy, f12
+// Chặn chuột phải
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Chặn copy
+document.addEventListener("copy", e => e.preventDefault());
+
+// Chặn bôi đen
+document.addEventListener("selectstart", e => e.preventDefault());
+
+// Chặn phím F12, Ctrl+Shift+I/J, Ctrl+U
+document.addEventListener("keydown", function (e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+      (e.ctrlKey && e.key === "U") ||
+      (e.ctrlKey && e.key === "S")
+    ) {
+      e.preventDefault();
+    }
+});
 
 // Gán các hàm vào window
 window.showRegisterPage = showRegisterPage;
