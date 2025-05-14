@@ -13652,8 +13652,8 @@ toggleMusicClick.addEventListener("click", () => {
 });
 
 //Chặn người dùng bôi đen, copy, f12
-// Chặn chuột phải
-document.addEventListener("contextmenu", e => e.preventDefault());
+// // Chặn chuột phải
+// document.addEventListener("contextmenu", e => e.preventDefault());
 
 // Chặn copy
 document.addEventListener("copy", e => e.preventDefault());
