@@ -935,6 +935,7 @@ body {
     position: relative;
     /* Để lớp phủ hoạt động */
     border: 2px solid rebeccapurple;
+    touch-action: none;
 }
 
 .dameSkillText {
@@ -983,7 +984,9 @@ body {
     /* Để chữ căn giữa cả về chiều ngang và chiều dọc */
 }
 
-
+.skill5MonInBag {
+    touch-action: none;
+}
 
 .skill.delete {
     /* background: rgba(255, 255, 255, 0.6); */
