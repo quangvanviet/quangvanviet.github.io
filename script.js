@@ -751,7 +751,7 @@ function loadDataForUser() {
 
                             item.DEF[0] = valueDef
                             item.CRIT[0] = valueCrit
-                            item.COOLDOWN[0] = valueC
+                            item.COOLDOWN[0] = Math.ceil(valueC)
                         }
                     });
                 }
