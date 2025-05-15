@@ -764,6 +764,7 @@ function loadDataForUser() {
                 typeGameConquest.battlePetUseSlotRound,
                 typeGameConquest.battleUserPet,
                 typeGameConquest.battleUserPetRound,
+                typeGameConquest.skillBattle,
                 userPet,
                 ...allComps.map(c => c.slotSkillComp) // Lấy slotSkillComp từ từng object trong allComps
             ];
