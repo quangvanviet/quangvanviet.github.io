@@ -402,7 +402,7 @@ let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0]
+    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0,
 };
 var price5MonConquest = 0;
 var typeGameGuess = {}
@@ -449,6 +449,7 @@ var typeGameConquest = {
         battleShop2: defaultSTT5Mon,
         battleShop3: defaultSTT5Mon,
         battleShop4: defaultSTT5Mon,
+        battleShop5: defaultSTT5Mon,
     },
     battlePetInInventory: {
         battleInv1: defaultSTT5Mon,
@@ -692,6 +693,8 @@ function loadDataForUser() {
                             // Gán lại POWER.SCALE theo allPets
                             if (!item.POWER) item.POWER = {};
                             item.POWER.SCALE = matchedPet.POWER.SCALE;
+                            
+                            item.PRICE = matchedPet.PRICE
 
                             let powerINT = scalePower5Mon(item.POWER.INT);
 
@@ -753,6 +756,7 @@ function loadDataForUser() {
                             item.DEF[0] = valueDef
                             item.CRIT[0] = valueCrit
                             item.COOLDOWN[0] = Math.ceil(valueC)
+
                         }
                     });
                 }
@@ -3142,7 +3146,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
 
 //Hàm hiển thị số sát thương đánh thường baseAttack
 function effectNumberAtBaseAttack(targetAttack, dameSkill, effect, isCrit) {
-    const effectNumberDiv = document.createElement('div');
+    let effectNumberDiv = document.createElement('div');
 
     const effectContainer = document.getElementById(targetAttack);
 
@@ -3201,7 +3205,7 @@ function effectNumberAtBaseAttack(targetAttack, dameSkill, effect, isCrit) {
 
 //Hàm hiển thị số sát thương cộng thêm của burn/poison bay số ở User Main
 function effectNumberAtAttack(skillId, dameSkill, effect, isCrit) {
-    const effectNumberDiv = document.createElement('div');
+    let effectNumberDiv = document.createElement('div');
 
     // Xử lý tấn công
     const targetSideId = skillId.includes('A') ? 'hpBarB' : 'hpBarA';
@@ -3347,7 +3351,7 @@ function applyDamage(targetSideId, dameSkill, effect) {
 
 // Function tạo hiệu ứng trừ máu/cộng máu hiện ra khi bị trừ/cộng ở thanh Hp
 function effectHpBarUpdate(effectContainer, dameSkill, effect) {
-    const effectDiv = document.createElement('div');
+    let effectDiv = document.createElement('div');
     //Thêm hiệu ứng vào div
     if (effect === "Burn") {
         effectDiv.classList.add('effect', 'burn')
@@ -3995,7 +3999,6 @@ function loadEventSlotBattle() {
                         typeGameConquest.starUser -= price5MonConquest
                         typeGameConquest.selectSkillShop += 1
                         price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
-                        document.getElementById("battleShopText").innerText = price5MonConquest;
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
 
@@ -4033,7 +4036,6 @@ function loadEventSlotBattle() {
                         typeGameConquest.starUser -= price5MonConquest;
                         typeGameConquest.selectSkillShop += 1;
                         price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon;
-                        document.getElementById("battleShopText").innerText = price5MonConquest;
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
                         // Nếu trùng thì chỉ reset màu slot
@@ -4455,7 +4457,6 @@ function loadEventSlotBattle() {
                         typeGameConquest.starUser -= price5MonConquest
                         typeGameConquest.selectSkillShop += 1
                         price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
-                        document.getElementById("battleShopText").innerText = price5MonConquest;
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
                     }
@@ -4478,7 +4479,6 @@ function loadEventSlotBattle() {
                     typeGameConquest.starUser -= price5MonConquest
                     typeGameConquest.selectSkillShop += 1
                     price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
-                    document.getElementById("battleShopText").innerText = price5MonConquest;
                     document.getElementById("starUser").innerText = typeGameConquest.starUser;
                 }
 
@@ -6606,7 +6606,6 @@ function openGameRank() {
         updateHpbar();
 
         price5MonConquest = typeGameConquest.price5Mon + typeGameConquest.selectSkillShop
-        document.getElementById("battleShopText").innerText = price5MonConquest;
         document.getElementById('qtyResetShop').innerText = typeGameConquest.reRollPrice;
         document.getElementById('starUser').innerText = typeGameConquest.starUser;
 
@@ -6683,9 +6682,6 @@ function nextStepGame1() {
         //Đổi nút tiếp tục thành => onclick="startBattle()"
         buttonNextStep.onclick = () => startBattle();
         buttonNextStep.innerText = "⚔️ Chiến đấu"
-
-        document.getElementById("battleShopText").innerText = price5MonConquest;
-
     }, 1000);
     endLoading();
 }
@@ -7243,7 +7239,7 @@ function outGameRank() {
             skillCompDiv.classList.remove("occupied")
         }
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             const skillCompSlot = `battleShop${i + 1}`;
             const skillCompDiv = document.querySelector(`#${skillCompSlot}`);
             skillCompDiv.innerHTML = ""
@@ -7288,6 +7284,7 @@ function randomSkillinShop() {
         battleShop2: defaultSTT5Mon,
         battleShop3: defaultSTT5Mon,
         battleShop4: defaultSTT5Mon,
+        battleShop5: defaultSTT5Mon,
     };
 
     // Lấy toàn bộ danh sách kỹ năng
@@ -7296,7 +7293,7 @@ function randomSkillinShop() {
     // Lưu trữ danh sách kỹ năng đã chọn theo ID (để tránh trùng)
     let selectedSkillIDs = [];
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
 
         if (availableSkills.length === 0) {
@@ -7315,13 +7312,13 @@ function randomSkillinShop() {
 
         if (shopDiv) {
             shopDiv.innerHTML = `
-<div 
-  id="skill${idSkillRND}" 
-  class="skill"
-  draggable="true"
-  style="background-image: url('${selectedSkill.URLimg}')"
-  data-skill='{"ID": "${selectedSkill.ID}", "LEVEL": ${selectedSkill.LEVEL}}'>
-</div>`;
+            <div 
+            id="skill${idSkillRND}" 
+            class="skill"
+            draggable="true"
+            style="background-image: url('${selectedSkill.URLimg}')"
+            data-skill='{"ID": "${selectedSkill.ID}", "LEVEL": ${selectedSkill.LEVEL}}'>
+            </div>`;
 
             let dameSkillText = ``;
             const dameSkillDiv = document.querySelector(`#skill${idSkillRND}`);
@@ -7347,14 +7344,29 @@ function randomSkillinShop() {
                 }
 
                 dameSkillDiv.innerHTML = `
-<div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
-  <i class="fa-solid fa-diamond"></i>
-  <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
-</div>
+                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+                <i class="fa-solid fa-diamond"></i>
+                <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
+                </div>
 
-<div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
-${dameSkillText}
-</div>`;
+                <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+                ${dameSkillText}
+                </div>
+
+                <div style="position: absolute;font-size: 18px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;
+                top: -6px; left: -6px; z-index: 1;">
+                    <i class="fa-solid fa-splotch" style="
+                        position: absolute;
+                    "></i>
+                    <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                    font-weight: bold;min-width: 25px;top: 2px;left: -3px;
+                    ">
+                        ${selectedSkill.PRICE}
+                    </span>
+                </div>`
+                ;
+
+
             }
         }
 
@@ -7396,9 +7408,10 @@ function randomSkillinShop1() {
         battleShop2: defaultSTT5Mon,
         battleShop3: defaultSTT5Mon,
         battleShop4: defaultSTT5Mon,
+        battleShop5: defaultSTT5Mon,
     };
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         // 1. Tính tần suất xuất hiện của ID
         const idFrequency = {};
         [...Object.values(typeGameConquest.battlePetUseSlotRound), ...Object.values(typeGameConquest.battlePetInInventory)].forEach(pet => {
@@ -7510,14 +7523,25 @@ function randomSkillinShop1() {
             // Gắn nội dung vào dameSkillDiv
             dameSkillDiv.innerHTML =
                 `
-    <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
-      <i class="fa-solid fa-diamond"></i>
-      <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
-    </div>
-    
-    <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
-    ${dameSkillText}
-    </div>`;
+            <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+            <i class="fa-solid fa-diamond"></i>
+            <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
+            </div>
+            
+            <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+            ${dameSkillText}
+            </div>
+            <div style="position: absolute;font-size: 18px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;
+            top: -6px; left: -6px; z-index: 1;">
+                <i class="fa-solid fa-splotch" style="
+                    position: absolute;
+                "></i>
+                <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                font-weight: bold;min-width: 25px;top: 2px;left: -3px;
+                ">
+                    ${selectedSkill.PRICE}
+                </span>
+            </div>`;
 
         }
         // Cập nhật thông tin vào battlePetInShop
@@ -7542,7 +7566,7 @@ function createSkill(slotDiv) {
 
     let lengthSlot = 0;
     if (slotDiv === "shop") {
-        lengthSlot = 4
+        lengthSlot = 5
     } else {
         lengthSlot = 9
     }
@@ -7590,17 +7614,42 @@ function createSkill(slotDiv) {
             }
 
             // Gắn nội dung vào dameSkillDiv
-            dameSkillDiv.innerHTML =
-                `
-    <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
-      <i class="fa-solid fa-diamond"></i>
-      <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
-    </div>
-    
-    <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
-    ${dameSkillText}
-    </div>
-    `;
+            if (slotDiv === "shop") {
+                dameSkillDiv.innerHTML =
+                    `
+                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+                <i class="fa-solid fa-diamond"></i>
+                <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
+                </div>
+                
+                <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+                ${dameSkillText}
+                </div>
+                <div style="position: absolute;font-size: 18px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;
+                top: -6px; left: -6px; z-index: 1;">
+                    <i class="fa-solid fa-splotch" style="
+                        position: absolute;
+                    "></i>
+                    <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                    font-weight: bold;min-width: 25px;top: 2px;left: -3px;
+                    ">
+                        ${skillItem[skillCompSlot].PRICE}
+                    </span>
+                </div>`;
+            } else {
+                dameSkillDiv.innerHTML =
+                    `
+                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+                <i class="fa-solid fa-diamond"></i>
+                <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
+                </div>
+                
+                <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+                ${dameSkillText}
+                </div>
+                `;
+            }
+            
 
             //Gắn cho div cha trạng thái đã lấp đầy
             skillCompDiv.classList.add("occupied");
@@ -9073,7 +9122,6 @@ function showResultScreen(isWin) {
 
     document.getElementById("qtyResetShop").innerText = typeGameConquest.reRollPrice;
     document.getElementById("starUser").innerText = typeGameConquest.starUser;
-    document.getElementById("battleShopText").innerText = price5MonConquest;
 
     // Reset các biến toàn cục
 
@@ -9601,6 +9649,7 @@ function register() {
                     battleShop2: defaultSTT5Mon,
                     battleShop3: defaultSTT5Mon,
                     battleShop4: defaultSTT5Mon,
+                    battleShop5: defaultSTT5Mon,
                 };
 
                 const typeGameConquest = {
@@ -10187,6 +10236,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
             document.getElementById("levelTextPopupSTT5Mon").textContent = item.LEVEL;
             document.getElementById("rareTextPopupSTT5Mon").textContent = item.RARE;
+            document.getElementById("priceTextPopupSTT5Mon").textContent = item.PRICE;
 
             if (item.LEVEL === 1) {
                 document.getElementById("levelColorPopupSTT5Mon").style.color = "#531515"
@@ -10661,6 +10711,7 @@ function resetOutGame() {
         battleShop2: defaultSTT5Mon,
         battleShop3: defaultSTT5Mon,
         battleShop4: defaultSTT5Mon,
+        battleShop5: defaultSTT5Mon,
     };
 }
 
@@ -10670,6 +10721,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${skillInfo.POWER.STR + skillInfo.POWER.DEF + skillInfo.POWER.INT + skillInfo.POWER.LUK + skillInfo.POWER.AGI + skillInfo.POWER.HP}`;
     document.getElementById("levelTextPopupSTT5MonInBattle").textContent = skillInfo.LEVEL;
     document.getElementById("rareTextPopupSTT5MonInBattle").textContent = skillInfo.RARE;
+    document.getElementById("priceTextPopupSTT5MonInBattle").textContent = skillInfo.PRICE;
 
     if (skillInfo.LEVEL === 1) {
         document.getElementById("levelColorPopupSTT5MonInBattle").style.color = "#531515"
@@ -11384,6 +11436,7 @@ function randomPet5Mon() {
         EFFECT: e5mon.EFFECT,
         COOLDOWN: e5mon.COOLDOWN,
         RARE: rare,
+        PRICE: e5mon.PRICE
     }
 }
 
@@ -11472,7 +11525,8 @@ function getRandom5mon() {
         POISON: [poison, 0, 0, 0, 0],
         CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), infoPetRandom.COOLDOWN[1], 0, 0, 0],
-        RARE: infoPetRandom.RARE
+        RARE: infoPetRandom.RARE,
+        PRICE: infoPetRandom.PRICE
     }
 
     if (!userPet) {
@@ -11562,6 +11616,7 @@ function openExchangePage() {
             POISON: pet.POISON,
             CRIT: pet.CRIT,
             COOLDOWN: pet.COOLDOWN,
+            PRICE: pet.PRICE,
             ticketsPRICE: 10 // Giá mặc định
         }));
 
@@ -11686,6 +11741,7 @@ function setupPopupEventsExchangePage(itemList) {
         itemDiv.addEventListener("click", () => {
             document.getElementById("popupImgExchange").src = item.URLimg;
             document.getElementById("popupNameExchange").textContent = item.NAME;
+            document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
             let descTextItem = "";
             // Type
             let typeInfo = "";
@@ -12020,7 +12076,8 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         POISON: [poison, 0, 0, 0, 0],
         CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), select5Mon.COOLDOWN[1], 0, 0, 0],
-        RARE: rare
+        RARE: rare,
+        PRICE: select5Mon.PRICE
     }
 
     if (!userPet) {
@@ -12991,7 +13048,8 @@ function catch5Mon() {
         POISON: [poison, 0, 0, 0, 0],
         CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
         COOLDOWN: [Math.ceil(valueC), e5mon.COOLDOWN[1], 0, 0, 0],
-        RARE: rare
+        RARE: rare,
+        PRICE: e5mon.PRICE
     }
 
     // Hiển thị popup
@@ -12999,6 +13057,7 @@ function catch5Mon() {
     document.getElementById("namePopupSTT5MonMeet").textContent = is5MonMeet.NAME;
     document.getElementById("allStats5MonMeet").textContent = `⚔️: ${is5MonMeet.POWER.STR + is5MonMeet.POWER.AGI + is5MonMeet.POWER.HP}`;
     document.getElementById("rareTextPopupSTT5MonMeet").textContent = `${is5MonMeet.RARE}`;
+    document.getElementById("priceTextPopupMeet5Mon").textContent = `${is5MonMeet.PRICE}`;
 
 
     let descTextItem = "";
