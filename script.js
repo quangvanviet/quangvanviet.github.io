@@ -77,7 +77,7 @@ function checkUserLogins() {
 
             // 4️⃣ Chạy bộ đếm ngược từ 10 → 1
             let countdown = 10;
-            const countdownInterval = setInterval(() => {
+            let countdownInterval = setInterval(() => {
                 const countdownElement = document.getElementById("countdown");
                 if (countdownElement) {
                     countdownElement.innerText = countdown;
@@ -1327,7 +1327,7 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     const target = document.getElementById(targetAttack);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (teamAorB === "TeamA") {
         // attackEffect.classList.add('attackEffectOfA');
         attackEffect.classList.add('baseAttackEffect')
@@ -1467,7 +1467,7 @@ function skillAttacking(skillId, dameSkill, isCrit) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
         // attackEffect.classList.add('attackEffectOfA');
         attackEffect.classList.add('attackEffect')
@@ -1549,7 +1549,7 @@ function skillHealing(skillId, dameSkill, isCrit) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamA") {
         attackEffect.classList.add('healEffect'); // Class CSS để định dạng hiệu ứng
     } else {
@@ -1623,7 +1623,7 @@ function skillShield(skillId, dameSkill, isCrit) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamA") {
         attackEffect.classList.add('shieldEffect'); // Class CSS để định dạng hiệu ứng
     } else {
@@ -1703,7 +1703,7 @@ function skillBurn(skillId, dameSkill, isCrit) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
         attackEffect.classList.add('burnEffect'); // Class CSS để định dạng hiệu ứng
     } else {
@@ -1786,7 +1786,7 @@ function skillPoison(skillId, dameSkill, isCrit) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
         attackEffect.classList.add('poisonEffect'); // Class CSS để định dạng hiệu ứng
     } else {
@@ -1872,7 +1872,7 @@ function skillFreeze(skillId, timeFreeze, isComp) {
     const target = document.getElementById(imgTeam);  // Đối tượng bị tấn công
 
     // Tạo mũi tên/nắm đấm
-    const attackEffect = document.createElement('div');
+    let attackEffect = document.createElement('div');
     if (imgTeam === "TeamB") {
         attackEffect.classList.add('freezeEffect'); // Class CSS để định dạng hiệu ứng
     } else {
@@ -2619,7 +2619,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
         if (targetSkill) {
 
             // Tạo mũi tên/nắm đấm
-            const attackEffect = document.createElement('div');
+            let attackEffect = document.createElement('div');
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('sleepEffect'); // Class CSS để định dạng hiệu ứng
             } else {
@@ -2794,7 +2794,7 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
         if (targetSkill) {
 
             // Tạo mũi tên/nắm đấm
-            const attackEffect = document.createElement('div');
+            let attackEffect = document.createElement('div');
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('deleteEffect'); // Class CSS để định dạng hiệu ứng
             } else {
@@ -2900,7 +2900,7 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
         if (targetSkill) {
 
             // Tạo mũi tên/nắm đấm
-            const attackEffect = document.createElement('div');
+            let attackEffect = document.createElement('div');
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('speedUpEffect'); // Class CSS để định dạng hiệu ứng
             } else {
@@ -3048,7 +3048,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
         if (targetSkill) {
 
             // Tạo mũi tên/nắm đấm
-            const attackEffect = document.createElement('div');
+            let attackEffect = document.createElement('div');
             if (imgTeam === "TeamB") {
                 attackEffect.classList.add('slowEffect'); // Class CSS để định dạng hiệu ứng
             } else {
@@ -13608,7 +13608,7 @@ function getRandomIndexExcept(exceptIndex) {
 function fadeVolume(target, duration, callback) {
     const step = 50;
     const diff = (target - audio.volume) / (duration / step);
-    const interval = setInterval(() => {
+    let interval = setInterval(() => {
         audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
         if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
             clearInterval(interval);
