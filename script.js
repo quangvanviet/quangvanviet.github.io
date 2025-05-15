@@ -86,6 +86,7 @@ function checkUserLogins() {
                 countdown--;
                 if (countdown < 0) {
                     clearInterval(countdownInterval);
+                    countdownInterval = null;
                     window.location.reload();
                 }
             }, 1000);
@@ -1370,6 +1371,7 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtBaseAttack(targetAttack, dameSkill, "Attacking", isCrit);
 
             //Trừ máu target
@@ -1507,6 +1509,7 @@ function skillAttacking(skillId, dameSkill, isCrit) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtAttack(skillId, dameSkill, "Attacking", isCrit);
             applyDamage(targetSide, dameSkill, "Dame");
             //Hiệu ứng bị tấn công
@@ -1581,6 +1584,7 @@ function skillHealing(skillId, dameSkill, isCrit) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtAttack(skillId, dameSkill, "Heal", isCrit);
             applyDamage(targetSide, dameSkill, "Heal");
             //Hiệu ứng bị tấn công
@@ -1654,6 +1658,7 @@ function skillShield(skillId, dameSkill, isCrit) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtAttack(skillId, dameSkill, "Shield", isCrit);
             applyDamage(targetSide, dameSkill, "Shield");
 
@@ -1733,6 +1738,7 @@ function skillBurn(skillId, dameSkill, isCrit) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtAttack(skillId, dameSkill, "Burn", isCrit);
             //Cộng burn cho đối thủ
             if (teamAorB == 'TeamB') {
@@ -1815,6 +1821,7 @@ function skillPoison(skillId, dameSkill, isCrit) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
+            attackEffect = null;
             effectNumberAtAttack(skillId, dameSkill, "Poison", isCrit);
             //Cộng poison cho đối thủ
             if (teamAorB == 'TeamB') {
@@ -1900,7 +1907,7 @@ function skillFreeze(skillId, timeFreeze, isComp) {
         // Xóa phần tử sau khi hiệu ứng kết thúc
         setTimeout(() => {
             attackEffect.remove();
-
+            attackEffect = null;
             effectHpBarUpdate(effectContainer, timeFreeze, "Freeze");
 
             pauseCooldown(timeFreeze, isComp); // Cộng thêm thời gian tạm dừng cho đối thủ hoặc người chơi
@@ -2652,6 +2659,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 // Xóa phần tử sau khi hiệu ứng kết thúc
                 setTimeout(() => {
                     attackEffect.remove();
+                    attackEffect = null;
                 }, duration);
             };
 
@@ -2689,6 +2697,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             // Trước khi setInterval mới
             if (targetSkill.sleepIntervalId) {
                 clearInterval(targetSkill.sleepIntervalId);
+                targetSkill.sleepIntervalId = null;
             }
 
             // Cập nhật hiệu ứng và lưu ID interval
@@ -2710,6 +2719,7 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
                 clearInterval(targetSkill.sleepIntervalId);
                 targetSkill.sleepIntervalId = null;
                 sleepTimerElement.remove();
+                sleepTimerElement = null;
             }
         }, 200);
 
@@ -2824,6 +2834,7 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
                 // Xóa phần tử sau khi hiệu ứng kết thúc
                 setTimeout(() => {
                     attackEffect.remove();
+                    attackEffect = null;
                 }, duration);
             };
 
@@ -2924,6 +2935,7 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
                 // Xóa phần tử sau khi hiệu ứng kết thúc
                 setTimeout(() => {
                     attackEffect.remove();
+                    attackEffect = null;
                 }, duration);
             };
 
@@ -2957,6 +2969,7 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
             // Trước khi setInterval mới
             if (targetSkill.hasteIntervalId) {
                 clearInterval(targetSkill.hasteIntervalId);
+                targetSkill.hasteIntervalId = null;
             }
 
             // Cập nhật hiệu ứng và lưu ID interval
@@ -2974,6 +2987,7 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
                     clearInterval(targetSkill.hasteIntervalId);
                     targetSkill.hasteIntervalId = null;
                     hasteTimerElement.remove();
+                    hasteTimerElement = null;
                 }
             }, 500);
 
@@ -3069,6 +3083,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
                 // Xóa phần tử sau khi hiệu ứng kết thúc
                 setTimeout(() => {
                     attackEffect.remove();
+                    attackEffect = null;
                 }, duration);
             };
 
@@ -3103,6 +3118,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
             // Trước khi setInterval mới
             if (targetSkill.slowIntervalId) {
                 clearInterval(targetSkill.slowIntervalId);
+                targetSkill.slowIntervalId = null;
             }
 
             // Cập nhật hiệu ứng và lưu ID interval
@@ -3116,6 +3132,7 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
                     clearInterval(targetSkill.slowIntervalId);
                     targetSkill.slowIntervalId = null;
                     slowTimerElement.remove();
+                    slowTimerElement = null;
                 }
             }, 500);
 
@@ -3177,6 +3194,7 @@ function effectNumberAtBaseAttack(targetAttack, dameSkill, effect, isCrit) {
     // Xóa số sau khi hiệu ứng hoàn tất
     setTimeout(() => {
         effectNumberDiv.remove();
+        effectNumberDiv = null;
     }, 1500);  // Sau 1.5s, số sẽ biến mất
 }
 
@@ -3244,6 +3262,7 @@ function effectNumberAtAttack(skillId, dameSkill, effect, isCrit) {
     // Xóa số sau khi hiệu ứng hoàn tất
     setTimeout(() => {
         effectNumberDiv.remove();
+        effectNumberDiv = null;
     }, 1500);  // Sau 1.5s, số sẽ biến mất
 }
 
@@ -3374,6 +3393,7 @@ function effectHpBarUpdate(effectContainer, dameSkill, effect) {
     // Xóa sau 2s
     setTimeout(() => {
         effectDiv.remove();
+        effectDiv = null;
     }, 2000);
 }
 
@@ -3958,6 +3978,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         //Nâng data-skill LEVEL lên để tạo highlight
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
@@ -4099,6 +4120,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
                         if (skillDiv) {
@@ -4242,6 +4264,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
                         if (skillDiv) {
@@ -4417,6 +4440,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
                         if (skillDiv) {
@@ -4509,6 +4533,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
                         if (skillDiv) {
@@ -4611,6 +4636,7 @@ function loadEventSlotBattle() {
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
+                        skill = null;
 
                         const skillDiv = slot.querySelector(".skill"); // Lấy div skill con
                         if (skillDiv) {
@@ -4714,6 +4740,7 @@ function loadEventSlotBattle() {
                 // Xử lý logic bán kỹ năng
                 skillElement.parentElement.classList.remove("occupied")
                 skillElement.remove(); // Xóa skill khỏi giao diện
+                skillElement = null;
 
             }
             slots.forEach(slot => slot.classList.remove("highlight"));
@@ -6853,9 +6880,11 @@ function endBattle(whoWin, pointsThisRound) {
     //Reset Battle time
 
     clearInterval(intervalID)
+    intervalID = null;
     document.getElementById('cooldownBarContainer').classList.remove('comp');
     //Reset hiệu ứng trừ máu khi over time
     clearInterval(intervalIdOverTime)
+    intervalIdOverTime = null
     damageOverTime = 1 //+++++++++
 
     //Reset thông số shield/burn/poison của 2 team
@@ -7748,6 +7777,7 @@ function battleStartTime(init = true) {
         // Dừng khi hết thời gian hoặc game kết thúc
         if (cooldownRemaining <= 0 || endGame === true) {
             clearInterval(intervalID); // Dừng cập nhật
+            intervalID = null;
             cooldownTime.textContent = 'Hết thời gian!';
             document.getElementById('cooldownBarContainer').classList.add('comp');
             overTimeBattle();
@@ -7793,6 +7823,7 @@ function battleStartTime(init = true) {
 
         if (endGame === true) {
             clearInterval(intervalIDBurnOrPoison); // Dừng cập nhật
+            intervalIDBurnOrPoison = null;
         }
     }, 1500);
 }
@@ -7814,6 +7845,7 @@ function overTimeBattle() {
         }
         if (endGame === true) {
             clearInterval(intervalIdOverTime);
+            intervalIdOverTime = null;
             return;
         }
 
@@ -7963,6 +7995,7 @@ function applyPoison(hpBar) {
     updateHpbar();
     if (endGame === true || pauseBattle === true) {
         clearInterval(intervalId);
+        intervalId = null;
     }
 }
 
@@ -7973,8 +8006,11 @@ function checkWinOrLose() {
     if (nowHpBattleComp <= 0 && endGame === false) {
         console.log("Người chơi thắng!");
         clearInterval(intervalID)
+        intervalID = null;
         clearInterval(intervalIdOverTime)
+        intervalID = null;
         clearInterval(intervalIDBurnOrPoison)
+        intervalIDBurnOrPoison = null;
         endGame = true;
 
         updateHpbar();
@@ -7990,8 +8026,11 @@ function checkWinOrLose() {
     else if (nowHpBattleMy <= 0 && endGame === false) {
         console.log("Người chơi thua!");
         clearInterval(intervalID)
+        intervalID = null;
         clearInterval(intervalIdOverTime)
+        intervalID = null;
         clearInterval(intervalIDBurnOrPoison)
+        intervalIDBurnOrPoison = null;
         endGame = true;
         infoStartGame.winStreak = 0;
 
@@ -8040,6 +8079,7 @@ function cooldownSkillBattleA() {
         // Xóa vòng lặp cũ nếu có
         if (isComp && intervalIdA !== null) {
             clearInterval(intervalIdA);
+            intervalIdA = null
         }
 
         // Tạo vòng lặp mới
@@ -8056,6 +8096,7 @@ function cooldownSkillBattleA() {
 
             if (endGame) {
                 clearInterval(intervalId); // Dừng vòng lặp khi endGame = true
+                intervalId = null;
                 skillBar.style.width = "0%";
                 skillTime.textContent = ""
                 skillTime.style.backgroundColor = "";
@@ -8238,6 +8279,7 @@ function cooldownSkillBattleB() {
         // Xóa vòng lặp cũ nếu có
         if (!isComp && intervalIdB !== null) {
             clearInterval(intervalIdB);
+            intervalIdB = null;
         }
 
         // Tạo vòng lặp mới
@@ -8254,6 +8296,7 @@ function cooldownSkillBattleB() {
 
             if (endGame) {
                 clearInterval(intervalId); // Dừng vòng lặp khi endGame = true
+                intervalId = null;
                 skillBar.style.width = "0%";
                 skillTime.textContent = ""
                 skillTime.style.backgroundColor = "";
@@ -10378,7 +10421,11 @@ function showUpWeightBag() {
 
     // Xóa nếu đã tồn tại popup cũ
     const oldPopup = document.getElementById('popupOverlayWeightBag');
-    if (oldPopup) oldPopup.remove();
+    if (oldPopup) {
+        oldPopup.remove();
+        oldPopup = null;
+    }
+    
 
     // Tạo lớp nền mờ
     const overlay = document.createElement('div');
@@ -12670,6 +12717,7 @@ function closeMap() {
     autoButton.style.border = "2px solid #ffffff40";
     autoButton.style.boxShadow = "1px 1px 1px 1px #961862";
     clearInterval(autoInterval); // Dừng lại khi tắt auto
+    autoInterval = null;
     isAutoHunter = false;
 
     // Xóa sự kiện visibilitychange khi tắt auto
@@ -13247,6 +13295,7 @@ function toggleAutoMovement() {
         autoButton.style.boxShadow = "1px 1px 1px 1px #961862";
 
         clearInterval(autoInterval); // Dừng lại khi tắt auto
+        autoInterval = null;
         isAutoHunter = false;
 
         // Xóa sự kiện visibilitychange khi tắt auto
@@ -13299,6 +13348,7 @@ function toggleAutoMovement() {
         autoButton.style.boxShadow = "1px 1px 1px 1px #961862";
 
         clearInterval(autoInterval); // Dừng lại khi tắt auto
+        autoInterval = null;
         isAutoHunter = false;
 
         // Xóa sự kiện visibilitychange khi tắt auto
@@ -13310,6 +13360,7 @@ function toggleAutoMovement() {
 function changeTabWhenAutoMove() {
     if (document.hidden) {
         clearInterval(autoInterval); // Dừng lại khi tab không còn hiển thị
+        autoInterval = null;
         stopStaminaRegen();
         isAutoMoving = false;
         isAutoHunter = false;
@@ -13329,7 +13380,10 @@ function showUpStamina() {
 
     // Xóa nếu đã tồn tại popup cũ
     const oldPopup = document.getElementById('popupOverlayStamina');
-    if (oldPopup) oldPopup.remove();
+    if (oldPopup) {
+        oldPopup.remove();
+        oldPopup = null;
+    }
 
     // Tạo lớp nền mờ
     const overlay = document.createElement('div');
@@ -13466,6 +13520,7 @@ function click5MonMeet(pet) {
     catch5Mon();
     setTimeout(() => {
         pet.remove();
+        pet = null;
     }, 800);
 }
 
@@ -13557,6 +13612,7 @@ function fadeVolume(target, duration, callback) {
         audio.volume = Math.max(0, Math.min(1, audio.volume + diff));
         if ((diff > 0 && audio.volume >= target) || (diff < 0 && audio.volume <= target)) {
             clearInterval(interval);
+            interval = null;
             if (callback) callback();
         }
     }, step);
