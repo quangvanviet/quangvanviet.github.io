@@ -6687,11 +6687,13 @@ function nextStepGame1() {
 
         //Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((skill) => {
-            typeGameConquest.battlePetInShop[skill] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
             let index = skill.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
             let skillLock = `LockBattleShop${index}`;
-            LockBattleShop[skillLock] = false;
-            document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
+            if (LockBattleShop[skillLock] === false) {
+                typeGameConquest.battlePetInShop[skill] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
+                LockBattleShop[skillLock] = false;
+                document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
+            }
         });
 
         //Lấy thông tin đối thủ
