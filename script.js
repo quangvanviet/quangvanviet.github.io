@@ -7230,7 +7230,7 @@ function outGameRank() {
         // Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((key) => {
             typeGameConquest.battlePetInShop[key] = defaultSTT5Mon;
-            let index = key.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+            let index = key.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
             let skillLock = `LockBattleShop${index}`;
             LockBattleShop[skillLock] = false;
             document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
