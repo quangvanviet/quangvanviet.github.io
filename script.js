@@ -3981,6 +3981,7 @@ function loadEventSlotBattle() {
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
                         let skillLock = `LockBattleShop${index}`;
                         LockBattleShop[skillLock] = false;
+                        document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
@@ -4444,6 +4445,7 @@ function loadEventSlotBattle() {
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
                         let skillLock = `LockBattleShop${index}`;
                         LockBattleShop[skillLock] = false;
+                        document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
                         
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
@@ -4474,6 +4476,7 @@ function loadEventSlotBattle() {
                     let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
                     let skillLock = `LockBattleShop${index}`;
                     LockBattleShop[skillLock] = false;
+                    document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
                     
                     //Chuyển slot mới thành đầy    
                     slot.prepend(skill);
@@ -6684,6 +6687,7 @@ function nextStepGame1() {
             let index = skill.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
             let skillLock = `LockBattleShop${index}`;
             LockBattleShop[skillLock] = false;
+            document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
         });
 
         //Lấy thông tin đối thủ
