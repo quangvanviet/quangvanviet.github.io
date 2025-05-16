@@ -7226,6 +7226,10 @@ function outGameRank() {
         // Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((key) => {
             typeGameConquest.battlePetInShop[key] = defaultSTT5Mon;
+            let index = key.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+            let skillLock = `LockBattleShop${index}`;
+            LockBattleShop[skillLock] = false;
+            document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
         });
 
         //Xóa toàn bộ div skill
@@ -7287,12 +7291,17 @@ let LockBattleShop = {
 }
 //Lọc 5mon shop - khóa 5mon shop
 function lock5MonShop(item) {
-    if (LockBattleShop[item] === true) {
-        LockBattleShop[item] = false;
-        document.getElementById(item).style.color = 'rgb(255 161 115)'
-    } else {
-        LockBattleShop[item] = true;
-        document.getElementById(item).style.color = 'rgb(255 85 0)'
+    let index = item.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+    let skill = `battleShop${index}`;
+    
+    if (typeGameConquest.battlePetInShop[skill]?.ID) {
+        if (LockBattleShop[item] === true) {
+            LockBattleShop[item] = false;
+            document.getElementById(item).style.color = 'rgb(255 161 115)';
+        } else {
+            LockBattleShop[item] = true;
+            document.getElementById(item).style.color = 'rgb(255 85 0)';
+        }
     }
 }
 
