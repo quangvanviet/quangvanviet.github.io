@@ -7669,41 +7669,27 @@ function createSkill(slotDiv) {
             }
 
             // Gắn nội dung vào dameSkillDiv
-            if (slotDiv === "shop") {
-                dameSkillDiv.innerHTML =
-                    `
-                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
-                <i class="fa-solid fa-diamond"></i>
-                <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
-                </div>
-                
-                <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
-                ${dameSkillText}
-                </div>
-                <div style="position: absolute;font-size: 18px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;
-                top: -6px; left: -6px; z-index: 1;">
-                    <i class="fa-solid fa-splotch" style="
-                        position: absolute;
-                    "></i>
-                    <span style="position: absolute;font-size: 10px;color: #ffffff;
-                    font-weight: bold;min-width: 25px;top: 2px;left: -3px;
-                    ">
-                        ${skillItem[skillCompSlot].PRICE}
-                    </span>
-                </div>`;
-            } else {
-                dameSkillDiv.innerHTML =
-                    `
-                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
-                <i class="fa-solid fa-diamond"></i>
-                <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
-                </div>
-                
-                <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
-                ${dameSkillText}
-                </div>
-                `;
-            }
+            dameSkillDiv.innerHTML =
+                `
+            <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+            <i class="fa-solid fa-diamond"></i>
+            <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${skillItem[skillCompSlot].LEVEL}</span>
+            </div>
+            
+            <div class="dameSkillText" style="display: flex; flex-direction: row; align-items: center;">
+            ${dameSkillText}
+            </div>
+            <div style="position: absolute;font-size: 18px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;
+            top: -6px; left: -6px; z-index: 1;">
+                <i class="fa-solid fa-splotch" style="
+                    position: absolute;
+                "></i>
+                <span style="position: absolute;font-size: 10px;color: #ffffff;
+                font-weight: bold;min-width: 25px;top: 2px;left: -3px;
+                ">
+                    ${skillItem[skillCompSlot].PRICE}
+                </span>
+            </div>`;
             
 
             //Gắn cho div cha trạng thái đã lấp đầy
