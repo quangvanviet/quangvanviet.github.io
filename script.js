@@ -7265,11 +7265,11 @@ function outGameRank() {
 }
 
 let LockBattleShop = {
-    LockBattleShop1 = false,
-    LockBattleShop2 = false,
-    LockBattleShop3 = false,
-    LockBattleShop4 = false,
-    LockBattleShop5 = false,
+    LockBattleShop1: false,
+    LockBattleShop2: false,
+    LockBattleShop3: false,
+    LockBattleShop4: false,
+    LockBattleShop5: false,
 }
 //Lọc 5mon shop - khóa 5mon shop
 function lock5MonShop(item) {
