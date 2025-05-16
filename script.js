@@ -404,7 +404,7 @@ var defaultSTT5Mon = {
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0,
 };
-var price5MonConquest = 0;
+
 var typeGameGuess = {}
 var typeGameSolo5Mon = {}
 var typeGameConquest = {
@@ -414,7 +414,6 @@ var typeGameConquest = {
     reRoll: 0,
     reRollPrice: 0,
     starUser: 0,
-    price5Mon: 0,
     selectCharacterBattle: "",
     slowB: 0,
     upCooldownB: 0,
@@ -3908,8 +3907,8 @@ function loadEventSlotBattle() {
             // Kéo từ shop xuống
             if (parentSlot.parentElement.id == "battleShop") {
                 //Kiểm tra nếu không đủ star
-                if (typeGameConquest.starUser < price5MonConquest) {
-                    messageOpen(`Không đủ <i class="fa-solid fa-splotch"></i>, cần có ${price5MonConquest} <i class="fa-solid fa-splotch"></i>`)
+                if (typeGameConquest.starUser < typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE) {
+                    messageOpen(`Không đủ <i class="fa-solid fa-splotch"></i>, cần có ${typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE} <i class="fa-solid fa-splotch"></i>`)
                     slot.style.backgroundColor = ""
                     return;
                 }
@@ -3975,7 +3974,8 @@ function loadEventSlotBattle() {
                         //     }
                         // };
 
-
+                        typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
+                        
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
 
@@ -3996,9 +3996,7 @@ function loadEventSlotBattle() {
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
 
-                        typeGameConquest.starUser -= price5MonConquest
                         typeGameConquest.selectSkillShop += 1
-                        price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
 
@@ -4024,6 +4022,8 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
                         typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
 
+                        typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
+                        
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
 
                         slot.prepend(skill);
@@ -4033,9 +4033,7 @@ function loadEventSlotBattle() {
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
 
-                        typeGameConquest.starUser -= price5MonConquest;
                         typeGameConquest.selectSkillShop += 1;
-                        price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon;
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
                         // Nếu trùng thì chỉ reset màu slot
@@ -4388,8 +4386,8 @@ function loadEventSlotBattle() {
             // Kéo từ shop xuống
             if (parentSlot.parentElement.id == "battleShop") {
                 //Kiểm tra nếu không đủ star
-                if (typeGameConquest.starUser < price5MonConquest) {
-                    messageOpen(`Không đủ <i class="fa-solid fa-splotch"></i>, cần có ${price5MonConquest} <i class="fa-solid fa-splotch"></i>`)
+                if (typeGameConquest.starUser < typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE) {
+                    messageOpen(`Không đủ <i class="fa-solid fa-splotch"></i>, cần có ${typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE} <i class="fa-solid fa-splotch"></i>`)
                     slot.style.backgroundColor = ""
                     return;
                 }
@@ -4437,6 +4435,8 @@ function loadEventSlotBattle() {
                         //     }
                         // };
 
+                        typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
+                        
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
 
@@ -4454,15 +4454,14 @@ function loadEventSlotBattle() {
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
 
-                        typeGameConquest.starUser -= price5MonConquest
                         typeGameConquest.selectSkillShop += 1
-                        price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else {
                     }
 
                 } else {
-
+                    typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
+                    
                     //Thêm skill vào battlePetUseSlotRound
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
 
@@ -4476,9 +4475,9 @@ function loadEventSlotBattle() {
                     resetMaxHpBattle();
                     updateSttForSkillAffter();
 
-                    typeGameConquest.starUser -= price5MonConquest
+                    
                     typeGameConquest.selectSkillShop += 1
-                    price5MonConquest = typeGameConquest.selectSkillShop + typeGameConquest.price5Mon
+
                     document.getElementById("starUser").innerText = typeGameConquest.starUser;
                 }
 
@@ -6492,7 +6491,7 @@ function openGameRank() {
             typeGameConquest.reRoll = 0;
             typeGameConquest.reRollPrice = 0
             typeGameConquest.starUser = 2;
-            typeGameConquest.price5Mon = 0;
+
             //Gán HP
             nowHpBattleMy = (typeGameConquest.maxHpBattle + maxHpUp);
             document.querySelector('#hpBarB').querySelector('.hpText').textContent = (typeGameConquest.maxHpBattle + maxHpUp);
@@ -6605,7 +6604,6 @@ function openGameRank() {
         updateHpAndRageBar5Mon();
         updateHpbar();
 
-        price5MonConquest = typeGameConquest.price5Mon + typeGameConquest.selectSkillShop
         document.getElementById('qtyResetShop').innerText = typeGameConquest.reRollPrice;
         document.getElementById('starUser').innerText = typeGameConquest.starUser;
 
@@ -9111,14 +9109,7 @@ function showResultScreen(isWin) {
     typeGameConquest.reRoll = 0;
     typeGameConquest.reRollPrice = 0;
 
-    if (infoStartGame.roundGame % 2 === 0) {
-        typeGameConquest.price5Mon += 1;
-    }
-
-
     typeGameConquest.selectSkillShop = 0;
-
-    price5MonConquest = typeGameConquest.price5Mon + typeGameConquest.selectSkillShop
 
     document.getElementById("qtyResetShop").innerText = typeGameConquest.reRollPrice;
     document.getElementById("starUser").innerText = typeGameConquest.starUser;
@@ -9659,7 +9650,6 @@ function register() {
                     reRoll: 0,
                     reRollPrice: 0,
                     starUser: 0,
-                    price5Mon: 0,
                     selectCharacterBattle: "",
                     slowB: 0,
                     upCooldownB: 0,
@@ -10603,8 +10593,7 @@ function resetOutGame() {
     typeGameConquest.reRoll = 0;
     typeGameConquest.reRollPrice = 0;
     typeGameConquest.starUser = 0;
-    typeGameConquest.price5Mon = 0;
-    price5MonConquest = 0;
+
     //Thông tin của người chơi
     nowHpBattleMy = 0;
     nowShieldBattleMy = 0;
