@@ -6482,6 +6482,12 @@ function openGameRank() {
             modeGamePoint = 1;
         }
 
+        //Reset Lock shop
+        for (let k = 1; k <=5 ; k++) {
+            LockBattleShop[`LockBattleShop${k}`] = false;
+            document.getElementById(`LockBattleShop${k}`).style.color = 'rgb(255 85 0)'
+        }
+        
         //Trường hợp onGame của người chơi = 0
         if (onGame === 0 && infoStartGame.stepGame === 0) {
 
@@ -7258,6 +7264,24 @@ function outGameRank() {
     endLoading();
 }
 
+let LockBattleShop = {
+    LockBattleShop1 = false,
+    LockBattleShop2 = false,
+    LockBattleShop3 = false,
+    LockBattleShop4 = false,
+    LockBattleShop5 = false,
+}
+//Lọc 5mon shop - khóa 5mon shop
+function lock5MonShop(item) {
+    if (LockBattleShop[item] === true) {
+        LockBattleShop[item] = false;
+        document.getElementById(item).style.color = 'rgb(255 85 0)'
+    } else {
+        LockBattleShop[item] = true;
+        document.getElementById(item).style.color = 'rgb(255 161 115)'
+    }
+}
+
 function reRollShop() { //++++++++++++++
     const resetButton = document.getElementById("resetShop");
 
@@ -7292,6 +7316,11 @@ function randomSkillinShop() {
     let selectedSkillIDs = [];
 
     for (let i = 0; i < 5; i++) {
+        //Kiểm tra xem có lock shop không
+        if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
+            continue;
+        }
+        
         const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
 
         if (availableSkills.length === 0) {
@@ -13826,3 +13855,4 @@ window.openPopupSettingMain = openPopupSettingMain;
 window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
+window.lock5MonShop = lock5MonShop;
