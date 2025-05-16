@@ -7317,9 +7317,9 @@ function randomSkillinShop() {
 
     for (let i = 0; i < 5; i++) {
         //Kiểm tra xem có lock shop không
-        if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
-            continue;
-        }
+        // if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
+        //     continue;
+        // }
         
         const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
 
@@ -7385,7 +7385,7 @@ function randomSkillinShop() {
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
-                    <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                    <span style="position: absolute;font-size: 10px;color: #ffffff;
                     font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                     ">
                         ${selectedSkill.PRICE}
@@ -7563,7 +7563,7 @@ function randomSkillinShop1() {
                 <i class="fa-solid fa-splotch" style="
                     position: absolute;
                 "></i>
-                <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                <span style="position: absolute;font-size: 10px;color: #ffffff;
                 font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                 ">
                     ${selectedSkill.PRICE}
@@ -7657,7 +7657,7 @@ function createSkill(slotDiv) {
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
-                    <span id="priceTextbattleShop1" style="position: absolute;font-size: 10px;color: #ffffff;
+                    <span style="position: absolute;font-size: 10px;color: #ffffff;
                     font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                     ">
                         ${skillItem[skillCompSlot].PRICE}
