@@ -4028,6 +4028,10 @@ function loadEventSlotBattle() {
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
                         
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
+                        let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+                        let skillLock = `LockBattleShop${index}`;
+                        LockBattleShop[skillLock] = false;
+                        document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
 
                         slot.prepend(skill);
                         slot.classList.add("occupied");
