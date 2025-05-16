@@ -3978,7 +3978,9 @@ function loadEventSlotBattle() {
                         
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
-
+                        let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+                        let skillLock = `LockBattleShop${index}`;
+                        LockBattleShop[skillLock] = false;
 
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
@@ -4439,7 +4441,10 @@ function loadEventSlotBattle() {
                         
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
-
+                        let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+                        let skillLock = `LockBattleShop${index}`;
+                        LockBattleShop[skillLock] = false;
+                        
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
                         skill = null;
@@ -4466,7 +4471,10 @@ function loadEventSlotBattle() {
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
 
                     typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
-
+                    let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+                    let skillLock = `LockBattleShop${index}`;
+                    LockBattleShop[skillLock] = false;
+                    
                     //Chuyển slot mới thành đầy    
                     slot.prepend(skill);
                     slot.classList.add("occupied");
@@ -6673,8 +6681,10 @@ function nextStepGame1() {
         //Xóa skill trong shop
         Object.keys(typeGameConquest.battlePetInShop).forEach((skill) => {
             typeGameConquest.battlePetInShop[skill] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
+            let index = skill.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
+            let skillLock = `LockBattleShop${index}`;
+            LockBattleShop[skillLock] = false;
         });
-
 
         //Lấy thông tin đối thủ
         //Lấy chỉ số
