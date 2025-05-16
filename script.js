@@ -7317,9 +7317,9 @@ function randomSkillinShop() {
 
     for (let i = 0; i < 5; i++) {
         //Kiểm tra xem có lock shop không
-        // if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
-        //     continue;
-        // }
+        if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
+            continue;
+        }
         
         const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
 
