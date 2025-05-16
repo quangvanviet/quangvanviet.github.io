@@ -6485,7 +6485,7 @@ function openGameRank() {
         //Reset Lock shop
         for (let k = 1; k <=5 ; k++) {
             LockBattleShop[`LockBattleShop${k}`] = false;
-            document.getElementById(`LockBattleShop${k}`).style.color = 'rgb(255 85 0)'
+            document.getElementById(`LockBattleShop${k}`).style.color = 'rgb(255 161 115)'
         }
         
         //Trường hợp onGame của người chơi = 0
@@ -7275,10 +7275,10 @@ let LockBattleShop = {
 function lock5MonShop(item) {
     if (LockBattleShop[item] === true) {
         LockBattleShop[item] = false;
-        document.getElementById(item).style.color = 'rgb(255 85 0)'
+        document.getElementById(item).style.color = 'rgb(255 161 115)'
     } else {
         LockBattleShop[item] = true;
-        document.getElementById(item).style.color = 'rgb(255 161 115)'
+        document.getElementById(item).style.color = 'rgb(255 85 0)'
     }
 }
 
@@ -7301,13 +7301,12 @@ function randomSkillinShop() {
     const battleUserPetRound1 = structuredClone(typeGameConquest.battleUserPetRound);
 
     // Khởi tạo các slot shop
-    typeGameConquest.battlePetInShop = {
-        battleShop1: defaultSTT5Mon,
-        battleShop2: defaultSTT5Mon,
-        battleShop3: defaultSTT5Mon,
-        battleShop4: defaultSTT5Mon,
-        battleShop5: defaultSTT5Mon,
-    };
+    for (let i = 0; i < 5; i++) {
+        //Kiểm tra xem có lock shop không
+        if (LockBattleShop[`LockBattleShop${i+1}`] === false) {
+            typeGameConquest.battlePetInShop[`battleShop${i+1}`] = defaultSTT5Mon
+        }
+    }
 
     // Lấy toàn bộ danh sách kỹ năng
     const allSkills = Object.values(battleUserPetRound1);
