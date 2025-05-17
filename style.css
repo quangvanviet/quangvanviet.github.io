@@ -1727,7 +1727,6 @@ body {
 
 .slotSkill.updateSkill {
     box-shadow: 0px 0px 10px 8px rgb(255 10 10);
-    /* Hiệu ứng phát sáng xanh */
 }
 
 /* Màn hình thông báo chiến thắng/ thua cuộc*/
@@ -2164,23 +2163,4 @@ body {
     }
 }
 
-.skill.can-upgrade {
-  position: relative;
-  border: 2px solid gold;
-  animation: glowUpdate 1s infinite alternate;
-}
-
-.upgrade-overlay {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  color: gold;
-  font-size: 18px;
-  pointer-events: none;
-}
-
-@keyframes glowUpdate {
-  0% { box-shadow: 0 0 5px gold; }
-  100% { box-shadow: 0 0 15px orange; }
-}
 
