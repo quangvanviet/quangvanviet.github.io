@@ -3705,20 +3705,19 @@ function highlightSkillLevel() {
 }
 
 //Hàm kiểm tra các thẻ trong battle có thể update level được không
-
 function checkUpdateLevel() {
   const allSkillDivs = document.querySelectorAll('.skill');
 
   // 🔁 RESET: Xoá tất cả hiệu ứng cũ và icon nâng cấp
   document.querySelectorAll('.updateSkill').forEach(div => {
-    div.classList.remove('upgrade-glow');
+    div.classList.remove('updateSkill');
   });
 
   document.querySelectorAll('.upgrade-icon').forEach(icon => {
     icon.remove();
   });
 
-  // 🔁 Tiếp tục như trước
+  // 🧭 Nguồn dữ liệu
   const allSources = [
     { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
     { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
@@ -3730,21 +3729,27 @@ function checkUpdateLevel() {
     if (!parentWithId) return;
     const parentId = parentWithId.id;
 
-    let currentSource = null;
+    // Tìm nguồn chứa skill này
+    let currentData = null;
     for (const source of allSources) {
       if (source.dom.contains(skillDiv)) {
-        currentSource = source.data;
+        currentData = source.data;
         break;
       }
     }
 
-    if (!currentSource || !currentSource[parentId]) return;
-    const currentSkill = currentSource[parentId];
+    if (!currentData || !currentData[parentId]) return;
 
-    // So sánh với các nguồn khác
-    allSources.forEach(other => {
-      if (other.data === currentSource) return;
-      for (const [otherKey, otherSkill] of Object.entries(other.data)) {
+    const currentSkill = currentData[parentId];
+    if (!currentSkill || currentSkill.ID === "") return;
+
+    // So sánh với tất cả nguồn còn lại
+    for (const otherSource of allSources) {
+      if (otherSource.data === currentData) continue;
+
+      for (const [otherKey, otherSkill] of Object.entries(otherSource.data)) {
+        if (!otherSkill || otherSkill.ID === "") continue;
+
         if (
           otherSkill.ID === currentSkill.ID &&
           otherSkill.LEVEL === currentSkill.LEVEL
@@ -3765,7 +3770,7 @@ function checkUpdateLevel() {
           }
         }
       }
-    });
+    }
   });
 }
 
