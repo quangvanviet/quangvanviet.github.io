@@ -3732,6 +3732,8 @@ function checkUpdateLevel() {
       skillDiv.classList.remove('can-upgrade');
       const oldOverlay = skillDiv.querySelector('.upgrade-overlay');
       if (oldOverlay) oldOverlay.remove();
+      oldOverlay = null;
+        
 
       // So sánh với các vùng khác
       for (const [otherZoneId, otherZoneData] of Object.entries(zoneMap)) {
@@ -3746,7 +3748,7 @@ function checkUpdateLevel() {
             // Trùng ID và LEVEL → có thể nâng cấp
             skillDiv.classList.add('can-upgrade');
 
-            const overlay = document.createElement('div');
+            let overlay = document.createElement('div');
             overlay.className = 'upgrade-overlay';
             overlay.innerHTML = '<i class="fa-solid fa-up-long"></i>';
             skillDiv.appendChild(overlay);
