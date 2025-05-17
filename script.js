@@ -3704,6 +3704,61 @@ function highlightSkillLevel() {
     });
 }
 
+//Hàm kiểm tra các thẻ trong battle có thể update level được không
+function checkUpdateLevel() {
+  const zoneMap = {
+    skillBarB: typeGameConquest.battlePetUseSlotRound,
+    battleInventory: typeGameConquest.battlePetInInventory,
+    battleShop: typeGameConquest.battlePetInShop,
+  };
+
+  // Duyệt từng vùng
+  for (const [zoneId, zoneData] of Object.entries(zoneMap)) {
+    const zoneElement = document.getElementById(zoneId);
+    if (!zoneElement) continue;
+
+    const skillDivs = zoneElement.querySelectorAll('.skill');
+
+    skillDivs.forEach(skillDiv => {
+      // Lấy div cha gần nhất có id (skill1B, battleInv1,...)
+      const parentWithId = skillDiv.closest('div[id]');
+      if (!parentWithId) return;
+
+      const key = parentWithId.id;
+      const currentSkill = zoneData[key];
+      if (!currentSkill) return;
+
+      // Reset trạng thái
+      skillDiv.classList.remove('can-upgrade');
+      const oldOverlay = skillDiv.querySelector('.upgrade-overlay');
+      if (oldOverlay) oldOverlay.remove();
+
+      // So sánh với các vùng khác
+      for (const [otherZoneId, otherZoneData] of Object.entries(zoneMap)) {
+        if (otherZoneId === zoneId) continue;
+
+        for (const otherKey in otherZoneData) {
+          const otherSkill = otherZoneData[otherKey];
+          if (
+            otherSkill.ID === currentSkill.ID &&
+            otherSkill.LEVEL === currentSkill.LEVEL
+          ) {
+            // Trùng ID và LEVEL → có thể nâng cấp
+            skillDiv.classList.add('can-upgrade');
+
+            const overlay = document.createElement('div');
+            overlay.className = 'upgrade-overlay';
+            overlay.innerHTML = '<i class="fa-solid fa-up-long"></i>';
+            skillDiv.appendChild(overlay);
+            return;
+          }
+        }
+      }
+    });
+  }
+}
+
+
 //Load event cho skill
 function loadEventSkillBattle() {
     const skills = document.querySelectorAll(".skill");
@@ -3998,6 +4053,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                         typeGameConquest.selectSkillShop += 1
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
@@ -4039,6 +4095,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                         typeGameConquest.selectSkillShop += 1;
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
@@ -4192,6 +4249,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
                     } else {
                         // Nếu trùng thì chỉ reset màu slot
                         slot.style.backgroundColor = "";
@@ -4283,6 +4341,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                     } else {
 
@@ -4334,6 +4393,7 @@ function loadEventSlotBattle() {
                     highlightSkillLevel();
                     resetMaxHpBattle();
                     updateSttForSkillAffter();
+                    checkUpdateLevel();
                 }
             } else {
                 slot.style.backgroundColor = "";
@@ -4464,6 +4524,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                         typeGameConquest.selectSkillShop += 1
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
@@ -4489,6 +4550,7 @@ function loadEventSlotBattle() {
                     highlightSkillLevel();
                     resetMaxHpBattle();
                     updateSttForSkillAffter();
+                    checkUpdateLevel();
 
                     
                     typeGameConquest.selectSkillShop += 1
@@ -4558,6 +4620,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                     } else {
 
@@ -4596,6 +4659,7 @@ function loadEventSlotBattle() {
                     highlightSkillLevel();
                     resetMaxHpBattle();
                     updateSttForSkillAffter();
+                    checkUpdateLevel();
                 }
 
             } else if (parentSlot.parentElement.id == "skillBarB") {
@@ -4661,6 +4725,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
+                        checkUpdateLevel();
 
                     } else {
                         // Đổi chỗ dữ liệu trong typeGameConquest.skillBattle và battlePetInInventory
@@ -4702,6 +4767,7 @@ function loadEventSlotBattle() {
                     highlightSkillLevel();
                     resetMaxHpBattle();
                     updateSttForSkillAffter();
+                    checkUpdateLevel();
                 }
                 internalUp();
                 resetHp5Mon();
@@ -7439,6 +7505,9 @@ function randomSkillinShop() {
 
     //Load event click hiện info cho các skill
     createInfo5mon();
+
+    //Kiểm tra có skill nào có thể update không
+    checkUpdateLevel();
 }
 
 function randomSkillinShop1() {
@@ -7614,6 +7683,9 @@ function randomSkillinShop1() {
 
     //Load event click hiện info cho các skill
     createInfo5mon();
+
+    //Kiểm tra xem có skill nào có thể update không
+    checkUpdateLevel();
 }
 
 //Hàm tạo comp => tạo skill cho comp skill1A -> 9A
@@ -7706,6 +7778,9 @@ function createSkill(slotDiv) {
 
     //Load event click hiện info cho các skill
     createInfo5mon();
+
+    //Kiểm tra xem có skill nào có thể update không
+    checkUpdateLevel();
 }
 
 //Cập nhật thông tin skill khi ở tủ đồ và ở slot skill khi di chuyển skill
