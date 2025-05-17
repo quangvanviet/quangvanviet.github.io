@@ -10264,7 +10264,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
         }
 
         itemDiv.addEventListener("click", () => {
-            document.getElementById("imgPopupSTT5Mon").src = item.URLimg;
+            document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + item.URLimg + "')";
             document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
             document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
             document.getElementById("levelTextPopupSTT5Mon").textContent = item.LEVEL;
@@ -10748,7 +10748,7 @@ function resetOutGame() {
 }
 
 function setupPopupInfo5MonInBattle(skillInfo) {
-    document.getElementById("imgPopupSTT5MonInBattle").src = skillInfo.URLimg;
+    document.getElementById("imgPopupSTT5MonInBattle").style.backgroundImage = "url('" + skillInfo.URLimg + "')";
     document.getElementById("namePopupSTT5MonInBattle").textContent = skillInfo.NAME;
     document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${skillInfo.POWER.STR + skillInfo.POWER.DEF + skillInfo.POWER.INT + skillInfo.POWER.LUK + skillInfo.POWER.AGI + skillInfo.POWER.HP}`;
     document.getElementById("levelTextPopupSTT5MonInBattle").textContent = skillInfo.LEVEL;
@@ -11771,7 +11771,7 @@ function setupPopupEventsExchangePage(itemList) {
     itemList.forEach(item => {
         const itemDiv = document.getElementById(item.ID);
         itemDiv.addEventListener("click", () => {
-            document.getElementById("popupImgExchange").src = item.URLimg;
+            document.getElementById("popupImgExchange").style.backgroundImage = "url('" + item.URLimg + "')";
             document.getElementById("popupNameExchange").textContent = item.NAME;
             document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
             let descTextItem = "";
@@ -13085,7 +13085,7 @@ function catch5Mon() {
     }
 
     // Hiển thị popup
-    document.getElementById("imgPopupSTT5MonMeet").src = is5MonMeet.URLimg;
+    document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + is5MonMeet.URLimg + "')";
     document.getElementById("namePopupSTT5MonMeet").textContent = is5MonMeet.NAME;
     document.getElementById("allStats5MonMeet").textContent = `⚔️: ${is5MonMeet.POWER.STR + is5MonMeet.POWER.AGI + is5MonMeet.POWER.HP}`;
     document.getElementById("rareTextPopupSTT5MonMeet").textContent = `${is5MonMeet.RARE}`;
