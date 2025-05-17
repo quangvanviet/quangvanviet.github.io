@@ -3706,60 +3706,58 @@ function highlightSkillLevel() {
 
 //Hàm kiểm tra các thẻ trong battle có thể update level được không
 function checkUpdateLevel() {
-  const zoneMap = {
-    skillBarB: typeGameConquest.battlePetUseSlotRound,
-    battleInventory: typeGameConquest.battlePetInInventory,
-    battleShop: typeGameConquest.battlePetInShop,
-  };
+  const allSkillDivs = document.querySelectorAll('.skill');
+  const allSources = [
+    { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
+    { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
+    { dom: document.getElementById('battleShop'), data: typeGameConquest.battlePetInShop }
+  ];
 
-  // Duyệt từng vùng
-  for (const [zoneId, zoneData] of Object.entries(zoneMap)) {
-    const zoneElement = document.getElementById(zoneId);
-    if (!zoneElement) continue;
+  allSkillDivs.forEach(skillDiv => {
+    const parentWithId = skillDiv.closest('div[id]');
+    if (!parentWithId) return;
+    const parentId = parentWithId.id;
 
-    const skillDivs = zoneElement.querySelectorAll('.skill');
+    let currentSource = null;
+    for (const source of allSources) {
+      if (source.dom.contains(skillDiv)) {
+        currentSource = source.data;
+        break;
+      }
+    }
 
-    skillDivs.forEach(skillDiv => {
-      // Lấy div cha gần nhất có id (skill1B, battleInv1,...)
-      const parentWithId = skillDiv.closest('div[id]');
-      if (!parentWithId) return;
+    if (!currentSource || !currentSource[parentId]) return;
+    const currentSkill = currentSource[parentId];
 
-      const key = parentWithId.id;
-      const currentSkill = zoneData[key];
-      if (!currentSkill) return;
+    // So sánh với các nguồn khác
+    allSources.forEach(other => {
+      if (other.data === currentSource) return;
+      for (const [otherKey, otherSkill] of Object.entries(other.data)) {
+        if (
+          otherSkill.ID === currentSkill.ID &&
+          otherSkill.LEVEL === currentSkill.LEVEL
+        ) {
+          // Tìm thấy có thể nâng cấp
+          // Gán hiệu ứng cho div cha (parentWithId)
+          parentWithId.classList.add('updateSkill');
 
-      // Reset trạng thái
-      skillDiv.classList.remove('can-upgrade');
-      let oldOverlay = skillDiv.querySelector('.upgrade-overlay');
-      if (oldOverlay) oldOverlay.remove();
-      oldOverlay = null;
-        
-
-      // So sánh với các vùng khác
-      for (const [otherZoneId, otherZoneData] of Object.entries(zoneMap)) {
-        if (otherZoneId === zoneId) continue;
-
-        for (const otherKey in otherZoneData) {
-          const otherSkill = otherZoneData[otherKey];
-          if (
-            otherSkill.ID === currentSkill.ID &&
-            otherSkill.LEVEL === currentSkill.LEVEL
-          ) {
-            // Trùng ID và LEVEL → có thể nâng cấp
-            skillDiv.classList.add('can-upgrade');
-
-            let overlay = document.createElement('div');
-            overlay.className = 'upgrade-overlay';
-            overlay.innerHTML = '<i class="fa-solid fa-up-long"></i>';
-            skillDiv.appendChild(overlay);
-            return;
+          // Thêm icon nâng cấp nếu chưa có
+          if (!parentWithId.querySelector('.upgrade-icon')) {
+            const upgradeIcon = document.createElement('i');
+            upgradeIcon.className = 'fa-solid fa-up-long upgrade-icon';
+            upgradeIcon.style.position = 'absolute';
+            upgradeIcon.style.top = '5px';
+            upgradeIcon.style.right = '5px';
+            upgradeIcon.style.color = 'gold';
+            upgradeIcon.style.fontSize = '18px';
+            parentWithId.style.position = 'relative';
+            parentWithId.appendChild(upgradeIcon);
           }
         }
       }
     });
-  }
+  });
 }
-
 
 //Load event cho skill
 function loadEventSkillBattle() {
