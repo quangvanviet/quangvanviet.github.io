@@ -4210,7 +4210,8 @@ function loadEventSlotBattle() {
                         }
                         highlightSkillLevel();
                         resetMaxHpBattle();
-                        updateSttForSkillAffter()
+                        updateSttForSkillAffter();
+                        checkupdatelevel();
 
                     } else {
 
