@@ -3725,7 +3725,7 @@ function checkUpdateLevel() {
   ];
 
   allSkillDivs.forEach(skillDiv => {
-    const parentWithId = skillDiv.closest('div[id]');
+    const parentWithId = skillDiv.parentElement;
       console.log("parentWithId", parentWithId)
     if (!parentWithId) return;
     const parentId = parentWithId.id;
