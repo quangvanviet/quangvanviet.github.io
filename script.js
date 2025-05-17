@@ -3726,14 +3726,17 @@ function checkUpdateLevel() {
 
   allSkillDivs.forEach(skillDiv => {
     const parentWithId = skillDiv.closest('div[id]');
+      console.log("parentWithId", parentWithId)
     if (!parentWithId) return;
     const parentId = parentWithId.id;
+      console.log("parentId", parentId)
 
     // Tìm nguồn chứa skill này
     let currentData = null;
     for (const source of allSources) {
       if (source.dom.contains(skillDiv)) {
         currentData = source.data;
+          console.log("currentData", currentData)
         break;
       }
     }
@@ -3745,15 +3748,19 @@ function checkUpdateLevel() {
 
     // So sánh với tất cả nguồn còn lại
     for (const otherSource of allSources) {
-      if (otherSource.data === currentData) continue;
+      // if (otherSource.data === currentData) continue;
 
       for (const [otherKey, otherSkill] of Object.entries(otherSource.data)) {
         if (!otherSkill || otherSkill.ID === "") continue;
 
+          console.log("otherSkill", otherSkill)
+          console.log("currentSkill", currentSkill)
+          console.log("So sanh", otherSkill.ID, currentSkill.ID, otherSkill.LEVEL, currentSkill.LEVEL)
         if (
           otherSkill.ID === currentSkill.ID &&
           otherSkill.LEVEL === currentSkill.LEVEL
         ) {
+            console.log("Here", otherSkill.ID, currentSkill.ID, otherSkill.LEVEL, currentSkill.LEVEL)
           // ✅ Thêm hiệu ứng vào div cha
           parentWithId.classList.add('updateSkill');
 
