@@ -3705,8 +3705,20 @@ function highlightSkillLevel() {
 }
 
 //Hàm kiểm tra các thẻ trong battle có thể update level được không
+
 function checkUpdateLevel() {
   const allSkillDivs = document.querySelectorAll('.skill');
+
+  // 🔁 RESET: Xoá tất cả hiệu ứng cũ và icon nâng cấp
+  document.querySelectorAll('.updateSkill').forEach(div => {
+    div.classList.remove('upgrade-glow');
+  });
+
+  document.querySelectorAll('.upgrade-icon').forEach(icon => {
+    icon.remove();
+  });
+
+  // 🔁 Tiếp tục như trước
   const allSources = [
     { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
     { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
@@ -3737,20 +3749,18 @@ function checkUpdateLevel() {
           otherSkill.ID === currentSkill.ID &&
           otherSkill.LEVEL === currentSkill.LEVEL
         ) {
-          // Tìm thấy có thể nâng cấp
-          // Gán hiệu ứng cho div cha (parentWithId)
+          // ✅ Thêm hiệu ứng vào div cha
           parentWithId.classList.add('updateSkill');
 
-          // Thêm icon nâng cấp nếu chưa có
           if (!parentWithId.querySelector('.upgrade-icon')) {
             const upgradeIcon = document.createElement('i');
             upgradeIcon.className = 'fa-solid fa-up-long upgrade-icon';
             upgradeIcon.style.position = 'absolute';
             upgradeIcon.style.top = '5px';
             upgradeIcon.style.right = '5px';
-            upgradeIcon.style.color = 'gold';
+            upgradeIcon.style.color = 'red';
             upgradeIcon.style.fontSize = '18px';
-            parentWithId.style.position = 'relative';
+
             parentWithId.appendChild(upgradeIcon);
           }
         }
@@ -3758,6 +3768,7 @@ function checkUpdateLevel() {
     });
   });
 }
+
 
 //Load event cho skill
 function loadEventSkillBattle() {
