@@ -3730,7 +3730,7 @@ function checkUpdateLevel() {
 
       // Reset trạng thái
       skillDiv.classList.remove('can-upgrade');
-      const oldOverlay = skillDiv.querySelector('.upgrade-overlay');
+      let oldOverlay = skillDiv.querySelector('.upgrade-overlay');
       if (oldOverlay) oldOverlay.remove();
       oldOverlay = null;
         
