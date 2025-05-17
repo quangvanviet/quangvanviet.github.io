@@ -3709,8 +3709,8 @@ function checkUpdateLevel() {
   const allSkillDivs = document.querySelectorAll('.skill');
 
   // 🔁 RESET: Xoá tất cả hiệu ứng cũ và icon nâng cấp
-  document.querySelectorAll('.updateSkill').forEach(div => {
-    div.classList.remove('updateSkill');
+  document.querySelectorAll('.updateSkillLevel').forEach(div => {
+    div.classList.remove('updateSkillLevel');
   });
 
   document.querySelectorAll('.upgrade-icon').forEach(icon => {
@@ -3726,6 +3726,7 @@ function checkUpdateLevel() {
 
   allSkillDivs.forEach(skillDiv => {
     const parentWithId = skillDiv.parentElement;
+    const thisSkill = skillDiv
     if (!parentWithId) return;
     const parentId = parentWithId.id;
 
@@ -3749,7 +3750,8 @@ function checkUpdateLevel() {
       for (const [otherKey, otherSkill] of Object.entries(otherSource.data)) {
         if (!otherSkill || otherSkill.ID === "") continue;
 
-          if (currentData === otherSource.data && parentId === otherKey) continue;
+        //Bỏ qua chính mình
+        if (currentData === otherSource.data && parentId === otherKey) continue;
 
         if (
           otherSkill.ID === currentSkill.ID &&
@@ -3757,7 +3759,7 @@ function checkUpdateLevel() {
         ) {
 
           // ✅ Thêm hiệu ứng vào div cha
-          parentWithId.classList.add('updateSkill');
+          thisSkill.classList.add('updateSkillLevel');
 
           if (!parentWithId.querySelector('.upgrade-icon')) {
             const upgradeIcon = document.createElement('span');
