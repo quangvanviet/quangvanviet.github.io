@@ -2163,4 +2163,27 @@ body {
     }
 }
 
+@keyframes glow-move {
+  0%, 100% {
+    transform: translateY(0);
+    text-shadow: 0 0 5px red, 0 0 10px orange;
+  }
+  50% {
+    transform: translateY(-5px);
+    text-shadow: 0 0 10px orange, 0 0 20px yellow;
+  }
+}
+
+.upgrade-icon {
+  animation: glow-move 1s infinite ease-in-out;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+}
+
+
 
