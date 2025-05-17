@@ -3760,14 +3760,9 @@ function checkUpdateLevel() {
           parentWithId.classList.add('updateSkill');
 
           if (!parentWithId.querySelector('.upgrade-icon')) {
-            const upgradeIcon = document.createElement('i');
-            upgradeIcon.className = 'fa-solid fa-up-long upgrade-icon';
-            upgradeIcon.style.position = 'absolute';
-            upgradeIcon.style.top = '5px';
-            upgradeIcon.style.right = '5px';
-            upgradeIcon.style.color = 'red';
-            upgradeIcon.style.fontSize = '18px';
-
+            const upgradeIcon = document.createElement('span');
+            upgradeIcon.className = 'upgrade-icon';
+            upgradeIcon.textContent = '^';
             parentWithId.appendChild(upgradeIcon);
           }
         }
