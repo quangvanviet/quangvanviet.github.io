@@ -1726,11 +1726,7 @@ body {
 }
 
 .slotSkill.updateSkill {
-    box-shadow: 0px 0px 10px 8px rgb(255 10 10);
-}
-
-.updateSkillLevel {
-    box-shadow: 0px 0px 10px 8px rgb(255 10 10);
+    box-shadow: 0px 0px 10px 8px rgb(0, 255, 238);
 }
 
 /* Màn hình thông báo chiến thắng/ thua cuộc*/
@@ -2170,24 +2166,27 @@ body {
 @keyframes glow-move {
   0%, 100% {
     transform: translateY(0);
-    text-shadow: 0 0 5px red, 0 0 10px orange;
+    text-shadow: 0 0 5px rgb(0, 221, 255), 0 0 10px rgb(200, 0, 255);
   }
   50% {
     transform: translateY(-5px);
-    text-shadow: 0 0 10px orange, 0 0 20px yellow;
+    text-shadow: 0 0 10px rgb(0, 204, 255), 0 0 20px rgb(225, 0, 255);
   }
 }
 
 .upgrade-icon {
-  animation: glow-move 1s infinite ease-in-out;
-  color: red;
-  font-size: 18px;
-  font-weight: bold;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  z-index: 10;
+    animation: glow-move 0.6s infinite ease-in-out;
+    color: #00fdff61;
+    font-size: 80px;
+    font-weight: bold;
+    top: 6px;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
 }
 
 
-
+.updateSkillLevel {
+    box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
+    animation: glow-move 2s infinite ease-in-out;
+}
