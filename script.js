@@ -1,4 +1,4 @@
-import { 
+import {
     getDatabase,        // 🎯 Khởi tạo kết nối tới Realtime Database
     ref,                // 📍 Tạo tham chiếu (đường dẫn) đến một node trong database
 
@@ -6,6 +6,7 @@ import {
     set,                // ✍️ Ghi đè toàn bộ dữ liệu tại vị trí (xóa những dữ liệu cũ không được khai báo)
     update,             // 🛠️ Cập nhật một phần dữ liệu (giữ nguyên phần không cập nhật)
     get,                // 📥 Lấy dữ liệu một lần (trả về snapshot)
+    child,
 
     // --- Thêm & xóa dữ liệu ---
     push,               // ➕ Thêm node con mới với key tự động (hay dùng trong danh sách chat, comment...)
@@ -210,7 +211,27 @@ function saveDataUserToFirebase() {
             .catch((error) => {
                 console.error("❌ Lỗi khi lưu dữ liệu:", error);
             });
+
+            // Kiểm tra nếu pointRank là số, thì chuyển thành object mặc định
+            if (typeof pointRank === 'number') {
+                pointRank = {
+                    typeGameConquest: pointRank,
+                    typeGameSolo5Mon: 0,
+                    typeGameGuess: 0
+                };
+            }
+
+            const rankDataRef = ref(db, 'rankGame/' + username + '/rankPoint');
+            update(rankDataRef, pointRank)
+                .then(() => {
+                    console.log("✅ Cập nhật rank của bạn");
+                })
+                .catch((error) => {
+                    console.error("❌ Lỗi khi lưu rank của bạn", error);
+                });
+
     }
+
 }
 
 // Hàm để thiết lập lắng nghe sự kiện cho tất cả input
@@ -296,46 +317,133 @@ var effectsInternal = {}; // Tạo đối tượng để lưu các Effect Intern
 var effectsSellUp = {}; // Tạo đối tượng để lưu các Effect SellUp và mô tả tương ứng
 // Load toàn bộ dữ liệu chỉ trong 1 lần gọi
 
+var rankGame = {}
+
+function updateRankGameToFB() {
+    const allUsersRef = ref(db, 'allUsers');
+
+    get(allUsersRef)
+        .then(snapshot => {
+            if (!snapshot.exists()) {
+                console.error("❌ allUsers không tồn tại");
+                return;
+            }
+
+            const allUsers = snapshot.val();
+            const rankGame = {};
+
+            for (const username in allUsers) {
+                if (allUsers.hasOwnProperty(username)) {
+                    const user = allUsers[username];
+                    let userPointRank = user.pointRank;
+
+                    // Nếu pointRank là số thì cập nhật lại cả allUsers
+                    if (typeof userPointRank === 'number') {
+                        const fixedRank = {
+                            typeGameConquest: userPointRank,
+                            typeGameGuess: 0,
+                            typeGameSolo5Mon: 0
+                        };
+
+                        // Cập nhật lại cho user đó trong allUsers
+                        const userRef = ref(db, 'allUsers/' + username + '/pointRank');
+                        set(userRef, fixedRank)
+                            .then(() => {
+                                console.log(`✅ Đã sửa pointRank của ${username} thành object trong allUsers.`);
+                            })
+                            .catch(error => {
+                                console.error(`❌ Lỗi khi sửa pointRank của ${username}:`, error);
+                            });
+
+                        userPointRank = fixedRank;
+                    } else {
+                        // Nếu là object thì đảm bảo đủ 3 trường
+                        userPointRank = {
+                            typeGameConquest: userPointRank?.typeGameConquest ?? 0,
+                            typeGameGuess: userPointRank?.typeGameGuess ?? 0,
+                            typeGameSolo5Mon: userPointRank?.typeGameSolo5Mon ?? 0
+                        };
+                    }
+
+                    // Dữ liệu cho rankGame
+                    rankGame[username] = {
+                        rankPoint: userPointRank
+                    };
+                }
+            }
+
+            // Ghi rankGame mới vào Firebase
+            set(ref(db, 'rankGame'), rankGame)
+                .then(() => {
+                    console.log('✅ rankGame đã được cập nhật thành công trên Firebase.');
+                })
+                .catch(error => {
+                    console.error('❌ Lỗi khi ghi rankGame vào Firebase:', error);
+                });
+        })
+        .catch(error => {
+            console.error("❌ Lỗi khi lấy allUsers:", error);
+        });
+}
+
+
 function loadAllData() {
-    get(ref(db)).then(snapshot => {
-        const data = snapshot.val();
+    
+    const dbRef = ref(db);
 
-        allCharacter = data.allCharacter || [];
-        allQuestData = data.allQuestData || {};
-        allPets = data.allPets || [];
-        allUsers = data.allUsers || {};
-        defaultHP = data.defaultHP
-        allComps = data.allComps || [];
-        console.log("allComps", allComps)
+    Promise.all([
+        get(child(dbRef, 'allCharacter')),
+        get(child(dbRef, 'allQuestData')),
+        get(child(dbRef, 'allPets')),
+        get(child(dbRef, 'defaultHP')),
+        get(child(dbRef, 'allComps')),
+        get(child(dbRef, 'skillDescriptions')),
+    ]).then(([charSnap, questSnap, petsSnap, hpSnap, compsSnap, skillSnap]) => {
+        allCharacter = charSnap.val() || [];
+        allQuestData = questSnap.val() || {};
+        allPets = petsSnap.val() || [];
+        defaultHP = hpSnap.val();
+        allComps = compsSnap.val() || [];
+        console.log("allComps", allComps);
 
-        var skillDescriptions = data.skillDescriptions || {};
-
-        var effectsSkillArray = skillDescriptions.effectsSkill;
-        var effectsInternalArray = skillDescriptions.effectsInternal;
-        var effectsSellUpArray = skillDescriptions.effectsSellUp;
+        const skillDescriptions = skillSnap.val() || {};
+        const effectsSkillArray = skillDescriptions.effectsSkill || [];
+        const effectsInternalArray = skillDescriptions.effectsInternal || [];
+        const effectsSellUpArray = skillDescriptions.effectsSellUp || [];
 
         effectsSkill = effectsSkillArray.reduce((acc, item) => {
-            acc[item.name] = { dameSkill: item.dameSkill, descriptionSkill: item.descriptionSkill };
-            return acc; // ⚠️ Cần return acc để tiếp tục tích lũy giá trị
+            acc[item.name] = {
+                dameSkill: item.dameSkill,
+                descriptionSkill: item.descriptionSkill
+            };
+            return acc;
         }, {});
 
         effectsInternal = effectsInternalArray.reduce((acc, item) => {
-            acc[item.name] = { dameInternal: item.dameInternal, descriptionInternal: item.descriptionInternal };
+            acc[item.name] = {
+                dameInternal: item.dameInternal,
+                descriptionInternal: item.descriptionInternal
+            };
             return acc;
         }, {});
 
         effectsSellUp = effectsSellUpArray.reduce((acc, item) => {
-            acc[item.name] = { dameSellUp: item.dameSellUp, descriptionSellUp: item.descriptionSellUp };
+            acc[item.name] = {
+                dameSellUp: item.dameSellUp,
+                descriptionSellUp: item.descriptionSellUp
+            };
             return acc;
         }, {});
 
         console.log(effectsSkill, effectsInternal, effectsSellUp);
         console.log("allPets", allPets);
-        console.log("allUsers", allUsers);
         console.log("allCharacter", allCharacter);
         console.log("allComps", allComps);
-    })
+    }).catch(error => {
+        console.error("Error loading data from Firebase:", error);
+    });
 }
+
 
 //Khai báo các biến
 //Thông tin User
@@ -351,7 +459,7 @@ var weightBagUser = 0;
 var luckyMeet5Mon = 0;
 var diamondUser = 0;
 
-var pointRank = 0;
+var pointRank = {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0}
 var characterUser = "";
 var isBan = "";
 var timeOnline = "";
@@ -401,8 +509,14 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
-    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0}, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0,
+};
+
+var defaultSTT5MonInBattle = {
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
+    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0, PRICESELL: 0,
 };
 
 var typeGameGuess = {}
@@ -433,58 +547,81 @@ var typeGameConquest = {
     maxHpBattle: 0,
     battleUserPetRound: [""],
     battlePetUseSlotRound: {
-        skill1B: defaultSTT5Mon,
-        skill2B: defaultSTT5Mon,
-        skill3B: defaultSTT5Mon,
-        skill4B: defaultSTT5Mon,
-        skill5B: defaultSTT5Mon,
-        skill6B: defaultSTT5Mon,
-        skill7B: defaultSTT5Mon,
-        skill8B: defaultSTT5Mon,
-        skill9B: defaultSTT5Mon,
+        skill1B: defaultSTT5MonInBattle,
+        skill2B: defaultSTT5MonInBattle,
+        skill3B: defaultSTT5MonInBattle,
+        skill4B: defaultSTT5MonInBattle,
+        skill5B: defaultSTT5MonInBattle,
+        skill6B: defaultSTT5MonInBattle,
+        skill7B: defaultSTT5MonInBattle,
+        skill8B: defaultSTT5MonInBattle,
+        skill9B: defaultSTT5MonInBattle,
     },
     battlePetInShop: {
-        battleShop1: defaultSTT5Mon,
-        battleShop2: defaultSTT5Mon,
-        battleShop3: defaultSTT5Mon,
-        battleShop4: defaultSTT5Mon,
-        battleShop5: defaultSTT5Mon,
+        battleShop1: defaultSTT5MonInBattle,
+        battleShop2: defaultSTT5MonInBattle,
+        battleShop3: defaultSTT5MonInBattle,
+        battleShop4: defaultSTT5MonInBattle,
+        battleShop5: defaultSTT5MonInBattle,
     },
     battlePetInInventory: {
-        battleInv1: defaultSTT5Mon,
-        battleInv2: defaultSTT5Mon,
-        battleInv3: defaultSTT5Mon,
-        battleInv4: defaultSTT5Mon,
-        battleInv5: defaultSTT5Mon,
-        battleInv6: defaultSTT5Mon,
-        battleInv7: defaultSTT5Mon,
-        battleInv8: defaultSTT5Mon,
-        battleInv9: defaultSTT5Mon,
+        battleInv1: defaultSTT5MonInBattle,
+        battleInv2: defaultSTT5MonInBattle,
+        battleInv3: defaultSTT5MonInBattle,
+        battleInv4: defaultSTT5MonInBattle,
+        battleInv5: defaultSTT5MonInBattle,
+        battleInv6: defaultSTT5MonInBattle,
+        battleInv7: defaultSTT5MonInBattle,
+        battleInv8: defaultSTT5MonInBattle,
+        battleInv9: defaultSTT5MonInBattle,
     },
     skillBattle: {
-        skill1A: defaultSTT5Mon,
-        skill2A: defaultSTT5Mon,
-        skill3A: defaultSTT5Mon,
-        skill4A: defaultSTT5Mon,
-        skill5A: defaultSTT5Mon,
-        skill6A: defaultSTT5Mon,
-        skill7A: defaultSTT5Mon,
-        skill8A: defaultSTT5Mon,
-        skill9A: defaultSTT5Mon,
-        skill1B: defaultSTT5Mon,
-        skill2B: defaultSTT5Mon,
-        skill3B: defaultSTT5Mon,
-        skill4B: defaultSTT5Mon,
-        skill5B: defaultSTT5Mon,
-        skill6B: defaultSTT5Mon,
-        skill7B: defaultSTT5Mon,
-        skill8B: defaultSTT5Mon,
-        skill9B: defaultSTT5Mon,
+        skill1A: defaultSTT5MonInBattle,
+        skill2A: defaultSTT5MonInBattle,
+        skill3A: defaultSTT5MonInBattle,
+        skill4A: defaultSTT5MonInBattle,
+        skill5A: defaultSTT5MonInBattle,
+        skill6A: defaultSTT5MonInBattle,
+        skill7A: defaultSTT5MonInBattle,
+        skill8A: defaultSTT5MonInBattle,
+        skill9A: defaultSTT5MonInBattle,
+        skill1B: defaultSTT5MonInBattle,
+        skill2B: defaultSTT5MonInBattle,
+        skill3B: defaultSTT5MonInBattle,
+        skill4B: defaultSTT5MonInBattle,
+        skill5B: defaultSTT5MonInBattle,
+        skill6B: defaultSTT5MonInBattle,
+        skill7B: defaultSTT5MonInBattle,
+        skill8B: defaultSTT5MonInBattle,
+        skill9B: defaultSTT5MonInBattle,
     },
 };
 
 function loadDataForUser() {
     const userDataRef = ref(db, `allUsers/${username}`); // Truy cập đường dẫn dữ liệu người dùng
+
+    const rankGameData = ref(db, 'rankGame');
+
+    get(rankGameData)
+    .then(snapshot => {
+        if (!snapshot.exists()) {
+        console.error("Dữ liệu không tồn tại trong Firebase.");
+        rankGame = {};  // Khởi tạo biến rankGame nếu chưa có dữ liệu
+        return;
+        }
+
+        const data = snapshot.val();
+
+        if (!data) {
+        console.error("Dữ liệu trả về từ Firebase là null hoặc undefined.");
+        return;
+        }
+
+        rankGame = data;
+    })
+    .catch(error => {
+        console.error("Lỗi khi lấy dữ liệu từ Firebase:", error);
+    });
 
     // Sử dụng `get` để lấy dữ liệu từ Firebase
     get(userDataRef)
@@ -542,7 +679,7 @@ function loadDataForUser() {
             characterUser = data.characterUser;
             onGame = data.onGame;
             idSkillRND = data.idSkillRND;
-            pointRank = data.pointRank;
+            pointRank = data.pointRank || {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0};
             nameUser = data.nameUser;
             isBan = data.isBan;
             timeOnline = data.timeOnline;
@@ -588,9 +725,9 @@ function loadDataForUser() {
             document.getElementById("textNameComp").innerText = typeGameConquest.nameComp;
 
             // Kiểm tra điểm rank của đối thủ
-            Object.keys(allUsers).forEach((key) => {
+            Object.keys(rankGame).forEach((key) => {
                 if (key === typeGameConquest.usernameComp) {
-                    pointRankComp = allUsers[key].pointRank;
+                    pointRankComp = rankGame[key].rankPoint.typeGameConquest;
                     console.log("pointRankComp", pointRankComp);
                 }
             });
@@ -692,8 +829,14 @@ function loadDataForUser() {
                             // Gán lại POWER.SCALE theo allPets
                             if (!item.POWER) item.POWER = {};
                             item.POWER.SCALE = matchedPet.POWER.SCALE;
-                            
+
                             item.PRICE = matchedPet.PRICE
+
+                            //Gắn lại EFFECT 
+                            item.EFFECT = matchedPet.EFFECT
+                            item.SELLUP = matchedPet.SELLUP
+                            item.INTERNAL = matchedPet.INTERNAL
+                            item.TYPE = matchedPet.TYPE
 
                             let powerINT = scalePower5Mon(item.POWER.INT);
 
@@ -707,26 +850,26 @@ function loadDataForUser() {
                                 item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
                             } else {
                                 item.HEAL[0] = 0
-                            } 
+                            }
 
                             if (item.EFFECT.includes("Shield")) {
                                 item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
-                            }else {
+                            } else {
                                 item.SHIELD[0] = 0
                             }
 
                             if (item.EFFECT.includes("Burn")) {
                                 item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
-                            }else {
+                            } else {
                                 item.BURN[0] = 0
                             }
 
                             if (item.EFFECT.includes("Poison")) {
                                 item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
-                            }else {
+                            } else {
                                 item.POISON[0] = 0
                             }
-                            
+
                             //Tính cooldown
                             let agi = item.POWER.AGI;
                             let minC = 0;
@@ -770,13 +913,34 @@ function loadDataForUser() {
                 typeGameConquest.battleUserPetRound,
                 typeGameConquest.skillBattle,
                 userPet,
-                ...allComps.map(c => c.slotSkillComp) // Lấy slotSkillComp từ từng object trong allComps
             ];
-            
+
             // Gọi hàm xử lý tất cả
             updatePowerScale(allPets, allSkillSources);
 
-            console.log("allComps",allComps)
+            // Lặp qua từng phần tử trong allComps để cập nhập lại comps
+            for (let i = 0; i < allComps.length; i++) {
+                const comp = allComps[i];
+
+                // Chuyển object slotSkillComp thành mảng các skill (dạng object)
+                const skillObjects = Object.values(comp.slotSkillComp);
+
+                // Gọi hàm cập nhật dữ liệu
+                updatePowerScale(allPets, skillObjects);
+
+                // Cập nhật lại các skill đã xử lý vào slotSkillComp
+                const updatedSlotSkillComp = {};
+                let skillKeys = Object.keys(comp.slotSkillComp);
+                for (let j = 0; j < skillKeys.length; j++) {
+                    updatedSlotSkillComp[skillKeys[j]] = skillObjects[j];
+                }
+
+                // Gán lại vào allComps
+                allComps[i].slotSkillComp = updatedSlotSkillComp;
+            }
+
+
+            console.log("allComps", allComps)
 
             userDataOld = {
                 passwordUser: password,
@@ -916,59 +1080,34 @@ var endGame = true;
 
 //Khai bào biến để lưu ID cooldown
 var animationFrameIds = [];
+let skillsSleepA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
+let skillsDeleteA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
+let skillsSleepB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
+let skillsDeleteB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
 
-//Bắt đầu cooldown và khi cooldown xong thì sử dụng skill
-function triggerCooldown(skillId) {
-    const skill = document.getElementById(skillId);
-    const overlay = skill.querySelector('.skillCooldownOverlay');
+function userSkillA(skillKey, isComp) {
+    const skillElement = document.getElementById(skillKey);
+    let overlayDiv = null;
 
-    // Lấy thời gian hồi chiêu từ cấu hình
-    const cooldownTime = typeGameConquest.skillBattle[skillId].COOLDOWN[0] + typeGameConquest.skillBattle[skillId].COOLDOWN[1] + typeGameConquest.skillBattle[skillId].COOLDOWN[2] + typeGameConquest.skillBattle[skillId].COOLDOWN[3] + typeGameConquest.skillBattle[skillId].COOLDOWN[4];
-    const dameSkill = typeGameConquest.skillBattle[skillId].DAME[0] + typeGameConquest.skillBattle[skillId].DAME[1] + typeGameConquest.skillBattle[skillId].DAME[2] + typeGameConquest.skillBattle[skillId].DAME[3];
+    // for (const child of skillElement.children) {
+    //     if (child.classList.contains("skillCooldownOverlay") || child.classList.contains("skillCooldownOverlayLV")) {
+    //         overlayDiv = child;
+    //         break;
+    //     }
+    // }
 
-    if (endGame === true) {
-        stopSkillGame()
-        return;
-    }
-
-    // Đặt lại trạng thái overlay ban đầu
-    overlay.style.transitionDuration = '0ms'; // Không có hiệu ứng chuyển tiếp ban đầu
-    overlay.style.transform = 'scaleY(1)';    // Đặt overlay đầy (hiện full)
-
-    // Khởi tạo thời gian bắt đầu hồi chiêu
-    const startTime = Date.now();
-
-    function updateCooldown() {
-        const elapsedTime = Date.now() - startTime; // Tính thời gian đã trôi qua
-
-        // Tính tỉ lệ hồi chiêu (từ 0 đến 1)
-        const progress = Math.min(elapsedTime / cooldownTime, 1);
-
-        // Điều chỉnh overlay dựa trên tỉ lệ đã trôi qua
-        overlay.style.transform = `scaleY(${1 - progress})`;
-
-        if (elapsedTime < cooldownTime) {
-            // Tiếp tục cập nhật khi chưa hết thời gian hồi chiêu
-            const frameId = requestAnimationFrame(updateCooldown);
-            animationFrameIds.push(frameId); // Lưu ID
-        } else {
-            //Kiểm tra xem endgame chưa, nếu chưa => Tiếp tục vòng hồi chiêu
-            if (endGame === false) {
-                triggerCooldown(skillId);
-                // Khi hết thời gian hồi chiêu, kích hoạt đòn đánh thường
-                skillAttacking(skillId, dameSkill);
-            } else {
-                stopSkillGame()
-                return;
+    //Tính mutilcast=> đánh liên tiếp
+    let doubleSkill = Math.max(typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1)
+    Object.keys(effectsSkill).forEach((effectSkill) => {
+        if (typeGameConquest.skillBattle[skillKey].EFFECT.includes(effectSkill)) {
+            for (let d = 1; d <= doubleSkill; d++) {
+                setTimeout(() => {
+                    useSkill(skillKey, effectSkill, overlayDiv, isComp);
+                }, 350 * (d - 1)); // Thực hiện sử dụng skill với delay tăng dần
             }
         }
-    }
-
-    // Bắt đầu vòng lặp cập nhật cooldown
-    const frameId = requestAnimationFrame(updateCooldown);
-    animationFrameIds.push(frameId); // Lưu ID
+    });
 }
-
 function baseAttack(skillKey, isComp) {
     // Kiểm tra skill có tồn tại không
     if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
@@ -1021,7 +1160,7 @@ function baseAttack(skillKey, isComp) {
         const now = Date.now();
         const delta = now - startTime;
         startTime = now;
-        
+
         //Khởi tạo biến cooldown
         let hasteMultiplier = 1;
         if (skillsSpeed[skillKey] > 0) { //Nếu tăng tốc
@@ -1114,7 +1253,7 @@ function baseAttack(skillKey, isComp) {
                             let dameSkill = Math.round(baseDame * (1 - defTargetAttack) * critDame);
 
                             if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
-                                
+
                             } else {
                                 baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
                                 let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
@@ -1126,7 +1265,7 @@ function baseAttack(skillKey, isComp) {
                                 }
                                 updateHpAndRageBar5Mon();
                             }
-                            
+
                         }, d * 200); // delay mỗi lần 200ms
                     }
 
@@ -1192,7 +1331,7 @@ function baseAttack(skillKey, isComp) {
                                 let dameSkill = Math.round(baseDame);
 
                                 if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
-                                
+
                                 } else {
                                     skillAttacking(skillKey, dameSkill, isCrit);
                                     let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
@@ -1252,7 +1391,7 @@ function baseAttack(skillKey, isComp) {
                                 let dameSkill = Math.round(baseDame * (1 - defTargetAttack) * critDame);
 
                                 if (skillsDelete[skillKey] === 1 || skillsSleep[skillKey] > 0) {
-                                    
+
                                 } else {
                                     baseAttacking(skillKey, dameSkill, isCrit, targetAttackFirst);
                                     let rageGain = calculateRageGainFromSkill(typeGameConquest.skillBattle[skillKey]);
@@ -1314,8 +1453,8 @@ function calculateRageGainFromSkill(skillData) {
 function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     const teamAorB = skillKey.includes('A') ? 'TeamA' : 'TeamB';
     const skill = document.getElementById(skillKey);
-    const skillsDelete = teamAorB==='TeamA'?skillsDeleteB:skillsDeleteA
-    const isComp = teamAorB==='TeamA'?true:false
+    const skillsDelete = teamAorB === 'TeamA' ? skillsDeleteB : skillsDeleteA
+    const isComp = teamAorB === 'TeamA' ? true : false
 
     // Hiệu ứng cho thanh skill 
     if (teamAorB == 'TeamA') { //bên A
@@ -1361,13 +1500,13 @@ function baseAttacking(skillKey, dameSkill, isCrit, targetAttack) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
-        
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
+
         // Tính góc giữa 2 điểm, đổi từ radian sang độ
         const angleInRadians = Math.atan2(deltaY, deltaX);
         const angleInDegrees = angleInRadians * (180 / Math.PI) + 90;
-        
+
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${angleInDegrees}deg)`;
 
@@ -1499,8 +1638,8 @@ function skillAttacking(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         if (imgTeam === "TeamB") {
@@ -1578,8 +1717,8 @@ function skillHealing(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1652,8 +1791,8 @@ function skillShield(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1732,8 +1871,8 @@ function skillBurn(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1815,8 +1954,8 @@ function skillPoison(skillId, dameSkill, isCrit) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -1901,8 +2040,8 @@ function skillFreeze(skillId, timeFreeze, isComp) {
     // Tạo hiệu ứng bay
     const moveEffect = () => {
         const duration = 500;
-        const deltaX = targetX - skillX - effectWidth/2;
-        const deltaY = targetY - skillY - effectHeight/2;
+        const deltaX = targetX - skillX - effectWidth / 2;
+        const deltaY = targetY - skillY - effectHeight / 2;
 
         attackEffect.style.transition = `transform ${duration}ms ease-out`;
         attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2043,19 +2182,10 @@ function skillchargerSkill(skillKey, isComp, typeSkill) {
             //   return; // Bỏ qua skill này
             // }
 
-            let skillElement = document.getElementById(adjacentKey);
-            let overlayDiv = 0;
-            for (let child of skillElement.children) {
-                if (child.classList.contains('skillCooldownOverlay') || child.classList.contains('skillCooldownOverlayLV')) {
-                    overlayDiv = child;
-                    break; // Dừng vòng lặp khi tìm thấy
-                }
-            }
-
             let adjacentEffectSkill = typeGameConquest.skillBattle[adjacentKey].EFFECT;
             for (let effect of adjacentEffectSkill) {
                 if (!myEffect.includes(effect)) {
-                    startSkill(adjacentKey, overlayDiv, isComp);
+                    userSkillA(adjacentKey, isComp);
                     break; // Thoát khỏi vòng lặp ngay khi gọi xong startSkill.
                 }
             }
@@ -2648,8 +2778,8 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
             // Tạo hiệu ứng bay
             const moveEffect = () => {
                 const duration = 500;
-                const deltaX = targetX - skillX - effectWidth/2;
-                const deltaY = targetY - skillY - effectHeight/2;
+                const deltaX = targetX - skillX - effectWidth / 2;
+                const deltaY = targetY - skillY - effectHeight / 2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2705,26 +2835,26 @@ function skillSleepSkills(skillKey, dameSkill, isComp, qtyTarget) {
 
             // Cập nhật hiệu ứng và lưu ID interval
             targetSkill.sleepIntervalId = setInterval(() => {
-            const currentSleep = skillsSleep[skillKeyToSleep];
+                const currentSleep = skillsSleep[skillKeyToSleep];
 
-            if (currentSleep > 0) {
-                sleepTimerElement.textContent = Math.ceil(currentSleep / 1000);
-                let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA
-                if (skillsSpeed[skillKeyToSleep] > 0) {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 * 2);
-                } else if (skillsSpeed[skillKeyToSleep] < 0) {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 / 2);
+                if (currentSleep > 0) {
+                    sleepTimerElement.textContent = Math.ceil(currentSleep / 1000);
+                    let skillsSpeed = isComp ? skillsSpeedB : skillsSpeedA
+                    if (skillsSpeed[skillKeyToSleep] > 0) {
+                        skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 * 2);
+                    } else if (skillsSpeed[skillKeyToSleep] < 0) {
+                        skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200 / 2);
+                    } else {
+                        skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200);
+                    }
+
                 } else {
-                    skillsSleep[skillKeyToSleep] = Math.max(0, currentSleep - 200);
+                    clearInterval(targetSkill.sleepIntervalId);
+                    targetSkill.sleepIntervalId = null;
+                    sleepTimerElement.remove();
+                    sleepTimerElement = null;
                 }
-                
-            } else {
-                clearInterval(targetSkill.sleepIntervalId);
-                targetSkill.sleepIntervalId = null;
-                sleepTimerElement.remove();
-                sleepTimerElement = null;
-            }
-        }, 200);
+            }, 200);
 
         }
     });
@@ -2823,8 +2953,8 @@ function skillDeleteSkills(skillKey, dameSkill, isComp) {
             // Tạo hiệu ứng bay
             const moveEffect = () => {
                 const duration = 500;
-                const deltaX = targetX - skillX - effectWidth/2;
-                const deltaY = targetY - skillY - effectHeight/2;
+                const deltaX = targetX - skillX - effectWidth / 2;
+                const deltaY = targetY - skillY - effectHeight / 2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -2929,8 +3059,8 @@ function skillSpeedUp(skillKey, dameSkill, isComp, qtyTarget) {
             // Tạo hiệu ứng bay
             const moveEffect = () => {
                 const duration = 500;
-                const deltaX = targetX - skillX - effectWidth/2;
-                const deltaY = targetY - skillY - effectHeight/2;
+                const deltaX = targetX - skillX - effectWidth / 2;
+                const deltaY = targetY - skillY - effectHeight / 2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -3077,8 +3207,8 @@ function skillSlow(skillKey, dameSkill, isComp, qtyTarget) {
             // Tạo hiệu ứng bay
             const moveEffect = () => {
                 const duration = 500;
-                const deltaX = targetX - skillX - effectWidth/2;
-                const deltaY = targetY - skillY - effectHeight/2;
+                const deltaX = targetX - skillX - effectWidth / 2;
+                const deltaY = targetY - skillY - effectHeight / 2;
 
                 attackEffect.style.transition = `transform ${duration}ms ease-out`;
                 attackEffect.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
@@ -3543,9 +3673,18 @@ function showPopupInfo(element, type) {
             }
         }
 
+        let pointRankIndex = ""
+        if (infoStartGame.typeGame === "Conquest") {
+            pointRankIndex = pointRank.typeGameConquest
+        } else if (infoStartGame.typeGame === "Solo5Mon") {
+            pointRankIndex = pointRank.typeGameSolo5Mon
+        } else if (infoStartGame.typeGame === "Guess") {
+            pointRankIndex = pointRank.typeGameGuess
+        }
+
         name = `<span style="display: flex; justify-content: space-between; flex-direction: row; align-items: center;">
             <a>${nameUser}</a>
-            <a style="font-size:11px;">[Điểm xếp hạng: ${pointRank}]<span style="color: red;"> [Top: 1]</span></a>
+            <a style="font-size:11px;">[Điểm xếp hạng: ${pointRankIndex}]<span style="color: red;"> [Top: 1]</span></a>
         </span>
         <span style="color: #4504b3; font-weight: bold; font-size: 12px;">[Vòng đấu hiện tại: <span style="color: red;">${infoStartGame.roundGame}</span>] [Điểm cả trận: <span style="color: red;">${typeGameConquest.pointBattle} điểm</span>]</span>
         <span style="color: #4504b3; font-weight: bold; font-size: 12px;">
@@ -3672,105 +3811,138 @@ document.addEventListener('click', function () {
 //Tạo hiệu ứng skill theo level
 function highlightSkillLevel() {
     document.querySelectorAll('.skill').forEach(skillElement => {
-        // Parse data-skill JSON
-        const skillData = JSON.parse(skillElement.getAttribute('data-skill'));
+        let skillData;
+        let skillKey = skillElement.parentElement.id;
 
-        // Tìm div con có class levelSkillText
-        const levelTextDiv = skillElement.querySelector('.levelSkillText');
+        console.log("skillKey là ", skillKey)
 
-        if (levelTextDiv) {
-            levelTextDiv.innerText = skillData.LEVEL; // Cập nhật số Level vào div con
+        if (skillElement.parentElement.parentElement.id === 'battleShop') {
+            
         }
 
-        // Tìm div con có class levelSkillText
+        if (skillElement.parentElement.parentElement.id === 'battleInventory') {
+            skillData = typeGameConquest.battlePetInInventory[skillKey];
+        }
+        
+        if (skillElement.parentElement.parentElement.id === 'skillBarB') {
+            skillData = typeGameConquest.skillBattle[skillKey];
+        }
+
+        console.log("skillData là ", skillData)
+
+        // Nếu không tìm được dữ liệu => bỏ qua
+        if (!skillData) return;
+
+        // Tìm div con có class levelSkillText và starSkillText
+        const levelTextDiv = skillElement.querySelector('.levelSkillText');
+        const starTextDiv = skillElement.querySelector('.starSkillText');
+
+        levelTextDiv.innerText = skillData.LEVEL; 
+        starTextDiv.innerText = skillData.PRICESELL + skillData.PRICE; // Ưu tiên PRICESELL nếu có
+
+        // Tô màu theo level
         const levelSkillColorDiv = skillElement.querySelector('.levelSkillColor');
 
         if (levelSkillColorDiv) {
-            if (skillData.LEVEL === 1) {
-                levelSkillColorDiv.style.color = "#531515"
-            }
-            if (skillData.LEVEL === 2) {
-                levelSkillColorDiv.style.color = "#8c0b0b"
-            }
-            if (skillData.LEVEL === 3) {
-                levelSkillColorDiv.style.color = "#c00d0d"
-            }
-            if (skillData.LEVEL === 4) {
-                levelSkillColorDiv.style.color = "red"
+            switch (skillData.LEVEL) {
+                case 1:
+                    levelSkillColorDiv.style.color = "#531515";
+                    break;
+                case 2:
+                    levelSkillColorDiv.style.color = "#8c0b0b";
+                    break;
+                case 3:
+                    levelSkillColorDiv.style.color = "#c00d0d";
+                    break;
+                case 4:
+                    levelSkillColorDiv.style.color = "red";
+                    break;
             }
         }
-
-
     });
 }
 
 //Hàm kiểm tra các thẻ trong battle có thể update level được không
 function checkUpdateLevel() {
-  const allSkillDivs = document.querySelectorAll('.skill');
+    const allSkillDivs = document.querySelectorAll('.skill');
 
-  // 🔁 RESET: Xoá tất cả hiệu ứng cũ và icon nâng cấp
-  document.querySelectorAll('.updateSkillLevel').forEach(div => {
-    div.classList.remove('updateSkillLevel');
-  });
+    // 🔁 RESET: Xoá tất cả hiệu ứng cũ và icon nâng cấp
+    document.querySelectorAll('.updateSkillLevel').forEach(div => {
+        div.classList.remove('updateSkillLevel');
+    });
 
-  document.querySelectorAll('.upgrade-icon').forEach(icon => {
-    icon.remove();
-  });
+    document.querySelectorAll('.upgrade-icon').forEach(icon => {
+        icon.remove();
+    });
 
-  // 🧭 Nguồn dữ liệu
-  const allSources = [
-    { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
-    { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
-    { dom: document.getElementById('battleShop'), data: typeGameConquest.battlePetInShop }
-  ];
+    // 🧭 Nguồn dữ liệu
+    let allSources = [
+        { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
+        { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
+        { dom: document.getElementById('battleShop'), data: typeGameConquest.battlePetInShop }
+    ];
 
-  allSkillDivs.forEach(skillDiv => {
-    const parentWithId = skillDiv.parentElement;
-    const thisSkill = skillDiv
-    if (!parentWithId) return;
-    const parentId = parentWithId.id;
-
-    // Tìm nguồn chứa skill này
-    let currentData = null;
-    for (const source of allSources) {
-      if (source.dom.contains(skillDiv)) {
-        currentData = source.data;
-        break;
-      }
+    if (infoStartGame.stepGame > 1) {
+        allSources = [
+            { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
+            { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
+        ];
+    } else {
+        allSources = [
+            { dom: document.getElementById('skillBarB'), data: typeGameConquest.battlePetUseSlotRound },
+            { dom: document.getElementById('battleInventory'), data: typeGameConquest.battlePetInInventory },
+            { dom: document.getElementById('battleShop'), data: typeGameConquest.battlePetInShop }
+        ];
     }
 
-    if (!currentData || !currentData[parentId]) return;
 
-    const currentSkill = currentData[parentId];
-    if (!currentSkill || currentSkill.ID === "") return;
+    allSkillDivs.forEach(skillDiv => {
+        const parentWithId = skillDiv.parentElement;
+        const thisSkill = skillDiv
+        if (!parentWithId) return;
+        const parentId = parentWithId.id;
 
-    // So sánh với tất cả nguồn còn lại
-    for (const otherSource of allSources) {
-
-      for (const [otherKey, otherSkill] of Object.entries(otherSource.data)) {
-        if (!otherSkill || otherSkill.ID === "") continue;
-
-        //Bỏ qua chính mình
-        if (currentData === otherSource.data && parentId === otherKey) continue;
-
-        if (
-          otherSkill.ID === currentSkill.ID &&
-          otherSkill.LEVEL === currentSkill.LEVEL
-        ) {
-
-          // ✅ Thêm hiệu ứng vào div cha
-          thisSkill.classList.add('updateSkillLevel');
-
-          if (!parentWithId.querySelector('.upgrade-icon')) {
-            const upgradeIcon = document.createElement('span');
-            upgradeIcon.className = 'upgrade-icon';
-            upgradeIcon.textContent = '^';
-            parentWithId.appendChild(upgradeIcon);
-          }
+        // Tìm nguồn chứa skill này
+        let currentData = null;
+        for (const source of allSources) {
+            if (source.dom.contains(skillDiv)) {
+                currentData = source.data;
+                break;
+            }
         }
-      }
-    }
-  });
+
+        if (!currentData || !currentData[parentId]) return;
+
+        const currentSkill = currentData[parentId];
+        if (!currentSkill || currentSkill.ID === "") return;
+
+        // So sánh với tất cả nguồn còn lại
+        for (const otherSource of allSources) {
+
+            for (const [otherKey, otherSkill] of Object.entries(otherSource.data)) {
+                if (!otherSkill || otherSkill.ID === "") continue;
+
+                //Bỏ qua chính mình
+                if (currentData === otherSource.data && parentId === otherKey) continue;
+
+                if (
+                    otherSkill.ID === currentSkill.ID &&
+                    otherSkill.LEVEL === currentSkill.LEVEL
+                ) {
+
+                    // ✅ Thêm hiệu ứng vào div cha
+                    thisSkill.classList.add('updateSkillLevel');
+
+                    if (!parentWithId.querySelector('.upgrade-icon')) {
+                        const upgradeIcon = document.createElement('span');
+                        upgradeIcon.className = 'upgrade-icon';
+                        upgradeIcon.textContent = '^';
+                        parentWithId.appendChild(upgradeIcon);
+                    }
+                }
+            }
+        }
+    });
 }
 
 
@@ -3963,7 +4135,7 @@ function loadEventSlotBattle() {
         slot.addEventListener("drop", (e) => {
             e.preventDefault();
             const skillId = e.dataTransfer.getData("text/plain");
-            const skill = document.getElementById(skillId);
+            let skill = document.getElementById(skillId);
 
 
             const parentSlot = skill.parentElement;
@@ -4014,6 +4186,8 @@ function loadEventSlotBattle() {
                         typeGameConquest.skillBattle[slot.id].CRIT[0] = typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0]
                         typeGameConquest.skillBattle[slot.id].COOLDOWN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0]
 
+                        typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
+                        typeGameConquest.skillBattle[slot.id].PRICESELL = typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4045,7 +4219,7 @@ function loadEventSlotBattle() {
                         // };
 
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
-                        
+
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
@@ -4097,7 +4271,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
 
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
-                        
+
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
                         let skillLock = `LockBattleShop${index}`;
@@ -4155,6 +4329,13 @@ function loadEventSlotBattle() {
                         typeGameConquest.skillBattle[slot.id].CRIT[0] = typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0]
                         typeGameConquest.skillBattle[slot.id].COOLDOWN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0]
 
+                        if (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL === 2) {
+                            typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
+                        } else {
+                            typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICESELL + typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
+                        }
+                        typeGameConquest.skillBattle[slot.id].PRICESELL = typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL
+
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
                         //     const pData = allPets[p];
@@ -4211,7 +4392,7 @@ function loadEventSlotBattle() {
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
-                        checkupdatelevel();
+                        checkUpdateLevel();
 
                     } else {
 
@@ -4305,6 +4486,13 @@ function loadEventSlotBattle() {
                         typeGameConquest.skillBattle[slot.id].POISON[0] = typeGameConquest.battlePetUseSlotRound[slot.id].POISON[0]
                         typeGameConquest.skillBattle[slot.id].CRIT[0] = typeGameConquest.battlePetUseSlotRound[slot.id].CRIT[0]
                         typeGameConquest.skillBattle[slot.id].COOLDOWN[0] = typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[0]
+
+                        if (typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL === 2) {
+                            typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.skillBattle[skill.parentElement.id].PRICE
+                        } else {
+                            typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.skillBattle[skill.parentElement.id].PRICESELL + typeGameConquest.skillBattle[skill.parentElement.id].PRICE
+                        }
+                        typeGameConquest.skillBattle[slot.id].PRICESELL = typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4456,7 +4644,7 @@ function loadEventSlotBattle() {
         slot.addEventListener("drop", (e) => {
             e.preventDefault();
             const skillId = e.dataTransfer.getData("text/plain");
-            const skill = document.getElementById(skillId);
+            let skill = document.getElementById(skillId);
 
             const parentSlot = skill.parentElement;
             //Lấy thông tin của skill target để nâng cấp
@@ -4498,6 +4686,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
 
+                        typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4526,7 +4715,7 @@ function loadEventSlotBattle() {
                         let skillLock = `LockBattleShop${index}`;
                         LockBattleShop[skillLock] = false;
                         document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
-                        
+
                         // Xóa kỹ năng html shop (div skill Shop)
                         skill.remove();
                         skill = null;
@@ -4537,6 +4726,7 @@ function loadEventSlotBattle() {
                             skillData.LEVEL += 1; // Tăng LEVEL lên
                             skillDiv.dataset.skill = JSON.stringify(skillData); // Cập nhật lại data-skill
                         }
+
                         highlightSkillLevel();
                         resetMaxHpBattle();
                         updateSttForSkillAffter();
@@ -4549,7 +4739,7 @@ function loadEventSlotBattle() {
 
                 } else {
                     typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
-                    
+
                     //Thêm skill vào battlePetUseSlotRound
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
 
@@ -4558,7 +4748,7 @@ function loadEventSlotBattle() {
                     let skillLock = `LockBattleShop${index}`;
                     LockBattleShop[skillLock] = false;
                     document.getElementById(skillLock).style.color = 'rgb(255 161 115)'
-                    
+
                     //Chuyển slot mới thành đầy    
                     slot.prepend(skill);
                     slot.classList.add("occupied");
@@ -4568,7 +4758,7 @@ function loadEventSlotBattle() {
                     updateSttForSkillAffter();
                     checkUpdateLevel();
 
-                    
+
                     typeGameConquest.selectSkillShop += 1
 
                     document.getElementById("starUser").innerText = typeGameConquest.starUser;
@@ -4597,6 +4787,13 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
                         typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
+
+                        if (typeGameConquest.battlePetInInventory[slot.id].LEVEL === 2) {
+                             typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
+                        } else {
+                            typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICESELL + typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
+                        }
+                        
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4701,6 +4898,13 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
                         typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
+                        
+                        if (typeGameConquest.battlePetInInventory[slot.id].LEVEL === 2) {
+                            typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.skillBattle[skill.parentElement.id].PRICE
+                        } else {
+                            typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.skillBattle[skill.parentElement.id].PRICESELL + typeGameConquest.skillBattle[skill.parentElement.id].PRICE
+                        }
+
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4802,7 +5006,7 @@ function loadEventSlotBattle() {
     shopSell.addEventListener('drop', (event) => {
         event.preventDefault(); // Ngăn hành vi mặc định
         const skillId = event.dataTransfer.getData("text/plain"); // Lấy ID kỹ năng
-        const skillElement = document.getElementById(skillId);
+        let skillElement = document.getElementById(skillId);
 
         if (skillElement) {
             if (skillElement.parentElement.parentElement.id !== "battleShop") {
@@ -4816,6 +5020,7 @@ function loadEventSlotBattle() {
                     skillSell.SELLUP.forEach(sellUpEffect => {
                         sellUpSkill(skillSell, sellUpEffect);
                     });
+                    typeGameConquest.starUser += skillSell.PRICE + skillSell.PRICESELL
                 }
 
                 //Skill bán ở slot skill
@@ -4825,6 +5030,8 @@ function loadEventSlotBattle() {
 
                     typeGameConquest.skillBattle[skillElement.parentElement.id] = typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id]
                     //Cộng atk/heal/shield/burn/poison khi bán skill
+                    
+                    typeGameConquest.starUser += skillSell.PRICE + skillSell.PRICESELL
 
                     skillSell.SELLUP.forEach(sellUpEffect => {
                         sellUpSkill(skillSell, sellUpEffect);
@@ -4843,6 +5050,7 @@ function loadEventSlotBattle() {
             slots.forEach(slot => slot.classList.remove("updateSkill"));
 
             shopSell.style.background = "#f86e85"
+            document.getElementById('starUser').innerText = typeGameConquest.starUser;
         }
         resetMaxHpBattle();
     });
@@ -6580,11 +6788,11 @@ function openGameRank() {
         }
 
         //Reset Lock shop
-        for (let k = 1; k <=5 ; k++) {
+        for (let k = 1; k <= 5; k++) {
             LockBattleShop[`LockBattleShop${k}`] = false;
             document.getElementById(`LockBattleShop${k}`).style.color = 'rgb(255 161 115)'
         }
-        
+
         //Trường hợp onGame của người chơi = 0
         if (onGame === 0 && infoStartGame.stepGame === 0) {
 
@@ -6637,9 +6845,9 @@ function openGameRank() {
                 }
 
                 //pointrank cho comp
-                Object.keys(allUsers).forEach((key) => {
+                Object.keys(rankGame).forEach((key) => {
                     if (key === typeGameConquest.usernameComp) {
-                        pointRankComp = allUsers[key].pointRank;
+                        pointRankComp = rankGame[key].rankPoint.typeGameConquest;
                     }
                 });
 
@@ -6741,6 +6949,7 @@ function resetMaxHpBattle() {
 
 function nextStepGame1() {
     infoStartGame.stepGame = 2;
+    checkUpdateLevel();
     console.log("Next Step Game 1 executed");
     startLoading();
     setTimeout(() => {
@@ -6851,16 +7060,16 @@ function resetHp5Mon() {
                 let valuePower = 2 * typeGameConquest.skillBattle[skill].POWER.HP / scaleHP + 180;
 
                 let baseHP = Math.round(valuePower);
-                
+
                 maxHpAll5Mon[skill] = baseHP || 0;
             }
         }
     });
 
     // ✅ Sao chép kết quả sau khi tính toán
-    curentHpAll5Mon = { ...maxHpAll5Mon};
+    curentHpAll5Mon = { ...maxHpAll5Mon };
 
-    
+
     [typeGameConquest.skillBattle, typeGameConquest.battlePetUseSlotRound].forEach((obj) => {
         Object.values(obj).forEach((skill) => {
             skill.COOLDOWN[4] = 0;
@@ -6906,6 +7115,15 @@ function startBattle() {
             console.log("Chuyển về slot không đưa skill vào được")
         });
 
+        //Xóa tất cả các hiệu ứng uplevel
+        document.querySelectorAll('.updateSkillLevel').forEach(div => {
+            div.classList.remove('updateSkillLevel');
+        });
+
+        document.querySelectorAll('.upgrade-icon').forEach(icon => {
+            icon.remove();
+        });
+
         updateHpbar();
         setTimeout(() => {
             battleStartTime(true);
@@ -6944,7 +7162,7 @@ function startBattle() {
         //đạt điều kiện thì chiến thắng và gọi endBattle() => dừng tất cả cooldown và trừ máu
 
         //Đổi nút tiếp tục thành => onclick="startBattle()"
-        
+
     }, 2000);
     endLoading();
 }
@@ -6972,7 +7190,7 @@ function endBattle(whoWin, pointsThisRound) {
 
     //Tìm nhân vật để tăng chỉ số mỗi round cho người chơi user
     upSTTRoundWithCharacter();
-    
+
     //Cộng star mỗi round
     const bonusStars = Math.floor(typeGameConquest.starUser / 5);
     typeGameConquest.starUser += infoStartGame.roundGame * 2 + bonusStars;
@@ -7010,8 +7228,6 @@ function endBattle(whoWin, pointsThisRound) {
 
     skillsSpeedA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
     skillsSpeedB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
-    speedUpA = 1;
-    speedUpB = 1;
 
     //reset Hp5Mon
     resetHp5Mon();
@@ -7110,11 +7326,6 @@ function endBattle(whoWin, pointsThisRound) {
         overlay.style.transitionDuration = '0ms'; // Không có hiệu ứng chuyển tiếp ban đầu
         overlay.style.transform = 'scaleY(0)';    // Đặt overlay đầy (hiện full)
     });
-    const overlaysLV = document.querySelectorAll('.skillCooldownOverlayLV');
-    overlaysLV.forEach((overlay) => {
-        overlay.style.transitionDuration = '0ms'; // Không có hiệu ứng chuyển tiếp ban đầu
-        overlay.style.transform = 'scaleY(0)';    // Đặt overlay đầy (hiện full)
-    });
 
     //Random tìm đối thủ mới
     let candidates = allComps.filter(comp => comp.roundComp === infoStartGame.roundGame);
@@ -7139,9 +7350,9 @@ function endBattle(whoWin, pointsThisRound) {
         }
 
         //pointrank cho comp
-        Object.keys(allUsers).forEach((key) => {
+        Object.keys(rankGame).forEach((key) => {
             if (key === typeGameConquest.usernameComp) {
-                pointRankComp = allUsers[key].pointRank;
+                pointRankComp = rankGame[key].rankPoint.typeGameConquest;
             }
         });
 
@@ -7152,11 +7363,7 @@ function endBattle(whoWin, pointsThisRound) {
     }
 
     for (let s = 1; s <= 9; s++) {
-        if (s === 9) {
-            document.querySelector(`#skill${s}A`).innerHTML = `<div class="skillCooldownOverlayLV"></div>`
-        } else {
-            document.querySelector(`#skill${s}A`).innerHTML = `<div class="skillCooldownOverlay"></div>`
-        }
+        document.querySelector(`#skill${s}A`).innerHTML = `<div class="skillCooldownOverlay"></div>`
     }
 
     //Khởi tạo skill cho các slot skill1A -> 9A
@@ -7288,9 +7495,9 @@ function outGameRank() {
 
         //Cộng điểm rank & reset điểm trong game
         if (infoStartGame.roundGame <= 1) {
-            pointRank -= 10;
+            pointRank.typeGameConquest -= 10;
         } else {
-            pointRank += typeGameConquest.pointBattle;
+            pointRank.typeGameConquest += typeGameConquest.pointBattle;
         }
 
         resetOutGame();
@@ -7324,21 +7531,14 @@ function outGameRank() {
         for (let i = 1; i <= 9; i++) {
             const skillCompSlot = `skill${i}A`;
             const skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-            if (i === 9) {
-                skillCompDiv.innerHTML = `<div class="skillCooldownOverlayLV"></div>`
-            } else {
-                skillCompDiv.innerHTML = `<div class="skillCooldownOverlay"></div>`
-            }
+            skillCompDiv.innerHTML = `<div class="skillCooldownOverlay"></div>`
         }
 
         for (let i = 1; i <= 9; i++) {
             const skillCompSlot = `skill${i}B`;
             const skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-            if (i === 9) {
-                skillCompDiv.innerHTML = `<div class="skillCooldownOverlayLV"></div>`
-            } else {
-                skillCompDiv.innerHTML = `<div class="skillCooldownOverlay"></div>`
-            }
+            skillCompDiv.innerHTML = `<div class="skillCooldownOverlay"></div>`
+
             skillCompDiv.classList.remove("occupied")
         }
 
@@ -7381,7 +7581,7 @@ let LockBattleShop = {
 function lock5MonShop(item) {
     let index = item.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
     let skill = `battleShop${index}`;
-    
+
     if (typeGameConquest.battlePetInShop[skill]?.ID) {
         if (LockBattleShop[item] === true) {
             LockBattleShop[item] = false;
@@ -7414,8 +7614,8 @@ function randomSkillinShop() {
     // Khởi tạo các slot shop
     for (let i = 0; i < 5; i++) {
         //Kiểm tra xem có lock shop không
-        if (LockBattleShop[`LockBattleShop${i+1}`] === false) {
-            typeGameConquest.battlePetInShop[`battleShop${i+1}`] = defaultSTT5Mon
+        if (LockBattleShop[`LockBattleShop${i + 1}`] === false) {
+            typeGameConquest.battlePetInShop[`battleShop${i + 1}`] = defaultSTT5Mon
         }
     }
 
@@ -7427,10 +7627,10 @@ function randomSkillinShop() {
 
     for (let i = 0; i < 5; i++) {
         //Kiểm tra xem có lock shop không
-        if (LockBattleShop[`LockBattleShop${i+1}`] === true) {
+        if (LockBattleShop[`LockBattleShop${i + 1}`] === true) {
             continue;
         }
-        
+
         const availableSkills = allSkills.filter(skill => !selectedSkillIDs.includes(skill.ID));
 
         if (availableSkills.length === 0) {
@@ -7442,6 +7642,8 @@ function randomSkillinShop() {
         const selectedSkill = availableSkills[randomIndex];
 
         selectedSkillIDs.push(selectedSkill.ID); // Ghi lại ID đã chọn
+        
+        selectedSkill.PRICESELL = 0;
 
         // Đặt vào UI
         const shopSlot = `battleShop${i + 1}`;
@@ -7495,13 +7697,13 @@ function randomSkillinShop() {
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
-                    <span style="position: absolute;font-size: 10px;color: #ffffff;
+                    <span class="starSkillText" style="position: absolute;font-size: 10px;color: #ffffff;
                     font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                     ">
-                        ${selectedSkill.PRICE}
+                        ${selectedSkill.PRICESELL + selectedSkill.PRICE || selectedSkill.PRICE}
                     </span>
                 </div>`
-                ;
+                    ;
 
 
             }
@@ -7544,11 +7746,11 @@ function randomSkillinShop1() {
 
     let selectedSkills = [];  // Danh sách lưu trữ các ID kỹ năng đã chọn
     typeGameConquest.battlePetInShop = {
-        battleShop1: defaultSTT5Mon,
-        battleShop2: defaultSTT5Mon,
-        battleShop3: defaultSTT5Mon,
-        battleShop4: defaultSTT5Mon,
-        battleShop5: defaultSTT5Mon,
+        battleShop1: defaultSTT5MonInBattle,
+        battleShop2: defaultSTT5MonInBattle,
+        battleShop3: defaultSTT5MonInBattle,
+        battleShop4: defaultSTT5MonInBattle,
+        battleShop5: defaultSTT5MonInBattle,
     };
 
     for (let i = 0; i < 5; i++) {
@@ -7676,10 +7878,10 @@ function randomSkillinShop1() {
                 <i class="fa-solid fa-splotch" style="
                     position: absolute;
                 "></i>
-                <span style="position: absolute;font-size: 10px;color: #ffffff;
+                <span class="starSkillText" style="position: absolute;font-size: 10px;color: #ffffff;
                 font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                 ">
-                    ${selectedSkill.PRICE}
+                    ${selectedSkill.PRICESELL + selectedSkill.PRICE || selectedSkill.PRICE}
                 </span>
             </div>`;
 
@@ -7772,13 +7974,13 @@ function createSkill(slotDiv) {
                 <i class="fa-solid fa-splotch" style="
                     position: absolute;
                 "></i>
-                <span style="position: absolute;font-size: 10px;color: #ffffff;
+                <span class="starSkillText" style="position: absolute;font-size: 10px;color: #ffffff;
                 font-weight: bold;min-width: 25px;top: 2px;left: -3px;
                 ">
-                    ${skillItem[skillCompSlot].PRICE}
+                    ${skillItem[skillCompSlot].PRICESELL + skillItem[skillCompSlot].PRICE || skillItem[skillCompSlot].PRICE}
                 </span>
             </div>`;
-            
+
 
             //Gắn cho div cha trạng thái đã lấp đầy
             skillCompDiv.classList.add("occupied");
@@ -8000,7 +8202,7 @@ function battleStartTime(init = true) {
 
         updateHpAndRageBar5Mon();
 
-        
+
 
         if (endGame === true) {
             clearInterval(intervalIDBurnOrPoison); // Dừng cập nhật
@@ -8225,426 +8427,6 @@ function checkWinOrLose() {
     }
 }
 
-//Tạo ra biến cục bộ để kiểm soát skill vô hiệu và loại bỏ
-let skillsSleepA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
-let skillsDeleteA = { skill1A: 0, skill2A: 0, skill3A: 0, skill4A: 0, skill5A: 0, skill6A: 0, skill7A: 0, skill8A: 0, skill9A: 0 };
-// let limitSkillsA = {skill1A: 0,skill2A: 0,skill3A: 0,skill4A: 0,skill5A: 0,skill6A: 0,skill7A: 0,skill8A: 0,skill9A: 0};
-let speedUpA = 1;
-//useskill with cooldown mới
-function cooldownSkillBattleA() {
-    let cooldownComp = 0;
-
-    // Tính tổng cooldownComp và cooldownMy
-    for (let skill in typeGameConquest.skillBattle) {
-        const cooldown = typeGameConquest.skillBattle[skill].COOLDOWN[0] === 0 ? 1000 : typeGameConquest.skillBattle[skill].COOLDOWN[0];
-        if (/^skill[1-8]A$/.test(skill)) cooldownComp += cooldown;
-    }
-
-
-    // Cấu hình thanh cooldown
-    const cooldownSkillBarA = document.getElementById('cooldownBarSkillA');
-    const cooldownSkillTimeA = document.getElementById('cooldownTimeSkillA');
-    const cooldownSpeedUpTimeSkillA = document.getElementById('cooldownSpeedUpTimeSkillA');
-
-    const interval = 100;
-
-    // Lưu ID của vòng lặp cooldown cho mỗi bên
-    let intervalIdA = null;
-
-    // Hàm cập nhật thanh cooldown và sử dụng skill
-    function updateCooldown(skillBar, skillTime, skills, isComp) {
-        let cooldownDuration = cooldownComp + typeGameConquest.slowB - typeGameConquest.upCooldownA
-        let cooldownRemaining = 0; // Bắt đầu từ 0% (trái qua phải)
-        let progress = 0; // Bắt đầu từ trái
-
-        // Xóa vòng lặp cũ nếu có
-        if (isComp && intervalIdA !== null) {
-            clearInterval(intervalIdA);
-            intervalIdA = null
-        }
-
-        // Tạo vòng lặp mới
-        const intervalId = setInterval(() => {
-            if (pauseBattle) {
-                return;
-            }
-
-            if (cooldownQueueComp > 0) {
-                cooldownQueueComp -= 100; // Giảm 0.1 giây mỗi lần
-                if (cooldownQueueComp < 0) cooldownQueueComp = 0;
-                return;
-            }
-
-            if (endGame) {
-                clearInterval(intervalId); // Dừng vòng lặp khi endGame = true
-                intervalId = null;
-                skillBar.style.width = "0%";
-                skillTime.textContent = ""
-                skillTime.style.backgroundColor = "";
-                cooldownSpeedUpTimeSkillA.textContent = "";
-                cooldownSpeedUpTimeSkillA.style.backgroundColor = "";
-                return;
-            } else {
-                skillTime.style.backgroundColor = "rgb(150 0 238)";
-            }
-
-            cooldownRemaining += (interval / 1000) * speedUpA;
-            progress = Math.min((cooldownRemaining / (cooldownDuration / 1000)) * 100, 100);
-            skillBar.style.width = `${progress}%`;
-            skillTime.textContent = `${Math.ceil(cooldownDuration / 1000 - cooldownRemaining)}`;
-
-            let skillElementLV = document.getElementById("skill9A");  // Lấy phần tử chính
-            let overlayDivLV = null;
-
-            // Duyệt qua các phần tử con để tìm phần tử có class là 'skillCooldownOverlay'
-            for (let child of skillElementLV.children) {
-                if (child.classList.contains('skillCooldownOverlayLV')) {
-                    overlayDivLV = child;
-                    break; // Dừng vòng lặp khi tìm thấy
-                }
-            }
-            useSkillLV("skill9A", overlayDivLV, isComp);
-
-            for (let i = 0; i < skills.length; i++) {
-                const skillKey = `skill${i + 1}A`;
-
-                if (progress >= i * 12.5 + 6.25 && skills[i] === 0
-                    // && limitSkillsA[skillKey] <= 10 
-                    && typeGameConquest.skillBattle[skillKey].ID !== "") {
-                    // limitSkillsA[skillKey] += 1
-                    skills[i] = 1; //Tăng lên 1 để không bị lặp sử dụng skill
-
-                    // Ưu tiên kiểm tra trạng thái Sleep/delete
-                    if (skillsSleepA[skillKey] === 1) {
-                        skillsSleepA[skillKey] = 0
-                        const skillElement = document.getElementById(skillKey);
-                        if (skillElement) {
-                            const skillChild = skillElement.querySelector('.skill');
-                            if (skillChild && skillChild.classList.contains('sleep')) {
-                                skillChild.classList.remove('sleep');
-                            }
-                        }
-                        continue; // Bỏ qua skill này
-                    }
-
-                    if (skillsDeleteA[skillKey] === 1) {
-                        console.log(`Skill ${skillKey} đã bị xóa!`);
-                        continue; // Bỏ qua skill này
-                    }
-
-                    let skillElement = document.getElementById(skillKey);  // Lấy phần tử chính
-                    let overlayDiv = null;
-
-                    // Duyệt qua các phần tử con để tìm phần tử có class là 'skillCooldownOverlay'
-                    for (let child of skillElement.children) {
-                        if (child.classList.contains('skillCooldownOverlay')) {
-                            overlayDiv = child;
-                            break; // Dừng vòng lặp khi tìm thấy
-                        }
-                    }
-
-                    if (i === 9) {
-
-                    } else {
-                        startSkill(skillKey, overlayDiv, isComp);
-                    }
-                }
-            }
-
-            if (cooldownRemaining >= cooldownDuration / 1000) {
-                // Reset cooldown về 0 và bắt đầu lại
-                cooldownRemaining = 0;
-                skills.fill(0); // Reset trạng thái skill đã sử dụng
-                // limitSkillsA = {skill1A: 0,skill2A: 0,skill3A: 0,skill4A: 0,skill5A: 0,skill6A: 0,skill7A: 0,skill8A: 0,skill9A: 0}; //Reset litmit 
-
-                // Giảm cooldownComp và cooldownMy mỗi lần kết thúc vòng lặp
-                const minCooldown = 1000; // Cooldown tối thiểu không được giảm dưới
-                let reductionFactorBase = 0.02; // Tỷ lệ giảm cơ bản (2%)
-
-                // Tính toán hệ số giảm dựa trên cooldown hiện tại
-                if (cooldownComp > 24000) { //Lớn hơn 24 giây
-                    reductionFactorBase = 0.10 //giảm 10%
-                } else if (cooldownComp > 21000) {
-                    reductionFactorBase = 0.09 //giảm 9%
-                } else if (cooldownComp > 18000) {
-                    reductionFactorBase = 0.08 //giảm 8%
-                } else if (cooldownComp > 16000) {
-                    reductionFactorBase = 0.07 //giảm 7%
-                } else if (cooldownComp > 14000) {
-                    reductionFactorBase = 0.06 //giảm 6%
-                } else if (cooldownComp > 12000) {
-                    reductionFactorBase = 0.05 //giảm 5%
-                } else if (cooldownComp > 10000) {
-                    reductionFactorBase = 0.04 //giảm 4%
-                } else if (cooldownComp > 8000) {
-                    reductionFactorBase = 0.03 //giảm 3%
-                } else {
-                    reductionFactorBase = 0.02 //giảm 2%
-                }
-
-                let reductionFactor = reductionFactorBase + ((cooldownComp / 1000) * 0.001); // Mỗi 1000ms tăng thêm 0.1%
-
-                // Đảm bảo giới hạn tỷ lệ giảm không vượt quá một mức hợp lý
-                reductionFactor = Math.min(reductionFactor, 0.5); // Giới hạn giảm tối đa 50%
-
-                // Giảm cooldown với tỷ lệ đã tính
-                cooldownComp = Math.max(cooldownComp - cooldownComp * reductionFactor, minCooldown);
-
-                // Thực hiện một lần gọi lại để giảm giá trị cooldown sau mỗi lần chạy xong
-                updateCooldown(skillBar, skillTime, skills, true);
-            }
-            if (totalSpeedDownTimeA > 0) {
-                speedUpA = 0.5
-                totalSpeedDownTimeA -= 100
-            } else if (totalSpeedUpTimeA > 0) {
-                speedUpA = 2
-                totalSpeedUpTimeA -= 100
-            } else {
-                speedUpA = 1
-            }
-
-            if (speedUpA > 1) {
-                document.getElementById("cooldownSkillA").style.backgroundColor = "rgb(255 10 10)";
-                cooldownSpeedUpTimeSkillA.textContent = `${Math.ceil(totalSpeedUpTimeA / 1000)}`
-                cooldownSpeedUpTimeSkillA.style.backgroundColor = "rgb(255 10 10)";
-            } else if (speedUpA < 1) {
-                document.getElementById("cooldownSkillA").style.backgroundColor = "rgb(10 128 255)";
-                cooldownSpeedUpTimeSkillA.textContent = `${Math.ceil(totalSpeedDownTimeA / 1000)}`
-                cooldownSpeedUpTimeSkillA.style.backgroundColor = "rgb(10 128 255)";
-            } else {
-                document.getElementById("cooldownSkillA").style.backgroundColor = "rgb(0 0 0 / 25%)";
-                cooldownSpeedUpTimeSkillA.textContent = "";
-                cooldownSpeedUpTimeSkillA.style.backgroundColor = "";
-            }
-        }, interval);
-
-        // Lưu lại ID vòng lặp mới
-        intervalIdA = intervalId;
-    }
-
-    // Tạo mảng kỹ năng và bắt đầu giảm thanh cooldown
-    const skillCompStates = new Array(9).fill(0);
-    updateCooldown(cooldownSkillBarA, cooldownSkillTimeA, skillCompStates, true);
-}
-
-
-//Tạo ra biến cục bộ để kiểm soát skill vô hiệu và loại bỏ
-let skillsSleepB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
-let skillsDeleteB = { skill1B: 0, skill2B: 0, skill3B: 0, skill4B: 0, skill5B: 0, skill6B: 0, skill7B: 0, skill8B: 0, skill9B: 0 };
-// let limitSkillsB = {skill1B: 0,skill2B: 0,skill3B: 0,skill4B: 0,skill5B: 0,skill6B: 0,skill7B: 0,skill8B: 0,skill9B: 0}; // đếm skill dùng được bao nhiêu trong 1 lần chạy cooldown => dùng để giới hạn skill dùng được
-let speedUpB = 1;
-function cooldownSkillBattleB() {
-    let cooldownMy = 0;
-
-    // Tính tổng cooldownComp và cooldownMy
-    for (let skill in typeGameConquest.skillBattle) {
-        const cooldown = typeGameConquest.skillBattle[skill].COOLDOWN[0] === 0 ? 1000 : typeGameConquest.skillBattle[skill].COOLDOWN[0];
-        if (/^skill[1-8]B$/.test(skill)) cooldownMy += cooldown;
-    }
-
-    // Cấu hình thanh cooldown
-    const cooldownSkillBarB = document.getElementById('cooldownBarSkillB');
-    const cooldownSkillTimeB = document.getElementById('cooldownTimeSkillB');
-    const cooldownSpeedUpTimeSkillB = document.getElementById('cooldownSpeedUpTimeSkillB');
-    const interval = 100;
-
-    // Lưu ID của vòng lặp cooldown cho mỗi bên
-    let intervalIdB = null;
-
-    // Hàm cập nhật thanh cooldown và sử dụng skill
-    function updateCooldown(skillBar, skillTime, skills, isComp) {
-        let cooldownDuration = cooldownMy + typeGameConquest.slowA - typeGameConquest.upCooldownB
-        let cooldownRemaining = 0; // Bắt đầu từ 0% (trái qua phải)
-        let progress = 0; // Bắt đầu từ trái
-
-        // Xóa vòng lặp cũ nếu có
-        if (!isComp && intervalIdB !== null) {
-            clearInterval(intervalIdB);
-            intervalIdB = null;
-        }
-
-        // Tạo vòng lặp mới
-        const intervalId = setInterval(() => {
-            if (pauseBattle) {
-                return;
-            }
-
-            if (cooldownQueueMy > 0) {
-                cooldownQueueMy -= 100; // Giảm 0.1 giây mỗi lần
-                if (cooldownQueueMy < 0) cooldownQueueMy = 0;
-                return;
-            }
-
-            if (endGame) {
-                clearInterval(intervalId); // Dừng vòng lặp khi endGame = true
-                intervalId = null;
-                skillBar.style.width = "0%";
-                skillTime.textContent = ""
-                skillTime.style.backgroundColor = "";
-                cooldownSpeedUpTimeSkillB.textContent = "";
-                cooldownSpeedUpTimeSkillB.style.backgroundColor = "";
-                return;
-            } else {
-                skillTime.style.backgroundColor = "rgb(150 0 238)";
-            }
-
-            cooldownRemaining += (interval / 1000) * speedUpB;
-            progress = Math.min((cooldownRemaining / (cooldownDuration / 1000)) * 100, 100);
-            skillBar.style.width = `${progress}%`;
-            skillTime.textContent = `${Math.ceil(cooldownDuration / 1000 - cooldownRemaining)}`;
-
-            let skillElementLV = document.getElementById("skill9B");  // Lấy phần tử chính
-            let overlayDivLV = null;
-
-            // Duyệt qua các phần tử con để tìm phần tử có class là 'skillCooldownOverlay'
-            for (let child of skillElementLV.children) {
-                if (child.classList.contains('skillCooldownOverlayLV')) {
-                    overlayDivLV = child;
-                    break; // Dừng vòng lặp khi tìm thấy
-                }
-            }
-            useSkillLV("skill9B", overlayDivLV, isComp);
-
-            for (let i = 0; i < skills.length; i++) {
-                const skillKey = `skill${i + 1}B`;
-                if (progress >= i * 12.5 + 6.25 && skills[i] === 0
-                    // && limitSkillsB[skillKey]<=10 
-                    && typeGameConquest.skillBattle[skillKey].ID !== "") {
-                    // limitSkillsB[skillKey] += 1
-                    skills[i] = 1; //Tăng lên 1 để không bị lặp sử dụng skill
-
-                    if (skillsSleepB[skillKey] === 1) {
-                        skillsSleepB[skillKey] = 0
-                        //Xóa hình ảnh bị Sleep
-                        const skillElement = document.getElementById(skillKey);
-                        if (skillElement) {
-                            const skillChild = skillElement.querySelector('.skill');
-                            if (skillChild && skillChild.classList.contains('sleep')) {
-                                skillChild.classList.remove('sleep');
-                            }
-                        }
-                        continue;
-                    }
-
-                    if (skillsDeleteB[skillKey] === 1) {
-                        continue;
-                    }
-
-                    let skillElement = document.getElementById(skillKey);  // Lấy phần tử chính
-                    let overlayDiv = null;
-
-                    // Duyệt qua các phần tử con để tìm phần tử có class là 'skillCooldownOverlay'
-                    for (let child of skillElement.children) {
-                        if (child.classList.contains('skillCooldownOverlay')) {
-                            overlayDiv = child;
-                            break; // Dừng vòng lặp khi tìm thấy
-                        }
-                    }
-
-                    if (i === 9) {
-
-                    } else {
-                        startSkill(skillKey, overlayDiv, isComp);
-                    }
-                }
-            }
-
-            if (cooldownRemaining >= cooldownDuration / 1000) {
-                // Reset cooldown về 0 và bắt đầu lại
-                cooldownRemaining = 0;
-                skills.fill(0)
-                // limitSkillsB = {skill1B: 0,skill2B: 0,skill3B: 0,skill4B: 0,skill5B: 0,skill6B: 0,skill7B: 0,skill8B: 0,skill9B: 0}; //Reset litmit 
-
-                // Giảm cooldownComp và cooldownMy mỗi lần kết thúc vòng lặp
-                const minCooldown = 1000; // Cooldown tối thiểu không được giảm dưới
-                let reductionFactorBase = 0.02; // Tỷ lệ giảm cơ bản (1%)
-
-                if (cooldownMy > 24000) { //Lớn hơn 24 giây
-                    reductionFactorBase = 0.10 //giảm 10%
-                } else if (cooldownMy > 21000) {
-                    reductionFactorBase = 0.09 //giảm 9%
-                } else if (cooldownMy > 18000) {
-                    reductionFactorBase = 0.08 //giảm 8%
-                } else if (cooldownMy > 16000) {
-                    reductionFactorBase = 0.07 //giảm 7%
-                } else if (cooldownMy > 14000) {
-                    reductionFactorBase = 0.06 //giảm 6%
-                } else if (cooldownMy > 12000) {
-                    reductionFactorBase = 0.05 //giảm 5%
-                } else if (cooldownMy > 10000) {
-                    reductionFactorBase = 0.04 //giảm 4%
-                } else if (cooldownMy > 8000) {
-                    reductionFactorBase = 0.03 //giảm 3%
-                } else {
-                    reductionFactorBase = 0.02 //giảm 2%
-                }
-
-                let reductionFactor = reductionFactorBase + ((cooldownMy / 1000) * 0.001); // Mỗi 1000ms tăng thêm 0.1%
-
-                // Đảm bảo giới hạn tỷ lệ giảm không vượt quá một mức hợp lý
-                reductionFactor = Math.min(reductionFactor, 0.3); // Giới hạn giảm tối đa 50%
-
-                // Giảm cooldown với tỷ lệ đã tính
-                cooldownMy = Math.max(cooldownMy - cooldownMy * reductionFactor, minCooldown);
-
-
-
-                // Thực hiện một lần gọi lại để giảm giá trị cooldown sau mỗi lần chạy xong
-                updateCooldown(skillBar, skillTime, skills, false);
-            }
-            if (totalSpeedDownTimeB > 0) {
-                speedUpB = 0.5
-                totalSpeedDownTimeB -= 100
-            } else if (totalSpeedUpTimeB > 0) {
-                speedUpB = 2
-                totalSpeedUpTimeB -= 100
-            } else {
-                speedUpB = 1
-            }
-
-            if (speedUpB > 1) {
-                document.getElementById("cooldownSkillB").style.backgroundColor = "rgb(255 10 10)";
-                cooldownSpeedUpTimeSkillB.textContent = `${Math.ceil(totalSpeedUpTimeB / 1000)}`
-                cooldownSpeedUpTimeSkillB.style.backgroundColor = "rgb(255 10 10)";
-            } else if (speedUpB < 1) {
-                document.getElementById("cooldownSkillB").style.backgroundColor = "rgb(10 128 255)";
-                cooldownSpeedUpTimeSkillB.textContent = `${Math.ceil(totalSpeedDownTimeB / 1000)}`
-                cooldownSpeedUpTimeSkillB.style.backgroundColor = "rgb(10 128 255)";
-            } else {
-                document.getElementById("cooldownSkillB").style.backgroundColor = "rgb(0 0 0 / 25%)";
-                cooldownSpeedUpTimeSkillB.textContent = ""; cooldownSpeedUpTimeSkillB.style.backgroundColor = "";
-            }
-
-        }, interval);
-
-        // Lưu lại ID vòng lặp mới
-        intervalIdB = intervalId;
-    }
-
-    // Tạo mảng kỹ năng và bắt đầu giảm thanh cooldown
-    const skillMyStates = new Array(9).fill(0);
-    updateCooldown(cooldownSkillBarB, cooldownSkillTimeB, skillMyStates, false);
-}
-
-
-
-function startSkill(skillKey, overlayDiv, isComp) {
-    //Tính mutilcast=> đánh liên tiếp
-    let doubleSkill = Math.max(typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1)
-    console.log("multicast", doubleSkill, skillKey)
-    Object.keys(effectsSkill).forEach((effectSkill) => {
-        if (typeGameConquest.skillBattle[skillKey].EFFECT.includes(effectSkill)) {
-            for (let d = 1; d <= doubleSkill; d++) {
-                setTimeout(() => {
-                    useSkill(skillKey, effectSkill, overlayDiv, isComp);
-                }, 350 * (d - 1)); // Thực hiện sử dụng skill với delay tăng dần
-            }
-        }
-    });
-
-}
-
-
 let skillQueueMirror = {}; // Hàng đợi cho mỗi skill phản đòn
 let countSkillQueueMirror = 0;
 function startSkillMirror(skillKey, isComp, effect) {
@@ -8708,20 +8490,10 @@ function startSkillMirror(skillKey, isComp, effect) {
                                 return; // Kiểm tra lại sau delay
                             }
 
-                            const skillElementComp = document.getElementById(key);
-                            let overlayDivComp = null;
-
-                            for (const child of skillElementComp.children) {
-                                if (child.classList.contains("skillCooldownOverlay") || child.classList.contains("skillCooldownOverlayLV")) {
-                                    overlayDivComp = child;
-                                    break;
-                                }
-                            }
-
                             if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueueMirror < 300) {
                                 isComp
-                                    ? startSkill(key, overlayDivComp, false)
-                                    : startSkill(key, overlayDivComp, true);
+                                    ? userSkillA(key, false)
+                                    : userSkillA(key, true);
                                 countSkillQueueMirror += 1;
                                 console.log(`Kích hoạt skill phản đòn: ${key}`);
                             }
@@ -8767,14 +8539,6 @@ function startSkillResonance(skillKey, isComp, effect) {
         if (key !== skillKey && ((isComp ? key.endsWith("A") : key.endsWith("B")))) {
             for (const { reEffect, baseEffect } of effectPairs) {
 
-                const skillElementComp = document.getElementById(key);
-                let overlayDivComp = null;
-                if (key.startsWith("skill9")) {
-                    overlayDivComp = skillElementComp.querySelector(".skillCooldownOverlayLV")
-                } else {
-                    overlayDivComp = skillElementComp.querySelector(".skillCooldownOverlay")
-                }
-
                 // Logic xử lý nếu hiệu ứng có mặt trong skillKey
                 if (reEffect === "ReBeforeSkill" || reEffect === "ReAfterSkill" || reEffect === "ReBeforeAfterSkill" || reEffect === "ReType") {
                     let slotSkillKey = parseInt(skillKey.match(/\d+/)[0], 10);  // Chuyển đổi thành số
@@ -8784,6 +8548,8 @@ function startSkillResonance(skillKey, isComp, effect) {
                     if (reEffect === "ReBeforeAfterSkill" && typeGameConquest.skillBattle[key].EFFECT.includes("ReBeforeAfterSkill")) {
                         // Kiểm tra nếu slotSkillKey nhỏ hơn slotKey (tức là skill này là trước skill hiện tại)
                         if (slotSkillKey === slotKey - 1 || slotSkillKey === slotKey + 1) {
+                            console.log("Vào đây 1 lần")
+
                             // Khi skill có ReBeforeSkill, kích hoạt kỹ năng nếu slotSkillKey < slotKey
                             if (!skillQueue[key]) {
                                 skillQueue[key] = Promise.resolve(); // Khởi tạo hàng đợi nếu chưa có
@@ -8808,7 +8574,7 @@ function startSkillResonance(skillKey, isComp, effect) {
 
                                     // Nếu có overlayDivComp thì kích hoạt kỹ năng
                                     if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueue < 300) {
-                                        startSkill(key, overlayDivComp, isComp);
+                                        userSkillA(key, isComp);
                                         countSkillQueue += 1
                                     }
                                 });
@@ -8841,7 +8607,7 @@ function startSkillResonance(skillKey, isComp, effect) {
 
                                     // Nếu có overlayDivComp thì kích hoạt kỹ năng
                                     if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueue < 300) {
-                                        startSkill(key, overlayDivComp, isComp);
+                                        userSkillA(key, isComp);
                                         countSkillQueue += 1
                                     }
                                 });
@@ -8874,7 +8640,7 @@ function startSkillResonance(skillKey, isComp, effect) {
 
                                     // Nếu có overlayDivComp thì kích hoạt kỹ năng
                                     if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueue < 300) {
-                                        startSkill(key, overlayDivComp, isComp);
+                                        userSkillA(key, isComp);
                                         countSkillQueue += 1
                                     }
                                 });
@@ -8905,7 +8671,7 @@ function startSkillResonance(skillKey, isComp, effect) {
 
                                     // Nếu có overlayDivComp thì kích hoạt kỹ năng
                                     if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueue < 300) {
-                                        startSkill(key, overlayDivComp, isComp);
+                                        userSkillA(key, isComp);
                                         countSkillQueue += 1
                                     }
                                 });
@@ -8943,7 +8709,7 @@ function startSkillResonance(skillKey, isComp, effect) {
                                 }
 
                                 if (isRound === infoStartGame.roundGame && skillsSleep[key] === 0 && skillsDelete[key] === 0 && countSkillQueue < 300) {
-                                    startSkill(key, overlayDivComp, isComp);
+                                    userSkillA(key, isComp);
                                     countSkillQueue += 1
                                 }
                             });
@@ -8955,111 +8721,6 @@ function startSkillResonance(skillKey, isComp, effect) {
     });
 }
 
-//Cập nhật nộ Rage và sử dụng skill nộ
-function updateRage(skillKey, overlayDiv, isComp) {
-    // Kiểm tra typeGameConquest.skillBattle[skillKey]
-    if (!typeGameConquest.skillBattle[skillKey]) {
-        console.error(`typeGameConquest.skillBattle[${skillKey}] is undefined or null.`);
-        return;
-    }
-
-    // Kiểm tra overlayDiv
-    if (!overlayDiv) {
-        console.error("overlayDiv is null or undefined.");
-        return;
-    }
-
-    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) {  // Kiểm tra nộ đã đạt hoặc vượt 100
-        setTimeout(() => {
-            for (let s = 0; s < typeGameConquest.skillBattle[skillKey].EFFECT.length; s++) {
-                useSkill(skillKey, typeGameConquest.skillBattle[skillKey].EFFECT[s], overlayDiv, isComp);
-            }
-        }, 350);
-
-        overlayDiv.style.transform = 'scaleY(0)';  // Reset thanh nộ
-
-        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;  // Trừ 100 nộ
-        setTimeout(() => {
-            overlayDiv.style.transition = 'transform 1s ease-in-out'; // Hiệu ứng mượt
-            overlayDiv.style.transform = `scaleY(${Math.min(typeGameConquest.skillBattle[skillKey].COOLDOWN[4] / 100, 1)})`;  // Cập nhật thanh nộ
-        }, 100);
-
-    } else {  // Nếu chưa đạt 100
-        let rageIncrease = Math.max(Math.max(Math.min(30000 / typeGameConquest.skillBattle[skillKey].COOLDOWN[0], 200), 10) / (typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3]), 1) / typeGameConquest.skillBattle[skillKey].EFFECT.length || 1; // Tính lượng nộ tăng
-        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += rageIncrease;  // Cộng nộ
-        setTimeout(() => {
-            overlayDiv.style.transition = 'transform 1s ease-in-out'; // Hiệu ứng mượt
-            overlayDiv.style.transform = `scaleY(${Math.min(typeGameConquest.skillBattle[skillKey].COOLDOWN[4] / 100, 1)})`;  // Cập nhật thanh nộ
-        }, 100);
-    }
-}
-
-function userSkillA(skillKey, isComp) {
-    const skillElement = document.getElementById(skillKey);
-    let overlayDiv = null;
-
-    // for (const child of skillElement.children) {
-    //     if (child.classList.contains("skillCooldownOverlay") || child.classList.contains("skillCooldownOverlayLV")) {
-    //         overlayDiv = child;
-    //         break;
-    //     }
-    // }
-    
-    //Tính mutilcast=> đánh liên tiếp
-    let doubleSkill = Math.max(typeGameConquest.skillBattle[skillKey].COOLDOWN[1] + typeGameConquest.skillBattle[skillKey].COOLDOWN[2] + typeGameConquest.skillBattle[skillKey].COOLDOWN[3], 1)
-    Object.keys(effectsSkill).forEach((effectSkill) => {
-        if (typeGameConquest.skillBattle[skillKey].EFFECT.includes(effectSkill)) {
-            for (let d = 1; d <= doubleSkill; d++) {
-                setTimeout(() => {
-                    useSkill(skillKey, effectSkill, overlayDiv, isComp);
-                }, 350 * (d - 1)); // Thực hiện sử dụng skill với delay tăng dần
-            }
-        }
-    });
-}
-
-
-function useSkillLV(skillKey, overlayDiv, isComp) {
-    // Kiểm tra typeGameConquest.skillBattle[skillKey]
-    if (!typeGameConquest.skillBattle[skillKey] || !typeGameConquest.skillBattle[skillKey].ID) {
-        return;
-    }
-    // Kiểm tra overlayDiv
-    if (!overlayDiv) {
-        return;
-    }
-
-    // Ưu tiên kiểm tra trạng thái Sleep/delete
-    let skillsSleep = isComp ? skillsSleepA : skillsSleepB
-    let skillsDelete = isComp ? skillsDeleteA : skillsDeleteB
-
-    if (skillsDelete[skillKey] === 1) {
-        return; // Bỏ qua skill này
-    }
-
-    //Tính tốc độ tăng nộ của LV dựa theo công thức cooldown*multi
-    let speedLV = 10 / (typeGameConquest.skillBattle[skillKey].COOLDOWN[0] / 1000)
-
-    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] < 100) typeGameConquest.skillBattle[skillKey].COOLDOWN[4] += speedLV
-
-    if (typeGameConquest.skillBattle[skillKey].COOLDOWN[4] >= 100) {  // Kiểm tra nộ đã đạt hoặc vượt 100
-        typeGameConquest.skillBattle[skillKey].COOLDOWN[4] -= 100;  // Trừ 100 nộ
-        if (skillsSleep[skillKey] > 0) {
-            skillsSleep[skillKey] = 0
-            const skillElement = document.getElementById(skillKey);
-            if (skillElement) {
-                const skillChild = skillElement.querySelector('.skill');
-                if (skillChild && skillChild.classList.contains('sleep')) {
-                    skillChild.classList.remove('sleep');
-                }
-            }
-        } else {
-            startSkill(skillKey, overlayDiv, isComp);
-        }
-    }
-    // overlayDiv.style.transition = 'transform 1s ease-in-out'; // Hiệu ứng mượt
-    overlayDiv.style.transform = `scaleY(${Math.min(typeGameConquest.skillBattle[skillKey].COOLDOWN[4] / 100, 1)})`; // Cập nhật thanh nộ
-}
 
 //Function useskill
 function useSkill(skillKey, effect, overlayDiv, isComp) {
@@ -9727,54 +9388,54 @@ function register() {
                 }
 
                 var battlePetUseSlotRound = { //pet đang dùng tại slotskill
-                    skill1B: defaultSTT5Mon,
-                    skill2B: defaultSTT5Mon,
-                    skill3B: defaultSTT5Mon,
-                    skill4B: defaultSTT5Mon,
-                    skill5B: defaultSTT5Mon,
-                    skill6B: defaultSTT5Mon,
-                    skill7B: defaultSTT5Mon,
-                    skill8B: defaultSTT5Mon,
-                    skill9B: defaultSTT5Mon,
+                    skill1B: defaultSTT5MonInBattle,
+                    skill2B: defaultSTT5MonInBattle,
+                    skill3B: defaultSTT5MonInBattle,
+                    skill4B: defaultSTT5MonInBattle,
+                    skill5B: defaultSTT5MonInBattle,
+                    skill6B: defaultSTT5MonInBattle,
+                    skill7B: defaultSTT5MonInBattle,
+                    skill8B: defaultSTT5MonInBattle,
+                    skill9B: defaultSTT5MonInBattle,
                 };
                 var battlePetInInventory = {
-                    battleInv1: defaultSTT5Mon,
-                    battleInv2: defaultSTT5Mon,
-                    battleInv3: defaultSTT5Mon,
-                    battleInv4: defaultSTT5Mon,
-                    battleInv5: defaultSTT5Mon,
-                    battleInv6: defaultSTT5Mon,
-                    battleInv7: defaultSTT5Mon,
-                    battleInv8: defaultSTT5Mon,
-                    battleInv9: defaultSTT5Mon,
+                    battleInv1: defaultSTT5MonInBattle,
+                    battleInv2: defaultSTT5MonInBattle,
+                    battleInv3: defaultSTT5MonInBattle,
+                    battleInv4: defaultSTT5MonInBattle,
+                    battleInv5: defaultSTT5MonInBattle,
+                    battleInv6: defaultSTT5MonInBattle,
+                    battleInv7: defaultSTT5MonInBattle,
+                    battleInv8: defaultSTT5MonInBattle,
+                    battleInv9: defaultSTT5MonInBattle,
                 }; //pet có trong slot tủ đồ
                 var skillBattle = { //Khay Pet sử dụng
-                    skill1A: defaultSTT5Mon,
-                    skill2A: defaultSTT5Mon,
-                    skill3A: defaultSTT5Mon,
-                    skill4A: defaultSTT5Mon,
-                    skill5A: defaultSTT5Mon,
-                    skill6A: defaultSTT5Mon,
-                    skill7A: defaultSTT5Mon,
-                    skill8A: defaultSTT5Mon,
-                    skill9A: defaultSTT5Mon,
-                    skill1B: defaultSTT5Mon,
-                    skill2B: defaultSTT5Mon,
-                    skill3B: defaultSTT5Mon,
-                    skill4B: defaultSTT5Mon,
-                    skill5B: defaultSTT5Mon,
-                    skill6B: defaultSTT5Mon,
-                    skill7B: defaultSTT5Mon,
-                    skill8B: defaultSTT5Mon,
-                    skill9B: defaultSTT5Mon,
+                    skill1A: defaultSTT5MonInBattle,
+                    skill2A: defaultSTT5MonInBattle,
+                    skill3A: defaultSTT5MonInBattle,
+                    skill4A: defaultSTT5MonInBattle,
+                    skill5A: defaultSTT5MonInBattle,
+                    skill6A: defaultSTT5MonInBattle,
+                    skill7A: defaultSTT5MonInBattle,
+                    skill8A: defaultSTT5MonInBattle,
+                    skill9A: defaultSTT5MonInBattle,
+                    skill1B: defaultSTT5MonInBattle,
+                    skill2B: defaultSTT5MonInBattle,
+                    skill3B: defaultSTT5MonInBattle,
+                    skill4B: defaultSTT5MonInBattle,
+                    skill5B: defaultSTT5MonInBattle,
+                    skill6B: defaultSTT5MonInBattle,
+                    skill7B: defaultSTT5MonInBattle,
+                    skill8B: defaultSTT5MonInBattle,
+                    skill9B: defaultSTT5MonInBattle,
                 };
 
                 var battlePetInShop = {
-                    battleShop1: defaultSTT5Mon,
-                    battleShop2: defaultSTT5Mon,
-                    battleShop3: defaultSTT5Mon,
-                    battleShop4: defaultSTT5Mon,
-                    battleShop5: defaultSTT5Mon,
+                    battleShop1: defaultSTT5MonInBattle,
+                    battleShop2: defaultSTT5MonInBattle,
+                    battleShop3: defaultSTT5MonInBattle,
+                    battleShop4: defaultSTT5MonInBattle,
+                    battleShop5: defaultSTT5MonInBattle,
                 };
 
                 const typeGameConquest = {
@@ -9812,7 +9473,7 @@ function register() {
                 const typeGameGuess = {}
                 const infoStartGame = { typeGame: "No", modeGame: "No", difficultyGame: "No", roundGame: 1, stepGame: 0, winStreak: 0, }
 
-                const allBattleUsersData = { typeGameConquest, typeGameSolo5Mon, typeGameGuess }
+                const allBattleUsersData = { typeGameConquest, typeGameSolo5Mon, typeGameGuess}
 
                 var userData = {
                     passwordUser: passwordRegister,
@@ -9820,7 +9481,7 @@ function register() {
                     telUser: tel,
                     activateUser: "Yes",
                     keyLogin: 0,
-                    pointRank: 0,
+                    pointRank: {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0},
                     goldUser: 0,
                     staminaUser: 0,
                     weightBagUser: 100,
@@ -9885,6 +9546,19 @@ function register() {
                 }
             })
 
+
+            const userRankData = {
+                [usernameRegister]: {rankPoint: {typeGameConquest: 0, typeGameGuess: 0, typeGameSolo5Mon: 0}}
+            };
+
+
+            update(ref(db, 'rankGame'), userRankData)
+            .then(() => {
+                console.log("✅ Đã thêm hoặc cập nhật rankGame cho người dùng:", usernameRegister);
+            })
+            .catch(err => {
+                console.error("❌ Lỗi khi cập nhật rankGame:", err);
+            });
 
         }
     }).catch(error => {
@@ -10399,7 +10073,7 @@ function setupPopupInfo5MonBag(itemList, prefix) {
             const scaleSTR = 1 * Math.log10(item.POWER.STR);
             let valuePowerSTR = 0.12 * item.POWER.STR / scaleSTR + 1
             let baseDame = Math.round(valuePowerSTR * item.POWER.SCALE);
-            
+
             const scaleHP = 1 * Math.log10(item.POWER.HP);
             let valuePowerHP = 2 * item.POWER.HP / scaleHP + 180;
             let baseHP = Math.round(valuePowerHP * item.POWER.SCALE);
@@ -10599,7 +10273,7 @@ function showUpWeightBag() {
         oldPopup.remove();
         oldPopup = null;
     }
-    
+
 
     // Tạo lớp nền mờ
     const overlay = document.createElement('div');
@@ -10775,9 +10449,6 @@ function resetOutGame() {
         }
     });
 
-    speedUpA = 1;
-    speedUpB = 1;
-
     typeGameConquest.slowB = 0;
     typeGameConquest.dameCritB = 0;
     typeGameConquest.upCooldownB = 0;
@@ -10785,56 +10456,56 @@ function resetOutGame() {
     typeGameConquest.dameCritA = 0;
     typeGameConquest.upCooldownA = 0;
     typeGameConquest.skillBattle = { //Khay Pet sử dụng
-        skill1A: defaultSTT5Mon,
-        skill2A: defaultSTT5Mon,
-        skill3A: defaultSTT5Mon,
-        skill4A: defaultSTT5Mon,
-        skill5A: defaultSTT5Mon,
-        skill6A: defaultSTT5Mon,
-        skill7A: defaultSTT5Mon,
-        skill8A: defaultSTT5Mon,
-        skill9A: defaultSTT5Mon,
-        skill1B: defaultSTT5Mon,
-        skill2B: defaultSTT5Mon,
-        skill3B: defaultSTT5Mon,
-        skill4B: defaultSTT5Mon,
-        skill5B: defaultSTT5Mon,
-        skill6B: defaultSTT5Mon,
-        skill7B: defaultSTT5Mon,
-        skill8B: defaultSTT5Mon,
-        skill9B: defaultSTT5Mon,
+        skill1A: defaultSTT5MonInBattle,
+        skill2A: defaultSTT5MonInBattle,
+        skill3A: defaultSTT5MonInBattle,
+        skill4A: defaultSTT5MonInBattle,
+        skill5A: defaultSTT5MonInBattle,
+        skill6A: defaultSTT5MonInBattle,
+        skill7A: defaultSTT5MonInBattle,
+        skill8A: defaultSTT5MonInBattle,
+        skill9A: defaultSTT5MonInBattle,
+        skill1B: defaultSTT5MonInBattle,
+        skill2B: defaultSTT5MonInBattle,
+        skill3B: defaultSTT5MonInBattle,
+        skill4B: defaultSTT5MonInBattle,
+        skill5B: defaultSTT5MonInBattle,
+        skill6B: defaultSTT5MonInBattle,
+        skill7B: defaultSTT5MonInBattle,
+        skill8B: defaultSTT5MonInBattle,
+        skill9B: defaultSTT5MonInBattle,
     };
 
     typeGameConquest.battlePetUseSlotRound = { //pet đang dùng tại slotskill
-        skill1B: defaultSTT5Mon,
-        skill2B: defaultSTT5Mon,
-        skill3B: defaultSTT5Mon,
-        skill4B: defaultSTT5Mon,
-        skill5B: defaultSTT5Mon,
-        skill6B: defaultSTT5Mon,
-        skill7B: defaultSTT5Mon,
-        skill8B: defaultSTT5Mon,
-        skill9B: defaultSTT5Mon,
+        skill1B: defaultSTT5MonInBattle,
+        skill2B: defaultSTT5MonInBattle,
+        skill3B: defaultSTT5MonInBattle,
+        skill4B: defaultSTT5MonInBattle,
+        skill5B: defaultSTT5MonInBattle,
+        skill6B: defaultSTT5MonInBattle,
+        skill7B: defaultSTT5MonInBattle,
+        skill8B: defaultSTT5MonInBattle,
+        skill9B: defaultSTT5MonInBattle,
     };
 
     typeGameConquest.battlePetInInventory = {
-        battleInv1: defaultSTT5Mon,
-        battleInv2: defaultSTT5Mon,
-        battleInv3: defaultSTT5Mon,
-        battleInv4: defaultSTT5Mon,
-        battleInv5: defaultSTT5Mon,
-        battleInv6: defaultSTT5Mon,
-        battleInv7: defaultSTT5Mon,
-        battleInv8: defaultSTT5Mon,
-        battleInv9: defaultSTT5Mon,
+        battleInv1: defaultSTT5MonInBattle,
+        battleInv2: defaultSTT5MonInBattle,
+        battleInv3: defaultSTT5MonInBattle,
+        battleInv4: defaultSTT5MonInBattle,
+        battleInv5: defaultSTT5MonInBattle,
+        battleInv6: defaultSTT5MonInBattle,
+        battleInv7: defaultSTT5MonInBattle,
+        battleInv8: defaultSTT5MonInBattle,
+        battleInv9: defaultSTT5MonInBattle,
     }; //pet có trong slot tủ đồ
 
     typeGameConquest.battlePetInShop = {
-        battleShop1: defaultSTT5Mon,
-        battleShop2: defaultSTT5Mon,
-        battleShop3: defaultSTT5Mon,
-        battleShop4: defaultSTT5Mon,
-        battleShop5: defaultSTT5Mon,
+        battleShop1: defaultSTT5MonInBattle,
+        battleShop2: defaultSTT5MonInBattle,
+        battleShop3: defaultSTT5MonInBattle,
+        battleShop4: defaultSTT5MonInBattle,
+        battleShop5: defaultSTT5MonInBattle,
     };
 }
 
@@ -10844,7 +10515,8 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${skillInfo.POWER.STR + skillInfo.POWER.DEF + skillInfo.POWER.INT + skillInfo.POWER.LUK + skillInfo.POWER.AGI + skillInfo.POWER.HP}`;
     document.getElementById("levelTextPopupSTT5MonInBattle").textContent = skillInfo.LEVEL;
     document.getElementById("rareTextPopupSTT5MonInBattle").textContent = skillInfo.RARE;
-    document.getElementById("priceTextPopupSTT5MonInBattle").textContent = skillInfo.PRICE;
+
+    document.getElementById("priceTextPopupSTT5MonInBattle").textContent = skillInfo.PRICESELL + skillInfo.PRICE || skillInfo.PRICE;
 
     if (skillInfo.LEVEL === 1) {
         document.getElementById("levelColorPopupSTT5MonInBattle").style.color = "#531515"
@@ -10853,7 +10525,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
         document.getElementById("levelColorPopupSTT5MonInBattle").style.color = "#8c0b0b"
     }
     if (skillInfo.LEVEL === 3) {
-        document.getElementById("levelColorPopupSTT5MonInBattle").style, color = "#c00d0d"
+        document.getElementById("levelColorPopupSTT5MonInBattle").style.color = "#c00d0d"
     }
     if (skillInfo.LEVEL === 4) {
         document.getElementById("levelColorPopupSTT5MonInBattle").style.color = "red"
@@ -10882,7 +10554,7 @@ function setupPopupInfo5MonInBattle(skillInfo) {
     const scaleSTR = 1 * Math.log10(skillInfo.POWER.STR);
     let valuePowerSTR = 0.12 * skillInfo.POWER.STR / scaleSTR + 1
     let baseDame = Math.round(valuePowerSTR * skillInfo.POWER.SCALE);
-    
+
     const scaleHP = 1 * Math.log10(skillInfo.POWER.HP);
     let valuePowerHP = 2 * skillInfo.POWER.HP / scaleHP + 180;
     let baseHP = Math.round(valuePowerHP * skillInfo.POWER.SCALE);
@@ -11086,8 +10758,30 @@ function closePopupSetting() {
 
 //Bảng xếp hạng
 function openRankBoard() {
-    changePage(0)
-    showOrHiddenDiv("rankBoard")
+    const rankGameRef = ref(db, 'rankGame');
+  get(rankGameRef)
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        const rankGameData = snapshot.val();
+        console.log("Dữ liệu rankGame:", rankGameData);
+
+        // TODO: xử lý rankGameData, ví dụ cập nhật UI bảng xếp hạng
+
+      } else {
+        console.log("Chưa có dữ liệu rankGame trong Firebase.");
+        // TODO: xử lý khi rankGame chưa có, ví dụ hiển thị bảng rỗng hoặc mặc định
+      }
+      
+      // Sau khi đã đọc hoặc xử lý dữ liệu, chuyển trang và hiện bảng
+      changePage(0);
+      showOrHiddenDiv("rankBoard");
+    })
+    .catch(error => {
+      console.error("Lỗi khi đọc rankGame từ Firebase:", error);
+      // Vẫn mở bảng nhưng có thể hiển thị thông báo lỗi
+      changePage(0);
+      showOrHiddenDiv("rankBoard");
+    });
 }
 
 let currentPageRank = 1;
@@ -11097,67 +10791,69 @@ function rankBoard() {
     const leaderboardBody = document.getElementById("leaderboard-body");
     leaderboardBody.innerHTML = "";
 
-    const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
+    const sortedUsers = Object.entries(rankGame).sort(([, a], [, b]) => b.rankPoint.typeGameConquest - a.rankPoint.typeGameConquest);
     const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
 
     const start = (currentPageRank - 1) * usersPerPage;
     const end = start + usersPerPage;
     const usersOnPage = sortedUsers.slice(start, end);
 
-    let topCheck = "";
-    let colorTop = "";
-
     for (let i = 0; i < usersPerPage; i++) {
-        const [username, data] = usersOnPage[i] || []; // Tách dữ liệu, tránh lỗi undefined
+        const [username, data] = usersOnPage[i] || [];
+
+        let topCheck = "";
+        let colorTop = "";
 
         if (start + i + 1 === 1) {
             topCheck = `<i class="fa-solid fa-crown"></i>`;
-            colorTop = `rgb(145 46 99)`
+            colorTop = `rgb(145 46 99)`;
         } else if (start + i + 1 === 2) {
-            topCheck = `<i class="fa-solid fa-chess-queen"></i>`
-            colorTop = `rgb(145 46 99)`
+            topCheck = `<i class="fa-solid fa-chess-queen"></i>`;
+            colorTop = `rgb(145 46 99)`;
         } else if (start + i + 1 === 3) {
-            topCheck = `<i class="fa-solid fa-chess-knight"></i>`
-            colorTop = `rgb(145 46 99)`
+            topCheck = `<i class="fa-solid fa-chess-knight"></i>`;
+            colorTop = `rgb(145 46 99)`;
         } else {
-            topCheck = ""
-            colorTop = `rgb(46 128 145)`
+            topCheck = "";
+            colorTop = `rgb(46 128 145)`;
         }
 
         const row = document.createElement("tr");
         row.style = `
-      height: 30px; 
-      background: ${colorTop}; 
-      clip-path: polygon(2% 0%, 98% 0%, 100% 50%, 98% 110%, 2% 110%, 0% 50%);
-      box-shadow: rgb(0 0 0 / 30%) 0px 3px 2px 0px;
-  `;
+          height: 30px; 
+          background: ${colorTop}; 
+          clip-path: polygon(2% 0%, 98% 0%, 100% 50%, 98% 110%, 2% 110%, 0% 50%);
+          box-shadow: rgb(0 0 0 / 30%) 0px 3px 2px 0px;
+        `;
 
         row.innerHTML = `
-      <td style="width: 10%; text-align: right;">${topCheck}</td>
-      <td style="width: 15%; text-align: center;">${start + i + 1}</td>
-      <td style="width: 40%; text-align: center; font-weight: bold;">${data?.nameUser || ""}</td>
-      <td style="width: 25%; text-align: center;">${data?.pointRank ?? "-"}</td>
-      <td style="width: 10%; text-align: center;"></td>
-  `;
+          <td style="width: 10%; text-align: right;">${topCheck}</td>
+          <td style="width: 15%; text-align: center;">${start + i + 1}</td>
+          <td style="width: 40%; text-align: center; font-weight: bold;">${username || ""}</td>
+          <td style="width: 25%; text-align: center;">${data?.rankPoint?.typeGameConquest ?? "-"}</td>
+          <td style="width: 10%; text-align: center;"></td>
+        `;
 
         leaderboardBody.appendChild(row);
     }
 
-    const myTop = sortedUsers.findIndex(([user]) => user === username) + 1; // Thứ hạng bắt đầu từ 1
+    // Lấy thứ hạng người chơi hiện tại
+    const myIndex = sortedUsers.findIndex(([user]) => user === username);
+    const myTop = myIndex !== -1 ? myIndex + 1 : "-";
+    const myData = myIndex !== -1 ? sortedUsers[myIndex][1] : null;
 
-
-
-    document.getElementById("myRankTop").innerHTML = `${myTop}`
-    document.getElementById("myRankName").innerHTML = `${nameUser}`
-    document.getElementById("myRankPoint").innerHTML = `${pointRank}`
+    document.getElementById("myRankTop").innerHTML = myTop;
+    document.getElementById("myRankName").innerHTML = username;
+    document.getElementById("myRankPoint").innerHTML = myData ? myData.rankPoint.typeGameConquest : "-";
 
     document.getElementById("prev-page").disabled = currentPageRank === 1;
     document.getElementById("next-page").disabled = currentPageRank === totalPages;
 }
 
+
 // Chuyển trang
 function changePage(direction) {
-    const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
+    const sortedUsers = Object.entries(rankGame).sort(([, a], [, b]) => b.rankPoint.typeGameConquest - a.rankPoint.typeGameConquest);
     const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
 
     currentPageRank += direction;
@@ -11552,7 +11248,7 @@ function randomPet5Mon() {
         ID: e5mon.ID,
         NAME: e5mon.NAME,
         URLimg: e5mon.URLimg,
-        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp , SCALE: e5mon.POWER.SCALE},
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp, SCALE: e5mon.POWER.SCALE },
         TYPE: e5mon.TYPE,
         SELLUP: e5mon.SELLUP,
         INTERNAL: e5mon.INTERNAL,
@@ -11910,7 +11606,7 @@ function setupPopupEventsExchangePage(itemList) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
                         let rawDescription = dynamicDescription(item);
-                        
+
                         // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
                         let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
 
@@ -12185,7 +11881,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         ID: select5Mon.ID,
         LEVEL: 1,
         NAME: select5Mon.NAME,
-        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp , SCALE: select5Mon.POWER.SCALE},
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp, SCALE: select5Mon.POWER.SCALE },
         TYPE: select5Mon.TYPE,
         SELLUP: select5Mon.SELLUP,
         INTERNAL: select5Mon.INTERNAL,
@@ -12223,11 +11919,11 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 function resetGoldAndTicket() {
     document.getElementById("goldUser").innerText = `${goldUser}`;
     document.getElementById("ticketUser").innerText = `${ticketsUser}`;
-    document.getElementById("pointRank").innerText = `${pointRank}`;
+    document.getElementById("pointRank").innerText = `${pointRank.typeGameConquest}`;
     document.getElementById("diamondUser").innerText = `${diamondUser}`;
 
     //Cập nhật bảng xếp hạng hiện tại:
-    const sortedUsers = Object.entries(allUsers).sort(([, a], [, b]) => b.pointRank - a.pointRank);
+    const sortedUsers = Object.entries(rankGame).sort(([, a], [, b]) => b.rankPoint.typeGameConquest - a.rankPoint.typeGameConquest);
     const myTop = sortedUsers.findIndex(([user]) => user === username) + 1; // Thứ hạng bắt đầu từ 1
     document.getElementById("isRanking").innerText = `(Hạng: ${myTop})`;
 
@@ -13157,7 +12853,7 @@ function catch5Mon() {
         ID: e5mon.ID,
         LEVEL: 1,
         NAME: e5mon.NAME,
-        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp , SCALE: e5mon.POWER.SCALE},
+        POWER: { STR: str, DEF: def, INT: int, AGI: agi, LUK: luk, HP: hp, SCALE: e5mon.POWER.SCALE },
         TYPE: e5mon.TYPE,
         SELLUP: e5mon.SELLUP,
         INTERNAL: e5mon.INTERNAL,
@@ -13909,12 +13605,12 @@ document.addEventListener("selectstart", e => e.preventDefault());
 // Chặn phím F12, Ctrl+Shift+I/J, Ctrl+U
 document.addEventListener("keydown", function (e) {
     if (
-      e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-      (e.ctrlKey && e.key === "U") ||
-      (e.ctrlKey && e.key === "S")
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+        (e.ctrlKey && e.key === "U") ||
+        (e.ctrlKey && e.key === "S")
     ) {
-      e.preventDefault();
+        e.preventDefault();
     }
 });
 
