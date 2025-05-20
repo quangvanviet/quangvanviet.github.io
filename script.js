@@ -872,10 +872,10 @@ function loadDataForUser() {
 
                             //Tính cooldown
                             let agi = item.POWER.AGI;
-                            let minC = 0;
+                            let minC = 8;
                             let maxC = 20;
 
-                            let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+                            let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
                             let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
 
@@ -5082,10 +5082,10 @@ function update5MonBattle(skill) {
 
     //Tính cooldown
     let agi = skill.POWER.AGI;
-    let minC = 0;
+    let minC = 8;
     let maxC = 20;
 
-    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
     let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - skill.POWER.SCALE);
 
@@ -11301,10 +11301,10 @@ function getRandom5mon() {
 
     //Tính cooldown
     let agi = infoPetRandom.POWER.AGI;
-    let minC = 0;
+    let minC = 8;
     let maxC = 20;
 
-    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
     let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - infoPetRandom.POWER.SCALE);
 
@@ -11854,10 +11854,10 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     }
 
     //Tính cooldown
-    let minC = 0;
+    let minC = 8;
     let maxC = 20;
 
-    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
     let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - select5Mon.POWER.SCALE);
 
@@ -12825,10 +12825,10 @@ function catch5Mon() {
     }
 
     //Tính cooldown
-    let minC = 0;
+    let minC = 8;
     let maxC = 20;
 
-    let scaleC = Math.max(5, 100 - Math.floor((agi - 200) / 10)); // giảm dần, min là 5
+    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
     let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - e5mon.POWER.SCALE);
 
