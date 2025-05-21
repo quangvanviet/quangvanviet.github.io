@@ -10005,26 +10005,23 @@ function loadItemBagRight(sort) {
             const popup = document.createElement("div");
             popup.className = "item-action-popup";
             popup.style.position = "absolute";
-            popup.style.top = "80px";
-            popup.style.left = "0px";
+            popup.style.top = "-6px";
+            popup.style.left = "-75px";
             popup.style.display = "flex";
             popup.style.flexDirection = "column";
             popup.style.gap = "5px";
             popup.style.zIndex = "10";
-            popup.style.background = "#2c2c44";
-            popup.style.border = "1px solid #ff973a";
-            popup.style.padding = "5px";
-            popup.style.borderRadius = "5px";
 
             // Nút Tháo ra
             const removeBtn = document.createElement("button");
-            removeBtn.innerText = "Tháo ra";
-            removeBtn.style.padding = "2px 5px";
+            removeBtn.innerText = "Tháo";
+            removeBtn.style.padding = "5px";
             removeBtn.style.cursor = "pointer";
             removeBtn.style.background = "#ff4d4d";
             removeBtn.style.color = "#fff";
             removeBtn.style.border = "none";
             removeBtn.style.borderRadius = "3px";
+            removeBtn.style.boxShadow = "1px 1px 2px #000000c4";
             removeBtn.addEventListener("click", () => {
                 // Gọi hàm tháo ra tại đây
                 console.log("Tháo item:", item);
@@ -10034,12 +10031,13 @@ function loadItemBagRight(sort) {
             // Nút Thông tin
             const infoBtn = document.createElement("button");
             infoBtn.innerText = "Thông tin";
-            infoBtn.style.padding = "2px 5px";
+            infoBtn.style.padding = "5px";
             infoBtn.style.cursor = "pointer";
             infoBtn.style.background = "#4da6ff";
             infoBtn.style.color = "#fff";
             infoBtn.style.border = "none";
             infoBtn.style.borderRadius = "3px";
+            infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
             infoBtn.addEventListener("click", () => {
                 setupClickPopupInfo5MonBag(item, "bag");
                 popup.remove();
