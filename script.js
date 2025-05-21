@@ -9273,42 +9273,18 @@ function endLoading() {
 
 
 //Show trang đăng ký
-var showRegisterPageOn = false;
-var keyActiveData = {};
-function showRegisterPage() {
-    if (showRegisterPageOn == false) {
+function switchTabWelcomPage(tab) {
+  document.getElementById('form-login').style.display = 'none';
+  document.getElementById('form-register').style.display = 'none';
+  document.getElementById('form-forgot').style.display = 'none';
 
-        // Lấy thông tin keyActive từ Firebase
-        const keyActiveRef = ref(db, "keyActiveData");
+  document.getElementById('tab-login').style.borderBottom = 'none';
+  document.getElementById('tab-register').style.borderBottom = 'none';
+  document.getElementById('tab-forgot').style.borderBottom = 'none';
 
-        get(keyActiveRef)
-            .then(snapshot => {
-                const data = snapshot.val();
-                keyActiveData = data;  // Gán dữ liệu keyActiveData từ Firebase vào biến
-            })
-            .catch(error => {
-                console.error("Lỗi khi lấy dữ liệu:", error);
-            });
-
-        showRegisterPageOn = true;
-        showLoading();
-        document.getElementById("registerPage").style.display = "flex";
-        setTimeout(() => {
-            document.getElementById("registerPage").style.opacity = 1;
-            hideLoading();
-        }, 500);
-    } else {
-        showLoading();
-        showRegisterPageOn = false;
-        setTimeout(() => {
-            document.getElementById("registerPage").style.opacity = 0;
-            document.getElementById("registerPage").style.display = "none";
-            hideLoading();
-        }, 500);
-    }
+  document.getElementById('form-' + tab).style.display = 'block';
+  document.getElementById('tab-' + tab).style.borderBottom = '2px solid #5C67F2';
 }
-
-
 
 //ĐĂNG KÝ
 function register() {
@@ -13768,6 +13744,7 @@ document.addEventListener("keydown", function (e) {
 });
 
 // Gán các hàm vào window
+window.switchTabWelcomPage = switchTabWelcomPage;
 window.showRegisterPage = showRegisterPage;
 window.register = register;
 window.openRankBoard = openRankBoard;
