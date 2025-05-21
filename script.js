@@ -10041,7 +10041,7 @@ function loadItemBagRight(sort) {
             infoBtn.style.border = "none";
             infoBtn.style.borderRadius = "3px";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, infoBtn);
+                setupClickPopupInfo5MonBag(item);
                 popup.remove();
             });
 
@@ -10067,11 +10067,10 @@ function loadItemBagRight(sort) {
     document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
 
-function setupClickPopupInfo5MonBag(item, idDivClick) {
+function setupClickPopupInfo5MonBag(item) {
   const popup = document.getElementById("popupSTT5Mon");
   const overlay = document.getElementById("popupOverlay");
   
-  idDivClick.addEventListener("click", () => {
     document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + item.URLimg + "')";
     document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
     document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
@@ -10291,10 +10290,9 @@ function setupClickPopupInfo5MonBag(item, idDivClick) {
             }
         };
     }
-
+    
     popup.style.display = "block";
     overlay.style.display = "block";
-  });
 
   // Đóng popup khi bấm nút đóng hoặc click vào nền mờ
   [overlay].forEach(element => {
