@@ -10144,6 +10144,7 @@ function loadItemBagRight(sort) {
                     if (typeGameConquest.battleUserPet[key].IDcreate === item.IDcreate) {
                         delete typeGameConquest.battleUserPet[key];  // Xoá pet ra khỏi object
                         loadItemBagRight(sortBagRight)
+                        loadItemBagLeft(sortBagLeft)
                         removeBtn.remove()
                         removeBtn = null;
                         popup.remove();
