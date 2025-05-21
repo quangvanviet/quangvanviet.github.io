@@ -9860,13 +9860,13 @@ function loadItemBagLeft(sort) {
             let popup = document.createElement("div");
             popup.className = "item-action-popup";
             popup.style.position = "relative";
-            popup.style.top = "15px";
             popup.style.display = "flex";
             popup.style.flexDirection = "column";
             popup.style.gap = "5px";
             popup.style.zIndex = "10";
             popup.style.background = "#04040454";
             popup.style.height = "100%";
+            popup.style.justifyContent = "center";
 
             // Nút Thông tin
             let infoBtn = document.createElement("button");
@@ -9932,7 +9932,7 @@ function loadItemBagLeft(sort) {
             
             // Xoá popup nếu click ngoài
             document.addEventListener("click", function docClick(e) {
-                if (!popup.contains(e.target) && e.target !== skillDiv) {
+                if (popup && !popup.contains(e.target) && e.target !== skillDiv) {
                     addBtn.remove()
                     addBtn = null;
                     infoBtn.remove();
@@ -10101,13 +10101,13 @@ function loadItemBagRight(sort) {
             let popup = document.createElement("div");
             popup.className = "item-action-popup";
             popup.style.position = "relative";
-            popup.style.top = "15px";
             popup.style.display = "flex";
             popup.style.flexDirection = "column";
             popup.style.gap = "5px";
             popup.style.zIndex = "10";
             popup.style.background = "#04040454";
             popup.style.height = "100%";
+            popup.style.justifyContent = "center";
 
             // Nút Thông tin
             let infoBtn = document.createElement("button");
@@ -10159,7 +10159,7 @@ function loadItemBagRight(sort) {
             
             // Xoá popup nếu click ngoài
             document.addEventListener("click", function docClick(e) {
-                if (!popup.contains(e.target) && e.target !== skillDiv) {
+                if (popup && !popup.contains(e.target) && e.target !== skillDiv) {
                     removeBtn.remove()
                     removeBtn = null;
                     infoBtn.remove();
