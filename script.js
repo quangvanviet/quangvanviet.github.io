@@ -212,23 +212,23 @@ function saveDataUserToFirebase() {
                 console.error("❌ Lỗi khi lưu dữ liệu:", error);
             });
 
-            // Kiểm tra nếu pointRank là số, thì chuyển thành object mặc định
-            if (typeof pointRank === 'number') {
-                pointRank = {
-                    typeGameConquest: pointRank,
-                    typeGameSolo5Mon: 0,
-                    typeGameGuess: 0
-                };
-            }
+        // Kiểm tra nếu pointRank là số, thì chuyển thành object mặc định
+        if (typeof pointRank === 'number') {
+            pointRank = {
+                typeGameConquest: pointRank,
+                typeGameSolo5Mon: 0,
+                typeGameGuess: 0
+            };
+        }
 
-            const rankDataRef = ref(db, 'rankGame/' + username + '/rankPoint');
-            update(rankDataRef, pointRank)
-                .then(() => {
-                    console.log("✅ Cập nhật rank của bạn");
-                })
-                .catch((error) => {
-                    console.error("❌ Lỗi khi lưu rank của bạn", error);
-                });
+        const rankDataRef = ref(db, 'rankGame/' + username + '/rankPoint');
+        update(rankDataRef, pointRank)
+            .then(() => {
+                console.log("✅ Cập nhật rank của bạn");
+            })
+            .catch((error) => {
+                console.error("❌ Lỗi khi lưu rank của bạn", error);
+            });
 
     }
 
@@ -307,7 +307,6 @@ function listenForUserChanges() {
 
 //Biến cục bộ
 var allPets = [];
-var allUsers = {};
 var allComps = []; //Mảng toàn bộ Comps
 var allCharacter = []; //Mảng lưu nhân vật
 var allQuestData = {}; //Mảng lưu nhiệm vụ
@@ -388,7 +387,7 @@ function updateRankGameToFB() {
 
 
 function loadAllData() {
-    
+
     const dbRef = ref(db);
 
     Promise.all([
@@ -459,7 +458,7 @@ var weightBagUser = 0;
 var luckyMeet5Mon = 0;
 var diamondUser = 0;
 
-var pointRank = {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0}
+var pointRank = { typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0 }
 var characterUser = "";
 var isBan = "";
 var timeOnline = "";
@@ -603,25 +602,25 @@ function loadDataForUser() {
     const rankGameData = ref(db, 'rankGame');
 
     get(rankGameData)
-    .then(snapshot => {
-        if (!snapshot.exists()) {
-        console.error("Dữ liệu không tồn tại trong Firebase.");
-        rankGame = {};  // Khởi tạo biến rankGame nếu chưa có dữ liệu
-        return;
-        }
+        .then(snapshot => {
+            if (!snapshot.exists()) {
+                console.error("Dữ liệu không tồn tại trong Firebase.");
+                rankGame = {};  // Khởi tạo biến rankGame nếu chưa có dữ liệu
+                return;
+            }
 
-        const data = snapshot.val();
+            const data = snapshot.val();
 
-        if (!data) {
-        console.error("Dữ liệu trả về từ Firebase là null hoặc undefined.");
-        return;
-        }
+            if (!data) {
+                console.error("Dữ liệu trả về từ Firebase là null hoặc undefined.");
+                return;
+            }
 
-        rankGame = data;
-    })
-    .catch(error => {
-        console.error("Lỗi khi lấy dữ liệu từ Firebase:", error);
-    });
+            rankGame = data;
+        })
+        .catch(error => {
+            console.error("Lỗi khi lấy dữ liệu từ Firebase:", error);
+        });
 
     // Sử dụng `get` để lấy dữ liệu từ Firebase
     get(userDataRef)
@@ -679,7 +678,7 @@ function loadDataForUser() {
             characterUser = data.characterUser;
             onGame = data.onGame;
             idSkillRND = data.idSkillRND;
-            pointRank = data.pointRank || {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0};
+            pointRank = data.pointRank || { typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0 };
             nameUser = data.nameUser;
             isBan = data.isBan;
             timeOnline = data.timeOnline;
@@ -916,29 +915,21 @@ function loadDataForUser() {
             ];
 
             // Gọi hàm xử lý tất cả
-            updatePowerScale(allPets, allSkillSources);
+            updatePowerScale(allPets, allSkillSources); //+++++++++++++
 
             // Lặp qua từng phần tử trong allComps để cập nhập lại comps
-            for (let i = 0; i < allComps.length; i++) {
-                const comp = allComps[i];
-
-                // Chuyển object slotSkillComp thành mảng các skill (dạng object)
-                const skillObjects = Object.values(comp.slotSkillComp);
-
-                // Gọi hàm cập nhật dữ liệu
+            allComps.forEach(comp => {
+                const skillKeys = Object.keys(comp.slotSkillComp);
+                const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
                 updatePowerScale(allPets, skillObjects);
 
-                // Cập nhật lại các skill đã xử lý vào slotSkillComp
                 const updatedSlotSkillComp = {};
-                let skillKeys = Object.keys(comp.slotSkillComp);
-                for (let j = 0; j < skillKeys.length; j++) {
-                    updatedSlotSkillComp[skillKeys[j]] = skillObjects[j];
-                }
+                skillKeys.forEach((key, index) => {
+                    updatedSlotSkillComp[key] = skillObjects[index];
+                });
 
-                // Gán lại vào allComps
-                allComps[i].slotSkillComp = updatedSlotSkillComp;
-            }
-
+                comp.slotSkillComp = updatedSlotSkillComp;
+            });
 
             console.log("allComps", allComps)
 
@@ -3817,13 +3808,13 @@ function highlightSkillLevel() {
         console.log("skillKey là ", skillKey)
 
         if (skillElement.parentElement.parentElement.id === 'battleShop') {
-            
+
         }
 
         if (skillElement.parentElement.parentElement.id === 'battleInventory') {
             skillData = typeGameConquest.battlePetInInventory[skillKey];
         }
-        
+
         if (skillElement.parentElement.parentElement.id === 'skillBarB') {
             skillData = typeGameConquest.skillBattle[skillKey];
         }
@@ -3837,7 +3828,7 @@ function highlightSkillLevel() {
         const levelTextDiv = skillElement.querySelector('.levelSkillText');
         const starTextDiv = skillElement.querySelector('.starSkillText');
 
-        levelTextDiv.innerText = skillData.LEVEL; 
+        levelTextDiv.innerText = skillData.LEVEL;
         starTextDiv.innerText = skillData.PRICESELL + skillData.PRICE; // Ưu tiên PRICESELL nếu có
 
         // Tô màu theo level
@@ -4708,7 +4699,7 @@ function loadEventSlotBattle() {
                         // };
 
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
-                        
+
                         // Xóa kỹ năng khỏi battlePetInShop
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
@@ -4789,11 +4780,11 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
 
                         if (typeGameConquest.battlePetInInventory[slot.id].LEVEL === 2) {
-                             typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
+                            typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
                         } else {
                             typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICESELL + typeGameConquest.battlePetInInventory[skill.parentElement.id].PRICE
                         }
-                        
+
 
                         // //Tìm thông tin từ Allpets để gán thông tin vào để nâng cấp
                         // for (let p = 0; p < allPets.length; p++) {
@@ -4898,7 +4889,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.battlePetInInventory[slot.id].POISON[0] = power5MonUpdate.poison
                         typeGameConquest.battlePetInInventory[slot.id].CRIT[0] = power5MonUpdate.crit
                         typeGameConquest.battlePetInInventory[slot.id].COOLDOWN[0] = power5MonUpdate.cooldown
-                        
+
                         if (typeGameConquest.battlePetInInventory[slot.id].LEVEL === 2) {
                             typeGameConquest.battlePetInInventory[slot.id].PRICESELL += typeGameConquest.skillBattle[skill.parentElement.id].PRICE
                         } else {
@@ -5030,7 +5021,7 @@ function loadEventSlotBattle() {
 
                     typeGameConquest.skillBattle[skillElement.parentElement.id] = typeGameConquest.battlePetUseSlotRound[skillElement.parentElement.id]
                     //Cộng atk/heal/shield/burn/poison khi bán skill
-                    
+
                     typeGameConquest.starUser += skillSell.PRICE + skillSell.PRICESELL
 
                     skillSell.SELLUP.forEach(sellUpEffect => {
@@ -7642,7 +7633,7 @@ function randomSkillinShop() {
         const selectedSkill = availableSkills[randomIndex];
 
         selectedSkillIDs.push(selectedSkill.ID); // Ghi lại ID đã chọn
-        
+
         selectedSkill.PRICESELL = 0;
 
         // Đặt vào UI
@@ -9272,18 +9263,39 @@ function endLoading() {
 }
 
 
-//Show trang đăng ký
+//Show trang đăng ký đăng nhập quên mật khẩu
 function switchTabWelcomPage(tab) {
-  document.getElementById('form-login').style.display = 'none';
-  document.getElementById('form-register').style.display = 'none';
-  document.getElementById('form-forgot').style.display = 'none';
+    const container = document.getElementById('welcomePage');
+    const newForm = document.getElementById('form-' + tab);
 
-  document.getElementById('tab-login').style.borderBottom = 'none';
-  document.getElementById('tab-register').style.borderBottom = 'none';
-  document.getElementById('tab-forgot').style.borderBottom = 'none';
+    // Nếu form đang hiển thị là form được chọn lại => không làm gì
+    if (newForm.style.display === 'block') return;
 
-  document.getElementById('form-' + tab).style.display = 'block';
-  document.getElementById('tab-' + tab).style.borderBottom = '2px solid #5C67F2';
+    // Bước 1: lấy chiều cao hiện tại
+    const startHeight = container.offsetHeight;
+
+    // Ẩn tất cả form
+    document.getElementById('form-login').style.display = 'none';
+    document.getElementById('form-register').style.display = 'none';
+    document.getElementById('form-forgot').style.display = 'none';
+
+    // Hiện form mới để đo chiều cao
+    newForm.style.display = 'block';
+    const endHeight = newForm.offsetHeight;
+
+    // Bước 2: đặt lại height ban đầu
+    container.style.height = startHeight + 'px';
+    container.style.transition = 'height 1s ease';
+    void container.offsetHeight; // ép reflow
+
+    // Bước 3: đặt height mới -> trigger animation
+    container.style.height = endHeight + 60 + 'px';
+
+    // Cập nhật viền tab
+    document.getElementById('tab-login').style.borderBottom = 'none';
+    document.getElementById('tab-register').style.borderBottom = 'none';
+    document.getElementById('tab-forgot').style.borderBottom = 'none';
+    document.getElementById('tab-' + tab).style.borderBottom = '2px solid #5C67F2';
 }
 
 //ĐĂNG KÝ
@@ -9449,7 +9461,7 @@ function register() {
                 const typeGameGuess = {}
                 const infoStartGame = { typeGame: "No", modeGame: "No", difficultyGame: "No", roundGame: 1, stepGame: 0, winStreak: 0, }
 
-                const allBattleUsersData = { typeGameConquest, typeGameSolo5Mon, typeGameGuess}
+                const allBattleUsersData = { typeGameConquest, typeGameSolo5Mon, typeGameGuess }
 
                 var userData = {
                     passwordUser: passwordRegister,
@@ -9457,7 +9469,7 @@ function register() {
                     telUser: tel,
                     activateUser: "Yes",
                     keyLogin: 0,
-                    pointRank: {typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0},
+                    pointRank: { typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0 },
                     goldUser: 0,
                     staminaUser: 0,
                     weightBagUser: 100,
@@ -9524,17 +9536,17 @@ function register() {
 
 
             const userRankData = {
-                [usernameRegister]: {rankPoint: {typeGameConquest: 0, typeGameGuess: 0, typeGameSolo5Mon: 0}}
+                [usernameRegister]: { rankPoint: { typeGameConquest: 0, typeGameGuess: 0, typeGameSolo5Mon: 0 } }
             };
 
 
             update(ref(db, 'rankGame'), userRankData)
-            .then(() => {
-                console.log("✅ Đã thêm hoặc cập nhật rankGame cho người dùng:", usernameRegister);
-            })
-            .catch(err => {
-                console.error("❌ Lỗi khi cập nhật rankGame:", err);
-            });
+                .then(() => {
+                    console.log("✅ Đã thêm hoặc cập nhật rankGame cho người dùng:", usernameRegister);
+                })
+                .catch(err => {
+                    console.error("❌ Lỗi khi cập nhật rankGame:", err);
+                });
 
         }
     }).catch(error => {
@@ -9861,7 +9873,7 @@ function loadItemBagLeft(sort) {
                 popup.remove();
                 popup = null;
             });
-            
+
             // Nút gắn vào
             let addBtn = document.createElement("button");
             addBtn.innerText = "Gắn vào";
@@ -9877,9 +9889,9 @@ function loadItemBagLeft(sort) {
                     messageOpen('Hành lý đã đầy');
                     return;
                 }
-            
+
                 const newKey = item.IDcreate;
-            
+
                 // Nếu chưa tồn tại key IDcreate
                 if (typeGameConquest.battleUserPet[newKey]) {
                     messageOpen('Hành lý đã có 5Mon này rồi');
@@ -9887,12 +9899,12 @@ function loadItemBagLeft(sort) {
                 } else {
                     // Kiểm tra xem đã tồn tại pet có cùng ID hay chưa
                     const isDuplicate = Object.values(typeGameConquest.battleUserPet).some(pet => pet.ID === item.ID);
-            
+
                     if (isDuplicate) {
                         messageOpen('Hành lý đã có 5Mon này rồi');
                         return;
                     }
-            
+
                     // Nếu không trùng thì thêm vào
                     typeGameConquest.battleUserPet[newKey] = item;
                     loadItemBagRight(sortBagRight);
@@ -9903,11 +9915,11 @@ function loadItemBagLeft(sort) {
                     popup = null;
                 }
             });
-            
+
             // Thêm nút vào popup
             popup.appendChild(infoBtn);
             popup.appendChild(addBtn);
-            
+
             // Xoá popup nếu click ngoài
             document.addEventListener("click", function docClick(e) {
                 if (popup && !popup.contains(e.target) && e.target !== skillDiv) {
@@ -9924,7 +9936,7 @@ function loadItemBagLeft(sort) {
             // Thêm vào skillDiv
             skillDiv.appendChild(popup);
         });
-        
+
     });
 
     document.getElementById("weightBagLeftText").innerText = `${Object.values(userPet).length}/${weightBagUser}`
@@ -10069,7 +10081,7 @@ function loadItemBagRight(sort) {
             };
             event.dataTransfer.setData("text/plain", JSON.stringify(data));
         });
-        
+
         skillDiv.addEventListener("click", (e) => {
             // Xóa popup nút nếu đã có
             const existingPopup = document.querySelector(".item-action-popup");
@@ -10104,7 +10116,7 @@ function loadItemBagRight(sort) {
                 popup.remove();
                 popup = null;
             });
-            
+
             // Nút Tháo ra
             let removeBtn = document.createElement("button");
             removeBtn.innerText = "Tháo";
@@ -10129,11 +10141,11 @@ function loadItemBagRight(sort) {
                     }
                 }
             });
-            
+
             // Thêm nút vào popup
             popup.appendChild(infoBtn);
             popup.appendChild(removeBtn);
-            
+
             // Xoá popup nếu click ngoài
             document.addEventListener("click", function docClick(e) {
                 if (popup && !popup.contains(e.target) && e.target !== skillDiv) {
@@ -10157,9 +10169,9 @@ function loadItemBagRight(sort) {
 }
 
 function setupClickPopupInfo5MonBag(item, prefix) {
-  const popup = document.getElementById("popupSTT5Mon");
-  const overlay = document.getElementById("popupOverlay");
-  
+    const popup = document.getElementById("popupSTT5Mon");
+    const overlay = document.getElementById("popupOverlay");
+
     document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + item.URLimg + "')";
     document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
     document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
@@ -10372,26 +10384,25 @@ function setupClickPopupInfo5MonBag(item, prefix) {
                     if (randomPet[`skill${i + 1}S`].ID === "") {
                         document.getElementById(`skill${i + 1}S`).innerHTML = "?";
                         document.getElementById(`skill${i + 1}S`).classList.remove("comp");
-                        document.getElementById(`skill${i + 1}SText`).innerHTML = "";
                         document.getElementById(`skill${i + 1}S`).style.overflow = "hidden";
                     }
                 }
             }
         };
     }
-    
+
     popup.style.display = "block";
     overlay.style.display = "block";
 
-  // Đóng popup khi bấm nút đóng hoặc click vào nền mờ
-  [overlay].forEach(element => {
-      element.addEventListener("click", (event) => {
-          if (popup.style.display === "block") {
-              popup.style.display = "none";
-              overlay.style.display = "none";
-          }
-      });
-  });
+    // Đóng popup khi bấm nút đóng hoặc click vào nền mờ
+    [overlay].forEach(element => {
+        element.addEventListener("click", (event) => {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+                overlay.style.display = "none";
+            }
+        });
+    });
 }
 
 function showUpWeightBag() {
@@ -10888,29 +10899,29 @@ function closePopupSetting() {
 //Bảng xếp hạng
 function openRankBoard() {
     const rankGameRef = ref(db, 'rankGame');
-  get(rankGameRef)
-    .then(snapshot => {
-      if (snapshot.exists()) {
-        const rankGameData = snapshot.val();
-        console.log("Dữ liệu rankGame:", rankGameData);
+    get(rankGameRef)
+        .then(snapshot => {
+            if (snapshot.exists()) {
+                const rankGameData = snapshot.val();
+                console.log("Dữ liệu rankGame:", rankGameData);
 
-        // TODO: xử lý rankGameData, ví dụ cập nhật UI bảng xếp hạng
+                // TODO: xử lý rankGameData, ví dụ cập nhật UI bảng xếp hạng
 
-      } else {
-        console.log("Chưa có dữ liệu rankGame trong Firebase.");
-        // TODO: xử lý khi rankGame chưa có, ví dụ hiển thị bảng rỗng hoặc mặc định
-      }
-      
-      // Sau khi đã đọc hoặc xử lý dữ liệu, chuyển trang và hiện bảng
-      changePage(0);
-      showOrHiddenDiv("rankBoard");
-    })
-    .catch(error => {
-      console.error("Lỗi khi đọc rankGame từ Firebase:", error);
-      // Vẫn mở bảng nhưng có thể hiển thị thông báo lỗi
-      changePage(0);
-      showOrHiddenDiv("rankBoard");
-    });
+            } else {
+                console.log("Chưa có dữ liệu rankGame trong Firebase.");
+                // TODO: xử lý khi rankGame chưa có, ví dụ hiển thị bảng rỗng hoặc mặc định
+            }
+
+            // Sau khi đã đọc hoặc xử lý dữ liệu, chuyển trang và hiện bảng
+            changePage(0);
+            showOrHiddenDiv("rankBoard");
+        })
+        .catch(error => {
+            console.error("Lỗi khi đọc rankGame từ Firebase:", error);
+            // Vẫn mở bảng nhưng có thể hiển thị thông báo lỗi
+            changePage(0);
+            showOrHiddenDiv("rankBoard");
+        });
 }
 
 let currentPageRank = 1;
@@ -11004,10 +11015,11 @@ function switchTabShop(tab) {
     document.getElementById('tabExchange').style.background = tab === 'exchange' ? 'rgb(134 154 74)' : 'rgb(201 138 77)';
 
     if (document.getElementById('gacha').style.display === "flex") {
-        document.getElementById(`skill1S`).innerHTML = "?";
-        document.getElementById(`skill1SText`).innerHTML = "";
-        document.getElementById(`skill1S`).style.overflow = "hidden";
-        document.getElementById(`skill1S`).classList.remove("user");
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`skill${i}S`).innerHTML = "?";
+            document.getElementById(`skill${i}S`).style.overflow = "hidden";
+            document.getElementById(`skill${i}S`).classList.remove("user");
+        }
     }
 
     if (document.getElementById('shop').style.display === "flex") {
@@ -11203,31 +11215,39 @@ function closePaymentGateway() {
 //Gacha Page
 var randomPet = {
     skill1S: defaultSTT5Mon,
+    skill2S: defaultSTT5Mon,
+    skill3S: defaultSTT5Mon,
+    skill4S: defaultSTT5Mon,
+    skill5S: defaultSTT5Mon,
 };
 
 //New gacha
-function gacha5Mon() {
+function gacha5Mon(isX5) {
     const filteredPets = allPets.filter(pet => pet.LEVEL === 1);
     if (filteredPets.length === 0) {
         messageOpen("Không có pet nào để gacha!");
         return;
     }
 
-    if (Object.values(userPet).length >= weightBagUser) {
-        messageOpen('Tủ đồ đã đầy')
-        return
+    let weightNeed = isX5?5:1
+    if (Object.values(userPet).length + weightNeed > weightBagUser) {
+        messageOpen('Tủ đồ đã đầy');
+        return;
     }
 
     //Kiểm tra đủ vàng để gacha không
-    if (goldUser < 5000) {
-        messageOpen("Không đủ vàng");
+    let goldNeed = isX5?15000:5000
+    if (goldUser < goldNeed) {
+        messageOpen(`Không đủ ${goldNeed} vàng`);
         return;
     } else {
-        goldUser -= 5000;
+        goldUser -= goldNeed;
     }
 
     document.getElementById("gachax1").disabled = true;
     document.getElementById("gachax1").style.background = "gray";
+    document.getElementById("gachax5").disabled = true;
+    document.getElementById("gachax5").style.background = "gray";
 
     let stopTimes = [4000, 6000, 8000, 10000, 12000];
     let chosenPets = [];
@@ -11235,21 +11255,27 @@ function gacha5Mon() {
     // Làm trống randomPet trước
     randomPet = {
         skill1S: defaultSTT5Mon,
+        skill2S: defaultSTT5Mon,
+        skill3S: defaultSTT5Mon,
+        skill4S: defaultSTT5Mon,
+        skill5S: defaultSTT5Mon,
     };
 
-    document.getElementById(`skill1S`).innerHTML = "?";
-    document.getElementById(`skill1S`).classList.remove("comp");
-    document.getElementById(`skill1SText`).innerHTML = "";
-    document.getElementById(`skill1S`).style.overflow = "hidden";
-
-    // Chọn pet trước khi quay
-    const pet = getRandom5mon();
-    randomPet.skill1S = pet;
+    let lengthRDPet = isX5?5:1;
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`skill${i}S`).innerHTML = "?";
+        document.getElementById(`skill${i}S`).classList.remove("comp");
+        document.getElementById(`skill${i}S`).style.overflow = "hidden";
+    }
 
     console.log("5mon sau khi random", randomPet);
-    let lengthRD = 1
+
     // Chạy hiệu ứng quay
-    for (let o = 0; o < lengthRD; o++) {
+    for (let o = 0; o < lengthRDPet; o++) {
+        // Chọn pet trước khi quay
+        const pet = getRandom5mon();
+        randomPet[`skill${o+1}S`] = pet;
+
         let slotKey = `skill${o + 1}S`
         let slotElement = document.getElementById(slotKey);
         let container = document.createElement("div");
@@ -11314,7 +11340,11 @@ function gacha5Mon() {
         resetGoldAndTicket();
         document.getElementById("gachax1").disabled = false;
         document.getElementById("gachax1").style.background = "#d9534f";
-    }, stopTimes[0])
+        document.getElementById("gachax5").disabled = false;
+        document.getElementById("gachax5").style.background = "#d9534f";
+    }, stopTimes[lengthRDPet-1] + 500)
+
+
 }
 
 //Random 5mon
@@ -11536,8 +11566,11 @@ function createSkillGacha(i) {
         //Gắn cho div cha trạng thái đã lấp đầy
         skillCompDiv.classList.add("comp");
 
+        skillCompDiv.addEventListener("click", () => {
+            setupClickPopupInfo5MonBag(randomPet[skillCompSlot], "skillGacha")
+        });
     }
-    setupPopupInfo5MonBag(randomPet, "skillGacha")
+    
 }
 
 //Exchange Page => Đổi thẻ lấy pet
@@ -12292,10 +12325,10 @@ function loadCheckin() {
 
 function giftCheckin() {
     giftCheckinComplete = "Yes"
-    diamondUser += 3000;
-    ticketsUser += 10;
+    diamondUser += 10;
+    ticketsUser += 100;
     resetGoldAndTicket();
-    messageOpen("Bạn nhận được 3000 kim cương và 10 vé đổi")
+    messageOpen("Bạn nhận được 10 kim cương và 100 vé đổi")
     loadCheckin();
 }
 
@@ -12306,9 +12339,10 @@ function checkinToday(key) {
     }
     todayCheckin = "Yes"
     weekCheckin[key] = 1
-    goldUser += 1000;
+    goldUser += 5000;
+    ticketsUser += 1;
     resetGoldAndTicket();
-    messageOpen("Điểm danh thành công, nhận về 1000 vàng")
+    messageOpen("Điểm danh thành công, nhận về 5000 vàng và 1 vé đổi")
     loadCheckin();
 }
 
@@ -12391,10 +12425,6 @@ function loadQuest(time) {
 
 function checkGiftQuest(key, time, gift, typeGift) {
     //key là qd / qw / qwe - time là Day / Week / Weekend
-
-    const timeQuest = time === "Day" ? allQuestData.questDay :
-        time === "Week" ? allQuestData.questWeek :
-            allQuestData.questWeekend;
     const checkQuestForTime = time === "Day" ? questDay :
         time === "Week" ? questWeek :
             questWeekend;
@@ -13745,7 +13775,6 @@ document.addEventListener("keydown", function (e) {
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
-window.showRegisterPage = showRegisterPage;
 window.register = register;
 window.openRankBoard = openRankBoard;
 window.loadQuest = loadQuest;
