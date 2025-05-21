@@ -22,11 +22,16 @@ body {
     overflow-y: hidden;
 
     /* chặn bôi đen, copy */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
-    user-select: none;         /* Standard */
-    -webkit-touch-callout: none; /* Ngăn menu khi giữ */
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE/Edge */
+    user-select: none;
+    /* Standard */
+    -webkit-touch-callout: none;
+    /* Ngăn menu khi giữ */
 }
 
 /* Toàn màn hình chiến đấu */
@@ -882,8 +887,8 @@ body {
 .slotSkillGacha {
     background: #3b3b56;
     border-radius: 5px;
-    width: 100px;
-    height: 132px;
+    width: 60px;
+    height: 80px;
     background-size: cover;
     /* Hình nền phủ kín */
     background-position: center;
@@ -895,7 +900,7 @@ body {
     position: relative;
     overflow: hidden;
     background: rgb(245 233 194);
-    font-size: 110px;
+    font-size: 80px;
     font-weight: bold;
     border: 4px solid #ffffff00;
     box-shadow: rgb(116 70 32 / 61%) 0px 4px 8px 0px;
@@ -930,7 +935,7 @@ body {
     position: relative;
     /* Để lớp phủ hoạt động */
     border: 2px solid rebeccapurple;
-    
+
     touch-action: none;
 }
 
@@ -1149,6 +1154,7 @@ body {
         box-shadow: 0 0 10px 3px rgba(255, 191, 0, 0.9);
     }
 }
+
 @keyframes speedGlow {
     0% {
         box-shadow: 0 0 0px 0px rgba(255, 0, 0, 0.5);
@@ -1158,6 +1164,7 @@ body {
         box-shadow: 0 0 10px 3px rgba(255, 0, 0, 0.9);
     }
 }
+
 @keyframes slowGlow {
     0% {
         box-shadow: 0 0 0px 0px rgba(0, 233, 255, 0.5);
@@ -1167,6 +1174,7 @@ body {
         box-shadow: 0 0 10px 3px rgba(0, 233, 255, 0.9);
     }
 }
+
 @keyframes platinumGlow {
     0% {
         box-shadow: 0 0 0px 0px rgba(255, 0, 0, 0.5);
@@ -2164,14 +2172,17 @@ body {
 }
 
 @keyframes glow-move {
-  0%, 100% {
-    transform: translateY(0);
-    text-shadow: 0 0 5px rgb(0, 221, 255), 0 0 10px rgb(200, 0, 255);
-  }
-  50% {
-    transform: translateY(-5px);
-    text-shadow: 0 0 10px rgb(0, 204, 255), 0 0 20px rgb(225, 0, 255);
-  }
+
+    0%,
+    100% {
+        transform: translateY(0);
+        text-shadow: 0 0 5px rgb(0, 221, 255), 0 0 10px rgb(200, 0, 255);
+    }
+
+    50% {
+        transform: translateY(-5px);
+        text-shadow: 0 0 10px rgb(0, 204, 255), 0 0 20px rgb(225, 0, 255);
+    }
 }
 
 .upgrade-icon {
