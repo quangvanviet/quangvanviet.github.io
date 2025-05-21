@@ -9995,9 +9995,74 @@ function loadItemBagRight(sort) {
             };
             event.dataTransfer.setData("text/plain", JSON.stringify(data));
         });
+        
+        skillDiv.addEventListener("click", (e) => {
+            // Xóa popup nút nếu đã có
+            const existingPopup = document.querySelector(".item-action-popup");
+            if (existingPopup) existingPopup.remove();
+
+            // Tạo popup container
+            const popup = document.createElement("div");
+            popup.className = "item-action-popup";
+            popup.style.position = "absolute";
+            popup.style.top = "80px";
+            popup.style.left = "0px";
+            popup.style.display = "flex";
+            popup.style.flexDirection = "column";
+            popup.style.gap = "5px";
+            popup.style.zIndex = "10";
+            popup.style.background = "#2c2c44";
+            popup.style.border = "1px solid #ff973a";
+            popup.style.padding = "5px";
+            popup.style.borderRadius = "5px";
+
+            // Nút Tháo ra
+            const removeBtn = document.createElement("button");
+            removeBtn.innerText = "Tháo ra";
+            removeBtn.style.padding = "2px 5px";
+            removeBtn.style.cursor = "pointer";
+            removeBtn.style.background = "#ff4d4d";
+            removeBtn.style.color = "#fff";
+            removeBtn.style.border = "none";
+            removeBtn.style.borderRadius = "3px";
+            removeBtn.addEventListener("click", () => {
+                // Gọi hàm tháo ra tại đây
+                console.log("Tháo item:", item);
+                popup.remove();
+            });
+
+            // Nút Thông tin
+            const infoBtn = document.createElement("button");
+            infoBtn.innerText = "Thông tin";
+            infoBtn.style.padding = "2px 5px";
+            infoBtn.style.cursor = "pointer";
+            infoBtn.style.background = "#4da6ff";
+            infoBtn.style.color = "#fff";
+            infoBtn.style.border = "none";
+            infoBtn.style.borderRadius = "3px";
+            infoBtn.addEventListener("click", () => {
+                setupPopupInfo5MonBag({ [item.IDcreate]: item }, "bag");
+                popup.remove();
+            });
+
+            // Thêm nút vào popup
+            popup.appendChild(removeBtn);
+            popup.appendChild(infoBtn);
+
+            // Xoá popup nếu click ngoài
+            document.addEventListener("click", function docClick(e) {
+                if (!popup.contains(e.target) && e.target !== skillDiv) {
+                    popup.remove();
+                    document.removeEventListener("click", docClick);
+                }
+            });
+
+            // Thêm vào skillDiv
+            skillDiv.appendChild(popup);
+        });
     });
 
-    setupPopupInfo5MonBag(battleUserPetSort, "bag")
+    // setupPopupInfo5MonBag(battleUserPetSort, "bag")
     document.getElementById("weightBagRightText").innerText = `${Object.values(typeGameConquest.battleUserPet).length}/40`
     document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
