@@ -9905,7 +9905,10 @@ function loadItemBagLeft(sort) {
                 const newKey = item.IDcreate;
             
                 // Nếu chưa tồn tại key IDcreate
-                if (!typeGameConquest.battleUserPet[newKey]) {
+                if (typeGameConquest.battleUserPet[newKey]) {
+                    messageOpen('Hành lý đã có 5Mon này rồi');
+                    return;
+                } else {
                     // Kiểm tra xem đã tồn tại pet có cùng ID hay chưa
                     const isDuplicate = Object.values(typeGameConquest.battleUserPet).some(pet => pet.ID === item.ID);
             
@@ -9917,8 +9920,7 @@ function loadItemBagLeft(sort) {
                     // Nếu không trùng thì thêm vào
                     typeGameConquest.battleUserPet[newKey] = item;
                     loadItemBagRight(sortBagRight);
-                    popup.style.display = "none";
-                    overlay.style.display = "none";
+                    loadItemBagLeft(sortBagLeft)
                     addBtn.remove();
                     addBtn = null;
                     popup.remove();
@@ -10142,8 +10144,6 @@ function loadItemBagRight(sort) {
                     if (typeGameConquest.battleUserPet[key].IDcreate === item.IDcreate) {
                         delete typeGameConquest.battleUserPet[key];  // Xoá pet ra khỏi object
                         loadItemBagRight(sortBagRight)
-                        popup.style.display = "none";
-                        overlay.style.display = "none";
                         removeBtn.remove()
                         removeBtn = null;
                         popup.remove();
