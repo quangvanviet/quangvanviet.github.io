@@ -27,209 +27,39 @@
         align-items: center;">
 
         <div id="ScreenBattle">
-            <!-- Màn hình đăng nhập/đăng ký -->
-            <div id="welcomePage" style=" 
-            display: flex;
-            flex-direction: row;
-            align-items: stretch;
-            justify-content: center;
-            gap: 10px;
-            margin: 60px
-            ">
-
-                <!-- Trang đăng nhập -->
-                <div style="display: flex;
-            flex-direction: column;
-            flex-wrap: nowrap;
-            align-items: center;
-            padding: 30px 30px;
-            gap: 10px;
-            background-color: white;
-            width: 250px;
-            height: auto;
-            justify-content: flex-start;
-            border-radius: 20px;
-            border: 1px solid #c5c5c5;
-            margin-bottom: 35px;
-            margin-top: 35px;
-            box-shadow: rgb(0 0 0 / 48%) 0px 4px 15px;
-            ">
-                    <div style="
-                    height: 50px;
-                    width: 260px; 
-                    margin-bottom: 10px; 
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 0px;
-                    ">
-                        <img style="display: block; width: 30%; height: auto;"
-                            src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1731291319/Logo5Mon-1.png"
-                            alt="ImageBag">
-                        <strong>
-                            <p style="
-                    height: auto;
-                    width: auto;
-                    text-align: center;
-                    display: none;
-                    font-size: 55px;
-                    margin: 0px;
-                    align-items: center;
-                    color: #cdbdb6;
-                    ">5MON</p>
-                        </strong>
-                    </div>
-
-                    <input type="text" id="loginUsername" placeholder="Tài khoản" required value="quangvanviet" style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-                    <input type="password" id="loginPassword" placeholder="Mật khẩu" required value="123456" style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-                ">
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="login(false)">Đăng nhập</button>
-                    <div style="display: flex; flex-direction: row; align-items: center; width: 260px">
-                        <hr style="border: 0.1px solid #c9c6c6; width: 180px; margin-right: 10px;">
-                        <p style="color: black;"> Hoặc </p>
-                        <hr style="border: 0.1px solid #c9c6c6; width: 180px; margin-left: 10px;">
-                    </div>
-                    <span id="loginMessage" style="color: red; text-align: center;"></span>
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="login(true)">Chơi thử</button>
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="showRegisterPage()">Đăng ký</button>
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="showRegisterPage()">Quên mật khẩu</button>
-                    <div style="display: flex; flex-direction: row; align-items: center; width: 260px">
-                        <hr style="border: 0.1px solid #c9c6c6; width: 260px; margin-right: 10px;">
-                    </div>
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="window.open('https://script.google.com/macros/s/AKfycbzGxCifX15m9IcdvLauK3EBNZPB_eabbpJKGgLATpP_BBrfvanF-NIltcmOkdEz3aI/exec', '_blank')">
-                        Liên hệ trợ giúp
-                    </button>
+            <div id="welcomePage" style="background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); width: 340px;">
+                <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                  <button onclick="switchTab('login')" id="tab-login" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer; border-bottom: 2px solid #5C67F2;">Đăng nhập</button>
+                  <button onclick="switchTab('register')" id="tab-register" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer;">Đăng ký</button>
+                  <button onclick="switchTab('forgot')" id="tab-forgot" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer;">Quên mật khẩu</button>
                 </div>
-
-                <!-- Trang đăng ký -->
-                <div id="registerPage" style="
-                    display: none;
-                    flex-direction: column;
-                    flex-wrap: nowrap;
-                    align-items: center;
-                    padding: 30px 30px;
-                    gap: 10px;
-                    background-color: white;
-                    width: 250px;
-                    height: auto;
-                    justify-content: flex-start;
-                    border-radius: 20px;
-                    border: 1px solid #c5c5c5;
-                    margin-bottom: 35px;
-                    margin-top: 35px;
-                    opacity: 0;
-                    transition: opacity 1s;
-                    box-shadow: rgb(0 0 0 / 48%) 0px 4px 15px;
-                ">
-                    <div style="
-                    height: 50px;
-                    width: 260px;
-                    margin-bottom: 10px;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    gap: 20px;
-                    align-items: center;
-                    ">
-                        <strong>
-                            <p style="
-                    height: 50px;
-                    width: 260px;
-                    text-align: center;
-                    font-size: 30px;
-                    margin: 0px;
-                    display: flex;
-                    color: #cdbdb6;
-                    align-items: center;
-                    justify-content: center;
-                    ">Đăng ký</p>
-                        </strong>
-                    </div>
-
-                    <input type="text" id="registerUsername" placeholder="Tài khoản" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-                    <input type="password" id="registerPassword" placeholder="Mật khẩu" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-                ">
-                    <input type="text" id="registerName" placeholder="Họ và tên" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-                    <input type="email" id="registerEmail" placeholder="Email" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-                    <input type="tel" id="registerTel" placeholder="Số điện thoại" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-
-                    <input type="text" id="registerKey" placeholder="Mã kích hoạt" required style="
-                    height: 28px;
-                    width: 250px;
-                    border-radius: 10px;
-                    border-color: #cfcfcf;
-                    text-align: center;
-                    border: 1px solid #c5c5c5;
-
-                ">
-
-                    <button
-                        style="height: 35px; width: 255px; background-color: #b4b8ff; border: none; border-radius: 15px;"
-                        onclick="register()">Đăng ký</button>
-                    <span id="registerMessage" style="color: red; text-align: center;"></span>
+            
+                <div id="form-login">
+                    
+                  <input type="text" id="loginUsername" placeholder="Tài khoản" required value="quangvanviet" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="password" id="loginPassword" placeholder="Mật khẩu" required value="123456" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <span id="loginMessage" style="color: red; text-align: center;"></span>
+                  <div style="display: flex; gap 5px;">
+                    <button onclick="login(false)" style="width: 100%; padding: 12px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Đăng nhập</button>
+                    <button onclick="login(true)" style="width: 100%; padding: 12px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Chơi thử</button>
+                  </div>
+                </div>
+            
+                <div id="form-register" style="display: none;">
+                  <input type="text" id="registerUsername" placeholder="Tài khoản" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="password" id="registerPassword" placeholder="Mật khẩu" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="text" id="registerName" placeholder="Họ và tên" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="email" id="registerEmail" placeholder="Email" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="tel" id="registerTel" placeholder="Số điện thoại" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <input type="text" id="registerKey" placeholder="Mã kích hoạt" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <span id="registerMessage" style="color: red; text-align: center;"></span>
+                  <button style="width: 100%; padding: 12px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Tạo tài khoản</button>
+                </div>
+            
+                <div id="form-forgot" style="display: none;">
+                  <input type="email" placeholder="Email khôi phục mật khẩu" id="forgotEmail" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd;">
+                  <span id="forgotMessage" style="color: red; text-align: center;"></span>
+                  <button style="width: 100%; padding: 12px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Khôi phục mật khẩu</button>
                 </div>
             </div>
 
