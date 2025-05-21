@@ -10004,18 +10004,34 @@ function loadItemBagRight(sort) {
             // Tạo popup container
             const popup = document.createElement("div");
             popup.className = "item-action-popup";
-            popup.style.position = "absolute";
-            popup.style.top = "-6px";
-            popup.style.left = "-75px";
+            popup.style.position = "relative";
+            popup.style.top = "15px";
             popup.style.display = "flex";
             popup.style.flexDirection = "column";
             popup.style.gap = "5px";
             popup.style.zIndex = "10";
+            popup.style.background = "#04040454";
+            popup.style.height = "100%";
 
+            // Nút Thông tin
+            const infoBtn = document.createElement("button");
+            infoBtn.innerText = "Thông tin";
+            infoBtn.style.padding = "3px";
+            infoBtn.style.cursor = "pointer";
+            infoBtn.style.background = "#4da6ff";
+            infoBtn.style.color = "#fff";
+            infoBtn.style.border = "none";
+            infoBtn.style.borderRadius = "3px";
+            infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
+            infoBtn.addEventListener("click", () => {
+                setupClickPopupInfo5MonBag(item, "bag");
+                popup.remove();
+            });
+            
             // Nút Tháo ra
             const removeBtn = document.createElement("button");
             removeBtn.innerText = "Tháo";
-            removeBtn.style.padding = "5px";
+            removeBtn.style.padding = "3px";
             removeBtn.style.cursor = "pointer";
             removeBtn.style.background = "#ff4d4d";
             removeBtn.style.color = "#fff";
@@ -10027,26 +10043,11 @@ function loadItemBagRight(sort) {
                 console.log("Tháo item:", item);
                 popup.remove();
             });
-
-            // Nút Thông tin
-            const infoBtn = document.createElement("button");
-            infoBtn.innerText = "Thông tin";
-            infoBtn.style.padding = "5px";
-            infoBtn.style.cursor = "pointer";
-            infoBtn.style.background = "#4da6ff";
-            infoBtn.style.color = "#fff";
-            infoBtn.style.border = "none";
-            infoBtn.style.borderRadius = "3px";
-            infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
-            infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, "bag");
-                popup.remove();
-            });
-
+            
             // Thêm nút vào popup
-            popup.appendChild(removeBtn);
             popup.appendChild(infoBtn);
-
+            popup.appendChild(removeBtn);
+            
             // Xoá popup nếu click ngoài
             document.addEventListener("click", function docClick(e) {
                 if (!popup.contains(e.target) && e.target !== skillDiv) {
