@@ -10041,7 +10041,7 @@ function loadItemBagRight(sort) {
             infoBtn.style.border = "none";
             infoBtn.style.borderRadius = "3px";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item);
+                setupClickPopupInfo5MonBag(item, "bag");
                 popup.remove();
             });
 
@@ -10067,7 +10067,7 @@ function loadItemBagRight(sort) {
     document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
 
-function setupClickPopupInfo5MonBag(item) {
+function setupClickPopupInfo5MonBag(item, prefix) {
   const popup = document.getElementById("popupSTT5Mon");
   const overlay = document.getElementById("popupOverlay");
   
