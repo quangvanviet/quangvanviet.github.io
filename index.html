@@ -27,38 +27,67 @@
         align-items: center;">
 
         <div id="ScreenBattle">
-            <div id="welcomePage" style="background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 1px 1px 2px 1px rgb(0 0 0 / 39%); width: 340px;">
+            <div id="welcomePage"
+                style="background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 1px 1px 2px 1px rgb(0 0 0 / 39%); width: 340px;
+                overflow: hidden; transition: height 1s ease;">
                 <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
-                  <button onclick="switchTabWelcomPage('login')" id="tab-login" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer; border-bottom: 2px solid #5C67F2;">Đăng nhập</button>
-                  <button onclick="switchTabWelcomPage('register')" id="tab-register" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer;">Đăng ký</button>
-                  <button onclick="switchTabWelcomPage('forgot')" id="tab-forgot" style="border: none; background: none; font-weight: bold; padding: 10px; cursor: pointer;">Quên mật khẩu</button>
+                    <button onclick="switchTabWelcomPage('login')" id="tab-login"
+                        style="border: none; background: none; font-weight: bold; padding: 5px; width: 33%; cursor: pointer; border-bottom: 2px solid #5C67F2;">Đăng
+                        nhập</button>
+                    <button onclick="switchTabWelcomPage('register')" id="tab-register"
+                        style="border: none; background: none; font-weight: bold; padding: 5px; width: 33%; cursor: pointer;">Đăng
+                        ký</button>
+                    <button onclick="switchTabWelcomPage('forgot')" id="tab-forgot"
+                        style="border: none; background: none; font-weight: bold; padding: 5px; width: 33%; cursor: pointer;">Quên
+                        mật khẩu</button>
                 </div>
-            
-                <div id="form-login" style="display: flex; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
-                  <input type="text" id="loginUsername" placeholder="Tài khoản" required value="quangvanviet" style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="password" id="loginPassword" placeholder="Mật khẩu" required value="123456" style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <span id="loginMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
-                  <div style="display: flex; gap: 5px; align-content: center; justify-content: center; align-items: center;">
-                    <button onclick="login(false)" style="padding: 10px 20px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Đăng nhập</button>
-                    <button onclick="login(true)" style="padding: 10px 20px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Chơi thử</button>
-                  </div>
+
+                <div id="form-login"
+                    style="display: flex; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
+                    <input type="text" id="loginUsername" placeholder="Tài khoản" required value="quangvanviet"
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="password" id="loginPassword" placeholder="Mật khẩu" required value="123456"
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <span id="loginMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
+                    <div
+                        style="display: flex; gap: 5px; align-content: center; justify-content: center; align-items: center;">
+                        <button onclick="login(false)"
+                            style="padding: 8px 10px; min-width: 90px;border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Đăng
+                            nhập</button>
+                        <button onclick="login(true)"
+                            style="padding: 8px 10px; min-width: 90px;border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Chơi
+                            thử</button>
+                    </div>
                 </div>
-            
-                <div id="form-register" style="display: none; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
-                  <input type="text" id="registerUsername" placeholder="Tài khoản" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="password" id="registerPassword" placeholder="Mật khẩu" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="text" id="registerName" placeholder="Họ và tên" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="email" id="registerEmail" placeholder="Email" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="tel" id="registerTel" placeholder="Số điện thoại" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <input type="text" id="registerKey" placeholder="Mã kích hoạt" required style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <span id="registerMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
-                  <button style="padding: 10px 20px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Tạo tài khoản</button>
+
+                <div id="form-register"
+                    style="display: none; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
+                    <input type="text" id="registerUsername" placeholder="Tài khoản" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="password" id="registerPassword" placeholder="Mật khẩu" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="text" id="registerName" placeholder="Họ và tên" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="email" id="registerEmail" placeholder="Email" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="tel" id="registerTel" placeholder="Số điện thoại" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <input type="text" id="registerKey" placeholder="Mã kích hoạt" required
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <span id="registerMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
+                    <button
+                        style="padding: 8px 10px; min-width: 90px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Tạo
+                        tài khoản</button>
                 </div>
-            
-                <div id="form-forgot" style="display: none; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
-                  <input type="email" placeholder="Email khôi phục mật khẩu" id="forgotEmail" style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
-                  <span id="forgotMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
-                  <button style="padding: 10px 20px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Khôi phục mật khẩu</button>
+
+                <div id="form-forgot"
+                    style="display: none; flex-direction: column; justify-content: center; align-items: center; align-content: center;">
+                    <input type="email" placeholder="Email khôi phục mật khẩu" id="forgotEmail"
+                        style="width: 80%; padding: 8px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #777676;">
+                    <span id="forgotMessage" style="color: red; text-align: center; margin-bottom: 10px;"></span>
+                    <button
+                        style="padding: 8px 10px; min-width: 90px; border-radius: 12px; background-color: #5C67F2; color: white; font-weight: bold; border: none; cursor: pointer;">Khôi
+                        phục mật khẩu</button>
                 </div>
             </div>
 
@@ -210,7 +239,8 @@
                     style="display: flex;flex-direction: column-reverse;gap: 5px;position: absolute;bottom: 6px;right: 10px;z-index: 3; max-width: 100px; width: 100px;">
                     <!-- Nút Mở rộng -->
                     <button id="toggleMenu" style="width: 100px; padding: 4px 6px; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; transition: 0.3s;
-                        border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu gọn</button><!-- Các nút ẩn -->
+                        border: 2px solid #ffffff2b; box-shadow: 1px 1px 1px 1px #19521b; font-weight: bold;">Thu
+                        gọn</button><!-- Các nút ẩn -->
 
                     <div id="menuButtons1"
                         style="display: flex;flex-direction: column-reverse;gap: 3px;font-weight: bold;">
@@ -882,22 +912,25 @@
                         <div id="gacha"
                             style="display: none;text-align: center;padding: 5px;flex-direction: row;align-items: center;width: 100%;height: 100%;justify-content: space-around;">
                             <div id="slotGacha"
-                                style="display: flex;flex-direction: row-reverse;width: 100%;height: 100%;justify-content: space-around;align-items: center;color: rebeccapurple;">
+                                style="display: flex;flex-direction: column;width: 100%;height: 100%;justify-content: flex-start;align-items: center;color: rebeccapurple;">
                                 <!-- Chứa các slot -->
-                                <div>
+                                <div style="display: flex; flex-direction: row; align-content: center; justify-content: center; align-items: center; gap: 8px; margin-top: 10px;">
                                     <div id="skill1S" class="slotSkillGacha" style="overflow: hidden;">?
                                     </div>
-                                    <div id="slotGachaText"
-                                        style="display: flex;flex-direction: row;height: 10%;justify-content: space-evenly;align-items: center;font-size: 15px;">
-                                        <div id="skill1SText" style="width: 100px; font-weight: bold;color: firebrick;">
-                                        </div>
+                                    <div id="skill2S" class="slotSkillGacha" style="overflow: hidden;">?
+                                    </div>
+                                    <div id="skill3S" class="slotSkillGacha" style="overflow: hidden;">?
+                                    </div>
+                                    <div id="skill4S" class="slotSkillGacha" style="overflow: hidden;">?
+                                    </div>
+                                    <div id="skill5S" class="slotSkillGacha" style="overflow: hidden;">?
                                     </div>
                                 </div>
 
                                 <div
-                                    style="display: flex; flex-direction: row; height: 10%; justify-content: center; align-items: center; gap: 15px; margin-top: 5px;">
+                                    style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 15px; margin-top: 15px;">
                                     <div style="display: flex;flex-direction: column-reverse;gap: 10px;">
-                                        <button id="gachax1" onclick="gacha5Mon()" style="
+                                        <button id="gachax1" onclick="gacha5Mon(false)" style="
                                                                 padding: 10px 20px;
                                                                 background: #d9534f;
                                                                 color: white;
@@ -906,10 +939,26 @@
                                                                 cursor: pointer;
                                                                 font-weight: bold;
                                                                 ">
-                                            Quay
+                                            Quay x1
                                         </button>
                                         <span style=" color: #d9534f;font-size: 13px; font-weight: bold;">
                                             <i class="fa-solid fa-coins"></i>: 5000
+                                        </span>
+                                    </div>
+                                    <div style="display: flex;flex-direction: column-reverse;gap: 10px;">
+                                        <button id="gachax5" onclick="gacha5Mon(true)" style="
+                                                                padding: 10px 20px;
+                                                                background: #d9534f;
+                                                                color: white;
+                                                                border: none;
+                                                                border-radius: 5px;
+                                                                cursor: pointer;
+                                                                font-weight: bold;
+                                                                ">
+                                            Quay x5
+                                        </button>
+                                        <span style=" color: #d9534f;font-size: 13px; font-weight: bold;">
+                                            <i class="fa-solid fa-coins"></i>: 15000
                                         </span>
                                     </div>
                                 </div>
@@ -955,7 +1004,8 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                     </div>
-                    <div id="pricePopupMeet5Mon" style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
+                    <div id="pricePopupMeet5Mon"
+                        style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
                         <i class="fa-solid fa-splotch" style="
                             position: absolute;
                         "></i>
@@ -965,7 +1015,7 @@
                             5
                         </span>
                     </div>
-                        <div id="rareColorPopupSTT5MonMeet"
+                    <div id="rareColorPopupSTT5MonMeet"
                         style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
                         <span id="rareTextPopupSTT5MonMeet"
                             style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
@@ -1231,31 +1281,49 @@
                                     <div id="skillBarA"
                                         style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 10px;">
                                         <div id="skill1A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill2A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill3A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill4A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill5A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill6A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill7A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill8A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill9A" class="slotSkillComp">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                     </div>
                                 </div>
@@ -1293,7 +1361,8 @@
                             Thả 5Mon
                         </div>
 
-                        <div style="display: flex; flex-direction: column;align-content: center;justify-content: center;align-items: center;">
+                        <div
+                            style="display: flex; flex-direction: column;align-content: center;justify-content: center;align-items: center;">
                             <div class="comp" style=" display: flex;justify-content: center;background: #f4c29d;border-radius: 10px;
                                 padding: 10px; align-items: center; gap: 6px; box-shadow: rgb(0 0 0 / 30%) 0px 3px 1px; 
                                 position: relative; flex-direction: column;">
@@ -1302,7 +1371,7 @@
                                     Cửa hàng
                                 </div>
                                 <div id="battleShop" style="display: flex;flex-direction: row; gap: 20px;">
-                                    <div id="battleShop1" class="slotSkillShop" >
+                                    <div id="battleShop1" class="slotSkillShop">
                                     </div>
                                     <div id="battleShop2" class="slotSkillShop">
                                     </div>
@@ -1313,7 +1382,7 @@
                                     <div id="battleShop5" class="slotSkillShop">
                                     </div>
                                 </div>
-                                    
+
 
                                 <div style="display: flex;font-size: 14px;font-weight: bold;
                                 text-shadow: 1px 1px 2px #140a03;flex-direction: row;align-content: center;
@@ -1503,31 +1572,49 @@
                                     <div id="skillBarB"
                                         style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 10px;">
                                         <div id="skill1B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill2B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill3B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill4B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill5B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill6B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill7B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill8B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                         <div id="skill9B" class="slotSkill">
-                                            <div class="skillCooldownOverlay" style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);"></div> <!-- Overlay hồi chiêu -->
+                                            <div class="skillCooldownOverlay"
+                                                style="background: linear-gradient(to bottom, #f9ff04, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff0438, #f9ff04);">
+                                            </div> <!-- Overlay hồi chiêu -->
                                         </div>
                                     </div>
                                 </div>
@@ -1762,7 +1849,8 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                 </div>
-                <div id="pricePopupSTT5Mon" style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
+                <div id="pricePopupSTT5Mon"
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
@@ -1772,7 +1860,7 @@
                         5
                     </span>
                 </div>
-                    <div id="rareColorPopupSTT5Mon"
+                <div id="rareColorPopupSTT5Mon"
                     style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
                     <span id="rareTextPopupSTT5Mon"
                         style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
@@ -1865,7 +1953,8 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                 </div>
-                <div id="pricePopupSTT5MonInBattle" style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
+                <div id="pricePopupSTT5MonInBattle"
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
@@ -2078,7 +2167,8 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                 </div>
-                <div id="priceItemPopupExchange" style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: 3px;left: 3px;">
+                <div id="priceItemPopupExchange"
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: 3px;left: 3px;">
                     <i class="fa-solid fa-splotch" style="
                         position: absolute;
                     "></i>
@@ -2088,7 +2178,7 @@
                         5
                     </span>
                 </div>
-                    <div
+                <div
                     style="display: flex; flex-direction: column; min-width: 320px; align-items: center; justify-content: flex-start;">
                     <h3 id="popupNameExchange" style="margin: 0;
             margin-top: 2px;
