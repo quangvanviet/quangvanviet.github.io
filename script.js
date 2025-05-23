@@ -10114,7 +10114,7 @@ function loadItemBagRight(sort) {
             infoBtn.style.borderRadius = "3px";
             infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, "bag", item.LEVEL);
+                setupClickPopupInfo5MonBag(item, "bag", 4);
                 infoBtn.remove();
                 infoBtn = null;
                 popup.remove();
