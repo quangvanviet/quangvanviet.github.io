@@ -10333,7 +10333,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
         
-                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,skill.POWER.SCALE);
+                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,item.POWER.SCALE);
             }
         });
 
@@ -10357,7 +10357,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
         
                 // Truyền các giá trị vào hàm
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,skill.POWER.SCALE)}</span>`;
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,item.POWER.SCALE)}</span>`;
                 countDescInfo += 1;
             }
         });
