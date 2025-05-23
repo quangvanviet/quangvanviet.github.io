@@ -4151,12 +4151,16 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL
+
+                        const powerStats = updateStatWhenLevelUp(typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL);
+                        
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += powerStats
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += powerStats
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += powerStats
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += powerStats
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += powerStats
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += powerStats
+                        
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -9867,7 +9871,7 @@ function loadItemBagLeft(sort) {
             infoBtn.style.borderRadius = "3px";
             infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, "inventory");
+                setupClickPopupInfo5MonBag(item, "inventory", item.LEVEL);
                 infoBtn.remove();
                 infoBtn = null;
                 popup.remove();
@@ -10110,7 +10114,7 @@ function loadItemBagRight(sort) {
             infoBtn.style.borderRadius = "3px";
             infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, "bag");
+                setupClickPopupInfo5MonBag(item, "bag", item.LEVEL);
                 infoBtn.remove();
                 infoBtn = null;
                 popup.remove();
@@ -10168,30 +10172,101 @@ function loadItemBagRight(sort) {
     document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
 
-function setupClickPopupInfo5MonBag(item, prefix) {
+function updateStatWhenLevelUp(level) {
+    let bonus = 0
+    if (level < 2 || level > 4) {
+        bonus = 50 * level;
+    } else {
+        bonus = 0;
+    }
+
+    return bonus;
+}
+
+function setupClickPopupInfo5MonBag(item, prefix, level) {
     const popup = document.getElementById("popupSTT5Mon");
     const overlay = document.getElementById("popupOverlay");
 
-    document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + item.URLimg + "')";
+    const powerStats = updateStatWhenLevelUp(level);
+
+    let url5Mon = item.URLimg;
+    let colorLevel = "#531515";
+    if (level === 2) {
+        url5Mon = "" || item.URLimg
+        colorLevel = "#8c0b0b"
+    } else if (level === 3) {
+        url5Mon = "" || item.URLimg
+        colorLevel = "#c00d0d"
+    } else if (level === 4) {
+        url5Mon = "" || item.URLimg
+        colorLevel = "red"
+    } else {
+        url5Mon = item.URLimg
+        colorLevel = "#531515"
+    }
+    
+    let str, def, int, agi, luk, hp, allStat;
+    str = item.POWER.STR + powerStats
+    def = item.POWER.DEF + powerStats
+    int = item.POWER.INT + powerStats
+    agi = item.POWER.AGI + powerStats
+    luk = item.POWER.LUK + powerStats
+    hp = item.POWER.HP + powerStats
+    allStat = str + def + int + agi + luk + hp
+
+    let powerINT = scalePower5Mon(int);
+
+    let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
+
+    // Áp dụng scaleSTR vào các phép tính hiệu ứng
+    if (item.EFFECT.includes("Attacking")) {
+        dame = Math.round(powerINT.dame * item.POWER.SCALE);  // Giảm dần khi STR tăng
+    }
+    if (item.EFFECT.includes("Healing")) {
+        heal = Math.round(powerINT.heal * item.POWER.SCALE);  // Giảm dần khi STR tăng
+    }
+    if (item.EFFECT.includes("Shield")) {
+        shield = Math.round(powerINT.shield * item.POWER.SCALE);  // Giảm dần khi STR tăng
+    }
+    if (item.EFFECT.includes("Burn")) {
+        burn = Math.round(powerINT.burn * item.POWER.SCALE);  // Giảm dần khi STR tăng
+    }
+    if (item.EFFECT.includes("Poison")) {
+        poison = Math.round(powerINT.poison * item.POWER.SCALE);  // Giảm dần khi STR tăng
+    }
+
+    //Tính cooldown
+    let minC = 8;
+    let maxC = 20;
+    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
+    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
+
+
+    //tính crit
+    let maxCrit = 60;
+    let scaleCrit = 475; // tùy chỉnh
+    let valueCrit = maxCrit * luk / (luk + scaleCrit);
+    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+    valueCrit = Math.round(valueCrit * item.POWER.SCALE);
+
+    //tính def
+    let maxDef = 90;
+    let scaleDef = 475; // tùy chỉnh
+    let valueDef = maxDef * def / (def + scaleDef);
+    valueDef = Math.min(maxDef, Math.max(0, valueDef));
+    valueDef = Math.round(valueDef * item.POWER.SCALE);
+
+    let crit = Math.round(valueCrit + item.CRIT[1] + item.CRIT[2] + item.CRIT[3]);
+    let defFn = Math.round(valueDef * 100) / 100;
+    let cooldown = Math.ceil(valueC);
+    
+    document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + url5Mon + "')";
     document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
-    document.getElementById("allStats5Mon").textContent = `⚔️: ${item.POWER.STR + item.POWER.DEF + item.POWER.INT + item.POWER.LUK + item.POWER.AGI + item.POWER.HP}`;
-    document.getElementById("levelTextPopupSTT5Mon").textContent = item.LEVEL;
+    document.getElementById("allStats5Mon").textContent = `⚔️: ${allStat}`;
+    document.getElementById("levelTextPopupSTT5Mon").textContent = level;
     document.getElementById("rareTextPopupSTT5Mon").textContent = item.RARE;
     document.getElementById("priceTextPopupSTT5Mon").textContent = item.PRICE;
-
-    if (item.LEVEL === 1) {
-        document.getElementById("levelColorPopupSTT5Mon").style.color = "#531515"
-    }
-    if (item.LEVEL === 2) {
-        document.getElementById("levelColorPopupSTT5Mon").style.color = "#8c0b0b"
-    }
-    if (item.LEVEL === 3) {
-        document.getElementById("levelColorPopupSTT5Mon").style, color = "#c00d0d"
-    }
-    if (item.LEVEL === 4) {
-        document.getElementById("levelColorPopupSTT5Mon").style.color = "red"
-    }
-
+    document.getElementById("levelColorPopupSTT5Mon").style.color = colorLevel
 
     let descTextItem = "";
     // Type
@@ -10213,12 +10288,12 @@ function setupClickPopupInfo5MonBag(item, prefix) {
             </div>
         </div>`
 
-    const scaleSTR = 1 * Math.log10(item.POWER.STR);
-    let valuePowerSTR = 0.12 * item.POWER.STR / scaleSTR + 1
+    const scaleSTR = 1 * Math.log10(str);
+    let valuePowerSTR = 0.12 * str / scaleSTR + 1
     let baseDame = Math.round(valuePowerSTR * item.POWER.SCALE);
 
-    const scaleHP = 1 * Math.log10(item.POWER.HP);
-    let valuePowerHP = 2 * item.POWER.HP / scaleHP + 180;
+    const scaleHP = 1 * Math.log10(hp);
+    let valuePowerHP = 2 * hp / scaleHP + 180;
     let baseHP = Math.round(valuePowerHP * item.POWER.SCALE);
 
     descTextItem += `
@@ -10233,7 +10308,7 @@ function setupClickPopupInfo5MonBag(item, prefix) {
                 </span>
             </span>
             </span>
-            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${item.COOLDOWN[0] / 1000 || ''} giây][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${cooldown / 1000 || ''} giây][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
             <span >Gây <a style="color: red; font-weight: bold;">${baseDame} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
 
@@ -10242,12 +10317,52 @@ function setupClickPopupInfo5MonBag(item, prefix) {
     if (item.EFFECT.length === 1) {
         item.EFFECT.forEach((effect) => {
             if (effectsSkill[effect]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                descInfo += dynamicDescription(item)
+                // Lấy chuỗi mô tả ban đầu
+                let rawDesc = effectsSkill[effect].descriptionSkill;
+        
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.SCALE/g, 'scale');
+        
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
+        
+                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,skill.POWER.SCALE);
             }
         });
+
     } else {
+        item.EFFECT.forEach((effect) => {
+            if (effectsSkill[effect]) {
+                // Lấy chuỗi mô tả ban đầu
+                let rawDesc = effectsSkill[effect].descriptionSkill;
+        
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.SCALE/g, 'scale');
+        
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
+        
+                // Truyền các giá trị vào hàm
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,skill.POWER.SCALE)}</span>`;
+                countDescInfo += 1;
+            }
+        });
+
+        
         item.EFFECT.forEach((effect) => {
             if (effectsSkill[effect]) {
                 // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
@@ -10280,15 +10395,33 @@ function setupClickPopupInfo5MonBag(item, prefix) {
     }
 
     //Chí mạng info
-    let critPercent = item.CRIT.reduce((a, b) => a + b, 0)
     let critInfo = ""
-    if (critPercent > 0) {
-        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${critPercent}%</span>]`;
+    if (crit > 0) {
+        critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">${crit}%</span>]`;
     }
     // Gán nội dung vào phần tử HTML
-    let rageGain = calculateRageGainFromSkill(item);
-    rageGain = parseFloat(rageGain.toFixed(2));
+    //Tính nộ
+    function getScaledRage(stat, multiplier) {
+        return multiplier * Math.sqrt(stat || 0);
+    }
 
+    function getInvertedRage(stat, multiplier) {
+        // Nếu stat thấp → giá trị cao
+        const maxStat = 1000; // giới hạn max giả định (có thể điều chỉnh)
+        const safeStat = Math.min(stat || 0, maxStat);
+        return multiplier * Math.sqrt(maxStat - safeStat);
+    }
+    
+    let rageGain = Math.floor(
+        getScaledRage(str, 0.3) +
+        getScaledRage(def, 0.5) +
+        getScaledRage(int, 0.3) +
+        getInvertedRage(agi, 0.4) + // dùng hệ số mới và công thức ngược
+        getScaledRage(luk, 0.3) +
+        getScaledRage(hp, 0.6)
+    );
+    rageGain = parseFloat(rageGain.toFixed(2));
+    
     if (descInfo !== "") {
         descTextItem +=
             `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ${rageGain}][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
@@ -11567,7 +11700,7 @@ function createSkillGacha(i) {
         skillCompDiv.classList.add("comp");
 
         skillCompDiv.addEventListener("click", () => {
-            setupClickPopupInfo5MonBag(randomPet[skillCompSlot], "skillGacha")
+            setupClickPopupInfo5MonBag(randomPet[skillCompSlot], "skillGacha", randomPet[skillCompSlot].LEVEL)
         });
     }
     
