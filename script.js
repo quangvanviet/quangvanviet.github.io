@@ -10114,7 +10114,7 @@ function loadItemBagRight(sort) {
             infoBtn.style.borderRadius = "3px";
             infoBtn.style.boxShadow = "1px 1px 2px #000000c4";
             infoBtn.addEventListener("click", () => {
-                setupClickPopupInfo5MonBag(item, "bag", 4);
+                setupClickPopupInfo5MonBag(item, "bag", item.LEVEL);
                 infoBtn.remove();
                 infoBtn = null;
                 popup.remove();
@@ -10163,6 +10163,16 @@ function loadItemBagRight(sort) {
                 }
             });
 
+            for (let s = 1; s <= 4; s++) {
+                document.getElementById(`popupSTT5MonLV${s}`).addEventListener("click", () => {
+                    setupClickPopupInfo5MonBag(item, "bag", s);
+                    infoBtn.remove();
+                    infoBtn = null;
+                    popup.remove();
+                    popup = null;
+                });
+            }
+        
             // Thêm vào skillDiv
             skillDiv.appendChild(popup);
         });
