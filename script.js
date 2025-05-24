@@ -10213,7 +10213,6 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     hp = item.POWER.HP + powerStats
     allStat = str + def + int + agi + luk + hp
     
-
     let powerINT = scalePower5Mon(int);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
@@ -10319,7 +10318,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
             if (effectsSkill[effect]) {
                 // Lấy chuỗi mô tả ban đầu
                 let rawDesc = effectsSkill[effect].descriptionSkill;
-                console.log("rawDesc1",rawDesc);
+
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
                     .replace(/skill\.POWER\.STR/g, 'str')
@@ -10333,13 +10332,11 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-
-                console.log("rawDesc2",rawDesc);
                 
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
         
-                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp);
+                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
             }
         });
 
@@ -10367,17 +10364,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
         
                 // Truyền các giá trị vào hàm
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp)}</span>`;
-                countDescInfo += 1;
-            }
-        });
-
-        
-        item.EFFECT.forEach((effect) => {
-            if (effectsSkill[effect]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item)}</span>`;
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
                 countDescInfo += 1;
             }
         });
@@ -10388,17 +10375,53 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     if (item.INTERNAL.length === 1) {
         item.INTERNAL.forEach((internal) => {
             if (effectsInternal[internal]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                internalInfo += dynamicDescription(item)
+
+                let rawDesc = effectsSkill[effect].descriptionInternal;
+
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
+                
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
+                
+                internalInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
             }
         });
     } else {
         item.INTERNAL.forEach((internal) => {
             if (effectsInternal[internal]) {
                 // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
-                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(item)}</span>`;
+                let rawDesc = effectsSkill[effect].descriptionInternal;
+
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
+                
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
+                
+                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
                 countInternalInfo += 1;
             }
         });
@@ -10455,17 +10478,51 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     if (item.SELLUP.length === 1) {
         item.SELLUP.forEach((sellup) => {
             if (effectsSellUp[sellup]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                sellUpInfo += dynamicDescription(item)
+                let rawDesc = effectsSkill[effect].descriptionSellUp;
+
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
+                
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
+
+                sellUpInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
             }
         });
     } else {
         item.SELLUP.forEach((sellup) => {
             if (effectsSellUp[sellup]) {
-                // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
-                sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(item)}</span>`;
+                let rawDesc = effectsSkill[effect].descriptionSellUp;
+
+                // Thay thế skill.POWER.X thành viết thường tương ứng
+                rawDesc = rawDesc
+                    .replace(/skill\.POWER\.STR/g, 'str')
+                    .replace(/skill\.POWER\.DEF/g, 'def')
+                    .replace(/skill\.POWER\.INT/g, 'int')
+                    .replace(/skill\.POWER\.AGI/g, 'agi')
+                    .replace(/skill\.POWER\.LUK/g, 'luk')
+                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
+                
+                // Tạo hàm từ chuỗi đã xử lý
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
+                
+                sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
                 countSellUpInfo += 1;
             }
         });
