@@ -10174,12 +10174,10 @@ function loadItemBagRight(sort) {
 
 function updateStatWhenLevelUp(level) {
     let bonus = 0
-    if (level < 2 || level > 4) {
+    if (level >= 2 && level <= 4) {
         bonus = 50 * level;
-    } else {
-        bonus = 0;
     }
-
+    
     return bonus;
 }
 
@@ -10188,6 +10186,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     const overlay = document.getElementById("popupOverlay");
 
     const powerStats = updateStatWhenLevelUp(level);
+    console.log("powerStats", powerStats)
 
     let url5Mon = item.URLimg;
     let colorLevel = "#531515";
@@ -10221,21 +10220,23 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
 
     // Áp dụng scaleSTR vào các phép tính hiệu ứng
     if (item.EFFECT.includes("Attacking")) {
-        dame = Math.round(powerINT.dame * item.POWER.SCALE);  // Giảm dần khi STR tăng
+        dame = Math.round(powerINT.dame * item.POWER.SCALE) + item.DAME[1] + item.DAME[2] + item.DAME[3] + item.DAME[4];  // Giảm dần khi STR tăng
     }
     if (item.EFFECT.includes("Healing")) {
-        heal = Math.round(powerINT.heal * item.POWER.SCALE);  // Giảm dần khi STR tăng
+        heal = Math.round(powerINT.heal * item.POWER.SCALE) + item.HEAL[1] + item.HEAL[2] + item.HEAL[3] + item.HEAL[4];  // Giảm dần khi STR tăng
     }
     if (item.EFFECT.includes("Shield")) {
-        shield = Math.round(powerINT.shield * item.POWER.SCALE);  // Giảm dần khi STR tăng
+        shield = Math.round(powerINT.shield * item.POWER.SCALE) + item.SHIELD[1] + item.SHIELD[2] + item.SHIELD[3] + item.SHIELD[4];  // Giảm dần khi STR tăng
     }
     if (item.EFFECT.includes("Burn")) {
-        burn = Math.round(powerINT.burn * item.POWER.SCALE);  // Giảm dần khi STR tăng
+        burn = Math.round(powerINT.burn * item.POWER.SCALE) + item.BURN[1] + item.BURN[2] + item.BURN[3] + item.BURN[4];  // Giảm dần khi STR tăng
     }
     if (item.EFFECT.includes("Poison")) {
-        poison = Math.round(powerINT.poison * item.POWER.SCALE);  // Giảm dần khi STR tăng
+        poison = Math.round(powerINT.poison * item.POWER.SCALE) + item.POISON[1] + item.POISON[2] + item.POISON[3] + item.POISON[4];  // Giảm dần khi STR tăng
     }
 
+    
+    
     //Tính cooldown
     let minC = 8;
     let maxC = 20;
@@ -10329,14 +10330,18 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
                     .replace(/skill\.POWER\.HP/g,  'hp')
-                    .replace(/skill\.POWER\.SCALE/g, 'scale');
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
 
                 console.log("rawDesc2",rawDesc);
                 
                 // Tạo hàm từ chuỗi đã xử lý
-                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", `return \`${rawDesc}\`;`);
         
-                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,item.POWER.SCALE);
+                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp);
             }
         });
 
@@ -10354,13 +10359,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
                     .replace(/skill\.POWER\.HP/g,  'hp')
-                    .replace(/skill\.POWER\.SCALE/g, 'scale');
+                    .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
+                    .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
+                    .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
+                    .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
+                    .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
         
                 // Tạo hàm từ chuỗi đã xử lý
-                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", `return \`${rawDesc}\`;`);
         
                 // Truyền các giá trị vào hàm
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,item.POWER.SCALE)}</span>`;
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp)}</span>`;
                 countDescInfo += 1;
             }
         });
