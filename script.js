@@ -9937,6 +9937,14 @@ function loadItemBagLeft(sort) {
                 }
             });
 
+            for (let s = 1; s <= 4; s++) {
+                const el = document.getElementById(`popupSTT5MonLV${s}`);
+                if (!el) continue;
+                el.onclick = () => {
+                    setupClickPopupInfo5MonBag(item, "inventory", s);
+                };
+            }
+            
             // Thêm vào skillDiv
             skillDiv.appendChild(popup);
         });
@@ -10164,13 +10172,11 @@ function loadItemBagRight(sort) {
             });
 
             for (let s = 1; s <= 4; s++) {
-                document.getElementById(`popupSTT5MonLV${s}`).addEventListener("click", () => {
+                const el = document.getElementById(`popupSTT5MonLV${s}`);
+                if (!el) continue;
+                el.onclick = () => {
                     setupClickPopupInfo5MonBag(item, "bag", s);
-                    infoBtn.remove();
-                    infoBtn = null;
-                    popup.remove();
-                    popup = null;
-                });
+                };
             }
         
             // Thêm vào skillDiv
@@ -10182,6 +10188,7 @@ function loadItemBagRight(sort) {
     document.getElementById("weightBagRight").style.width = `${Math.min(Object.values(typeGameConquest.battleUserPet).length / 40 * 100, 100)}%`
 }
 
+//Hàm tính stat nâng cấp 5mon
 function updateStatWhenLevelUp(level) {
     let bonus = 0
     if (level >= 2 && level <= 4) {
