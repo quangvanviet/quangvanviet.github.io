@@ -10213,6 +10213,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     luk = item.POWER.LUK + powerStats
     hp = item.POWER.HP + powerStats
     allStat = str + def + int + agi + luk + hp
+    
 
     let powerINT = scalePower5Mon(int);
 
@@ -10279,12 +10280,12 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     descTextItem += `
         <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
             <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${item.POWER.STR}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${item.POWER.DEF}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${item.POWER.INT}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${item.POWER.AGI}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${item.POWER.LUK}</span>
-                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${item.POWER.HP}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ${str}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ${def}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ${int}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ${agi}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ${luk}</span>
+                <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ${hp}</span>
             </div>
         </div>`
 
@@ -10319,7 +10320,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
             if (effectsSkill[effect]) {
                 // Lấy chuỗi mô tả ban đầu
                 let rawDesc = effectsSkill[effect].descriptionSkill;
-        
+                console.log("rawDesc1",rawDesc);
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
                     .replace(/skill\.POWER\.STR/g, 'str')
@@ -10329,7 +10330,9 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.LUK/g, 'luk')
                     .replace(/skill\.POWER\.HP/g,  'hp')
                     .replace(/skill\.POWER\.SCALE/g, 'scale');
-        
+
+                console.log("rawDesc2",rawDesc);
+                
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "scale", `return \`${rawDesc}\`;`);
         
