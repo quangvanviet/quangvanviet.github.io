@@ -10235,8 +10235,6 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
         poison = Math.round(powerINT.poison * item.POWER.SCALE) + item.POISON[1] + item.POISON[2] + item.POISON[3] + item.POISON[4];  // Giảm dần khi STR tăng
     }
 
-    
-    
     //Tính cooldown
     let minC = 8;
     let maxC = 20;
@@ -10339,7 +10337,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                 console.log("rawDesc2",rawDesc);
                 
                 // Tạo hàm từ chuỗi đã xử lý
-                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", `return \`${rawDesc}\`;`);
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
         
                 descInfo += dynamicDescription(item,str,def,int,agi,luk,hp);
             }
@@ -10366,7 +10364,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
         
                 // Tạo hàm từ chuỗi đã xử lý
-                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", `return \`${rawDesc}\`;`);
+                const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
         
                 // Truyền các giá trị vào hàm
                 descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp)}</span>`;
