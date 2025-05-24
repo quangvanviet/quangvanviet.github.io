@@ -10386,7 +10386,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
         item.INTERNAL.forEach((internal) => {
             if (effectsInternal[internal]) {
 
-                let rawDesc = effectsSkill[effect].descriptionInternal;
+                let rawDesc = effectsInternal[internal].descriptionInternal;
 
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
@@ -10412,7 +10412,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
         item.INTERNAL.forEach((internal) => {
             if (effectsInternal[internal]) {
                 // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
-                let rawDesc = effectsSkill[effect].descriptionInternal;
+                let rawDesc = effectsInternal[internal].descriptionInternal;
 
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
@@ -10488,7 +10488,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     if (item.SELLUP.length === 1) {
         item.SELLUP.forEach((sellup) => {
             if (effectsSellUp[sellup]) {
-                let rawDesc = effectsSkill[effect].descriptionSellUp;
+                let rawDesc = effectsSellUp[sellup].descriptionSellUp;
 
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
@@ -10513,7 +10513,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     } else {
         item.SELLUP.forEach((sellup) => {
             if (effectsSellUp[sellup]) {
-                let rawDesc = effectsSkill[effect].descriptionSellUp;
+                let rawDesc = effectsSellUp[sellup].descriptionSellUp;
 
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
