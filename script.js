@@ -11575,13 +11575,13 @@ function gacha5Mon(isX5) {
 
 //Random 5mon
 var rareStats = {
-    D: { min: 200, max: 600 },
-    C: { min: 601, max: 1000 },
-    B: { min: 1001, max: 1400 },
-    A: { min: 1401, max: 1800 },
-    S: { min: 1801, max: 2200 },
-    SS: { min: 2201, max: 2600 },
-    SSR: { min: 2601, max: 3000 }
+    D: { min: 60, max: 109 },
+    C: { min: 110, max: 149 },
+    B: { min: 150, max: 189 },
+    A: { min: 190, max: 229 },
+    S: { min: 230, max: 269 },
+    SS: { min: 270, max: 309 },
+    SSR: { min: 310, max: 350 }
 };
 
 function randomPet5Mon() {
@@ -11600,12 +11600,12 @@ function randomPet5Mon() {
     //rd chỉ số
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
-    else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
+    else if (rand < 10) rare = 'A';
+    else if (rand < 45) rare = 'B';
+    else if (rand < 70) rare = 'C';
     else rare = 'D';
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
@@ -11624,7 +11624,7 @@ function randomPet5Mon() {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
@@ -12178,12 +12178,12 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     //rd chỉ số
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
-    else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
+    else if (rand < 10) rare = 'A';
+    else if (rand < 45) rare = 'B';
+    else if (rand < 70) rare = 'C';
     else rare = 'D';
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
@@ -12202,7 +12202,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
@@ -13146,12 +13146,12 @@ function catch5Mon() {
 
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
-    else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
+    else if (rand < 10) rare = 'A';
+    else if (rand < 45) rare = 'B';
+    else if (rand < 70) rare = 'C';
     else rare = 'D';
 
     const { min: minSTT, max: maxSTT } = rareStats[rare];
@@ -13170,7 +13170,7 @@ function catch5Mon() {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 500 || def > 500 || int > 500 || agi > 500 || luk > 500 || hp > 500
+    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
