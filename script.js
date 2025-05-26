@@ -11624,7 +11624,7 @@ function randomPet5Mon() {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
+    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
@@ -12202,7 +12202,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
+    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
@@ -13170,7 +13170,7 @@ function catch5Mon() {
 
     } while ((str + def + int + agi + luk + hp > total)
     || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 100 || def > 100 || int > 100 || agi > 100 || luk > 100 || hp > 100
+    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
     || str + def + int + agi + luk + hp > maxSTT
         || str + def + int + agi + luk + hp < minSTT
     );
