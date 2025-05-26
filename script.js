@@ -1427,12 +1427,12 @@ function calculateRageGainFromSkill(skillData) {
     const stats = skillData.POWER || {};
 
     let rageGain = Math.floor(
-        getScaledRage(stats.STR, 0.3) +
-        getScaledRage(stats.DEF, 0.5) +
-        getScaledRage(stats.INT, 0.3) +
-        getInvertedRage(stats.AGI, 0.4) + // dùng hệ số mới và công thức ngược
-        getScaledRage(stats.LUK, 0.3) +
-        getScaledRage(stats.HP, 0.6)
+        getScaledRage(stats.STR, 0.1) +
+        getScaledRage(stats.DEF, 0.2) +
+        getScaledRage(stats.INT, 0.1) +
+        getInvertedRage(stats.AGI, 0.15) + // dùng hệ số mới và công thức ngược
+        getScaledRage(stats.LUK, 0.15) +
+        getScaledRage(stats.HP, 0.25)
     );
 
     return rageGain;
@@ -14000,8 +14000,8 @@ document.addEventListener("keydown", function (e) {
 });
 
 //Hàm tính scale mỗi khi nâng cấp level
-function getScaleLevelUp(sttLevel1) {
-    return (sttLevel1 / 100) + 1;
+function getScaleLevelUp(agi) {
+    return 1 + ((agi - 10) / (250 - 10));  // nội suy từ 1 → 2
 }
 
 // Gán các hàm vào window
