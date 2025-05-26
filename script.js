@@ -7639,7 +7639,16 @@ function randomSkillinShop() {
         selectedSkillIDs.push(selectedSkill.ID); // Ghi lại ID đã chọn
 
         selectedSkill.PRICESELL = 0;
-
+        let sLvUpSTR, sLvUpDEF, sLvUpINT, sLvUpAGI, sLvUpLUK, sLvUpHP
+        sLvUpSTR = getScaleLevelUp(selectedSkill.POWER.STR);
+        sLvUpDEF = getScaleLevelUp(selectedSkill.POWER.DEF);
+        sLvUpINT = getScaleLevelUp(selectedSkill.POWER.INT);
+        sLvUpAGI = getScaleLevelUp(selectedSkill.POWER.AGI);
+        sLvUpLUK = getScaleLevelUp(selectedSkill.POWER.LUK);
+        sLvUpHP = getScaleLevelUp(selectedSkill.POWER.HP);
+        
+        selectedSkill.LVUPSCALE = {STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP}
+        console.log("selectedSkill", selectedSkill)
         // Đặt vào UI
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
@@ -13989,6 +13998,11 @@ document.addEventListener("keydown", function (e) {
         e.preventDefault();
     }
 });
+
+//Hàm tính scale mỗi khi nâng cấp level
+function getScaleLevelUp(sttLevel1) {
+    return (sttLevel1 / 100) + 1;
+}
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
