@@ -1004,6 +1004,34 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                     </div>
+
+                    <div style="display: flex;position: absolute;flex-direction: column;align-content: center;justify-content: center;align-items: center;top: 30px;left: -33px;
+                        font-size: 12px;font-weight: bold;color: wheat;gap: 8px; z-index: -1;">
+                        <div id="popupMeet5MonLV1" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                            box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                            onmouseout="this.style.transform='scale(1) translateX(0)';">
+                            Lv.1
+                        </div>
+                        <div id="popupMeet5MonLV2" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                            box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                            onmouseout="this.style.transform='scale(1) translateX(0)';">
+                            Lv.2
+                        </div>
+                        <div id="popupMeet5MonLV3" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                            box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                            onmouseout="this.style.transform='scale(1) translateX(0)';">
+                            Lv.3
+                        </div>
+                        <div id="popupMeet5MonLV4" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                            box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                            onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                            onmouseout="this.style.transform='scale(1) translateX(0)';">
+                            Lv.4
+                        </div>
+                    </div>
                     <div id="pricePopupMeet5Mon"
                         style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
                         <i class="fa-solid fa-splotch" style="
@@ -1047,7 +1075,7 @@
                             font-size: 12px;
                             min-height: 170px;
                             max-height: 170px;
-                            max-width: 320px;
+                            max-width: 340px;
                             width: 95%;
                             overflow: auto;
                             display: flex;
@@ -1826,118 +1854,130 @@
         </div>
 
         <!-- Popup hiển thị thông tin 5mon -->
-        <div id="popupSTT5Mon" style="display: none; z-index: 1000; position: fixed; width: 535px; height: 280px;">
-            <div style="display: flex;position: absolute;flex-direction: column;align-content: center;justify-content: center;align-items: center;top: 30px;left: -32px;font-size: 12px;font-weight: bold;color: wheat;gap: 6px;">
-                <div id="popupSTT5MonLV1" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; box-shadow: 1px 1px 1px 1px #00000073;"> 
-                    Lv.1
-                </div>
-                <div id="popupSTT5MonLV2" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; box-shadow: 1px 1px 1px 1px #00000073;"> 
-                    Lv.2
-                </div>
-                <div id="popupSTT5MonLV3" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; box-shadow: 1px 1px 1px 1px #00000073;"> 
-                    Lv.3
-                </div>
-                <div id="popupSTT5MonLV4" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; box-shadow: 1px 1px 1px 1px #00000073;"> 
-                    Lv.4
-                </div>
-            </div>
-            
-            <div style="display: flex;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: rgb(240, 226, 201);
-                padding: 10px;
-                border-radius: 10px;
-                box-shadow: rgb(0 0 0 / 20%) 0px 4px 6px;
-                text-align: center;
-                min-width: 250px;">
-                <div style="display: flex; flex-direction: row; gap: 10px; position: relative;">
-                    <div id="imgPopupSTT5Mon" style=" width: 180px; 
-                          height: 250px;
-                          background-image: url('');
-                          background-size: cover;
-                          background-position: center;
-                          background-repeat: no-repeat;
-                          border-radius: 10px;
-                          border: 2px solid rebeccapurple;">
-                    </div>
-                    <div id="pricePopupSTT5Mon"
-                        style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
-                        <i class="fa-solid fa-splotch" style="
-                            position: absolute;
-                        "></i>
-                        <span id="priceTextPopupSTT5Mon" style="position: absolute;font-size: 14px;color: #ffffff;
-                        font-weight: bold;min-width: 25px;top: 4px;left: 1px;
-                        ">
-                            5
-                        </span>
-                    </div>
-                    <div id="rareColorPopupSTT5Mon"
-                        style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
-                        <span id="rareTextPopupSTT5Mon"
-                            style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
-                    </div>
-                    <div id="levelColorPopupSTT5Mon"
-                        style="position: absolute;font-size: 25px;font-weight: bold;color: red;text-shadow: rgba(0, 0, 0, 0.54) 0px 1px 2px;top: 20px;left: 152px;">
-                        <i class="fa-solid fa-diamond"></i>
-                        <span id="levelTextPopupSTT5Mon"
-                            style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: white;font-weight: bold;">2</span>
-                    </div>
-    
-                    <div
-                        style="display: flex; flex-direction: column; min-width: 320px; align-items: center; justify-content: flex-start;">
-                        <h3 id="namePopupSTT5Mon" style="margin: 0;
-                            margin-top: 2px;
-                            font-weight: bold;
-                            color: white;
-                            background: firebrick;
-                            border-bottom-right-radius: 10px;
-                            border-bottom-left-radius: 10px;
-                            pointer-events: none;
-                            width: 100%"></h3>
-                        <div id=""
-                            style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(83, 21, 21);text-shadow: 2px 1px 2px #140a03;top: 3px;right: -180px;width: 100%;">
-                            <span id="allStats5Mon"
-                                style="position: absolute;font-size: 14px;color: #ffd600;font-weight: bold;border-radius: 5px;">⚔️:
-                                206</span>
-                        </div>
-                        <p id="descPopupSTT5Mon" style="background: #fff3dc;
-                        margin: 0px;
-                        border: 6px solid #ff000000;
-                        margin-top: 5px;
+        <div id="popupSTT5Mon" style="display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(240, 226, 201);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: rgb(0 0 0 / 20%) 0px 4px 6px;
+            text-align: center;
+            min-width: 250px;
+            z-index: 1000;">
+            <div style="display: flex; flex-direction: row; gap: 10px; position: relative;">
+                <div id="imgPopupSTT5Mon" style=" width: 180px; 
+                        height: 250px;
+                        background-image: url('');
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
                         border-radius: 10px;
-                        font-size: 12px;
-                        min-height: 170px;
-                        max-height: 170px;
-                        max-width: 320px;
-                        width: 95%;
-                        overflow: auto;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                        text-align: left;
-                        font-weight: normal;
-                        gap: 3px;
-                        box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;">
-                        </p>
-                        <div style="width: 96%; height: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-                        align-content: center;margin-top: 10px;">
-                            <span id="IDcreate5MonPopupSTT5Mon"
-                                style="padding: 4px 10px; color: wheat;  background: rebeccapurple; border-radius: 8px; font-size: 14px;">
-                                "!@#$%^*$#(*^$)"
-                            </span>
-                            <div style="display: flex; flex-direction: row; gap: 4px;">
-                                <button id="buttonPopupSTT5Mon" style="font-weight: bold; padding: 5px 20px; background: rgb(63 117 219); color: white; border-radius: 5px; 
-                                    cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
-                                    box-shadow: rgb(0 0 0 / 69%) 1px 1px 1px 1px; transform: scale(1);"
-                                    onmouseover="this.style.background='rgb(54 157 37)'; this.style.transform='scale(1.05)';"
-                                    onmouseout="this.style.background='rgb(63 117 219)'; this.style.transform='scale(1)';"
-                                    onclick="">
-                                    Thả đi
-                                </button>
-                            </div>
+                        border: 2px solid rebeccapurple;">
+                </div>
+
+                <div style="display: flex;position: absolute;flex-direction: column;align-content: center;justify-content: center;align-items: center;top: 30px;left: -33px;
+                    font-size: 12px;font-weight: bold;color: wheat;gap: 8px; z-index: -1;">
+                    <div id="popupSTT5MonLV1" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.1
+                    </div>
+                    <div id="popupSTT5MonLV2" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.2
+                    </div>
+                    <div id="popupSTT5MonLV3" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.3
+                    </div>
+                    <div id="popupSTT5MonLV4" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.4
+                    </div>
+                </div>
+                <div id="pricePopupSTT5Mon"
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
+                    <i class="fa-solid fa-splotch" style="
+                        position: absolute;
+                    "></i>
+                    <span id="priceTextPopupSTT5Mon" style="position: absolute;font-size: 14px;color: #ffffff;
+                    font-weight: bold;min-width: 25px;top: 4px;left: 1px;
+                    ">
+                        5
+                    </span>
+                </div>
+                <div id="rareColorPopupSTT5Mon"
+                    style="position: absolute;font-size: 25px;font-weight: bold; color: rgb(83, 21, 21); text-shadow: 2px 1px 2px #140a03; top: 12px; left: 164px;">
+                    <span id="rareTextPopupSTT5Mon"
+                        style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: #ffd600; font-weight: bold; background: #ff0000;min-width: 25px; border-radius: 5px;">2</span>
+                </div>
+                <div id="levelColorPopupSTT5Mon"
+                    style="position: absolute;font-size: 25px;font-weight: bold;color: red;text-shadow: rgba(0, 0, 0, 0.54) 0px 1px 2px;top: 20px;left: 152px;">
+                    <i class="fa-solid fa-diamond"></i>
+                    <span id="levelTextPopupSTT5Mon"
+                        style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 14px;color: white;font-weight: bold;">2</span>
+                </div>
+
+                <div
+                    style="display: flex; flex-direction: column; min-width: 320px; align-items: center; justify-content: flex-start;">
+                    <h3 id="namePopupSTT5Mon" style="margin: 0;
+                        margin-top: 2px;
+                        font-weight: bold;
+                        color: white;
+                        background: firebrick;
+                        border-bottom-right-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        pointer-events: none;
+                        width: 100%"></h3>
+                    <div id=""
+                        style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(83, 21, 21);text-shadow: 2px 1px 2px #140a03;top: 3px;right: -180px;width: 100%;">
+                        <span id="allStats5Mon"
+                            style="position: absolute;font-size: 14px;color: #ffd600;font-weight: bold;border-radius: 5px;">⚔️:
+                            206</span>
+                    </div>
+                    <p id="descPopupSTT5Mon" style="background: #fff3dc;
+                    margin: 0px;
+                    border: 6px solid #ff000000;
+                    margin-top: 5px;
+                    border-radius: 10px;
+                    font-size: 12px;
+                    min-height: 170px;
+                    max-height: 170px;
+                    max-width: 340px;
+                    width: 95%;
+                    overflow: auto;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    text-align: left;
+                    font-weight: normal;
+                    gap: 3px;
+                    box-shadow: rgb(175 124 81 / 67%) 1px 2px 3px 2px;">
+                    </p>
+                    <div style="width: 96%; height: 30px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+                    align-content: center;margin-top: 10px;">
+                        <span id="IDcreate5MonPopupSTT5Mon"
+                            style="padding: 4px 10px; color: wheat;  background: rebeccapurple; border-radius: 8px; font-size: 14px;">
+                            "!@#$%^*$#(*^$)"
+                        </span>
+                        <div style="display: flex; flex-direction: row; gap: 4px;">
+                            <button id="buttonPopupSTT5Mon" style="font-weight: bold; padding: 5px 20px; background: rgb(63 117 219); color: white; border-radius: 5px; 
+                                cursor: pointer; transition: background-color 0.3s; border: 2px solid rgba(255, 255, 255, 0.17); 
+                                box-shadow: rgb(0 0 0 / 69%) 1px 1px 1px 1px; transform: scale(1);"
+                                onmouseover="this.style.background='rgb(54 157 37)'; this.style.transform='scale(1.05)';"
+                                onmouseout="this.style.background='rgb(63 117 219)'; this.style.transform='scale(1)';"
+                                onclick="">
+                                Thả đi
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1968,6 +2008,35 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                 </div>
+
+                <div style="display: flex;position: absolute;flex-direction: column;align-content: center;justify-content: center;align-items: center;top: 30px;left: -33px;
+                    font-size: 12px;font-weight: bold;color: wheat;gap: 8px; z-index: -1;">
+                    <div id="popupSTT5MonInBattleLV1" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.1
+                    </div>
+                    <div id="popupSTT5MonInBattleLV2" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.2
+                    </div>
+                    <div id="popupSTT5MonInBattleLV3" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.3
+                    </div>
+                    <div id="popupSTT5MonInBattleLV4" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.4
+                    </div>
+                </div>
+
                 <div id="pricePopupSTT5MonInBattle"
                     style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: -5px;left: -5px;">
                     <i class="fa-solid fa-splotch" style="
@@ -2016,7 +2085,7 @@
                         font-size: 12px;
                         min-height: 210px;
                         max-height: 210px;
-                        max-width: 320px;
+                        max-width: 340px;
                         width: 95%;
                         overflow: auto;
                         display: flex;
@@ -2121,7 +2190,7 @@
             font-size: 13px;
             min-height: 179px;
             max-height: 179px;
-            max-width: 320px;
+            max-width: 340px;
             width: 95%;
             overflow: auto;
             display: flex;
@@ -2182,6 +2251,35 @@
                       border-radius: 10px;
                       border: 2px solid rebeccapurple;">
                 </div>
+
+                <div style="display: flex;position: absolute;flex-direction: column;align-content: center;justify-content: center;align-items: center;top: 30px;left: -33px;
+                    font-size: 12px;font-weight: bold;color: wheat;gap: 8px; z-index: -1;">
+                    <div id="popupImgExchangeLV1" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.1
+                    </div>
+                    <div id="popupImgExchangeLV2" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.2
+                    </div>
+                    <div id="popupImgExchangeLV3" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.3
+                    </div>
+                    <div id="popupImgExchangeLV4" style="background: firebrick; padding: 3px 5px; padding-right: 20px; border-radius: 5px; 
+                        box-shadow: 1px 1px 1px 1px #00000073; cursor: pointer;"
+                        onmouseover="this.style.transform='scale(1.05) translateX(-5px)';"
+                        onmouseout="this.style.transform='scale(1) translateX(0)';">
+                        Lv.4
+                    </div>
+                </div>
+
                 <div id="priceItemPopupExchange"
                     style="position: absolute;font-size: 25px;font-weight: bold;color: rgb(0 88 255);text-shadow: 1px 1px 2px #140a03;top: 3px;left: 3px;">
                     <i class="fa-solid fa-splotch" style="
@@ -2212,7 +2310,7 @@
             font-size: 12px;
             min-height: 179px;
             max-height: 179px;
-            max-width: 320px;
+            max-width: 340px;
             width: 95%;
             overflow: auto;
             display: flex;
