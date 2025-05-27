@@ -445,147 +445,117 @@ function loadAllData() {
 
 function loadAllComp() {
     function updatePowerScale(allPets, objectsToUpdate) {
-                // Duyệt qua từng object trong mảng objectsToUpdate
-                for (const obj of objectsToUpdate) {
-                        const item = obj;
-                        // console.log("item", item)
-                        // console.log("item.ID", item.ID)
-                        const matchedPet = allPets.find(pet => pet.ID === item.ID);
+        // Duyệt qua từng object trong mảng objectsToUpdate
+        for (const obj of objectsToUpdate) {
+                const item = obj;
+                // console.log("item", item)
+                // console.log("item.ID", item.ID)
+                const matchedPet = allPets.find(pet => pet.ID === item.ID);
 
-                        if (matchedPet) {
-                            console.log("Vào đây matchedPet", matchedPet)
-                            // Gán lại POWER.SCALE theo allPets
-                            if (!item.POWER) item.POWER = {};
-                            item.POWER.SCALE = matchedPet.POWER.SCALE;
+                if (matchedPet) {
+                    console.log("Vào đây matchedPet", matchedPet)
+                    // Gán lại POWER.SCALE theo allPets
+                    if (!item.POWER) item.POWER = {};
+                    item.POWER.SCALE = matchedPet.POWER.SCALE;
 
-                            item.PRICE = matchedPet.PRICE
+                    item.PRICE = matchedPet.PRICE
 
-                            //Gắn lại EFFECT 
-                            item.EFFECT = matchedPet.EFFECT
-                            item.SELLUP = matchedPet.SELLUP
-                            item.INTERNAL = matchedPet.INTERNAL
-                            item.TYPE = matchedPet.TYPE
+                    //Gắn lại EFFECT 
+                    item.EFFECT = matchedPet.EFFECT
+                    item.SELLUP = matchedPet.SELLUP
+                    item.INTERNAL = matchedPet.INTERNAL
+                    item.TYPE = matchedPet.TYPE
 
-                            let powerINT = scalePower5Mon(item.POWER.INT);
+                    let powerINT = scalePower5Mon(item.POWER.INT);
 
-                            if (item.EFFECT.includes("Attacking")) {
-                                item.DAME[0] = Math.round(powerINT.dame * item.POWER.SCALE)
-                            } else {
-                                item.DAME[0] = 0
-                            }
+                    if (item.EFFECT.includes("Attacking")) {
+                        item.DAME[0] = Math.round(powerINT.dame * item.POWER.SCALE)
+                    } else {
+                        item.DAME[0] = 0
+                    }
 
-                            if (item.EFFECT.includes("Healing")) {
-                                item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
-                            } else {
-                                item.HEAL[0] = 0
-                            }
+                    if (item.EFFECT.includes("Healing")) {
+                        item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
+                    } else {
+                        item.HEAL[0] = 0
+                    }
 
-                            if (item.EFFECT.includes("Shield")) {
-                                item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
-                            } else {
-                                item.SHIELD[0] = 0
-                            }
+                    if (item.EFFECT.includes("Shield")) {
+                        item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
+                    } else {
+                        item.SHIELD[0] = 0
+                    }
 
-                            if (item.EFFECT.includes("Burn")) {
-                                item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
-                            } else {
-                                item.BURN[0] = 0
-                            }
+                    if (item.EFFECT.includes("Burn")) {
+                        item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
+                    } else {
+                        item.BURN[0] = 0
+                    }
 
-                            if (item.EFFECT.includes("Poison")) {
-                                item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
-                            } else {
-                                item.POISON[0] = 0
-                            }
+                    if (item.EFFECT.includes("Poison")) {
+                        item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
+                    } else {
+                        item.POISON[0] = 0
+                    }
 
-                            //Tính cooldown
-                            let agi = item.POWER.AGI;
-                            let minC = 8;
-                            let maxC = 20;
+                    //Tính cooldown
+                    let agi = item.POWER.AGI;
+                    let minC = 8;
+                    let maxC = 20;
 
-                            let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
+                    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
 
-                            let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
+                    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
 
-                            //tính crit
-                            let luk = item.POWER.LUK;
-                            let maxCrit = 60;
-                            let scaleCrit = 475; // tùy chỉnh
-                            let valueCrit = maxCrit * luk / (luk + scaleCrit);
-                            valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
-                            valueCrit = Math.round(valueCrit * item.POWER.SCALE);
+                    //tính crit
+                    let luk = item.POWER.LUK;
+                    let maxCrit = 60;
+                    let scaleCrit = 475; // tùy chỉnh
+                    let valueCrit = maxCrit * luk / (luk + scaleCrit);
+                    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+                    valueCrit = Math.round(valueCrit * item.POWER.SCALE);
 
-                            //tính def
-                            let def = item.POWER.DEF;
-                            let maxDef = 90;
-                            let scaleDef = 475; // tùy chỉnh
-                            let valueDef = maxDef * def / (def + scaleDef);
-                            valueDef = Math.min(maxDef, Math.max(0, valueDef));
-                            valueDef = Math.round(valueDef * item.POWER.SCALE);
+                    //tính def
+                    let def = item.POWER.DEF;
+                    let maxDef = 90;
+                    let scaleDef = 475; // tùy chỉnh
+                    let valueDef = maxDef * def / (def + scaleDef);
+                    valueDef = Math.min(maxDef, Math.max(0, valueDef));
+                    valueDef = Math.round(valueDef * item.POWER.SCALE);
 
-                            item.DEF[0] = valueDef
-                            item.CRIT[0] = valueCrit
-                            item.COOLDOWN[0] = Math.ceil(valueC)
-
-                        }
+                    item.DEF[0] = valueDef
+                    item.CRIT[0] = valueCrit
+                    item.COOLDOWN[0] = Math.ceil(valueC)
+                    item.URLimg = matchedPet.URLimg
                 }
-            }
+        }
+    }
+    
+    const compUpdateRef = ref(db, `allCompsRound`);
 
-            // allComps.forEach(comp => {
-            //     const skillKeys = Object.keys(comp.slotSkillComp);
-            //     const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
-            //     // Gọi và cập nhật trực tiếp lên object
-            //     updatePowerScale(allPets, skillObjects);
-            // });
+    get(compUpdateRef).then((snapshot) => {
+        const allCompsRound = snapshot.val();
 
-            const allCompsByRound = {};
-
-            // Bước 1: updatePowerScale cho từng comp
-            allComps.forEach(comp => {
+        allCompsRound.forEach(compInRound => {
+            compInRound.forEach(comp => {
                 const skillKeys = Object.keys(comp.slotSkillComp);
                 const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
 
-                // Gọi cập nhật
                 updatePowerScale(allPets, skillObjects);
 
-                // Gán lại skillComp sau khi cập nhật
                 const updatedSlotSkillComp = {};
                 skillKeys.forEach((key, index) => {
                     updatedSlotSkillComp[key] = skillObjects[index];
                 });
                 comp.slotSkillComp = updatedSlotSkillComp;
-
-                // Tạo key dạng round1, round2,...
-                const roundKey = `round${Number(comp.roundComp) || 0}`; // đảm bảo là số
-
-                // Khởi tạo mảng nếu chưa có
-                if (!allCompsByRound[roundKey]) {
-                    allCompsByRound[roundKey] = [];
-                }
-
-                // Đưa vào mảng tương ứng
-                allCompsByRound[roundKey].push(comp);
             });
+        });
 
-            // Bước 2: sắp xếp trong mỗi round theo idComp tăng dần
-            Object.keys(allCompsByRound).forEach(roundKey => {
-                allCompsByRound[roundKey].sort((a, b) => {
-                    const idA = Number(a.idComp);
-                    const idB = Number(b.idComp);
-                    return idA - idB;
-                });
-            });
-
-            console.log("✅ allCompsByRound đã sẵn sàng:", allCompsByRound);
-
-
-
-           const compUpdateRef = ref(db, `allCompsRound`);
-            set(compUpdateRef, allCompsByRound)
-                .then(() => console.log("✅ Cập nhật allCompsByRound thành công"))
-                .catch(err => console.error("❌ Lỗi cập nhật allCompsByRound:", err));
+        return set(compUpdateRef, allCompsRound);
+    })
+    .then(() => console.log("✅ Cập nhật allCompsByRound thành công"))
+    .catch(err => console.error("❌ Lỗi cập nhật allCompsByRound:", err));
 }
-
 
 //Khai báo các biến
 //Thông tin User
@@ -1040,7 +1010,7 @@ function loadDataForUser() {
                             item.DEF[0] = valueDef
                             item.CRIT[0] = valueCrit
                             item.COOLDOWN[0] = Math.ceil(valueC)
-
+                            item.URLimg = matchedPet.URLimg
                         }
                     });
                 }
@@ -1058,23 +1028,9 @@ function loadDataForUser() {
             ];
 
             // Gọi hàm xử lý tất cả
-            updatePowerScale(allPets, allSkillSources); //+++++++++++++
+            updatePowerScale(allPets, allSkillSources);
 
             // Lặp qua từng phần tử trong allComps để cập nhập lại comps
-            allComps.forEach(comp => {
-                const skillKeys = Object.keys(comp.slotSkillComp);
-                const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
-                updatePowerScale(allPets, skillObjects);
-
-                const updatedSlotSkillComp = {};
-                skillKeys.forEach((key, index) => {
-                    updatedSlotSkillComp[key] = skillObjects[index];
-                });
-
-                comp.slotSkillComp = updatedSlotSkillComp;
-            });
-
-            console.log("allComps", allComps)
 
             userDataOld = {
                 passwordUser: password,
@@ -9953,7 +9909,6 @@ function login(isTest) {
                     openFullscreen();
                     loadMap();
                     startStaminaRegen();
-                    // loadAllComp();
                 });
 
             hideLoading();
