@@ -537,7 +537,8 @@ function loadAllComp() {
         const allCompsRound = Object.values(snapshot.val() || {});
 
         allCompsRound.forEach(compInRound => {
-            compInRound.forEach(comp => {
+            const comps = Object.values(compInRound || {});
+            comps.forEach(comp => {
                 const skillKeys = Object.keys(comp.slotSkillComp);
                 const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
 
