@@ -620,13 +620,13 @@ var nowPoisonBattleComp = 0;
 
 let isLogin = false;
 var defaultSTT5Mon = {
-    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0,
 };
 
 var defaultSTT5MonInBattle = {
-    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: "",
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
     BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0, PRICESELL: 0,
 };
@@ -7799,13 +7799,15 @@ function randomSkillinShop() {
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
 
+        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`];
+        
         if (shopDiv) {
             shopDiv.innerHTML = `
             <div 
             id="skill${idSkillRND}" 
             class="skill"
             draggable="true"
-            style="background-image: url('${selectedSkill.URLimg}')"
+            style="background-image: url('${URLimg}')"
             data-skill='{"ID": "${selectedSkill.ID}", "LEVEL": ${selectedSkill.LEVEL}}'>
             </div>`;
 
@@ -7977,13 +7979,16 @@ function randomSkillinShop1() {
         // 9. Đặt kỹ năng vào slot shop
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
+
+        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`];
+        
         if (shopDiv) {
             shopDiv.innerHTML = `
   <div 
     id="skill${idSkillRND}" 
     class="skill"
     draggable="true"
-    style="background-image: url('${selectedSkill.URLimg}')"
+    style="background-image: url('${URLimg}')"
     data-skill='{"ID": "${selectedSkill.ID}", "LEVEL": ${selectedSkill.LEVEL}}'>
   </div>`;
 
@@ -8073,7 +8078,8 @@ function createSkill(slotDiv) {
         const skillCompSlot = slotDiv === "shop" ? `battleShop${i + 1}` : slotDiv === "skillComp" ? `skill${i + 1}A` : slotDiv === "inventory" ? `battleInv${i + 1}` : slotDiv === "slotSkillFn" ? `skill${i + 1}Bfn` : `skill${i + 1}B`;
 
         let skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-
+        let URLimg = skillItem[skillCompSlot].URLimg[`Lv${skillItem[skillCompSlot].LEVEL}`];
+        
         if ((skillCompDiv && skillItem[skillCompSlot] && skillItem[skillCompSlot].ID)) {
             console.log("Vào đây 2")
             skillCompDiv.innerHTML += `
@@ -8081,7 +8087,7 @@ function createSkill(slotDiv) {
       id="skill${idSkillRND}" 
       class="skill"
       draggable="true"
-      style="background-image: url('${skillItem[skillCompSlot].URLimg}')"
+      style="background-image: url('${URLimg}')"
       data-skill='{"ID": "${skillItem[skillCompSlot].ID}", "LEVEL": ${skillItem[skillCompSlot].LEVEL}}'>
     </div>`;
             let dameSkillText = ``; // Dùng let có thể thay đổi được biến, còn dùng const không được
@@ -10055,7 +10061,9 @@ function loadItemBagLeft(sort) {
         skillDiv.onmouseout = function () {
             this.style.transform = "scale(1)";
         };
-        skillDiv.style.backgroundImage = `url(${item.URLimg})`; // Đặt URL hình ảnh
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`];
+        
+        skillDiv.style.backgroundImage = `url(${URLimg})`; // Đặt URL hình ảnh
         skillDiv.draggable = true; // Đặt thuộc tính draggable
         skillDiv.dataset.id = item.ID; // Gắn dữ liệu ID
         skillDiv.dataset.idcreate = item.IDcreate; // Gắn dữ liệu ID
@@ -10345,7 +10353,8 @@ function loadItemBagRight(sort) {
         skillDiv.onmouseout = function () {
             this.style.transform = "scale(1)";
         };
-        skillDiv.style.backgroundImage = `url(${item.URLimg})`; // Đặt URL hình ảnh
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`];
+        skillDiv.style.backgroundImage = `url(${URLimg})`; // Đặt URL hình ảnh
         skillDiv.draggable = true; // Đặt thuộc tính draggable
         skillDiv.dataset.id = item.ID; // Gắn dữ liệu ID
         skillDiv.dataset.idcreate = item.IDcreate; // Gắn dữ liệu ID
@@ -10659,19 +10668,16 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     const popup = document.getElementById("popupSTT5Mon");
     const overlay = document.getElementById("popupOverlay");
 
-    let url5Mon = item.URLimg;
+    let URLimg = item.URLimg[`Lv${item.LEVEL}`];
+    
     let colorLevel = "#531515";
     if (level === 2) {
-        url5Mon = "" || item.URLimg
         colorLevel = "#8c0b0b"
     } else if (level === 3) {
-        url5Mon = "" || item.URLimg
         colorLevel = "#c00d0d"
     } else if (level === 4) {
-        url5Mon = "" || item.URLimg
         colorLevel = "red"
     } else {
-        url5Mon = item.URLimg
         colorLevel = "#531515"
     }
     
@@ -10737,7 +10743,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     let defFn = Math.round(valueDef * 100) / 100;
     let cooldown = Math.ceil(valueC);
     
-    document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + url5Mon + "')";
+    document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
     document.getElementById("allStats5Mon").textContent = `⚔️: ${allStat}`;
     document.getElementById("levelTextPopupSTT5Mon").textContent = level;
@@ -11338,19 +11344,16 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
 
     document.getElementById(`popupSTT5MonInBattleLV${skillInfo.LEVEL}`).style.background = "rebeccapurple";
 
-    let url5Mon = skillInfo.URLimg;
+    let URLimg = skillInfo.URLimg[`Lv${skillInfo.LEVEL}`];
+    
     let colorLevel = "#531515";
     if (level === 2) {
-        url5Mon = "" || skillInfo.URLimg
         colorLevel = "#8c0b0b"
     } else if (level === 3) {
-        url5Mon = "" || skillInfo.URLimg
         colorLevel = "#c00d0d"
     } else if (level === 4) {
-        url5Mon = "" || skillInfo.URLimg
         colorLevel = "red"
     } else {
-        url5Mon = skillInfo.URLimg
         colorLevel = "#531515"
     }
 
@@ -11453,7 +11456,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
     let defFn = Math.round(valueDef * 100) / 100;
     let cooldown = Math.ceil(valueC);
 
-    document.getElementById("imgPopupSTT5MonInBattle").style.backgroundImage = "url('" + url5Mon + "')";
+    document.getElementById("imgPopupSTT5MonInBattle").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5MonInBattle").textContent = skillInfo.NAME;
     document.getElementById("allStats5MonInBattle").textContent = `⚔️: ${allStat}`;
     document.getElementById("levelTextPopupSTT5MonInBattle").textContent = level;
@@ -12180,7 +12183,7 @@ function gacha5Mon(isX5) {
 
         for (let i = 0; i < totalImages; i++) {
             let img = document.createElement("img");
-            img.src = filteredPets[Math.floor(Math.random() * filteredPets.length)].URLimg;
+            img.src = filteredPets[Math.floor(Math.random() * filteredPets.length)].URLimg[Lv1];
             images.push(img);
         }
 
@@ -12400,7 +12403,7 @@ function getRandom5mon() {
 function createSkillGacha(i) {
     const skillCompSlot = `skill${i + 1}S`;
     let skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-
+    let URLimg = randomPet[skillCompSlot].URLimg[`Lv${randomPet[skillCompSlot].LEVEL}`];
     //Tạo 5mon ở slot i
     if ((skillCompDiv && randomPet && randomPet[skillCompSlot].ID)) {
         console.log("Vào đây 2")
@@ -12409,7 +12412,7 @@ function createSkillGacha(i) {
       id="skillGacha${i + 1}" 
       class="skill"
       draggable="true"
-      style="background-image: url('${randomPet[skillCompSlot].URLimg}')"
+      style="background-image: url('${URLimg}')"
       data-skill='{"ID": "${randomPet[skillCompSlot].ID}", "LEVEL": ${randomPet[skillCompSlot].LEVEL}}'>
     </div>`;
         let dameSkillText = ``; // Dùng let có thể thay đổi được biến, còn dùng const không được
@@ -12566,7 +12569,8 @@ function addItemForExchangePage(rowId, itemList) {
 
         // Thêm hình ảnh
         const img = document.createElement("img");
-        img.src = item.URLimg;
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`];
+        img.src = URLimg;
         img.style.cssText = "height: 75px; object-fit: cover; pointer-events: none;";
 
         // Thêm tên item
@@ -12627,7 +12631,9 @@ function setupPopupEventsExchangePage(itemList) {
         const itemDiv = document.getElementById(item.ID);
         itemDiv.addEventListener("click", () => {
 
-            document.getElementById("popupImgExchange").style.backgroundImage = "url('" + item.URLimg + "')";
+            let URLimg = item.URLimg[`Lv${item.LEVEL}`];
+            
+            document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
             document.getElementById("popupNameExchange").textContent = item.NAME;
             document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
 
@@ -12642,19 +12648,9 @@ function setupPopupEventsExchangePage(itemList) {
                 if (!el) continue;
                 el.onclick = () => {
                     
-                    let url5Mon = item.URLimg;
+                    let URLimg = item.URLimg[`Lv${item.LEVEL}`];
 
-                    if (s === 2) {
-                        url5Mon = "" || item.URLimg
-                    } else if (s === 3) {
-                        url5Mon = "" || item.URLimg
-                    } else if (s === 4) {
-                        url5Mon = "" || item.URLimg
-                    } else {
-                        url5Mon = item.URLimg
-                    }
-
-                    document.getElementById("popupImgExchange").style.backgroundImage = "url('" + url5Mon + "')";
+                    document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
 
                     for (let k = 1; k <= 4; k++) {
                         document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
@@ -13975,7 +13971,9 @@ function catch5Mon() {
 
 
     // Hiển thị popup
-    document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + is5MonMeet.URLimg + "')";
+    let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`];
+    
+    document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5MonMeet").textContent = is5MonMeet.NAME;
     document.getElementById("allStats5MonMeet").textContent = `⚔️: ${is5MonMeet.POWER.STR + is5MonMeet.POWER.DEF + is5MonMeet.POWER.INT + is5MonMeet.POWER.AGI + is5MonMeet.POWER.LUK + is5MonMeet.POWER.HP}`;
     document.getElementById("rareTextPopupSTT5MonMeet").textContent = `${is5MonMeet.RARE}`;
@@ -13993,19 +13991,9 @@ function catch5Mon() {
         if (!el) continue;
         el.onclick = () => {
             
-            let url5Mon = is5MonMeet.URLimg;
+            let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`];
 
-            if (s === 2) {
-                url5Mon = "" || is5MonMeet.URLimg
-            } else if (s === 3) {
-                url5Mon = "" || is5MonMeet.URLimg
-            } else if (s === 4) {
-                url5Mon = "" || is5MonMeet.URLimg
-            } else {
-                url5Mon = is5MonMeet.URLimg
-            }
-
-            document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + url5Mon + "')";
+            document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
 
             for (let k = 1; k <= 4; k++) {
                 document.getElementById(`popupMeet5MonLV${k}`).style.background = "firebrick";
