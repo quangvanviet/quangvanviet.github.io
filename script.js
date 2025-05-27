@@ -7801,7 +7801,7 @@ function randomSkillinShop() {
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
 
-        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg[Lv1];
+        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg['Lv1'];
         
         if (shopDiv) {
             shopDiv.innerHTML = `
@@ -7982,7 +7982,7 @@ function randomSkillinShop1() {
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
 
-        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg[Lv1];
+        let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg['Lv1'];
         
         if (shopDiv) {
             shopDiv.innerHTML = `
@@ -8080,7 +8080,7 @@ function createSkill(slotDiv) {
         const skillCompSlot = slotDiv === "shop" ? `battleShop${i + 1}` : slotDiv === "skillComp" ? `skill${i + 1}A` : slotDiv === "inventory" ? `battleInv${i + 1}` : slotDiv === "slotSkillFn" ? `skill${i + 1}Bfn` : `skill${i + 1}B`;
 
         let skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-        let URLimg = skillItem[skillCompSlot].URLimg[`Lv${skillItem[skillCompSlot].LEVEL}`] || skillItem[skillCompSlot].URLimg[Lv1]; 
+        let URLimg = skillItem[skillCompSlot].URLimg[`Lv${skillItem[skillCompSlot].LEVEL}`] || skillItem[skillCompSlot].URLimg['Lv1']; 
         
         if ((skillCompDiv && skillItem[skillCompSlot] && skillItem[skillCompSlot].ID)) {
             console.log("Vào đây 2")
@@ -10064,7 +10064,7 @@ function loadItemBagLeft(sort) {
         skillDiv.onmouseout = function () {
             this.style.transform = "scale(1)";
         };
-        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
         
         skillDiv.style.backgroundImage = `url(${URLimg})`; // Đặt URL hình ảnh
         skillDiv.draggable = true; // Đặt thuộc tính draggable
@@ -10356,7 +10356,7 @@ function loadItemBagRight(sort) {
         skillDiv.onmouseout = function () {
             this.style.transform = "scale(1)";
         };
-        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
         skillDiv.style.backgroundImage = `url(${URLimg})`; // Đặt URL hình ảnh
         skillDiv.draggable = true; // Đặt thuộc tính draggable
         skillDiv.dataset.id = item.ID; // Gắn dữ liệu ID
@@ -10671,7 +10671,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     const popup = document.getElementById("popupSTT5Mon");
     const overlay = document.getElementById("popupOverlay");
 
-    let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+    let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
     
     let colorLevel = "#531515";
     if (level === 2) {
@@ -11347,7 +11347,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
 
     document.getElementById(`popupSTT5MonInBattleLV${skillInfo.LEVEL}`).style.background = "rebeccapurple";
 
-    let URLimg = skillInfo.URLimg[`Lv${skillInfo.LEVEL}`] || skillInfo.URLimg[Lv1];
+    let URLimg = skillInfo.URLimg[`Lv${skillInfo.LEVEL}`] || skillInfo.URLimg['Lv1'];
     
     let colorLevel = "#531515";
     if (level === 2) {
@@ -12186,7 +12186,7 @@ function gacha5Mon(isX5) {
 
         for (let i = 0; i < totalImages; i++) {
             let img = document.createElement("img");
-            img.src = filteredPets[Math.floor(Math.random() * filteredPets.length)].URLimg[Lv1];
+            img.src = filteredPets[Math.floor(Math.random() * filteredPets.length)].URLimg['Lv1'];
             images.push(img);
         }
 
@@ -12406,7 +12406,7 @@ function getRandom5mon() {
 function createSkillGacha(i) {
     const skillCompSlot = `skill${i + 1}S`;
     let skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-    let URLimg = randomPet[skillCompSlot].URLimg[`Lv${randomPet[skillCompSlot].LEVEL}`] || randomPet[skillCompSlot].URLimg[Lv1];
+    let URLimg = randomPet[skillCompSlot].URLimg[`Lv${randomPet[skillCompSlot].LEVEL}`] || randomPet[skillCompSlot].URLimg['Lv1'];
     //Tạo 5mon ở slot i
     if ((skillCompDiv && randomPet && randomPet[skillCompSlot].ID)) {
         console.log("Vào đây 2")
@@ -12572,7 +12572,7 @@ function addItemForExchangePage(rowId, itemList) {
 
         // Thêm hình ảnh
         const img = document.createElement("img");
-        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
         img.src = URLimg;
         img.style.cssText = "height: 75px; object-fit: cover; pointer-events: none;";
 
@@ -12634,7 +12634,7 @@ function setupPopupEventsExchangePage(itemList) {
         const itemDiv = document.getElementById(item.ID);
         itemDiv.addEventListener("click", () => {
 
-            let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+            let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
             
             document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
             document.getElementById("popupNameExchange").textContent = item.NAME;
@@ -12651,7 +12651,7 @@ function setupPopupEventsExchangePage(itemList) {
                 if (!el) continue;
                 el.onclick = () => {
                     
-                    let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg[Lv1];
+                    let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
 
                     document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
 
@@ -13974,7 +13974,7 @@ function catch5Mon() {
 
 
     // Hiển thị popup
-    let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg[Lv1];
+    let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg['Lv1'];
     
     document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5MonMeet").textContent = is5MonMeet.NAME;
@@ -13994,7 +13994,7 @@ function catch5Mon() {
         if (!el) continue;
         el.onclick = () => {
             
-            let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg[Lv1];
+            let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg['Lv1'];
 
             document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
 
