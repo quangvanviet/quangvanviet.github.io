@@ -535,9 +535,10 @@ function loadAllComp() {
 
     get(compUpdateRef).then((snapshot) => {
         const allCompsRound = Object.values(snapshot.val() || {});
-
+        console.log('allCompsRound',allCompsRound)
         allCompsRound.forEach(compInRound => {
             const comps = Object.values(compInRound || {});
+            console.log('comps',comps)
             comps.forEach(comp => {
                 const skillKeys = Object.keys(comp.slotSkillComp);
                 const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
