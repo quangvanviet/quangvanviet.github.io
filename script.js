@@ -4303,7 +4303,6 @@ function loadEventSlotBattle() {
 
                         typeGameConquest.selectSkillShop += 1
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
-
                     } else if (
                         (typeGameConquest.battlePetInShop[skill.parentElement.id].ID === typeGameConquest.skillBattle[slot.id].ID 
                         && Number(typeGameConquest.battlePetInShop[skill.parentElement.id].LEVEL) === Number(typeGameConquest.skillBattle[slot.id].LEVEL) 
@@ -4379,11 +4378,8 @@ function loadEventSlotBattle() {
 
                 } else {
 
-                    if (
-                        typeGameConquest.battlePetInShop[skill.parentElement.id].EFFECT.includes("stoneUpMulti")
-                        || typeGameConquest.battlePetInShop[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
-                        
+                    if (typeGameConquest.battlePetInShop[skill.parentElement.id].ID.startsWith("S")) {
+                        //Nếu là đá cường hóa
                         return;
                     }
 
@@ -4432,7 +4428,6 @@ function loadEventSlotBattle() {
             } else if (parentSlot.parentElement.id == "battleInventory") {//Kéo từ tủ đồ xuống
                 console.log("Kéo từ tủ đồ 1")
                 if (slot.classList.contains("occupied")) { // Kiểm tra slot có skill chưa
-                    
                     if (typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpMulti")) {
                         typeGameConquest.battlePetUseSlotRound[slot.id].COOLDOWN[2] += 1
                         typeGameConquest.battlePetUseSlotRound[slot.id].PRICESELL += typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
@@ -4550,11 +4545,8 @@ function loadEventSlotBattle() {
                     }
 
                 } else {
-                    if (
-                        typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpMulti")
-                        || typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
-                        
+                    if (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID.startsWith("S")) {
+                        //Kiểm tra xem có phải đá nâng cấp không
                         return;
                     }
                     
