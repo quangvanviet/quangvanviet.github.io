@@ -4040,7 +4040,8 @@ function checkUpdateLevel() {
 
                 if (
                     otherSkill.ID === currentSkill.ID &&
-                    otherSkill.LEVEL === currentSkill.LEVEL
+                    otherSkill.LEVEL === currentSkill.LEVEL &&
+                    otherSkill !== currentSkill
                 ) {
 
                     // ✅ Thêm hiệu ứng vào div cha
@@ -4526,7 +4527,7 @@ function loadEventSlotBattle() {
                     } else {
 
 
-                        // Đổi chỗ dữ liệu trong typeGameConquest.skillBattle và battlePetInInventory
+                        // Đổi chỗ dữ liệu trong typeGameConquest.skillBattle và battlePetInInventory 
                         const tempSkill = typeGameConquest.battlePetInInventory[skill.parentElement.id];
                         typeGameConquest.battlePetInInventory[skill.parentElement.id] = typeGameConquest.skillBattle[slot.id];
                         typeGameConquest.skillBattle[slot.id] = tempSkill;
@@ -6951,11 +6952,25 @@ function openGameRank() {
                     typeGameConquest.slowA = selectedComp.slowA;
                     typeGameConquest.upCooldownA = selectedComp.upCooldownA;
                     typeGameConquest.maxHpBattleComp = selectedComp.maxHpBattleComp;
-                    document.getElementById("textNameComp").innerText = typeGameConquest.nameComp;
+                    
+                    document.getElementById("textNameComp").innerText = typeGameConquest.nameComp;  
                     // Gán thông tin kỹ năng của đối thủ vào typeGameConquest.skillBattle
                     for (let i = 1; i <= 9; i++) {
                         const skillKey = `skill${i}A`;
                         if (selectedComp.slotSkillComp[skillKey]) {
+
+                            if (selectedComp.slotSkillComp[skillKey].ID) {
+                                let sLvUpSTR, sLvUpDEF, sLvUpINT, sLvUpAGI, sLvUpLUK, sLvUpHP
+                                sLvUpSTR = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.STR);
+                                sLvUpDEF = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.DEF);
+                                sLvUpINT = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.INT);
+                                sLvUpAGI = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.AGI);
+                                sLvUpLUK = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.LUK);
+                                sLvUpHP = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.HP);
+                                
+                                selectedComp.slotSkillComp[skillKey].LVUPSCALE = {STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP}
+                            }
+
                             typeGameConquest.skillBattle[skillKey] = { ...selectedComp.slotSkillComp[skillKey] };
                         }
                     }
@@ -9917,7 +9932,7 @@ function login(isTest) {
                     openFullscreen();
                     loadMap();
                     startStaminaRegen();
-                    loadAllComp();
+                    // loadAllComp();
                 });
 
             hideLoading();
@@ -12124,7 +12139,7 @@ function gacha5Mon(isX5) {
     }
 
     //Kiểm tra đủ vàng để gacha không
-    let goldNeed = isX5?15000:5000
+    let goldNeed = isX5?15:5
     if (goldUser < goldNeed) {
         messageOpen(`Không đủ ${goldNeed} vàng`);
         return;
@@ -12246,6 +12261,16 @@ var rareStats = {
     SSR: { min: 310, max: 350 }
 };
 
+var rareStats1 = {
+    D: { sttMin: 150, sttMax: 200, max: 100 },
+    C: { sttMin: 201, sttMax: 250, max: 120 },
+    B: { sttMin: 251, sttMax: 300, max: 140 },
+    A: { sttMin: 301, sttMax: 350, max: 160 },
+    S: { sttMin: 351, sttMax: 400, max: 180 },
+    SS: { sttMin: 401, sttMax: 450, max: 200 },
+    SSR: { sttMin: 451, sttMax: 500, max: 220 }
+};
+
 function randomPet5Mon() {
 
     //rd pet5Mon
@@ -12262,34 +12287,53 @@ function randomPet5Mon() {
     //rd chỉ số
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
     else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    else if (rand < 25) rare = 'B';
+    else if (rand < 45) rare = 'C';
     else rare = 'D';
 
-    const { min: minSTT, max: maxSTT } = rareStats[rare];
+    // const { min: minSTT, max: maxSTT } = rareStats[rare];
+
+    const { sttMin: pointMin, sttMax: pointMax, max: maxPointUp } = rareStats1[rare];
+
+    const randStat = () => Math.floor(Math.random() * (maxPointUp - 10 + 1)) + 10;
 
     let str, def, int, agi, luk, hp, total;
 
+    let attempts = 0;
     do {
-        total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
-
-        str = Math.floor(Math.random() * (total + 1));
-        def = Math.floor(Math.random() * (total + 1));
-        int = Math.floor(Math.random() * (total + 1));
-        agi = Math.floor(Math.random() * (total + 1));
-        luk = Math.floor(Math.random() * (total + 1));
-        hp = Math.floor(Math.random() * (total + 1));
-
-    } while ((str + def + int + agi + luk + hp > total)
-    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 10
-    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
-    || str + def + int + agi + luk + hp > maxSTT
-        || str + def + int + agi + luk + hp < minSTT
+        str = randStat();
+        def = randStat();
+        int = randStat();
+        agi = randStat();
+        luk = randStat();
+        hp = randStat();
+        total = str + def + int + agi + luk + hp;
+        attempts++;
+    } while (
+        (total > pointMax || total < pointMin) &&
+        attempts < 1000
     );
+
+    // do {
+    //     total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
+
+    //     str = Math.floor(Math.random() * (total + 1));
+    //     def = Math.floor(Math.random() * (total + 1));
+    //     int = Math.floor(Math.random() * (total + 1));
+    //     agi = Math.floor(Math.random() * (total + 1));
+    //     luk = Math.floor(Math.random() * (total + 1));
+    //     hp = Math.floor(Math.random() * (total + 1));
+
+    // } while ((str + def + int + agi + luk + hp > total)
+    // || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 10
+    // || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
+    // || str + def + int + agi + luk + hp > maxSTT
+    //     || str + def + int + agi + luk + hp < minSTT
+    // );
 
     return {
         ID: e5mon.ID,
@@ -12894,34 +12938,54 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
     //rd chỉ số
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
     else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    else if (rand < 25) rare = 'B';
+    else if (rand < 45) rare = 'C';
     else rare = 'D';
 
-    const { min: minSTT, max: maxSTT } = rareStats[rare];
+    const { sttMin: pointMin, sttMax: pointMax, max: maxPointUp } = rareStats1[rare];
+    const randStat = () => Math.floor(Math.random() * (maxPointUp - 10 + 1)) + 10;
 
     let str, def, int, agi, luk, hp, total;
 
+    let attempts = 0;
     do {
-        total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
-
-        str = Math.floor(Math.random() * (total + 1));
-        def = Math.floor(Math.random() * (total + 1));
-        int = Math.floor(Math.random() * (total + 1));
-        agi = Math.floor(Math.random() * (total + 1));
-        luk = Math.floor(Math.random() * (total + 1));
-        hp = Math.floor(Math.random() * (total + 1));
-
-    } while ((str + def + int + agi + luk + hp > total)
-    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 10
-    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
-    || str + def + int + agi + luk + hp > maxSTT
-        || str + def + int + agi + luk + hp < minSTT
+        str = randStat();
+        def = randStat();
+        int = randStat();
+        agi = randStat();
+        luk = randStat();
+        hp = randStat();
+        total = str + def + int + agi + luk + hp;
+        attempts++;
+    } while (
+        (total > pointMax || total < pointMin) &&
+        attempts < 1000
     );
+    
+    // const { min: minSTT, max: maxSTT } = rareStats[rare];
+
+    // let str, def, int, agi, luk, hp, total;
+
+    // do {
+    //     total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
+
+    //     str = Math.floor(Math.random() * (total + 1));
+    //     def = Math.floor(Math.random() * (total + 1));
+    //     int = Math.floor(Math.random() * (total + 1));
+    //     agi = Math.floor(Math.random() * (total + 1));
+    //     luk = Math.floor(Math.random() * (total + 1));
+    //     hp = Math.floor(Math.random() * (total + 1));
+
+    // } while ((str + def + int + agi + luk + hp > total)
+    // || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 10
+    // || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
+    // || str + def + int + agi + luk + hp > maxSTT
+    //     || str + def + int + agi + luk + hp < minSTT
+    // );
 
     //Lấy ID5mon mới
     let maxID = 0;
@@ -13862,34 +13926,54 @@ function catch5Mon() {
 
     const rand = Math.random() * 100;
     let rare = '';
-    if (rand < 0.1) rare = 'SSR';
-    else if (rand < 0.25) rare = 'SS';
-    else if (rand < 0.8) rare = 'S';
+    if (rand < 0.5) rare = 'SSR';
+    else if (rand < 1) rare = 'SS';
+    else if (rand < 2) rare = 'S';
     else if (rand < 5) rare = 'A';
-    else if (rand < 35) rare = 'B';
-    else if (rand < 65) rare = 'C';
+    else if (rand < 25) rare = 'B';
+    else if (rand < 45) rare = 'C';
     else rare = 'D';
 
-    const { min: minSTT, max: maxSTT } = rareStats[rare];
+    const { sttMin: pointMin, sttMax: pointMax, max: maxPointUp } = rareStats1[rare];
+    const randStat = () => Math.floor(Math.random() * (maxPointUp - 10 + 1)) + 10;
 
     let str, def, int, agi, luk, hp, total;
 
+    let attempts = 0;
     do {
-        total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
-
-        str = Math.floor(Math.random() * (total + 1));
-        def = Math.floor(Math.random() * (total + 1));
-        int = Math.floor(Math.random() * (total + 1));
-        agi = Math.floor(Math.random() * (total + 1));
-        luk = Math.floor(Math.random() * (total + 1));
-        hp = Math.floor(Math.random() * (total + 1));
-
-    } while ((str + def + int + agi + luk + hp > total)
-    || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
-    || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
-    || str + def + int + agi + luk + hp > maxSTT
-        || str + def + int + agi + luk + hp < minSTT
+        str = randStat();
+        def = randStat();
+        int = randStat();
+        agi = randStat();
+        luk = randStat();
+        hp = randStat();
+        total = str + def + int + agi + luk + hp;
+        attempts++;
+    } while (
+        (total > pointMax || total < pointMin) &&
+        attempts < 1000
     );
+
+    // const { min: minSTT, max: maxSTT } = rareStats[rare];
+
+    // let str, def, int, agi, luk, hp, total;
+
+    // do {
+    //     total = Math.floor(Math.random() * (maxSTT - minSTT + 1)) + minSTT;
+
+    //     str = Math.floor(Math.random() * (total + 1));
+    //     def = Math.floor(Math.random() * (total + 1));
+    //     int = Math.floor(Math.random() * (total + 1));
+    //     agi = Math.floor(Math.random() * (total + 1));
+    //     luk = Math.floor(Math.random() * (total + 1));
+    //     hp = Math.floor(Math.random() * (total + 1));
+
+    // } while ((str + def + int + agi + luk + hp > total)
+    // || str < 10 || def < 10 || int < 10 || agi < 10 || luk < 10 || hp < 30
+    // || str > 250 || def > 250 || int > 250 || agi > 250 || luk > 250 || hp > 250
+    // || str + def + int + agi + luk + hp > maxSTT
+    //     || str + def + int + agi + luk + hp < minSTT
+    // );
 
     //Lấy ID5mon mới
     let maxID = 0;
@@ -14212,21 +14296,21 @@ function catch5Mon() {
     }
 
     const ranges = [
-        { min: 1, max: 5, weight: 20 },    // nhiều nhất
-        { min: 5, max: 10, weight: 15 },
-        { min: 10, max: 15, weight: 12 },
-        { min: 15, max: 20, weight: 10 },
+        { min: 1, max: 5, weight: 1 },    // nhiều nhất
+        { min: 5, max: 10, weight: 1 },
+        { min: 10, max: 15, weight: 1 },
+        { min: 15, max: 20, weight: 2 },
         { min: 20, max: 25, weight: 8 },
         { min: 25, max: 30, weight: 7 },
         { min: 30, max: 35, weight: 6 },
         { min: 35, max: 40, weight: 5 },
-        { min: 40, max: 45, weight: 4 },
-        { min: 45, max: 50, weight: 3 },
-        { min: 50, max: 55, weight: 2 },
-        { min: 55, max: 60, weight: 2 },
-        { min: 60, max: 65, weight: 1 },
-        { min: 65, max: 70, weight: 1 },
-        { min: 70, max: 75, weight: 1 },
+        { min: 40, max: 45, weight: 20 },
+        { min: 45, max: 50, weight: 15 },
+        { min: 50, max: 55, weight: 12 },
+        { min: 55, max: 60, weight: 10 },
+        { min: 60, max: 65, weight: 4 },
+        { min: 65, max: 70, weight: 3 },
+        { min: 70, max: 75, weight: 2 },
         { min: 75, max: 80, weight: 1 },
         { min: 80, max: 85, weight: 1 },
         { min: 85, max: 90, weight: 0.5 },
@@ -14733,10 +14817,10 @@ toggleMusicClick.addEventListener("click", () => {
     clickSoundMuted = !clickSoundMuted;
     if (audio.muted) {
         audio.muted = false;
-        toggleMusicBtnClick.textContent = "🔊";
+        toggleMusicClick.textContent = "🔊";
     } else {
         audio.muted = true;
-        toggleMusicBtnClick.textContent = "🔇";
+        toggleMusicClick.textContent = "🔇";
     }
 });
 
@@ -14764,7 +14848,7 @@ document.addEventListener("keydown", function (e) {
 
 //Hàm tính scale mỗi khi nâng cấp level
 function getScaleLevelUp(power) {
-    return 1 + ((power - 10) / (250 - 10));  // nội suy từ 1 → 2
+    return 1 + ((power - 10) / (100 - 10));  // nội suy từ 1 → 2
 }
 
 // Gán các hàm vào window
