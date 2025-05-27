@@ -9915,6 +9915,7 @@ function login(isTest) {
                     openFullscreen();
                     loadMap();
                     startStaminaRegen();
+                    loadAllComp();
                 });
 
             hideLoading();
