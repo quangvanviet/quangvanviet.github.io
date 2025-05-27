@@ -534,29 +534,37 @@ function loadAllComp() {
     const compUpdateRef = ref(db, `allCompsRound`);
 
     get(compUpdateRef).then((snapshot) => {
-        const allCompsRound = Object.values(snapshot.val() || {});
-        console.log('allCompsRound',allCompsRound)
-        allCompsRound.forEach(compInRound => {
-            const comps = Object.values(compInRound || {});
-            console.log('comps',comps)
-            comps.forEach(comp => {
+        const allCompsRound = snapshot.val() || {};
+        
+        for (const roundKey in allCompsRound) {
+            const compInRound = allCompsRound[roundKey];
+    
+            // Bỏ qua nếu compInRound không phải object
+            if (typeof compInRound !== 'object' || compInRound === null) continue;
+    
+            for (const compKey in compInRound) {
+                const comp = compInRound[compKey];
+    
+                if (!comp || typeof comp.slotSkillComp !== 'object') continue;
+    
                 const skillKeys = Object.keys(comp.slotSkillComp);
                 const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
-
+    
                 updatePowerScale(allPets, skillObjects);
-
+    
                 const updatedSlotSkillComp = {};
                 skillKeys.forEach((key, index) => {
                     updatedSlotSkillComp[key] = skillObjects[index];
                 });
                 comp.slotSkillComp = updatedSlotSkillComp;
-            });
-        });
-
+            }
+        }
+    
         return set(compUpdateRef, allCompsRound);
     })
     .then(() => console.log("✅ Cập nhật allCompsByRound thành công"))
     .catch(err => console.error("❌ Lỗi cập nhật allCompsByRound:", err));
+
 }
 
 //Khai báo các biến
