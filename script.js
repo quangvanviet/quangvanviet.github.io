@@ -12171,7 +12171,7 @@ function gacha5Mon(isX5) {
         slotElement.innerHTML = "";
         slotElement.appendChild(container);
 
-        let finalPet = randomPet[slotKey].URLimg;
+        let finalPet = randomPet[slotKey].URLimg['Lv1'];
         chosenPets.push(finalPet);
 
         // Chứa danh sách ảnh để quay
