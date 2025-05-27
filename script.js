@@ -534,7 +534,7 @@ function loadAllComp() {
     const compUpdateRef = ref(db, `allCompsRound`);
 
     get(compUpdateRef).then((snapshot) => {
-        const allCompsRound = snapshot.val();
+        const allCompsRound = Object.values(snapshot.val() || {});
 
         allCompsRound.forEach(compInRound => {
             compInRound.forEach(comp => {
