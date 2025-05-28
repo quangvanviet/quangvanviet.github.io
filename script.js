@@ -4526,23 +4526,43 @@ function loadEventSlotBattle() {
 
                     } else {
 
-
                         // Đổi chỗ dữ liệu trong typeGameConquest.skillBattle và battlePetInInventory 
                         const tempSkill = typeGameConquest.battlePetInInventory[skill.parentElement.id];
-                        typeGameConquest.battlePetInInventory[skill.parentElement.id] = typeGameConquest.skillBattle[slot.id];
-                        typeGameConquest.skillBattle[slot.id] = tempSkill;
-
-                        // Đổi chỗ skill trong HTML
-                        const currentSkill = slot.querySelector(".skill"); // Skill hiện tại trong slot
-                        const parentSkill = skill; // Skill từ parentSlot
-
-                        if (currentSkill && parentSkill) {
-                            const parentSlot = parentSkill.parentElement;
-                            parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
-                            slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
+                        const targetSkill = typeGameConquest.skillBattle[slot.id];
+                        // Kiểm tra xem skill này đã có trong skillBattle chưa (chỉ kiểm các key kết thúc bằng "B")
+                        let existsInBattle = false;
+                        for (const key in typeGameConquest.skillBattle) {
+                            console.log()
+                            if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === tempSkill.ID && key !== slot.id) {
+                                existsInBattle = true;
+                                break;
+                            }
                         }
 
-                        console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
+                        if (existsInBattle) {
+                            console.warn("Skill đã tồn tại trong skillBattle, không thể hoán đổi.");
+                            return; // Dừng thao tác đổi chỗ
+                        } else {
+                            typeGameConquest.battlePetInInventory[skill.parentElement.id] = targetSkill;
+                            typeGameConquest.skillBattle[slot.id] = tempSkill;
+
+                            // Đổi chỗ skill trong HTML
+                            const currentSkill = slot.querySelector(".skill") // Skill hiện tại trong slot
+                            const parentSkill = skill; // Skill từ parentSlot
+
+                            if (currentSkill && parentSkill) {
+                                const parentSlot = parentSkill.parentElement;
+                                parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
+                                slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
+                                console.warn("Đã hoán đổi 2.");
+                            }
+                            console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
+                            highlightSkillLevel();
+                            resetMaxHpBattle();
+                            updateSttForSkillAffter();
+                            checkUpdateLevel();
+                        }
+
                     }
 
                 } else {
@@ -4674,7 +4694,10 @@ function loadEventSlotBattle() {
                             parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
                             slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
                         }
-
+                        highlightSkillLevel();
+                        resetMaxHpBattle();
+                        updateSttForSkillAffter();
+                        checkUpdateLevel();
                         console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
 
                     }
@@ -4919,7 +4942,7 @@ function loadEventSlotBattle() {
                     } else if (
                         (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID == typeGameConquest.battlePetInInventory[slot.id].ID && 
                         Number(typeGameConquest.battlePetInInventory[skill.parentElement.id].LEVEL) === Number(typeGameConquest.battlePetInInventory[slot.id].LEVEL))
-                        || typeGameConquest.battlePetInShop[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
+                        || typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
                         ) {
 
                         //Nâng cấp
@@ -4986,7 +5009,10 @@ function loadEventSlotBattle() {
                             parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
                             slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
                         }
-
+                        highlightSkillLevel();
+                        resetMaxHpBattle();
+                        updateSttForSkillAffter();
+                        checkUpdateLevel();
                         console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
                     }
 
@@ -5064,22 +5090,40 @@ function loadEventSlotBattle() {
                     } else {
                         // Đổi chỗ dữ liệu trong typeGameConquest.skillBattle và battlePetInInventory
                         const tempSkill = typeGameConquest.skillBattle[skill.parentElement.id];
-
-                        typeGameConquest.skillBattle[skill.parentElement.id] = typeGameConquest.battlePetInInventory[slot.id];
-                        typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = typeGameConquest.battlePetInInventory[slot.id];
-                        typeGameConquest.battlePetInInventory[slot.id] = tempSkill;
-
-                        // Đổi chỗ skill trong HTML
-                        const currentSkill = slot.querySelector(".skill"); // Skill hiện tại trong slot
-                        const parentSkill = skill; // Skill từ parentSlot
-
-                        if (currentSkill && parentSkill) {
-                            const parentSlot = parentSkill.parentElement;
-                            parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
-                            slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
+                        const targetSkill = typeGameConquest.battlePetInInventory[slot.id]
+                        // Kiểm tra xem skill này đã có trong skillBattle chưa (chỉ kiểm các key kết thúc bằng "B")
+                        let existsInBattle = false;
+                        for (const key in typeGameConquest.skillBattle) {
+                            if (key.endsWith("B") && typeGameConquest.skillBattle[key].ID === targetSkill.ID && key !== skill.parentElement.id) {
+                                existsInBattle = true;
+                                break;
+                            }
                         }
 
-                        console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
+                        if (existsInBattle) {
+                            console.warn("Skill đã tồn tại trong skillBattle, không thể hoán đổi.");
+                            return; // Dừng thao tác đổi chỗ
+                        } else {
+                            typeGameConquest.skillBattle[skill.parentElement.id] = targetSkill
+                            typeGameConquest.battlePetUseSlotRound[skill.parentElement.id] = targetSkill
+                            typeGameConquest.battlePetInInventory[slot.id] = tempSkill;
+
+                            // Đổi chỗ skill trong HTML
+                            const currentSkill = slot.querySelector(".skill"); // Skill hiện tại trong slot
+                            const parentSkill = skill; // Skill từ parentSlot
+
+                            if (currentSkill && parentSkill) {
+                                const parentSlot = parentSkill.parentElement;
+                                parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
+                                slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
+                                console.warn("Đã hoán đổi1.");
+                            }
+                            highlightSkillLevel();
+                            resetMaxHpBattle();
+                            updateSttForSkillAffter();
+                            checkUpdateLevel();
+                            console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
+                        }
                     }
 
 
@@ -13586,8 +13630,8 @@ function settingMap() {
     mapHeight = viewport.offsetWidth * 2.5;
 
     // Cập nhật kích thước của player và các yếu tố khác
-    player.style.width = (mapWidth / 16) + "px";
-    player.style.height = (mapWidth / 16) + "px";
+    player.style.width = (mapWidth / 20) + "px";
+    player.style.height = (mapWidth / 20) + "px";
 
     // Cập nhật lại kích thước của các Wild Pets
     document.querySelectorAll('.wildPet').forEach(el => {
