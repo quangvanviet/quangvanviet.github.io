@@ -13586,8 +13586,8 @@ function settingMap() {
     mapHeight = viewport.offsetWidth * 2.5;
 
     // Cập nhật kích thước của player và các yếu tố khác
-    player.style.width = (mapWidth / 10) + "px";
-    player.style.height = (mapWidth / 10) + "px";
+    player.style.width = (mapWidth / 14) + "px";
+    player.style.height = (mapWidth / 14) + "px";
 
     // Cập nhật lại kích thước của các Wild Pets
     document.querySelectorAll('.wildPet').forEach(el => {
