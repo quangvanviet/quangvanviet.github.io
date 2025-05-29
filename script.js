@@ -4401,7 +4401,9 @@ function loadEventSlotBattle() {
                     // Nếu không bị trùng ID thì cho thêm
                     if (!isDuplicate) {
                         typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
-                        typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
+                        typeGameConquest.battlePetUseSlotRound[slot.id].PRICE = 0
+                        
+                        typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetUseSlotRound[slot.id]
 
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
 
@@ -4889,7 +4891,7 @@ function loadEventSlotBattle() {
 
                     //Thêm skill vào battlePetUseSlotRound
                     typeGameConquest.battlePetInInventory[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id]
-
+                    typeGameConquest.battlePetInInventory[slot.id].PRICE = 0;
                     typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon; // Xóa kỹ năng khỏi battlePetInShop
                     let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
                     let skillLock = `LockBattleShop${index}`;
@@ -7369,7 +7371,7 @@ function endBattle(whoWin, pointsThisRound) {
 
     //Cộng star mỗi round
     const bonusStars = Math.floor(typeGameConquest.starUser / 5);
-    typeGameConquest.starUser += infoStartGame.roundGame * 2 + bonusStars;
+    typeGameConquest.starUser += infoStartGame.roundGame + 1 + bonusStars;
     document.getElementById("starUser").innerText = typeGameConquest.starUser;
     
     //Tăng round
