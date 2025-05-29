@@ -4561,7 +4561,7 @@ function loadEventSlotBattle() {
                         //     resetMaxHpBattle();
                         //     updateSttForSkillAffter();
                         //     checkUpdateLevel();
-                        }
+                        // }
 
                     }
 
