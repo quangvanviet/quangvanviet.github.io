@@ -5212,7 +5212,10 @@ function loadEventSlotBattle() {
             shopSell.style.background = "#f86e85"
             document.getElementById('starUser').innerText = typeGameConquest.starUser;
         }
+        highlightSkillLevel();
         resetMaxHpBattle();
+        updateSttForSkillAffter();
+        checkUpdateLevel();
     });
 };
 
