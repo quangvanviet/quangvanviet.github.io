@@ -631,14 +631,16 @@ var nowPoisonBattleComp = 0;
 let isLogin = false;
 var defaultSTT5Mon = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
-    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0,
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0, 0],
+    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0], 
+    CRIT: [0, 0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0, 0], PRICE: 0,
 };
 
 var defaultSTT5MonInBattle = {
     ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
-    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0], HEAL: [0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0],
-    BURN: [0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0], CRIT: [0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0], PRICE: 0, PRICESELL: 0,
+    LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0, 0],
+    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0], 
+    CRIT: [0, 0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0, 0], PRICE: 0, PRICESELL: 0,
 };
 
 var typeGameGuess = {}
@@ -12489,14 +12491,14 @@ function getRandom5mon() {
         INTERNAL: infoPetRandom.INTERNAL,
         EFFECT: infoPetRandom.EFFECT,
         URLimg: infoPetRandom.URLimg,
-        DAME: [dame, 0, 0, 0, 0],
-        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
-        HEAL: [heal, 0, 0, 0, 0],
-        SHIELD: [shield, 0, 0, 0, 0],
-        BURN: [burn, 0, 0, 0, 0],
-        POISON: [poison, 0, 0, 0, 0],
-        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
-        COOLDOWN: [Math.ceil(valueC), infoPetRandom.COOLDOWN[1], 0, 0, 0],
+        DAME: [dame, 0, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0, 0],
+        HEAL: [heal, 0, 0, 0, 0, 0],
+        SHIELD: [shield, 0, 0, 0, 0, 0],
+        BURN: [burn, 0, 0, 0, 0, 0],
+        POISON: [poison, 0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0, 0],
+        COOLDOWN: [Math.ceil(valueC), infoPetRandom.COOLDOWN[1], 0, 0, 0, 0],
         RARE: infoPetRandom.RARE,
         PRICE: infoPetRandom.PRICE
     }
@@ -13117,14 +13119,14 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         INTERNAL: select5Mon.INTERNAL,
         EFFECT: select5Mon.EFFECT,
         URLimg: select5Mon.URLimg,
-        DAME: [dame, 0, 0, 0, 0],
-        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
-        HEAL: [heal, 0, 0, 0, 0],
-        SHIELD: [shield, 0, 0, 0, 0],
-        BURN: [burn, 0, 0, 0, 0],
-        POISON: [poison, 0, 0, 0, 0],
-        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
-        COOLDOWN: [Math.ceil(valueC), select5Mon.COOLDOWN[1], 0, 0, 0],
+        DAME: [dame, 0, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0, 0],
+        HEAL: [heal, 0, 0, 0, 0, 0],
+        SHIELD: [shield, 0, 0, 0, 0, 0],
+        BURN: [burn, 0, 0, 0, 0, 0],
+        POISON: [poison, 0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0, 0],
+        COOLDOWN: [Math.ceil(valueC), select5Mon.COOLDOWN[1], 0, 0, 0, 0],
         RARE: rare,
         PRICE: select5Mon.PRICE
     }
@@ -14106,14 +14108,14 @@ function catch5Mon() {
         INTERNAL: e5mon.INTERNAL,
         EFFECT: e5mon.EFFECT,
         URLimg: e5mon.URLimg,
-        DAME: [dame, 0, 0, 0, 0],
-        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0],
-        HEAL: [heal, 0, 0, 0, 0],
-        SHIELD: [shield, 0, 0, 0, 0],
-        BURN: [burn, 0, 0, 0, 0],
-        POISON: [poison, 0, 0, 0, 0],
-        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0],
-        COOLDOWN: [Math.ceil(valueC), e5mon.COOLDOWN[1], 0, 0, 0],
+        DAME: [dame, 0, 0, 0, 0, 0],
+        DEF: [Math.round(valueDef * 100) / 100, 0, 0, 0, 0, 0],
+        HEAL: [heal, 0, 0, 0, 0, 0],
+        SHIELD: [shield, 0, 0, 0, 0, 0],
+        BURN: [burn, 0, 0, 0, 0, 0],
+        POISON: [poison, 0, 0, 0, 0, 0],
+        CRIT: [Math.round(valueCrit * 100) / 100, 0, 0, 0, 0, 0],
+        COOLDOWN: [Math.ceil(valueC), e5mon.COOLDOWN[1], 0, 0, 0, 0],
         RARE: rare,
         PRICE: e5mon.PRICE
     }
