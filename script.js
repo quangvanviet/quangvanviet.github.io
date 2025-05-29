@@ -4551,9 +4551,17 @@ function loadEventSlotBattle() {
                             const parentSkill = skill; // Skill từ parentSlot
 
                             if (currentSkill && parentSkill) {
-                                const parentSlot = parentSkill.parentElement;
-                                parentSlot.appendChild(currentSkill); // Đưa skill từ slot vào parentSlot
-                                slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
+                                const tempCurrent = currentSkill.cloneNode(true);
+                                const tempParent = parentSkill.cloneNode(true);
+                            
+                                // Xóa cũ
+                                slot.innerHTML = "";
+                                parentSkill.parentElement.innerHTML = "";
+                            
+                                // Gắn lại
+                                slot.appendChild(tempParent);
+                                parentSkill.parentElement.appendChild(tempCurrent);
+                            
                                 console.warn("Đã hoán đổi 2.");
                             }
                             console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
