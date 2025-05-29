@@ -510,10 +510,10 @@ function loadAllComp() {
                     //tính crit
                     let luk = item.POWER.LUK;
                     let maxCrit = 60;
-                    let scaleCrit = 475; // tùy chỉnh
+                    let scaleCrit = 1500; // tùy chỉnh
                     let valueCrit = maxCrit * luk / (luk + scaleCrit);
                     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
-                    valueCrit = Math.round(valueCrit * item.POWER.SCALE);
+                    valueCrit = Math.round(valueCrit * item.POWER.SCALE); 
 
                     //tính def
                     let def = item.POWER.DEF;
@@ -1006,7 +1006,7 @@ function loadDataForUser() {
                             //tính crit
                             let luk = item.POWER.LUK;
                             let maxCrit = 60;
-                            let scaleCrit = 475; // tùy chỉnh
+                            let scaleCrit = 1500; // tùy chỉnh
                             let valueCrit = maxCrit * luk / (luk + scaleCrit);
                             valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
                             valueCrit = Math.round(valueCrit * item.POWER.SCALE);
@@ -1538,12 +1538,12 @@ function calculateRageGainFromSkill(skillData) {
     const stats = skillData.POWER || {};
 
     let rageGain = Math.floor(
-        getScaledRage(stats.STR, 0.3) +
-        getScaledRage(stats.DEF, 0.5) +
-        getScaledRage(stats.INT, 0.3) +
-        getInvertedRage(stats.AGI, 0.4) + // dùng hệ số mới và công thức ngược
-        getScaledRage(stats.LUK, 0.3) +
-        getScaledRage(stats.HP, 0.6)
+        getScaledRage(stats.STR, 0.1) +
+        getScaledRage(stats.DEF, 0.3) +
+        getScaledRage(stats.INT, 0.1) +
+        getInvertedRage(stats.AGI, 0.2) + // dùng hệ số mới và công thức ngược
+        getScaledRage(stats.LUK, 0.1) +
+        getScaledRage(stats.HP, 0.3)
     );
 
     return rageGain;
@@ -4402,12 +4402,11 @@ function loadEventSlotBattle() {
 
                     // Nếu không bị trùng ID thì cho thêm
                     if (!isDuplicate) {
+                        typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
                         typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
                         typeGameConquest.battlePetUseSlotRound[slot.id].PRICE = 0
                         
                         typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetUseSlotRound[slot.id]
-
-                        typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
 
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
                         let index = skill.parentElement.id.match(/\d+$/)?.[0]; // lấy số ở cuối skill.parentElement.id
@@ -5271,7 +5270,7 @@ function update5MonBattle(skill) {
     //tính crit
     let luk = skill.POWER.LUK;
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * skill.POWER.SCALE);
@@ -10809,7 +10808,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
 
     //tính crit
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * item.POWER.SCALE);
@@ -11012,12 +11011,12 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     }
     
     let rageGain = Math.floor(
-        getScaledRage(str, 0.3) +
-        getScaledRage(def, 0.5) +
-        getScaledRage(int, 0.3) +
-        getInvertedRage(agi, 0.4) + // dùng hệ số mới và công thức ngược
-        getScaledRage(luk, 0.3) +
-        getScaledRage(hp, 0.6)
+        getScaledRage(str, 0.1) +
+        getScaledRage(def, 0.3) +
+        getScaledRage(int, 0.1) +
+        getInvertedRage(agi, 0.2) + // dùng hệ số mới và công thức ngược
+        getScaledRage(luk, 0.1) +
+        getScaledRage(hp, 0.3)
     );
     rageGain = parseFloat(rageGain.toFixed(2));
     
@@ -11522,7 +11521,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
 
     //tính crit
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * skillInfo.POWER.SCALE);
@@ -11729,12 +11728,12 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
     }
     
     let rageGain = Math.floor(
-        getScaledRage(str, 0.3) +
-        getScaledRage(def, 0.5) +
-        getScaledRage(int, 0.3) +
-        getInvertedRage(agi, 0.4) + // dùng hệ số mới và công thức ngược
-        getScaledRage(luk, 0.3) +
-        getScaledRage(hp, 0.6)
+        getScaledRage(str, 0.1) +
+        getScaledRage(def, 0.3) +
+        getScaledRage(int, 0.1) +
+        getInvertedRage(agi, 0.2) + // dùng hệ số mới và công thức ngược
+        getScaledRage(luk, 0.1) +
+        getScaledRage(hp, 0.3)
     );
     rageGain = parseFloat(rageGain.toFixed(2));
 
@@ -12466,7 +12465,7 @@ function getRandom5mon() {
     //tính crit
     let luk = infoPetRandom.POWER.LUK;
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * infoPetRandom.POWER.SCALE);
@@ -13095,7 +13094,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
 
     //tính crit
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * select5Mon.POWER.SCALE);
@@ -14084,7 +14083,7 @@ function catch5Mon() {
 
     //tính crit
     let maxCrit = 60;
-    let scaleCrit = 475; // tùy chỉnh
+    let scaleCrit = 1500; // tùy chỉnh
     let valueCrit = maxCrit * luk / (luk + scaleCrit);
     valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
     valueCrit = Math.round(valueCrit * e5mon.POWER.SCALE);
@@ -14732,15 +14731,15 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
 function scalePower5Mon(INT) {
     const baseScale = 1;
     const scaleINT = baseScale * Math.log10(INT);
-    let valuePower = 1 + INT / scaleINT
+    let valuePower = (1 + INT / scaleINT)/Math.log10(INT*2)
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
 
-    dame = Math.round(valuePower * 0.48)
-    heal = Math.round(valuePower * 0.45)
-    shield = Math.round(valuePower * 0.43)
-    burn = Math.round(valuePower * 0.12)
-    poison = Math.round(valuePower * 0.1)
+    dame = Math.round(valuePower * 0.88)
+    heal = Math.round(valuePower * 0.88)
+    shield = Math.round(valuePower * 0.8)
+    burn = Math.round(valuePower * 0.11)
+    poison = Math.round(valuePower * 0.09)
 
     return { dame, heal, shield, burn, poison }
 }
