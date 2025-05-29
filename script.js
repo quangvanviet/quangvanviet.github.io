@@ -5199,6 +5199,19 @@ function loadEventSlotBattle() {
                     internalUp();
                 }
 
+                //Xử lý các 5Mon có sellUpPrice
+                Object.keys(typeGameConquest.battlePetUseSlotRound).forEach((key) => {
+                    if (typeGameConquest.battlePetUseSlotRound[key].INTERNAL.includes("sellUpPrice")) {
+                        typeGameConquest.battlePetUseSlotRound[key].PRICESELL += 1;
+                        typeGameConquest.skillBattle[key].PRICESELL = typeGameConquest.battlePetUseSlotRound[key].PRICESELL;      
+                    }
+                });
+                
+                Object.keys(typeGameConquest.battlePetInInventory).forEach((key) => {
+                    if (typeGameConquest.battlePetInInventory[key].INTERNAL.includes("sellUpPrice")) {
+                        typeGameConquest.battlePetInInventory[key].PRICESELL += 1;
+                    }
+                });
 
                 // Xử lý logic bán kỹ năng
                 skillElement.parentElement.classList.remove("occupied")
