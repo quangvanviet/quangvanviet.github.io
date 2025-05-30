@@ -10597,22 +10597,20 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
 
     if (isInBattle) {
         let lvUpScale = skill.LVUPSCALE[power.toUpperCase()]
-        if (level === 4) {
+        if (level === 3) {
             powerBouns = (50 * (level - 2) * lvUpScale) + (50 * (level - 1) * lvUpScale) + (50 * level * lvUpScale)
-        } else if (level === 3) {
-            powerBouns = (50 * (level - 1) * lvUpScale) + (50 * level * lvUpScale)
         } else if (level === 2) {
-            powerBouns = 50 * level * lvUpScale
+            powerBouns = (50 * (level - 1) * lvUpScale) + (50 * level * lvUpScale)
         } else if (level === 1) {
-            powerBouns = 0
+            powerBouns = 50 * level * lvUpScale
         } else if (level === 0) {
             powerBouns = 0
         } else if (level === -1) {
             powerBouns = -(50 * skill.LEVEL * lvUpScale)
         } else if (level === -2) {
-            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * skill.LVUPSCALE.STR))
+            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * lvUpScale))
         } else if (level === -3) {
-            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * skill.LVUPSCALE.STR) + (50 * (skill.LEVEL - 2) * skill.LVUPSCALE.STR))
+            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * lvUpScale) + (50 * (skill.LEVEL - 2) * lvUpScale))
         }
     } else {
         let sLvUPPower
@@ -11325,9 +11323,6 @@ function resetOutGame() {
 
 function setupPopupInfo5MonInBattle(skillInfo, level) {
 
-    //Xét level hiện tại so với level
-    let levelSum = level - skillInfo.LEVEL
-
     for (let k = 1; k <= 4; k++) {
         document.getElementById(`popupSTT5MonInBattleLV${k}`).style.background = "firebrick";
     }
@@ -11347,12 +11342,15 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
         colorLevel = "#531515"
     }
 
-    const powerStatsSTR = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'str', true):updateStatWhenLevelUp(skillInfo, level, 'str', true)
-    const powerStatsDEF = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'def', true):updateStatWhenLevelUp(skillInfo, level, 'def', true)
-    const powerStatsINT = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'int', true):updateStatWhenLevelUp(skillInfo, level, 'int', true)
-    const powerStatsAGI = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'agi', true):updateStatWhenLevelUp(skillInfo, level, 'agi', true)
-    const powerStatsLUK = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'luk', true):updateStatWhenLevelUp(skillInfo, level, 'luk', true)
-    const powerStatsHP = levelSum <= 0?updateStatWhenLevelUp(skillInfo, levelSum, 'hp', true):updateStatWhenLevelUp(skillInfo, level, 'hp', true)
+        //Xét level hiện tại so với level
+    let levelSum = level - skillInfo.LEVEL
+    console.log("levelSum", levelSum)
+    const powerStatsSTR = updateStatWhenLevelUp(skillInfo, levelSum, 'str', true)
+    const powerStatsDEF = updateStatWhenLevelUp(skillInfo, levelSum, 'def', true)
+    const powerStatsINT = updateStatWhenLevelUp(skillInfo, levelSum, 'int', true)
+    const powerStatsAGI = updateStatWhenLevelUp(skillInfo, levelSum, 'agi', true)
+    const powerStatsLUK = updateStatWhenLevelUp(skillInfo, levelSum, 'luk', true)
+    const powerStatsHP = updateStatWhenLevelUp(skillInfo, levelSum, 'hp', true)
 
     let str1 = 0
     let def1 = 0
