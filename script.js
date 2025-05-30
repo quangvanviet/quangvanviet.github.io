@@ -10596,114 +10596,23 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
     let powerBouns
 
     if (isInBattle) {
-        if (power==='str') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.STR
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.STR) + (50 * 3 * skill.LVUPSCALE.STR)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.STR) + (50 * 3 * skill.LVUPSCALE.STR) + (50 * 4 * skill.LVUPSCALE.STR)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.STR)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.STR) + (50 * 3 * skill.LVUPSCALE.STR))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.STR) + (50 * 3 * skill.LVUPSCALE.STR) + (50 * 4 * skill.LVUPSCALE.STR))
-            }
-        } else if (power==='def') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.DEF
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.DEF) + (50 * 3 * skill.LVUPSCALE.DEF)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.DEF) + (50 * 3 * skill.LVUPSCALE.DEF) + (50 * 4 * skill.LVUPSCALE.DEF)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.DEF)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.DEF) + (50 * 3 * skill.LVUPSCALE.DEF))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.DEF) + (50 * 3 * skill.LVUPSCALE.DEF) + (50 * 4 * skill.LVUPSCALE.DEF))
-            }
-        } else if (power==='int') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.INT
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.INT) + (50 * 3 * skill.LVUPSCALE.INT)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.INT) + (50 * 3 * skill.LVUPSCALE.INT) + (50 * 4 * skill.LVUPSCALE.INT)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.INT)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.INT) + (50 * 3 * skill.LVUPSCALE.INT))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.INT) + (50 * 3 * skill.LVUPSCALE.INT) + (50 * 4 * skill.LVUPSCALE.INT))
-            }
-        } else if (power==='agi') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.AGI
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.AGI) + (50 * 3 * skill.LVUPSCALE.AGI)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.AGI) + (50 * 3 * skill.LVUPSCALE.AGI) + (50 * 4 * skill.LVUPSCALE.AGI)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.AGI)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.AGI) + (50 * 3 * skill.LVUPSCALE.AGI))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.AGI) + (50 * 3 * skill.LVUPSCALE.AGI) + (50 * 4 * skill.LVUPSCALE.AGI))
-            }
-        } else if (power==='luk') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.LUK
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.LUK) + (50 * 3 * skill.LVUPSCALE.LUK)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.LUK) + (50 * 3 * skill.LVUPSCALE.LUK) + (50 * 4 * skill.LVUPSCALE.LUK)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.LUK)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.LUK) + (50 * 3 * skill.LVUPSCALE.LUK))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.LUK) + (50 * 3 * skill.LVUPSCALE.LUK) + (50 * 4 * skill.LVUPSCALE.LUK))
-            }
-        } else if (power==='hp') {
-            if (level === 1) {
-                powerBouns = 0
-            } else if (level === 2) {
-                powerBouns = 50 * 2 * skill.LVUPSCALE.HP
-            } else if (level === 3) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.HP) + (50 * 3 * skill.LVUPSCALE.HP)
-            } else if (level === 4) {
-                powerBouns = (50 * 2 * skill.LVUPSCALE.HP) + (50 * 3 * skill.LVUPSCALE.HP) + (50 * 4 * skill.LVUPSCALE.HP)
-            } else if (level === 0) {
-                powerBouns = 0
-            } else if (level === -1) {
-                powerBouns = -(50 * 2 * skill.LVUPSCALE.HP)
-            } else if (level === -2) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.HP) + (50 * 3 * skill.LVUPSCALE.HP))
-            } else if (level === -3) {
-                powerBouns = -((50 * 2 * skill.LVUPSCALE.HP) + (50 * 3 * skill.LVUPSCALE.HP) + (50 * 4 * skill.LVUPSCALE.HP))
-            }
+        let lvUpScale = skill.LVUPSCALE[power.toUpperCase()]
+        if (level === 4) {
+            powerBouns = (50 * (level - 2) * lvUpScale) + (50 * (level - 1) * lvUpScale) + (50 * level * lvUpScale)
+        } else if (level === 3) {
+            powerBouns = (50 * (level - 1) * lvUpScale) + (50 * level * lvUpScale)
+        } else if (level === 2) {
+            powerBouns = 50 * level * lvUpScale
+        } else if (level === 1) {
+            powerBouns = 0
+        } else if (level === 0) {
+            powerBouns = 0
+        } else if (level === -1) {
+            powerBouns = -(50 * skill.LEVEL * lvUpScale)
+        } else if (level === -2) {
+            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * skill.LVUPSCALE.STR))
+        } else if (level === -3) {
+            powerBouns = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * skill.LVUPSCALE.STR) + (50 * (skill.LEVEL - 2) * skill.LVUPSCALE.STR))
         }
     } else {
         let sLvUPPower
@@ -10735,9 +10644,9 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
         } else if (level === -1) {
             powerBouns = -(50 * 2 * sLvUPPower)
         } else if (level === -2) {
-            powerBouns = -((50 * 2 * sLvUPPower) - (50 * 3 * sLvUPPower))
+            powerBouns = -((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower))
         } else if (level === -3) {
-            powerBouns = -((50 * 2 * sLvUPPower) - (50 * 3 * sLvUPPower) - (50 * 4 * sLvUPPower))
+            powerBouns = -((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower) + (50 * 4 * sLvUPPower))
         }
     }
 
