@@ -10601,39 +10601,39 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
             if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * skill.LEVEL * lvUpScale)
+                powerBonus = -(50 * 4 * lvUpScale)
             } else if (level === -2) {
-                powerBonus = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * lvUpScale))
+                powerBonus = -((50 * 4 * lvUpScale) + (50 * 3 * lvUpScale))
             } else if (level === -3) {
-                powerBonus = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * lvUpScale) + (50 * (skill.LEVEL - 2) * lvUpScale))
+                powerBonus = -((50 * 4 * lvUpScale) + (50 * 3 * lvUpScale) + (50 * 2 * lvUpScale))
             }
         } else if (skill.LEVEL === 3) {       
             if (level === 1) {
-                powerBonus = 50 * (skill.LEVEL + 1) * lvUpScale
+                powerBonus = 50 * 4 * lvUpScale
             } else if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * skill.LEVEL * lvUpScale)
+                powerBonus = -(50 * 3 * lvUpScale)
             } else if (level === -2) {
-                powerBonus = -((50 * skill.LEVEL * lvUpScale) + (50 * (skill.LEVEL - 1) * lvUpScale))
+                powerBonus = -((50 * 3 * lvUpScale) + (50 * 2 * lvUpScale))
             }
         } else if (skill.LEVEL === 2) {       
             if (level === 2) {
-                powerBonus = (50 * (skill.LEVEL + 1) * lvUpScale) + (50 * (skill.LEVEL + 2) * lvUpScale)
+                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale)
             } else if (level === 1) {
-                powerBonus = 50 * (skill.LEVEL + 1) * lvUpScale
+                powerBonus = 50 * 3 * lvUpScale
             } else if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * skill.LEVEL * lvUpScale)
+                powerBonus = -(50 * 2 * lvUpScale)
             }
         } else if (skill.LEVEL === 1) {       
             if (level === 3) {
-                powerBonus = (50 * (skill.LEVEL + 1) * lvUpScale) + (50 * (skill.LEVEL + 2) * lvUpScale) + (50 * (skill.LEVEL + 3) * lvUpScale) 
+                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale) + (50 * 2 * lvUpScale) 
             } else if (level === 2) {
-                powerBonus = (50 * (skill.LEVEL + 1) * lvUpScale) + (50 * (skill.LEVEL + 2) * lvUpScale)
+                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale)
             } else if (level === 1) {
-                powerBonus = 50 * (skill.LEVEL + 1) * lvUpScale
+                powerBonus = 50 * 2 * lvUpScale
             } else if (level === 0) {
                 powerBonus = 0
             }
