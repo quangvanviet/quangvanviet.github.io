@@ -4317,12 +4317,12 @@ function loadEventSlotBattle() {
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
                         
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP)
                         
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
@@ -4471,12 +4471,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP)
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
@@ -4619,12 +4619,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += 50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP)
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -4837,12 +4837,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP)
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
@@ -4950,12 +4950,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP)
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
@@ -5044,12 +5044,12 @@ function loadEventSlotBattle() {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK
-                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += 50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.STR)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.DEF)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.INT)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.AGI)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.LUK)
+                        typeGameConquest.battlePetInInventory[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetInInventory[slot.id].LEVEL * typeGameConquest.battlePetInInventory[slot.id].LVUPSCALE.HP)
 
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetInInventory[slot.id])
 
@@ -5229,7 +5229,10 @@ function loadEventSlotBattle() {
         highlightSkillLevel();
         resetMaxHpBattle();
         updateSttForSkillAffter();
-        checkUpdateLevel();
+        checkUpdateLevel(); 
+        internalUp();
+        resetHp5Mon();
+        updateHpAndRageBar5Mon();
     });
 };
 
@@ -10597,47 +10600,54 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
 
     if (isInBattle) {
         let lvUpScale = skill.LVUPSCALE[power.toUpperCase()]
-        if (skill.LEVEL === 4) {       
+        let lv1 = 0
+        let lv2 = Math.round(50 * 2 * lvUpScale)
+        let lv3 = Math.round(50 * 3 * lvUpScale)
+        let lv4 = Math.round(50 * 4 * lvUpScale)
+
+
+        if (skill.LEVEL === 4) {
             if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * 4 * lvUpScale)
+                powerBonus = -lv4
             } else if (level === -2) {
-                powerBonus = -((50 * 4 * lvUpScale) + (50 * 3 * lvUpScale))
+                powerBonus = -lv4 - lv3
             } else if (level === -3) {
-                powerBonus = -((50 * 4 * lvUpScale) + (50 * 3 * lvUpScale) + (50 * 2 * lvUpScale))
-            }
-        } else if (skill.LEVEL === 3) {       
+                powerBonus = -lv4 -lv3 -lv2
+            } 
+        } else if (skill.LEVEL === 3) {
             if (level === 1) {
-                powerBonus = 50 * 4 * lvUpScale
+                powerBonus = lv4
             } else if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * 3 * lvUpScale)
+                powerBonus = -lv3
             } else if (level === -2) {
-                powerBonus = -((50 * 3 * lvUpScale) + (50 * 2 * lvUpScale))
+                powerBonus = -lv3 - lv2
             }
-        } else if (skill.LEVEL === 2) {       
+        } else if (skill.LEVEL === 2) {
             if (level === 2) {
-                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale)
+                powerBonus = lv4 + lv3
             } else if (level === 1) {
-                powerBonus = 50 * 3 * lvUpScale
+                powerBonus = lv3
             } else if (level === 0) {
                 powerBonus = 0
             } else if (level === -1) {
-                powerBonus = -(50 * 2 * lvUpScale)
+                powerBonus = -lv2
             }
-        } else if (skill.LEVEL === 1) {       
+        } else if (skill.LEVEL === 1) {
             if (level === 3) {
-                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale) + (50 * 2 * lvUpScale) 
+                powerBonus = lv4 + lv3 + lv2
             } else if (level === 2) {
-                powerBonus = (50 * 4 * lvUpScale) + (50 * 3 * lvUpScale)
+                powerBonus = lv3 + lv2
             } else if (level === 1) {
-                powerBonus = 50 * 2 * lvUpScale
+                powerBonus = lv2
             } else if (level === 0) {
                 powerBonus = 0
             }
-        } 
+        }
+ 
     } else {
         let sLvUPPower
 
@@ -10658,22 +10668,23 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
         if (level === 1) {
             powerBonus = 0
         } else if (level === 2) {
-            powerBonus = 50 * 2 * sLvUPPower
+            powerBonus = Math.round(50 * 2 * sLvUPPower)
         } else if (level === 3) {
-            powerBonus = (50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower)
+            powerBonus = Math.round((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower))
         } else if (level === 4) {
-            powerBonus = (50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower) + (50 * 4 * sLvUPPower)
+            powerBonus = Math.round((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower) + (50 * 4 * sLvUPPower))
         } else if (level === 0) {
             powerBonus = 0
         } else if (level === -1) {
-            powerBonus = -(50 * 2 * sLvUPPower)
+            powerBonus = Math.round(-(50 * 2 * sLvUPPower))
         } else if (level === -2) {
-            powerBonus = -((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower))
+            powerBonus = Math.round(-((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower)))
         } else if (level === -3) {
-            powerBonus = -((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower) + (50 * 4 * sLvUPPower))
+            powerBonus = Math.round(-((50 * 2 * sLvUPPower) + (50 * 3 * sLvUPPower) + (50 * 4 * sLvUPPower)))
         }
     }
 
+    console.log("powerBonus", powerBonus)
     return powerBonus || 0;
 }
 
@@ -11378,50 +11389,13 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
     const powerStatsLUK = updateStatWhenLevelUp(skillInfo, levelSum, 'luk', true)
     const powerStatsHP = updateStatWhenLevelUp(skillInfo, levelSum, 'hp', true)
 
-    let str1 = 0
-    let def1 = 0
-    let int1 = 0
-    let agi1 = 0
-    let luk1 = 0
-    let hp1 = 0
-
-    if (skillInfo.LEVEL === 1 && levelSum > 0) {
-        str1 = 0
-        def1 = 0
-        int1 = 0
-        agi1 = 0
-        luk1 = 0
-        hp1 = 0
-    } else if (skillInfo.LEVEL === 2 && levelSum > 0) {
-        str1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.STR)
-        def1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.DEF)
-        int1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.INT)
-        agi1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.AGI)
-        luk1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.LUK)
-        hp1 = Math.round(50 * 2 * skillInfo.LVUPSCALE.HP)
-    } else if (skillInfo.LEVEL === 3 && levelSum > 0) {
-        str1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.STR) - (50 * 2 * skillInfo.LVUPSCALE.STR))
-        def1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.DEF) - (50 * 2 * skillInfo.LVUPSCALE.DEF))
-        int1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.INT) - (50 * 2 * skillInfo.LVUPSCALE.INT))
-        agi1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.AGI) - (50 * 2 * skillInfo.LVUPSCALE.AGI))
-        luk1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.LUK) - (50 * 2 * skillInfo.LVUPSCALE.LUK))
-        hp1 = Math.round((50 * 3 * skillInfo.LVUPSCALE.HP) - (50 * 2 * skillInfo.LVUPSCALE.HP))
-    } else if (skillInfo.LEVEL === 4 && levelSum > 0) {
-        str1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.STR) - (50 * 3 * skillInfo.LVUPSCALE.STR) - (50 * 2 * skillInfo.LVUPSCALE.STR))
-        def1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.DEF) - (50 * 3 * skillInfo.LVUPSCALE.DEF) - (50 * 2 * skillInfo.LVUPSCALE.DEF))
-        int1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.INT) - (50 * 3 * skillInfo.LVUPSCALE.INT) - (50 * 2 * skillInfo.LVUPSCALE.INT))
-        agi1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.AGI) - (50 * 3 * skillInfo.LVUPSCALE.AGI) - (50 * 2 * skillInfo.LVUPSCALE.AGI))
-        luk1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.LUK) - (50 * 3 * skillInfo.LVUPSCALE.LUK) - (50 * 2 * skillInfo.LVUPSCALE.LUK))
-        hp1 = Math.round((50 * 4 * skillInfo.LVUPSCALE.HP) - (50 * 3 * skillInfo.LVUPSCALE.HP) - (50 * 2 * skillInfo.LVUPSCALE.HP))
-    }
-
     let str, def, int, agi, luk, hp, allStat;
-    str = Math.round(skillInfo.POWER.STR + powerStatsSTR - str1)
-    def = Math.round(skillInfo.POWER.DEF + powerStatsDEF - def1)
-    int = Math.round(skillInfo.POWER.INT + powerStatsINT - int1)
-    agi = Math.round(skillInfo.POWER.AGI + powerStatsAGI - agi1)
-    luk = Math.round(skillInfo.POWER.LUK + powerStatsLUK - luk1)
-    hp = Math.round(skillInfo.POWER.HP + powerStatsHP - hp1)
+    str = Math.round(skillInfo.POWER.STR + powerStatsSTR)
+    def = Math.round(skillInfo.POWER.DEF + powerStatsDEF)
+    int = Math.round(skillInfo.POWER.INT + powerStatsINT)
+    agi = Math.round(skillInfo.POWER.AGI + powerStatsAGI)
+    luk = Math.round(skillInfo.POWER.LUK + powerStatsLUK)
+    hp = Math.round(skillInfo.POWER.HP + powerStatsHP)
 
     allStat = str + def + int + agi + luk + hp
     
@@ -14668,11 +14642,11 @@ function scalePower5Mon(INT) {
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
 
-    dame = Math.round(valuePower * 0.88)
-    heal = Math.round(valuePower * 0.88)
-    shield = Math.round(valuePower * 0.8)
-    burn = Math.round(valuePower * 0.11)
-    poison = Math.round(valuePower * 0.09)
+    dame = Math.round(valuePower * 2)
+    heal = Math.round(valuePower * 2)
+    shield = Math.round(valuePower * 2)
+    burn = Math.round(valuePower * 0.21)
+    poison = Math.round(valuePower * 0.18)
 
     return { dame, heal, shield, burn, poison }
 }
