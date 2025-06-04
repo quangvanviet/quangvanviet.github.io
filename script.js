@@ -14841,14 +14841,21 @@ function loadSlotLock() {
 
     Object.keys(slotLock).forEach(key => {
         const slot = document.getElementById(`${key}`);
-        if (slotLock[key] === true && slot) {
+        if (slotLock[key] === true) {
             const lock = document.createElement("div");
             lock.id = `${key}Lock`; // Thêm ID để truy cập dễ dàng
-            lock.style.fontSize = "50px";
+            lock.className = "slotLock"
+            lock.style.fontSize = "30px";
+            lock.style.color = "rosybrown"
             lock.style.zIndex = "1";
             lock.style.textAlign = "center";
-            lock.innerHTML = `<div style="font-size: 40px"><i class="fa-solid fa-lock"></i></div>`;
+            lock.innerHTML = `<i class="fa-solid fa-lock"></i>`;
             slot.appendChild(lock); // Thêm vào DOM
+        } else {
+            const existingLock = slot.querySelector(".slotLock");
+            if (existingLock) {
+                slot.removeChild(existingLock);
+            }
         }
     });
 }
