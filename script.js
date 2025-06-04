@@ -669,6 +669,7 @@ var typeGameConquest = {
     selectCharacterComp: "",
     battleUserPet: [""],
     maxHpBattle: 0,
+    slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
     battleUserPetRound: [""],
     battlePetUseSlotRound: {
         skill1B: defaultSTT5MonInBattle,
@@ -7114,6 +7115,8 @@ function openGameRank() {
         updateHpAndRageBar5Mon();
         updateHpbar();
 
+        loadSlotLock();
+
         document.getElementById('qtyResetShop').innerText = typeGameConquest.reRollPrice;
         document.getElementById('starUser').innerText = typeGameConquest.starUser;
 
@@ -9829,6 +9832,7 @@ function register() {
                     selectCharacterComp: "",
                     battleUserPet: [""],
                     maxHpBattle: 0,
+                    slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
                     battleUserPetRound: [""],
                     battlePetUseSlotRound: battlePetUseSlotRound,
                     battlePetInShop: battlePetInShop,
@@ -14819,6 +14823,34 @@ document.addEventListener("keydown", function (e) {
 //Hàm tính scale mỗi khi nâng cấp level
 function getScaleLevelUp(power) {
     return 1 + ((power - 10) / (100 - 10));  // nội suy từ 1 → 2
+}
+
+//Hàm load slot lock
+function loadSlotLock() {
+    let slotLock = typeGameConquest.slotLock || {
+        skill1B: false,
+        skill2B: false,
+        skill3B: true,
+        skill4B: true,
+        skill5B: true,
+        skill6B: true,
+        skill7B: true,
+        skill8B: true,
+        skill9B: true
+    };
+
+    Object.keys(slotLock).forEach(key => {
+        const slot = document.getElementById(`${key}`);
+        if (slotLock[key] === true && slot) {
+            const lock = document.createElement("div");
+            lock.id = `${key}Lock`; // Thêm ID để truy cập dễ dàng
+            lock.style.fontSize = "50px";
+            lock.style.zIndex = "1";
+            lock.style.textAlign = "center";
+            lock.innerHTML = `<div style="font-size: 40px"><i class="fa-solid fa-lock"></i></div>`;
+            slot.appendChild(lock); // Thêm vào DOM
+        }
+    });
 }
 
 // Gán các hàm vào window
