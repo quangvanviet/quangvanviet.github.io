@@ -1780,25 +1780,117 @@
         </div>
 
         <!-- Popup hiển thị lựa chọn nhân vật -->
-        <div id="popupSelectCharacter"
-            style="position: absolute;display:none; flex-direction: column; gap: 20px; width: 100%; z-index: 9999; align-items: center; align-content: center; justify-content: center; height: 50%; background: radial-gradient(#faf5b4, transparent);">
-            <!-- Header -->
-            <div
-                style="display: flex; flex-direction: column; gap: 5px; max-width: 700px; align-content: center; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #f5e833; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">
-                <span>Chào mừng bạn đến với 5World hãy lựa chọn nhân vật và cùng khám phá 5World nào!</span>
-                <span>Hãy lựa chọn nhân vật và cùng khám phá 5World nào!</span>
+        <div id="popupSelectCharacter" style="display: none; justify-content: center; align-items: center; width: 100%; 
+            height: 100%; background: rgb(255 255 255 / 0%); z-index: 997; position: absolute;">
+            <div style="
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: #ffe4c6;
+                border: 4px solid #ca6f6f;
+                border-radius: 15px;
+                box-shadow: 2px 2px 2px 2px #4a0808;
+                padding: 5px;
+                padding-top: 20px;
+                display: flex;
+                position: relative;
+                width: 600px;
+                height: 300px;
+                ">
+                <div style="
+                    background: #2455a2;
+                    position: absolute;
+                    top: -20px;
+                    width: 230px;
+                    height: 18px;
+                    display: flex;
+                    color: #f9d66a;
+                    font-size: 15px;
+                    font-weight: bold;
+                    border-radius: 5px;
+                    border: 3px solid #bf80354a;
+                    box-shadow: rgb(93 9 7) 1px 2px 1px 2px;
+                    justify-content: center;
+                    align-items: center;
+                    outline: 2px solid #e0a35c;
+                    text-shadow: 1px 2px 1px #481a18;
+                    padding: 2px 2px;
+                    ">
+                    LỰA CHỌN NHÂN VẬT
+                </div>
+                <div style="display: flex;gap: 5px;flex-direction: row;width: 100%;justify-content: space-around;height: 100%;">
+                    <!-- LEFT -->
+                  <div style="background-color: #e8d99c;padding: 5px;border-radius: 15px;width: 35%;box-shadow: 1px 2px 2px #7e6e29;">
+                    <div style="font-size: 14px;font-weight: bold;margin-bottom: 3px;color: #444;">Nhân vật</div>
+                    <div style="width: 100%;height: 80%;background-color: #ccc;display: flex;align-items: center;justify-content: center;
+                        border-radius: 10px;margin-bottom: 3px;font-weight: bold;color: #555;">
+                        <img id="imgCharacterSelect" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1748421403/iwnqkthqvr2i5agyfxyd.png" style="
+                            width: 70%;
+                            z-index: 2;
+                            pointer-events: none;
+                            user-select: none;
+                            left: 795.5px;
+                            top: 795.5px;
+                            ">
+                    </div>
+                    <div style="display: flex;justify-content: space-between;align-items: center;height: 30px;">
+                      <button style="
+                          background-color: #4CAF50;
+                          color: white;
+                          border: none;
+                          padding: 5px 10px;
+                          border-radius: 8px;
+                          font-weight: bold;
+                          cursor: pointer;
+                          ">←</button>
+                      <div id="nameCharacter" style="font-size: 13px;font-weight: bold;color: #222;">Tên nhân vật</div>
+                      <button style="
+                          background-color: #4CAF50;
+                          color: white;
+                          border: none;
+                          padding: 5px 10px;
+                          border-radius: 8px;
+                          font-weight: bold;
+                          cursor: pointer;
+                          ">→</button>
+                    </div>
+                  </div>
+            
+                  <!-- RIGHT -->
+                  <div style="display: flex;flex-direction: column;width: 64%;height: 100%;">
+                      <div style="background-color: #e8d99c;padding: 5px;border-radius: 15px;height: 100%;box-shadow: 1px 2px 2px #7e6e29;">
+                        <div style="font-size: 14px;font-weight: bold;margin-bottom: 2px;color: #444;">Chỉ số của nhân vật</div>
+                        <div id="descCharacterSelect" style="font-size: 12px;color: #555;gap: 4px;display: flex;flex-direction: column;align-items: flex-start;justify-content: flex-start;height: 92%;border: 1px solid #66339963;border-radius: 10px;">
+                        </div>
+                        
+                        
+                        
+                      </div>
+                      <div style="
+                            display: flex;
+                            justify-content: flex-end;
+                            flex-direction: row;
+                            height: 25px;
+                            padding: 6px 0px;
+                        ">
+                          <button style="
+                          background-color: #4caf50;
+                          color: white;
+                          border: none;
+                          padding: 10px 20px;
+                          border-radius: 8px;
+                          font-weight: bold;
+                          cursor: pointer;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          ">Lựa chọn</button>
+                      </div>
+                  </div>
+                </div>
+                
             </div>
-            <!-- Hình ảnh lựa chọn nhân vật -->
-            <div style="display: flex; flex-direction: row; gap: 30px; justify-content: center; align-items: center;">
-                <!-- Nhân vật nam 1 -->
-                <div id="selectCharacter1" class="comp"
-                    style="height: 200px; width: 200px; border-radius: 15px; background: url(https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png); background-size: cover; background-position: center; border: 8px solid #fbedd2; cursor: pointer; "
-                    onclick="selectCharacterForUser('Male')"> </div>
-                <!-- Nhân vật nữ 1 -->
-                <div id="selectCharacter2" class="user"
-                    style="height: 200px; width: 200px; border-radius: 15px; background: url(https://res.cloudinary.com/dxgawkr4g/image/upload/v1730731024/0005.png); background-size: cover; background-position: center; border: 8px solid #fbedd2; cursor: pointer; "
-                    onclick="selectCharacterForUser('Female')"> </div>
-            </div>
+
         </div>
 
         <!-- Popup hiển thị thông báo đang trong game liệu có tiếp tục game không -->
