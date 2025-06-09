@@ -308,7 +308,7 @@ function listenForUserChanges() {
 //Biến cục bộ
 var allPets = [];
 var allComps = []; //Mảng toàn bộ Comps
-var allCharacter = []; //Mảng lưu nhân vật
+var allCharacter = {}; //Mảng lưu nhân vật
 var allQuestData = {}; //Mảng lưu nhiệm vụ
 
 var effectsSkill = {}; // Tạo đối tượng để lưu các Effect Skill và mô tả tương ứng
@@ -669,7 +669,7 @@ var typeGameConquest = {
     selectCharacterComp: "",
     battleUserPet: [""],
     maxHpBattle: 0,
-    slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
+    // slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
     battleUserPetRound: [""],
     battlePetUseSlotRound: {
         skill1B: defaultSTT5MonInBattle,
@@ -7115,7 +7115,7 @@ function openGameRank() {
         updateHpAndRageBar5Mon();
         updateHpbar();
 
-        loadSlotLock();
+        // loadSlotLock();
 
         document.getElementById('qtyResetShop').innerText = typeGameConquest.reRollPrice;
         document.getElementById('starUser').innerText = typeGameConquest.starUser;
@@ -9832,7 +9832,7 @@ function register() {
                     selectCharacterComp: "",
                     battleUserPet: [""],
                     maxHpBattle: 0,
-                    slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
+                    // slotLock: {skill1B: false, skill2B: false, skill3B: true, skill4B: true, skill5B: true, skill6B: true, skill7B: true, skill8B: true, skill9B: true},
                     battleUserPetRound: [""],
                     battlePetUseSlotRound: battlePetUseSlotRound,
                     battlePetInShop: battlePetInShop,
@@ -14825,40 +14825,42 @@ function getScaleLevelUp(power) {
     return 1 + ((power - 10) / (100 - 10));  // nội suy từ 1 → 2
 }
 
-//Hàm load slot lock
-function loadSlotLock() {
-    let slotLock = typeGameConquest.slotLock || {
-        skill1B: false,
-        skill2B: false,
-        skill3B: true,
-        skill4B: true,
-        skill5B: true,
-        skill6B: true,
-        skill7B: true,
-        skill8B: true,
-        skill9B: true
-    };
+// //Hàm load slot lock
+// function loadSlotLock() {
+//     let slotLock = typeGameConquest.slotLock || {
+//         skill1B: false,
+//         skill2B: false,
+//         skill3B: true,
+//         skill4B: true,
+//         skill5B: true,
+//         skill6B: true,
+//         skill7B: true,
+//         skill8B: true,
+//         skill9B: true
+//     };
 
-    Object.keys(slotLock).forEach(key => {
-        const slot = document.getElementById(`${key}`);
-        if (slotLock[key] === true) {
-            const lock = document.createElement("div");
-            lock.id = `${key}Lock`; // Thêm ID để truy cập dễ dàng
-            lock.className = "slotLock"
-            lock.style.fontSize = "30px";
-            lock.style.color = "rosybrown"
-            lock.style.zIndex = "1";
-            lock.style.textAlign = "center";
-            lock.innerHTML = `<i class="fa-solid fa-lock"></i>`;
-            slot.appendChild(lock); // Thêm vào DOM
-        } else {
-            const existingLock = slot.querySelector(".slotLock");
-            if (existingLock) {
-                slot.removeChild(existingLock);
-            }
-        }
-    });
-}
+//     Object.keys(slotLock).forEach(key => {
+//         const slot = document.getElementById(`${key}`);
+//         if (slotLock[key] === true) {
+//             const lock = document.createElement("div");
+//             lock.id = `${key}Lock`; // Thêm ID để truy cập dễ dàng
+//             lock.className = "slotLock"
+//             lock.style.fontSize = "30px";
+//             lock.style.color = "rosybrown"
+//             lock.style.zIndex = "1";
+//             lock.style.textAlign = "center";
+//             lock.innerHTML = `<i class="fa-solid fa-lock"></i>`;
+//             slot.appendChild(lock); // Thêm vào DOM
+//         } else {
+//             const existingLock = slot.querySelector(".slotLock");
+//             if (existingLock) {
+//                 slot.removeChild(existingLock);
+//             }
+//         }
+//     });
+// }
+
+
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
