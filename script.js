@@ -181,6 +181,7 @@ function saveDataUserToFirebase() {
         onGame: onGame,
         infoStartGame: infoStartGame,
         characterUser: characterUser,
+        allCharacterUser: allCharacterUser,
         userPet: userPetIDs,
         battleData: allBattleUsersData,
         isBan: isBan,
@@ -583,6 +584,7 @@ var diamondUser = 0;
 
 var pointRank = { typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0 }
 var characterUser = "";
+var allCharacterUser = [];
 var isBan = "";
 var timeOnline = "";
 var newTimeOnline = "";
@@ -802,6 +804,7 @@ function loadDataForUser() {
             infoStartGame = { ...infoStartGame, ...data.infoStartGame } || { typeGame: "Conquest", modeGame: "Normal", difficultyGame: "Easy", roundGame: 1, stepGame: 0, winStreak: 0 };
             activateUser = data.activateUser;
             characterUser = data.characterUser;
+            allCharacterUser = data.allCharacterUser;
             onGame = data.onGame;
             idSkillRND = data.idSkillRND;
             pointRank = data.pointRank || { typeGameConquest: 0, typeGameSolo5Mon: 0, typeGameGuess: 0 };
@@ -875,7 +878,7 @@ function loadDataForUser() {
 
             // Hiển thị popup nếu user chưa chọn nhân vật
             if (!characterUser || characterUser === "") {
-                openPopupSelectCharacter();
+                openPopupSelectCharacter(true);
                 if (guideMode) showStepGuide(0);
             }
 
@@ -1059,6 +1062,7 @@ function loadDataForUser() {
                 onGame: onGame,
                 infoStartGame: infoStartGame,
                 characterUser: characterUser,
+                allCharacterUser: allCharacterUser,
                 userPet: userPetIDsOld,
                 battleData: allBattleUsersData,
                 isBan: isBan,
@@ -9859,6 +9863,7 @@ function register() {
                     luckyMeet5Mon: 5,
                     diamondUser: 0,
                     characterUser: "",
+                    allCharacterUser: [],
                     userPet: [""],
                     battleData: allBattleUsersData,
                     isBan: "No",
@@ -10021,22 +10026,97 @@ function login(isTest) {
 
 window.login = login;
 
+let allCharacterLoad = [];
+let characterSelect;
+let indexCharacterSelect = 0;
 
-function openPopupSelectCharacter() {
+function openPopupSelectCharacter(newAccount) {
+    if (newAccount) { // Nếu là tài khoản mới
+        allCharacterLoad = [
+            allCharacter["C0001"],
+            allCharacter["C0002"]
+        ];
+        indexCharacterSelect = 0;
+        characterSelect = allCharacter["C0001"];
+    } else { // Nếu là bấm vào thay đổi nhân vật
+        allCharacterLoad = allCharacterUser
+            .map(id => allCharacter[id])
+            .filter(char => char); // bỏ qua undefined nếu id không tồn tại
+    
+        indexCharacterSelect = allCharacterLoad.findIndex(char => char.id === characterUser);
+        if (indexCharacterSelect === -1) indexCharacterSelect = 0;
+    
+        characterSelect = allCharacterLoad[indexCharacterSelect];
+    }
+
+    showDescCharacterSelect(characterSelect);
+
     document.getElementById("popupSelectCharacter").style.display = "flex";
-    document.getElementById("popupOverlay").style.display = "block"
+    document.getElementById("popupOverlay").style.display = "block";
+    console.log("allCharacterLoad", allCharacterLoad);
 }
 
-function selectCharacterForUser(select) {
-    if (select === "Male") {
-        characterUser = "C0001"
-        document.getElementById("popupSelectCharacter").style.display = "none";
-        document.getElementById("popupOverlay").style.display = "none"
-    } else if (select === "Female") {
-        characterUser = "C0001"
-        document.getElementById("popupSelectCharacter").style.display = "none";
-        document.getElementById("popupOverlay").style.display = "none"
+function prevShowCharacterSelect() {
+    if (indexCharacterSelect > 0) {
+        indexCharacterSelect--;
+        characterSelect = allCharacterLoad[indexCharacterSelect];
+        showDescCharacterSelect(characterSelect);
     }
+}
+
+function nextShowCharacterSelect() {
+    if (indexCharacterSelect < allCharacterLoad.length - 1) {
+        indexCharacterSelect++;
+        characterSelect = allCharacterLoad[indexCharacterSelect];
+        showDescCharacterSelect(characterSelect);
+    }
+}
+    
+function showDescCharacterSelect(characterSelect) {
+    document.getElementById("imgCharacterSelect").src= characterSelect.urlIMG
+
+    let sttCharacter = ""
+    if (characterSelect.hpMax > 0) {
+        sttCharacter +=  `<span style="font-size:10px;">Tăng <a style="color:green">${characterSelect.hpMax} sinh mệnh tối đa</a> cho nhân vật sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upDame > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.upDame} sát thương</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upHeal > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:lime">${characterSelect.upHeal} chỉ số hồi Hp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upShield > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:blue">${characterSelect.upShield} chỉ số tạo giáp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upBurn > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:orange">${characterSelect.upBurn} sát thương đốt</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upPoison > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:purple">${characterSelect.upPoison} gây độc</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upCrit > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.upCrit} chỉ số chí mạng</a> 5mon sau mỗi vòng đấu</span>`;
+    }
+    if (characterSelect.upCooldown > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:blue">${characterSelect.upCooldown / 1000}s tốc độ</a> của bản thân sau mỗi vòng đấu (hiện tại: ${typeGameConquest.upCooldownB / 1000}s)</span>`;
+    }
+    if (characterSelect.dameCrit > 0) {
+        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.dameCrit}% sát thương chí mạng</a> sau mỗi vòng đấu (hiện tại: ${typeGameConquest.dameCritB}%)</span>`;
+    }
+    
+    document.getElementById("descCharacterSelect").innerHTML = `
+    <div>
+        ${characterSelect.desc}
+    </div>
+    <div>
+        <span>Chỉ số:</span>
+        ${sttCharacter}
+    </div>
+    `
+}
+
+function selectCharacterForUser() {
+    characterUser = characterSelect.id
 }
 
 
@@ -14890,6 +14970,8 @@ window.skipGuide = skipGuide;
 window.messageOpen = messageOpen;
 window.nextStepGuide = nextStepGuide;
 window.selectCharacterForUser = selectCharacterForUser;
+window.prevShowCharacterSelect = prevShowCharacterSelect;
+window.nextShowCharacterSelect = nextShowCharacterSelect;
 window.openFullscreen = openFullscreen;
 window.toggleAutoMovement = toggleAutoMovement;
 window.showUpStamina = showUpStamina;
