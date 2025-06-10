@@ -812,6 +812,7 @@ function loadDataForUser() {
             isBan = data.isBan;
             timeOnline = data.timeOnline;
             onlineLasted = data.onlineLasted;
+            allCharacterUser = data.allCharacterUser || ["C0001"];
 
             weekOnline = data.weekOnline && data.weekOnline !== "" ? data.weekOnline : getISOWeek(new Date());
 
@@ -14970,6 +14971,7 @@ window.skipGuide = skipGuide;
 window.messageOpen = messageOpen;
 window.nextStepGuide = nextStepGuide;
 window.selectCharacterForUser = selectCharacterForUser;
+window.openPopupSelectCharacter = openPopupSelectCharacter;
 window.prevShowCharacterSelect = prevShowCharacterSelect;
 window.nextShowCharacterSelect = nextShowCharacterSelect;
 window.openFullscreen = openFullscreen;
