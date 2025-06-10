@@ -10057,19 +10057,15 @@ function openPopupSelectCharacter(newAccount) {
 }
 
 function prevShowCharacterSelect() {
-    if (indexCharacterSelect > 0) {
-        indexCharacterSelect--;
-        characterSelect = allCharacterLoad[indexCharacterSelect];
-        showDescCharacterSelect(characterSelect);
-    }
+    indexCharacterSelect = (indexCharacterSelect - 1 + allCharacterLoad.length) % allCharacterLoad.length;
+    characterSelect = allCharacterLoad[indexCharacterSelect];
+    showDescCharacterSelect(characterSelect);
 }
 
 function nextShowCharacterSelect() {
-    if (indexCharacterSelect < allCharacterLoad.length - 1) {
-        indexCharacterSelect++;
-        characterSelect = allCharacterLoad[indexCharacterSelect];
-        showDescCharacterSelect(characterSelect);
-    }
+    indexCharacterSelect = (indexCharacterSelect + 1) % allCharacterLoad.length;
+    characterSelect = allCharacterLoad[indexCharacterSelect];
+    showDescCharacterSelect(characterSelect);
 }
     
 function showDescCharacterSelect(characterSelect) {
