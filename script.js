@@ -13577,7 +13577,7 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    player.scr = allCharacter[characterUser].urlIMG
+    player.src = allCharacter[characterUser].urlIMG
     settingMap();
     screenMain.style.display = "flex";
     updateStamina();
