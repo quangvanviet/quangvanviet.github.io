@@ -10053,7 +10053,6 @@ function openPopupSelectCharacter(newAccount) {
     showDescCharacterSelect(characterSelect);
 
     document.getElementById("popupSelectCharacter").style.display = "flex";
-    document.getElementById("popupOverlay").style.display = "block";
     console.log("allCharacterLoad", allCharacterLoad);
 }
 
@@ -10075,41 +10074,41 @@ function nextShowCharacterSelect() {
     
 function showDescCharacterSelect(characterSelect) {
     document.getElementById("imgCharacterSelect").src= characterSelect.urlIMG
-
+    
     let sttCharacter = ""
     if (characterSelect.hpMax > 0) {
-        sttCharacter +=  `<span style="font-size:10px;">Tăng <a style="color:green">${characterSelect.hpMax} sinh mệnh tối đa</a> cho nhân vật sau mỗi vòng đấu</span>`;
+        sttCharacter +=  `<span>Tăng <a style="color:green">${characterSelect.hpMax} sinh mệnh tối đa</a> cho nhân vật sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upDame > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.upDame} sát thương</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:red">${characterSelect.upDame} sát thương</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upHeal > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:lime">${characterSelect.upHeal} chỉ số hồi Hp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:lime">${characterSelect.upHeal} chỉ số hồi Hp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upShield > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:blue">${characterSelect.upShield} chỉ số tạo giáp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:blue">${characterSelect.upShield} chỉ số tạo giáp</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upBurn > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:orange">${characterSelect.upBurn} sát thương đốt</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:orange">${characterSelect.upBurn} sát thương đốt</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upPoison > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:purple">${characterSelect.upPoison} gây độc</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:purple">${characterSelect.upPoison} gây độc</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upCrit > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.upCrit} chỉ số chí mạng</a> 5mon sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:red">${characterSelect.upCrit} chỉ số chí mạng</a> 5mon sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upCooldown > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:blue">${characterSelect.upCooldown / 1000}s tốc độ</a> của bản thân sau mỗi vòng đấu (hiện tại: ${typeGameConquest.upCooldownB / 1000}s)</span>`;
+        sttCharacter += `<span>Tăng <a style="color:blue">${characterSelect.upCooldown / 1000}s tốc độ</a> của bản thân sau mỗi vòng đấu (hiện tại: ${typeGameConquest.upCooldownB / 1000}s)</span>`;
     }
     if (characterSelect.dameCrit > 0) {
-        sttCharacter += `<span style="font-size:10px;">Tăng <a style="color:red">${characterSelect.dameCrit}% sát thương chí mạng</a> sau mỗi vòng đấu (hiện tại: ${typeGameConquest.dameCritB}%)</span>`;
+        sttCharacter += `<span>Tăng <a style="color:red">${characterSelect.dameCrit}% sát thương chí mạng</a> sau mỗi vòng đấu (hiện tại: ${typeGameConquest.dameCritB}%)</span>`;
     }
     
     document.getElementById("descCharacterSelect").innerHTML = `
     <div>
         ${characterSelect.desc}
     </div>
-    <div>
+    <div style="">
         <span>Chỉ số:</span>
         ${sttCharacter}
     </div>
@@ -10118,9 +10117,10 @@ function showDescCharacterSelect(characterSelect) {
 
 function selectCharacterForUser() {
     characterUser = characterSelect.id
+    
+    document.getElementById("playerHunter").src= characterSelect.urlIMG
+    document.getElementById("popupSelectCharacter").style.display = "none";
 }
-
-
 
 //LOADING
 function showLoading() {
