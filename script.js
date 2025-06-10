@@ -10069,7 +10069,8 @@ function nextShowCharacterSelect() {
 }
     
 function showDescCharacterSelect(characterSelect) {
-    document.getElementById("imgCharacterSelect").src= characterSelect.urlIMG
+    document.getElementById("imgCharacterSelect").src = characterSelect.urlIMG
+    document.getElementById("nameCharacter").innerText = characterSelect.name
     
     let sttCharacter = ""
     if (characterSelect.hpMax > 0) {
@@ -10104,8 +10105,9 @@ function showDescCharacterSelect(characterSelect) {
     <div>
         ${characterSelect.desc}
     </div>
-    <div style="">
-        <span>Chỉ số:</span>
+    <div style="display: flex; text-align: justify; flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    gap: 5px;">
+        <span style="font-weight: bold">Chỉ số:</span>
         ${sttCharacter}
     </div>
     `
@@ -10113,7 +10115,6 @@ function showDescCharacterSelect(characterSelect) {
 
 function selectCharacterForUser() {
     characterUser = characterSelect.id
-    
     document.getElementById("playerHunter").src= characterSelect.urlIMG
     document.getElementById("popupSelectCharacter").style.display = "none";
 }
