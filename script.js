@@ -804,6 +804,12 @@ function loadDataForUser() {
             infoStartGame = { ...infoStartGame, ...data.infoStartGame } || { typeGame: "Conquest", modeGame: "Normal", difficultyGame: "Easy", roundGame: 1, stepGame: 0, winStreak: 0 };
             activateUser = data.activateUser;
             characterUser = data.characterUser;
+
+            
+        console.log(allCharacter)
+        console.log(characterUser)
+        document.getElementById("playerHunter").src = allCharacter[characterUser].urlIMG
+        
             allCharacterUser = data.allCharacterUser;
             onGame = data.onGame;
             idSkillRND = data.idSkillRND;
@@ -13577,7 +13583,6 @@ function loadMap(isMap) {
         console.warn("Không tìm thấy địa điểm:", isMap);
     }
 
-    player.src = allCharacter[characterUser].urlIMG
     settingMap();
     screenMain.style.display = "flex";
     updateStamina();
