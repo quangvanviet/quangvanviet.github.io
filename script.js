@@ -13601,7 +13601,7 @@ function openSelectHunt() {
 
     userPetSort.forEach((item, index) => {
         const skillDiv = document.createElement("div");
-        skillDiv.id = `inventory${index + 1}`;
+        skillDiv.id = `selectHunt${index + 1}`;
         skillDiv.className = "skill5MonInBag";
         skillDiv.style.cssText = `
             width: 65px;
