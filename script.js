@@ -6594,6 +6594,7 @@ function showOrHiddenDiv(idDiv) {
         hunterBoard: [document.getElementById("hunterBoard"), "Right"],
         popupBag: [document.getElementById("popupBag"), "Right"],
         popupShop: [document.getElementById("popupShop"), "Left"],
+        popupSelectHunt: [document.getElementById("popupSelectHunt"), "Left"],
     };
 
     const mainDiv = allDivs[idDiv] ? allDivs[idDiv][0] : "";
@@ -13562,10 +13563,9 @@ let targetX = playerX;
 let targetY = playerY;
 
 let canClick = true;
-
+let random5MonByLocalMap = [];
 function loadMap(isMap) {
     //random để lấy số 5Mon trong allpets
-    let random5MonByLocalMap = [];
     let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
 
     for (let i = 1; i <= 100; i++) {
@@ -13587,6 +13587,74 @@ function loadMap(isMap) {
     screenMain.style.display = "flex";
     updateStamina();
     spawnRandomPets();
+}
+
+let select5MonInSelectHunt = []; // Đảm bảo là mảng
+function openSelectHunt() {
+    showOrHiddenDiv('popupSelectHunt');
+    
+    let userPetSort = Object.values(allPets).sort((a, b) => a.ID.localeCompare(b.ID));
+    const boardSelectHunt = document.getElementById("boardSelectHunt");
+    const containerId = "selectHuntPages";
+
+    boardSelectHunt.innerHTML = "";
+
+    userPetSort.forEach((item, index) => {
+        const skillDiv = document.createElement("div");
+        skillDiv.id = `inventory${index + 1}`;
+        skillDiv.className = "skill5MonInBag";
+        skillDiv.style.cssText = `
+            width: 65px;
+            height: 76px;
+            cursor: grab;
+            border-radius: 5px;
+            text-align: center;
+            background: #3b3b56;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            border: 2px solid rebeccapurple;
+            outline: 4px solid #ff973a;
+        `;
+        skillDiv.onmouseover = () => skillDiv.style.transform = "scale(1.05)";
+        skillDiv.onmouseout = () => skillDiv.style.transform = "scale(1)";
+
+        let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
+        skillDiv.style.backgroundImage = `url(${URLimg})`;
+        skillDiv.draggable = true;
+        skillDiv.dataset.id = item.ID;
+        skillDiv.dataset.idcreate = item.IDcreate;
+        skillDiv.dataset.source = containerId;
+
+        const hasEquipped = select5MonInSelectHunt.includes(item.ID);
+
+        if (hasEquipped) {
+            const ownedOverlay = document.createElement("div");
+            ownedOverlay.textContent = "Đã chọn";
+            ownedOverlay.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.3);
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                pointer-events: none;
+            `;
+            skillDiv.appendChild(ownedOverlay);
+        }
+
+        boardSelectHunt.appendChild(skillDiv);
+    });
+
+    setupPopupEventsExchangePage(userPetSort); // Gọi ngoài forEach
 }
 
 let scaleGameScreen = 0;
@@ -14982,6 +15050,7 @@ window.showUpStamina = showUpStamina;
 window.closePopupMeet5Mon = closePopupMeet5Mon;
 window.catch5MonMeet = catch5MonMeet;
 window.openBag = openBag;
+window.openSelectHunt = openSelectHunt;
 window.loadItemBagLeft = loadItemBagLeft;
 window.chosenSortBagLeft = chosenSortBagLeft;
 window.showUpWeightBag = showUpWeightBag;
