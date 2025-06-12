@@ -13622,7 +13622,6 @@ function openSelectHunt() {
 
         let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
         skillDiv.style.backgroundImage = `url(${URLimg})`;
-        skillDiv.draggable = true;
         skillDiv.dataset.id = item.ID;
         skillDiv.dataset.idcreate = item.IDcreate;
         skillDiv.dataset.source = containerId;
@@ -13654,7 +13653,261 @@ function openSelectHunt() {
         boardSelectHunt.appendChild(skillDiv);
     });
 
-    setupPopupEventsExchangePage(userPetSort); // Gọi ngoài forEach
+    setupPopupEventsSelectHunt(userPetSort); // Gọi ngoài forEach
+}
+
+function setupPopupEventsSelectHunt(itemList) {
+    const popup = document.getElementById("itemPopupExchange");
+    const overlay = document.getElementById("popupOverlay");
+    const buttonBuy = document.getElementById("buyItemExchange");
+
+    // Thêm sự kiện click cho từng item để mở popup
+    itemList.forEach(item => {
+        const itemDiv = document.getElementById(item.ID);
+        itemDiv.addEventListener("click", () => {
+
+            let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
+            
+            document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
+            document.getElementById("popupNameExchange").textContent = item.NAME;
+            document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
+
+            for (let k = 1; k <= 4; k++) {
+                document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
+            }
+
+            document.getElementById(`popupImgExchangeLV${item.LEVEL}`).style.background = "rebeccapurple";
+
+            for (let s = 1; s <= 4; s++) {
+                const el = document.getElementById(`popupImgExchangeLV${s}`);
+                if (!el) continue;
+                el.onclick = () => {
+                    
+                    let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
+
+                    document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
+
+                    for (let k = 1; k <= 4; k++) {
+                        document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
+                    }
+                    
+                    el.style.background = "rebeccapurple";
+
+                };
+            }
+
+
+            let descTextItem = "";
+            // Type
+            let typeInfo = "";
+            item.TYPE.forEach(type => {
+                typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`
+            });
+
+            // Cập nhật thông tin trong popup
+            descTextItem += `
+            <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
+                <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; gap: 3px; width: 100%">
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-hand-fist"></i>: ??</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-shield"></i>: ??</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-brain"></i>: ??</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-bolt"></i></i>: ??</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-clover"></i>: ??</span>
+                    <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ??</span>
+                </div>
+            </div>`
+
+            // Cập nhật thông tin trong popup
+            descTextItem += `
+            <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
+            justify-content: space-between;align-items: center; width: 100%;">
+            <span>
+                [Máu: <a style="color:red; font-weight: bold;">???</a>]
+            </span>
+            <span style="display: flex; gap: 5px;">
+                <span style="display: flex; gap: 3px; flex-direction: row; align-content: center; justify-content: center; align-items: center;">
+                    ${typeInfo}
+                </span>
+            </span>
+            </span>
+            <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
+            <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
+            `
+
+            let descInfo = "";
+            let countDescInfo = 1;
+            if (item.EFFECT.length === 1) {
+                item.EFFECT.forEach((effect) => {
+                    if (effectsSkill[effect]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
+                        let rawDescription = dynamicDescription(item);
+
+                        // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                        let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                        // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                        hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                        // Thay thế "mon" bằng "5mon" nếu có
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        // Bây giờ hiddenDescription đã được cập nhật với các thay thế
+                        descInfo += hiddenDescription
+                    }
+                });
+            } else {
+                item.EFFECT.forEach((effect) => {
+                    if (effectsSkill[effect]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
+                        let rawDescription = dynamicDescription(item);
+                        // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
+                        let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
+
+                        // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
+                        hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
+
+                        // Thay thế "mon" bằng "5mon" nếu có
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        // Bây giờ hiddenDescription đã được cập nhật với các thay thế
+
+                        descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${hiddenDescription}</span>`;
+                        countDescInfo += 1;
+                    }
+                });
+            }
+
+            let internalInfo = "";
+            let countInternalInfo = 1;
+            if (item.INTERNAL.length === 1) {
+                item.INTERNAL.forEach((internal) => {
+                    if (effectsInternal[internal]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+                        internalInfo += hiddenDescription
+                    }
+                });
+            } else {
+                item.INTERNAL.forEach((internal) => {
+                    if (effectsInternal[internal]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsInternal[internal].descriptionInternal}\`;`);
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${hiddenDescription}</span>`;
+                        countInternalInfo += 1;
+                    }
+                });
+            }
+
+            //Chí mạng info
+            let critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???</span>]`;
+
+            // Gán nội dung vào phần tử HTML
+            if (descInfo !== "") {
+                descTextItem +=
+                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ???][Liên kích: ???]</span>
+    <span style="display: flex;flex-direction: column; gap: 3px;">${descInfo.trim()}</span>
+    <span>${critInfo.trim()}</span>`;
+            } else {
+                descTextItem += "";
+            }
+
+            if (internalInfo !== "") {
+                descTextItem +=
+                    `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng bị động]</span>
+    <span style="display: flex;flex-direction: column; gap: 3px;">${internalInfo.trim()}</span>`
+            } else {
+                descTextItem += "";
+            }
+
+            //Sellup info
+            let sellUpInfo = "";
+            let countSellUpInfo = 1;
+            if (item.SELLUP.length === 1) {
+                item.SELLUP.forEach((sellup) => {
+                    if (effectsSellUp[sellup]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        sellUpInfo += hiddenDescription
+                    }
+                });
+            } else {
+                item.SELLUP.forEach((sellup) => {
+                    if (effectsSellUp[sellup]) {
+                        // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
+                        const dynamicDescription = new Function("skill", `return \`${effectsSellUp[sellup].descriptionSellUp}\`;`);
+                        let rawDescription = dynamicDescription(item);
+                        // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
+                        let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
+                        hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
+
+                        sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${hiddenDescription}</span>`;
+                        countSellUpInfo += 1;
+                    }
+                });
+            }
+
+            if (sellUpInfo !== "") {
+                descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Thả đi nhận được]</span>
+                <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
+            } else {
+                descTextItem += "";
+            }
+
+            document.getElementById("popupDescExchange").innerHTML = descTextItem;
+
+
+            document.getElementById("popupPriceExchange").textContent = `${item.ticketsPRICE} vé đổi`;
+            // Kiểm tra nếu pet đã select chưa
+            const hasEquipped = select5MonInSelectHunt.includes(item.ID);
+
+            if (hasEquipped) {
+                buttonBuy.innerHTML = "Bỏ lựa chọn";
+                buttonBuy.style.background = "gray";
+                buttonBuy.style.cursor = "not-allowed";
+                buttonBuy.disabled = true;
+                buttonBuy.onclick = () => {
+                    select5MonInSelectHunt = select5MonInSelectHunt.filter(id => id !== item.ID);
+                };
+            } else {
+                buttonBuy.innerHTML = "Lựa chọn";
+                buttonBuy.style.background = "firebrick";
+                buttonBuy.style.cursor = "pointer";
+                buttonBuy.disabled = false;
+                buttonBuy.onclick = () => {
+                    select5MonInSelectHunt.push(item.ID);
+                };
+            }
+
+            popup.style.display = "block";
+            overlay.style.display = "block";
+        });
+    });
+
+    // Đóng popup khi bấm nút đóng hoặc click vào nền mờ
+    [overlay].forEach(element => {
+        element.addEventListener("click", (event) => {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+                overlay.style.display = "none";
+            }
+        });
+    });
 }
 
 let scaleGameScreen = 0;
