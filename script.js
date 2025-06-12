@@ -13567,7 +13567,7 @@ function loadMap(isMap) {
     //random để lấy số 5Mon trong allpets
     let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
 
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 1; i <= 50; i++) {
         if (allPetsLv1.length === 0) break; // tránh lỗi nếu không có 5mon level 1
         let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
         random5MonByLocalMap.push(allPetsLv1[rdIndex].ID);
@@ -13596,7 +13596,7 @@ function openSelectHunt() {
         //random để lấy số 5Mon trong allpets
         let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
         random5MonByLocalMap = [];
-        for (let i = 1; i <= 100; i++) {
+        for (let i = 1; i <= 50; i++) {
             if (allPetsLv1.length === 0) break; // tránh lỗi nếu không có 5mon level 1
             let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
             random5MonByLocalMap.push(allPetsLv1[rdIndex].ID);
