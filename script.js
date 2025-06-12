@@ -805,10 +805,9 @@ function loadDataForUser() {
             activateUser = data.activateUser;
             characterUser = data.characterUser;
 
-            
-        console.log(allCharacter)
-        console.log(characterUser)
-        document.getElementById("playerHunter").src = allCharacter[characterUser].urlIMG
+            if (characterUser) {
+                document.getElementById("playerHunter").src = allCharacter[characterUser].urlIMG
+            }
         
             allCharacterUser = data.allCharacterUser;
             onGame = data.onGame;
@@ -13898,7 +13897,7 @@ function setupPopupEventsSelectHunt(item) {
             document.getElementById("popupDescExchange").innerHTML = descTextItem;
     
     
-            document.getElementById("popupPriceExchange").textContent = `!@@!$#%#@#@%^%$^#`;
+            document.getElementById("popupPriceExchange").textContent = `!@$#%@^%$^#`;
             // Kiểm tra nếu pet đã select chưa
             const hasEquipped = select5MonInSelectHunt.includes(item.ID);
     
@@ -13906,7 +13905,7 @@ function setupPopupEventsSelectHunt(item) {
                 buttonBuy.innerHTML = "Bỏ lựa chọn";
                 buttonBuy.style.background = "gray";
                 buttonBuy.style.cursor = "pointer";
-                buttonBuy.disabled = true;
+                buttonBuy.disabled = false;
                 buttonBuy.onclick = () => {
                     select5MonInSelectHunt = select5MonInSelectHunt.filter(id => id !== item.ID);
                     popup.style.display = "none";
