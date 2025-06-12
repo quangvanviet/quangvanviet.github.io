@@ -13607,10 +13607,10 @@ function openSelectHunt() {
         list5MonMeet = [];
         if (random5MonByLocalMap) {
             list5MonMeet = [...random5MonByLocalMap, ...select5MonInSelectHunt];
-            console.log("Danh sách 5Mon gặp sau cập nhập", isMap, ":", list5MonMeet);
+            console.log("Danh sách 5Mon gặp sau cập nhập", list5MonMeet);
         } else {
             list5MonMeet = [];
-            console.warn("Không tìm thấy địa điểm:", isMap);
+            console.warn("Không tìm thấy list5MonMeet", list5MonMeet);
         }
         
         return;
@@ -13905,11 +13905,12 @@ function setupPopupEventsSelectHunt(item) {
             if (hasEquipped) {
                 buttonBuy.innerHTML = "Bỏ lựa chọn";
                 buttonBuy.style.background = "gray";
-                buttonBuy.style.cursor = "not-allowed";
+                buttonBuy.style.cursor = "pointer";
                 buttonBuy.disabled = true;
                 buttonBuy.onclick = () => {
                     select5MonInSelectHunt = select5MonInSelectHunt.filter(id => id !== item.ID);
                     popup.style.display = "none";
+                    overlay.style.display = "none";
                     loadSelect5MonHunt();
                 };
             } else {
@@ -13921,6 +13922,7 @@ function setupPopupEventsSelectHunt(item) {
                     for (let x = 1; x <=5 ; x++) {
                         select5MonInSelectHunt.push(item.ID);
                         popup.style.display = "none";
+                        overlay.style.display = "none";
                         loadSelect5MonHunt();
                     }
                 };
