@@ -12146,8 +12146,8 @@ function openPaymentGateway() {
 
     // Thông tin thanh toán
     const descPayment = `
-<span style="color: firebrick; ">Với cứ mỗi 1000đ bạn chuyển bạn sẽ nhận được 1 kim cương</span>
-<span>Thông tin chuyển khoản</span>
+<span style="color: firebrick; ">Với cứ mỗi 1000đ donate bạn sẽ nhận được 1 <i class="fa-solid fa-gem"></i></span>
+<span>Thông tin tài khoản ủng hộ</span>
 <span>Ngân hàng: <a style="color: royalblue;">MB Bank (Ngân hàng quân đội)</a></span>
 <span>Số tài khoản: <a style="color: royalblue;">0398167251</a></span>
 <span>Người thụ hưởng: <a style="color: royalblue;">Quàng Văn Việt</a></span>
@@ -12157,7 +12157,7 @@ function openPaymentGateway() {
 <span>Sau khi thanh toán xong vui lòng chờ xác nhận từ hệ thống</span>
 <span>Trường hợp đã quá 15 phút mà vẫn chưa thấy có tin hiệu phản hồi vui lòng liên hệ tới <a style="color: royalblue;">Sđt/Zalo: 0398167251</a> để được hỗ trợ</span>
 <span style="margin-top: -15px;">_____________________</span>
-<span style="color: royalblue;">Đội ngũ phát triển 5Mon cảm ơn bạn đã ủng hộ trò chơi này!</span>
+<span style="color: royalblue;">Thay mặt đội ngũ phát triển cảm ơn bạn đã ủng hộ trò chơi này.</span>
 `;
 
     descPaymentDiv.innerHTML = descPayment; // Thêm nội dung vào popup
