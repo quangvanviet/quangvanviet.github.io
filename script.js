@@ -13591,7 +13591,7 @@ function loadMap(isMap) {
 
 let select5MonInSelectHunt = []; // Đảm bảo là mảng
 function openSelectHunt() {
-    if (classList.contains("showDiv")) {
+    if (document.getElementById("popupSelectHunt").classList.contains("showDiv")) {
         showOrHiddenDiv('popupSelectHunt');
         return;
     }
