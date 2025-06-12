@@ -13593,6 +13593,26 @@ let select5MonInSelectHunt = []; // Đảm bảo là mảng
 function openSelectHunt() {
     if (document.getElementById("popupSelectHunt").classList.contains("showDiv")) {
         showOrHiddenDiv('popupSelectHunt');
+
+        //random để lấy số 5Mon trong allpets
+        let allPetsLv1 = allPets.filter(p => Number(p.LEVEL) === 1);
+        random5MonByLocalMap = [];
+        for (let i = 1; i <= 100; i++) {
+            if (allPetsLv1.length === 0) break; // tránh lỗi nếu không có 5mon level 1
+            let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
+            random5MonByLocalMap.push(allPetsLv1[rdIndex].ID);
+        }
+        
+        // Nếu tìm thấy, gán danh sách petMeets vào list5MonMeet
+        list5MonMeet = [];
+        if (random5MonByLocalMap) {
+            list5MonMeet = [...random5MonByLocalMap, ...select5MonInSelectHunt];
+            console.log("Danh sách 5Mon gặp sau cập nhập", isMap, ":", list5MonMeet);
+        } else {
+            list5MonMeet = [];
+            console.warn("Không tìm thấy địa điểm:", isMap);
+        }
+        
         return;
     } else {
         loadSelect5MonHunt();
