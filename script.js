@@ -4311,7 +4311,7 @@ function loadEventSlotBattle() {
 
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4380,7 +4380,7 @@ function loadEventSlotBattle() {
 
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4429,7 +4429,7 @@ function loadEventSlotBattle() {
                         slot.classList.add("occupied");
                         slot.style.backgroundColor = "";
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4468,7 +4468,7 @@ function loadEventSlotBattle() {
 
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
                     } else if (
@@ -4534,7 +4534,7 @@ function loadEventSlotBattle() {
 
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4572,7 +4572,7 @@ function loadEventSlotBattle() {
                             }
                             console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
                             highlightSkillLevel();
-                            resetMaxHpBattle();
+                            // resetMaxHpBattle();
                             updateSttForSkillAffter();
                             checkUpdateLevel();
                         }
@@ -4613,7 +4613,7 @@ function loadEventSlotBattle() {
                         slot.classList.add("occupied");
                         slot.style.backgroundColor = "";
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
                     } else {
@@ -4683,7 +4683,7 @@ function loadEventSlotBattle() {
 
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4709,7 +4709,7 @@ function loadEventSlotBattle() {
                             slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
                         console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
@@ -4738,7 +4738,7 @@ function loadEventSlotBattle() {
                     slot.classList.add("occupied");
                     slot.style.backgroundColor = "";
                     highlightSkillLevel();
-                    resetMaxHpBattle();
+                    // resetMaxHpBattle();
                     updateSttForSkillAffter();
                     checkUpdateLevel();
                 }
@@ -4832,7 +4832,7 @@ function loadEventSlotBattle() {
                         }
 
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4889,7 +4889,7 @@ function loadEventSlotBattle() {
                         }
 
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -4915,7 +4915,7 @@ function loadEventSlotBattle() {
                     slot.classList.add("occupied");
                     slot.style.backgroundColor = "";
                     highlightSkillLevel();
-                    resetMaxHpBattle();
+                    // resetMaxHpBattle();
                     updateSttForSkillAffter();
                     checkUpdateLevel();
 
@@ -4949,7 +4949,7 @@ function loadEventSlotBattle() {
                             skillDiv.dataset.skill = JSON.stringify(skillData); // Cập nhật lại data-skill
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -5002,7 +5002,7 @@ function loadEventSlotBattle() {
                             skillDiv.dataset.skill = JSON.stringify(skillData); // Cập nhật lại data-skill
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -5024,7 +5024,7 @@ function loadEventSlotBattle() {
                             slot.appendChild(parentSkill); // Đưa skill từ parentSlot vào slot
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
                         console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
@@ -5044,7 +5044,7 @@ function loadEventSlotBattle() {
                     slot.classList.add("occupied");
                     slot.style.backgroundColor = "";
                     highlightSkillLevel();
-                    resetMaxHpBattle();
+                    // resetMaxHpBattle();
                     updateSttForSkillAffter();
                     checkUpdateLevel();
                 }
@@ -5097,7 +5097,7 @@ function loadEventSlotBattle() {
                             skillDiv.dataset.skill = JSON.stringify(skillData); // Cập nhật lại data-skill
                         }
                         highlightSkillLevel();
-                        resetMaxHpBattle();
+                        // resetMaxHpBattle();
                         updateSttForSkillAffter();
                         checkUpdateLevel();
 
@@ -5133,7 +5133,7 @@ function loadEventSlotBattle() {
                                 console.warn("Đã hoán đổi1.");
                             }
                             highlightSkillLevel();
-                            resetMaxHpBattle();
+                            // resetMaxHpBattle();
                             updateSttForSkillAffter();
                             checkUpdateLevel();
                             console.log("Kéo từ tủ đồ 5 - đổi chỗ", typeGameConquest.battlePetInInventory, typeGameConquest.skillBattle);
@@ -5157,7 +5157,7 @@ function loadEventSlotBattle() {
                     slot.classList.add("occupied");
                     slot.style.backgroundColor = "";
                     highlightSkillLevel();
-                    resetMaxHpBattle();
+                    // resetMaxHpBattle();
                     updateSttForSkillAffter();
                     checkUpdateLevel();
                 }
@@ -5238,7 +5238,7 @@ function loadEventSlotBattle() {
             document.getElementById('starUser').innerText = typeGameConquest.starUser;
         }
         highlightSkillLevel();
-        resetMaxHpBattle();
+        // resetMaxHpBattle();
         updateSttForSkillAffter();
         checkUpdateLevel(); 
         internalUp();
@@ -6989,7 +6989,7 @@ function openGameRank() {
         if (onGame === 0 && infoStartGame.stepGame === 0) {
 
             //Reset Hp 
-            resetMaxHpBattle();
+            // resetMaxHpBattle();
 
             typeGameConquest.reRoll = 0;
             typeGameConquest.reRollPrice = 0
@@ -7147,14 +7147,14 @@ function openGameRank() {
     endLoading();
 }
 
-function resetMaxHpBattle() {
+function resetMaxHpBattle() { //chưa sửa được tính năng này => mong muốn là khi thay đổi defaultHP thì tất cả Hp của người chơi sẽ tự thay đổi
+    //Đáng ra phải tách ra nowHpBattleMy = defaultHP + maxHpUp + hp+thêm mỗi lượt hoặc gì đó
     // let allHP5Mon = 0;
     // Object.values(typeGameConquest.battlePetUseSlotRound).forEach(slot => {
     //     if (slot.POWER && typeof slot.POWER.HP === "number") {
     //         allHP5Mon += slot.POWER.HP;
     //     }
     // });
-
     typeGameConquest.maxHpBattle = defaultHP + maxHpUp;
 }
 
@@ -11340,7 +11340,7 @@ function resetOutGame() {
     //Hp của người chơi (nếu round = 1 thì auto Hp = 300; còn round > 1 thì Hp được lấy từ googleSheet)
     maxHpUp = 0;
 
-    resetMaxHpBattle();
+    // resetMaxHpBattle();
     idSkillRND = 0; //ID random tạo id cho div skill
 
     //Chỉ số trong game
