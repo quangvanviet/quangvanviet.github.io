@@ -7931,8 +7931,20 @@ function randomSkillinShop() {
                     dameSkillText += `<div class="skill-freeze">${Number(selectedSkill.COOLDOWN[0] / 2 / 1000 * selectedSkill.LEVEL)}</div>`;
                 }
 
+                let levelSkillColor = "#531515"
+
+                if (selectedSkill.LEVEL === 4) {
+                    levelSkillColor = "red"
+                } else if (selectedSkill.LEVEL === 3) {
+                    levelSkillColor = "#c00d0d"
+                } else if (selectedSkill.LEVEL === 2) {
+                    levelSkillColor = "#8c0b0b"
+                } else {
+                    levelSkillColor = "#531515"
+                }
+                
                 dameSkillDiv.innerHTML = `
-                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+                <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: ${levelSkillColor};text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
                 <i class="fa-solid fa-diamond"></i>
                 <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
                 </div>
@@ -8114,10 +8126,22 @@ function randomSkillinShop1() {
                 }
             }
 
+            let levelSkillColor = "#531515"
+
+            if (selectedSkill.LEVEL === 4) {
+                levelSkillColor = "red"
+            } else if (selectedSkill.LEVEL === 3) {
+                levelSkillColor = "#c00d0d"
+            } else if (selectedSkill.LEVEL === 2) {
+                levelSkillColor = "#8c0b0b"
+            } else {
+                levelSkillColor = "#531515"
+            }
+            
             // Gắn nội dung vào dameSkillDiv
             dameSkillDiv.innerHTML =
                 `
-            <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: #d80789;text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
+            <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: ${levelSkillColor};text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
             <i class="fa-solid fa-diamond"></i>
             <span class="levelSkillText" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 12px;color: white;font-weight: bold;">${selectedSkill.LEVEL}</span>
             </div>
