@@ -7641,35 +7641,35 @@ function upSTTRoundWithCharacter() {
     let addMultiFn = 0;
     //+++++
     //Kiểm tra xem nhân vật battle là gì
-    for (let i = 0; i < allCharacter.length; i++) {
-        if (allCharacter[i].id === typeGameConquest.selectCharacterBattle) {
-
-            typeGameConquest.maxHpBattle += allCharacter[i].hpMax
+    for (let key in allCharacter) {
+        let character = allCharacter[key];
+        if (character.id === typeGameConquest.selectCharacterBattle) {
+            typeGameConquest.maxHpBattle += character.hpMax
 
             Object.keys(typeGameConquest.skillBattle).forEach((key) => {
                 if (typeGameConquest.skillBattle[key].ID !== "" &&
                     key.endsWith("B")) {
-                    if (typeGameConquest.skillBattle[key].DAME[0] > 0 && allCharacter[i].upDame > 0) {
-                        typeGameConquest.skillBattle[key].DAME[1] += allCharacter[i].upDame
+                    if (typeGameConquest.skillBattle[key].DAME[0] > 0 && character.upDame > 0) {
+                        typeGameConquest.skillBattle[key].DAME[1] += character.upDame
                     }
-                    if (typeGameConquest.skillBattle[key].HEAL[0] > 0 && allCharacter[i].upHeal > 0) {
-                        typeGameConquest.skillBattle[key].HEAL[1] += allCharacter[i].upHeal
+                    if (typeGameConquest.skillBattle[key].HEAL[0] > 0 && character.upHeal > 0) {
+                        typeGameConquest.skillBattle[key].HEAL[1] += character.upHeal
                     }
-                    if (typeGameConquest.skillBattle[key].SHIELD[0] > 0 && allCharacter[i].upShield > 0) {
-                        typeGameConquest.skillBattle[key].SHIELD[1] += allCharacter[i].upShield
+                    if (typeGameConquest.skillBattle[key].SHIELD[0] > 0 && character.upShield > 0) {
+                        typeGameConquest.skillBattle[key].SHIELD[1] += character.upShield
                     }
-                    if (typeGameConquest.skillBattle[key].BURN[0] > 0 && allCharacter[i].upBurn > 0) {
-                        typeGameConquest.skillBattle[key].BURN[1] += allCharacter[i].upBurn
+                    if (typeGameConquest.skillBattle[key].BURN[0] > 0 && character.upBurn > 0) {
+                        typeGameConquest.skillBattle[key].BURN[1] += character.upBurn
                     }
-                    if (typeGameConquest.skillBattle[key].POISON[0] > 0 && allCharacter[i].upPoison > 0) {
-                        typeGameConquest.skillBattle[key].POISON[1] += allCharacter[i].upPoison
+                    if (typeGameConquest.skillBattle[key].POISON[0] > 0 && character.upPoison > 0) {
+                        typeGameConquest.skillBattle[key].POISON[1] += character.upPoison
                     }
-                    if (typeGameConquest.skillBattle[key].CRIT[0] > 0 && allCharacter[i].upCrit > 0) {
-                        typeGameConquest.skillBattle[key].CRIT[1] += allCharacter[i].upCrit
+                    if (typeGameConquest.skillBattle[key].CRIT[0] > 0 && character.upCrit > 0) {
+                        typeGameConquest.skillBattle[key].CRIT[1] += character.upCrit
                     }
                     //Sau 3 round thì mới cộng multi ngẫu nhiên 1 5mon
 
-                    // if (typeGameConquest.skillBattle[key].COOLDOWN[1] > 0 && allCharacter[i].upMulti > 0 && infoStartGame.roundGame % 3 === 0 && addMultiFn === 0) {
+                    // if (typeGameConquest.skillBattle[key].COOLDOWN[1] > 0 && character.upMulti > 0 && infoStartGame.roundGame % 3 === 0 && addMultiFn === 0) {
                     //     // Lọc danh sách các skill kết thúc bằng "B"
                     //     const skillBKeys = Object.keys(typeGameConquest.skillBattle).filter(key1 =>
                     //         typeGameConquest.skillBattle[key1].ID !== "" && key1.endsWith("B")
@@ -7680,7 +7680,7 @@ function upSTTRoundWithCharacter() {
                     //         const randomKey = skillBKeys[Math.floor(Math.random() * skillBKeys.length)];
 
                     //         // Cập nhật COOLDOWN của skill ngẫu nhiên
-                    //         typeGameConquest.skillBattle[randomKey].COOLDOWN[2] += allCharacter[i].upMulti;
+                    //         typeGameConquest.skillBattle[randomKey].COOLDOWN[2] += character.upMulti;
                     //         addMultiFn = 1;
 
                     //         console.log(`Skill "${randomKey}" được random và cập nhật COOLDOWN!`);
@@ -7691,14 +7691,14 @@ function upSTTRoundWithCharacter() {
                 }
             });
 
-            if (allCharacter[i].upCooldown > 0) {
-                typeGameConquest.upCooldownB += allCharacter[i].upCooldown
+            if (character.upCooldown > 0) {
+                typeGameConquest.upCooldownB += character.upCooldown
             }
-            if (allCharacter[i].slow > 0) {
-                typeGameConquest.slowB += allCharacter[i].slow
+            if (character.slow > 0) {
+                typeGameConquest.slowB += character.slow
             }
-            if (allCharacter[i].dameCrit > 0) {
-                typeGameConquest.dameCritB += allCharacter[i].dameCrit
+            if (character.dameCrit > 0) {
+                typeGameConquest.dameCritB += character.dameCrit
             }
 
             updateSttForSkillAffter();
