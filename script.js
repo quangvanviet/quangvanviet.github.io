@@ -9572,7 +9572,7 @@ function createNewComp(isWin) {
                     let fullGame = comp.loseUser + comp.winUser;
                     let ratioWinComp = (comp.winUser / fullGame) * 100;
 
-                    if (ratioWinComp < ratioWinCheck && fullGame > 10) {
+                    if (ratioWinComp < ratioWinCheck && fullGame > 4) {
                         compList.splice(existingIndex, 1);
                         console.log("Đã xóa comp vì tỷ lệ thắng thấp.");
                     } else {
