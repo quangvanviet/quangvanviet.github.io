@@ -15460,16 +15460,20 @@ class Bullet {
   constructor(owner, target) {
     this.owner = owner;
     this.team = owner.team;
-    this.x = owner.x + 0.5;  // bắn từ giữa ô
+
+    // spawn từ giữa ô pet
+    this.x = owner.x + 0.5;
     this.y = owner.y + 0.5;
 
-    let dx = target.x - owner.x;
-    let dy = target.y - owner.y;
+    // hướng bay về tâm đối thủ
+    let dx = (target.x + 0.5) - this.x;
+    let dy = (target.y + 0.5) - this.y;
+
     const len = Math.sqrt(dx*dx + dy*dy);
     this.vx = dx / len;
     this.vy = dy / len;
 
-    this.speed = 0.25; // hợp lý hơn
+    this.speed = 0.1; // ô / frame
 
     this.element = document.createElement("div");
     this.element.className = "bullet";
@@ -15487,17 +15491,20 @@ class Bullet {
     this.x += this.vx * this.speed;
     this.y += this.vy * this.speed;
 
-    // boundary
+    // ra ngoài map thì xóa
     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
       this.destroy();
       return false;
     }
 
-    // va chạm
+    // check va chạm
     const enemies = this.team === "A" ? teamB : teamA;
     for (let enemy of enemies) {
-      let dist = Math.sqrt((this.x - (enemy.x+0.5))**2 + (this.y - (enemy.y+0.5))**2);
-      if (dist < 0.5) {
+      let dist = Math.sqrt(
+        (this.x - (enemy.x + 0.5)) ** 2 +
+        (this.y - (enemy.y + 0.5)) ** 2
+      );
+      if (dist < 0.4) { // bán kính 0.4 ô
         enemy.takeDamage(this.owner.stats.ATK);
         this.destroy();
         return false;
@@ -15514,6 +15521,7 @@ class Bullet {
     }
   }
 }
+
 
 function placeBullet(bullet) {
   const mapArea = document.getElementById("mapArea");
@@ -15692,6 +15700,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
