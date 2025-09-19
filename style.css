@@ -41,14 +41,13 @@ body {
   grid-template-columns: repeat(15, 20px);
   grid-template-rows: repeat(12, 20px);
   gap: 1px;
-  background: #333;
   padding: 5px;
 }
 #mapArea .cell {
   width: 20px;
   height: 20px;
-  background: #1e1e1e;
-  border: 1px solid #444;
+  background: #2f0a0a;
+  border: 2px solid #984141;
 }
 
 /* Info */
@@ -2246,6 +2245,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
