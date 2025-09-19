@@ -15367,6 +15367,8 @@ class Pet {
     this.stats = stats;
     this.x = x;
     this.y = y;
+    this.isDead = false;   // <--- thêm flag
+    this.stt = [];
     this.hp = stats.HP;
     this.element = null; // DOM element trên map
     this.lastMove = 0;
@@ -15391,6 +15393,12 @@ class Pet {
   }
 
   moveRandom(now) {
+      if (this.isDead) return; // <--- nếu đã chết không di chuyển
+      // nếu có status bất lợi thì không di chuyển
+      if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
+        return;
+      }
+      
     if (now - this.lastMove < 1000 / this.stats.speedMove) return; // tốc độ di chuyển
     this.lastMove = now;
 
@@ -15414,6 +15422,12 @@ class Pet {
   }
 
       tryShoot(now) {
+          if (this.isDead) return; // <--- không bắn nếu đã chết
+          // nếu có status bất lợi thì không bắn
+          if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
+            return;
+          }
+          
           const A = 3900;
           const B = -0.292;
         
@@ -15434,6 +15448,7 @@ class Pet {
 
     
     takeDamage(dmg) {
+      if (this.isDead) return; // chết rồi thì bỏ qua
       this.hp -= dmg;
       if (this.hp < 0) this.hp = 0;
     
@@ -15446,6 +15461,21 @@ class Pet {
         }
       }
     }
+    die() {
+          this.isDead = true;
+        
+          // ❌ không remove khỏi teamA / teamB nữa
+        
+          // xóa element và hpBar trên DOM
+          if (this.element?.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          if (this.hpBar?.parentNode) {
+            this.hpBar.parentNode.removeChild(this.hpBar);
+          }
+        
+          console.log(`${this.team}${this.id} đã chết`);
+        }
 
 }
 
@@ -15731,6 +15761,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
