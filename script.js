@@ -15322,7 +15322,25 @@ function getScaleLevelUp(power) {
 //     });
 // }
 
+// BattleMap Area
+///////////////////////////////////
 
+function buildBattleMap(cols = 15, rows = 15) {
+  const mapArea = document.getElementById("mapArea");
+  mapArea.innerHTML = "";
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.dataset.x = x;
+      cell.dataset.y = y;
+      mapArea.appendChild(cell);
+    }
+  }
+}
+
+// gọi khi load
+buildBattleMap();
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -15371,3 +15389,4 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
