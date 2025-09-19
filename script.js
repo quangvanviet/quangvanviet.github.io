@@ -15425,32 +15425,21 @@ class Pet {
     const bullet = new Bullet(this, target);
     bullets.push(bullet);
   }
-
-linkHpBar(barEl) {
-    this.hpBarEl = barEl;
-    this.updateHpBar();
-  }
-
-  updateHpBar() {
-    if (this.hpBarEl) {
-      let percent = Math.max(0, (this.hp / this.stats.HP) * 100);
-      this.hpBarEl.style.width = percent + "%";
-      if (percent > 50) {
-        this.hpBarEl.style.background = "linear-gradient(90deg, #0f0, #6f6)";
-      } else if (percent > 20) {
-        this.hpBarEl.style.background = "linear-gradient(90deg, #ff0, #cc0)";
-      } else {
-        this.hpBarEl.style.background = "linear-gradient(90deg, #f00, #900)";
+    
+    takeDamage(dmg) {
+      this.hp -= dmg;
+      if (this.hp < 0) this.hp = 0;
+    
+      console.log(`${this.team}${this.id} HP: ${this.hp}/${this.stats.HP}`);
+    
+      if (this.hp === 0) {
+        // xử lý pet chết nếu muốn
+        if (this.element && this.element.parentNode) {
+          this.element.parentNode.removeChild(this.element);
+        }
       }
     }
-  }
 
-  takeDamage(dmg) {
-    this.hp -= dmg;
-    if (this.hp < 0) this.hp = 0;
-    this.updateHpBar();
-    console.log(`${this.team}${this.id} HP: ${this.hp}/${this.stats.HP}`);
-  }
 }
 
 
@@ -15592,7 +15581,6 @@ function createTeams() {
       teamB.push(petB);
       mapData[petB.y][petB.x].occupied = true;
       petB.createElement();
-      petB.linkHpBar(teamBbars[i]);
     });
     
     // Load Team A
@@ -15601,9 +15589,42 @@ function createTeams() {
       teamA.push(petA);
       mapData[petA.y][petA.x].occupied = true;
       petA.createElement();
-      petA.linkHpBar(teamAbars[i]);
     });
 }
+
+//Tính HPBar pet
+function updateHpBars() {
+  teamA.forEach((pet, i) => {
+    const bar = document.querySelector(`#petA${i+1}HpBar .hp-fill`);
+    if (bar) {
+      let percent = Math.max(0, (pet.hp / pet.stats.HP) * 100);
+      bar.style.width = percent + "%";
+      if (percent > 50) {
+        bar.style.background = "linear-gradient(90deg, #0f0, #6f6)";
+      } else if (percent > 20) {
+        bar.style.background = "linear-gradient(90deg, #ff0, #cc0)";
+      } else {
+        bar.style.background = "linear-gradient(90deg, #f00, #900)";
+      }
+    }
+  });
+
+  teamB.forEach((pet, i) => {
+    const bar = document.querySelector(`#petB${i+1}HpBar .hp-fill`);
+    if (bar) {
+      let percent = Math.max(0, (pet.hp / pet.stats.HP) * 100);
+      bar.style.width = percent + "%";
+      if (percent > 50) {
+        bar.style.background = "linear-gradient(90deg, #0f0, #6f6)";
+      } else if (percent > 20) {
+        bar.style.background = "linear-gradient(90deg, #ff0, #cc0)";
+      } else {
+        bar.style.background = "linear-gradient(90deg, #f00, #900)";
+      }
+    }
+  });
+}
+
 
 
 //Khởi tạo game loop
@@ -15618,8 +15639,11 @@ function gameLoop() {
 
   bullets = bullets.filter(b => b.update());
 
+  updateHpBars(); // 🔥 cập nhật máu liên tục
+
   requestAnimationFrame(gameLoop);
 }
+
 
 //Khởi tạo game từ đầu
 //////////////////////////////
@@ -15700,6 +15724,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
