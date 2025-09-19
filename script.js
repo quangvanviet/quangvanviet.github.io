@@ -15460,20 +15460,16 @@ class Bullet {
   constructor(owner, target) {
     this.owner = owner;
     this.team = owner.team;
-    this.x = owner.x;
-    this.y = owner.y;
+    this.x = owner.x + 0.5;  // bắn từ giữa ô
+    this.y = owner.y + 0.5;
 
-    // Tính vector hướng bắn tại thời điểm bắn
     let dx = target.x - owner.x;
     let dy = target.y - owner.y;
-
-    // Chuẩn hóa vector (để không bị bay lệch quá nhanh)
     const len = Math.sqrt(dx*dx + dy*dy);
-    this.vx = dx / len;  
-    this.vy = dy / len;  
+    this.vx = dx / len;
+    this.vy = dy / len;
 
-    // tốc độ bay (càng nhỏ càng chậm)
-    this.speed = 0.02; // mỗi frame đi 0.2 ô
+    this.speed = 0.25; // hợp lý hơn
 
     this.element = document.createElement("div");
     this.element.className = "bullet";
@@ -15484,40 +15480,36 @@ class Bullet {
     this.element.style.position = "absolute";
     this.element.style.zIndex = "10";
 
-    // đặt vị trí ban đầu
     placeBullet(this);
   }
 
   update() {
-    // di chuyển
     this.x += this.vx * this.speed;
     this.y += this.vy * this.speed;
 
-    // kiểm tra map boundary
+    // boundary
     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
       this.destroy();
       return false;
     }
 
-    // kiểm tra va chạm với pet đối thủ
+    // va chạm
     const enemies = this.team === "A" ? teamB : teamA;
     for (let enemy of enemies) {
-      if (Math.abs(this.x - enemy.x) < 0.5 && Math.abs(this.y - enemy.y) < 0.5) {
-          enemy.takeDamage(this.owner.stats.ATK);
-          this.destroy();
-          return false;
-        }
+      let dist = Math.sqrt((this.x - (enemy.x+0.5))**2 + (this.y - (enemy.y+0.5))**2);
+      if (dist < 0.5) {
+        enemy.takeDamage(this.owner.stats.ATK);
+        this.destroy();
+        return false;
+      }
     }
 
-      
-
-    // cập nhật DOM
     placeBullet(this);
     return true;
   }
 
   destroy() {
-    if (this.element && this.element.parentNode) {
+    if (this.element?.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
   }
@@ -15525,15 +15517,15 @@ class Bullet {
 
 function placeBullet(bullet) {
   const mapArea = document.getElementById("mapArea");
-  const cellSize = 20; // đúng bằng cell map
-
-  bullet.element.style.left = (bullet.x * cellSize + 5) + "px";
-  bullet.element.style.top  = (bullet.y * cellSize + 5) + "px";
+  const cellSize = 20;
+  bullet.element.style.left = (bullet.x * cellSize) + "px";
+  bullet.element.style.top  = (bullet.y * cellSize) + "px";
 
   if (!bullet.element.parentNode) {
     mapArea.appendChild(bullet.element);
   }
 }
+
 
 
 //Khởi tạo 2 team
@@ -15700,6 +15692,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
