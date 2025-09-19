@@ -15325,19 +15325,35 @@ function getScaleLevelUp(power) {
 // BattleMap Area
 ///////////////////////////////////
 
+let mapData = []; // chứa thông tin ô
+
 function buildBattleMap(cols = 15, rows = 15) {
   const mapArea = document.getElementById("mapArea");
   mapArea.innerHTML = "";
+  mapData = []; // reset
+
   for (let y = 0; y < rows; y++) {
+    const row = [];
     for (let x = 0; x < cols; x++) {
       const cell = document.createElement("div");
       cell.className = "cell";
       cell.dataset.x = x;
       cell.dataset.y = y;
+
+      // push vào mảng trạng thái
+      row.push({
+        x: x,
+        y: y,
+        occupied: false, // mặc định trống
+        pet: null        // pet nào đang đứng, nếu có
+      });
+
       mapArea.appendChild(cell);
     }
+    mapData.push(row);
   }
 }
+
 
 // gọi khi load
 buildBattleMap();
@@ -15389,4 +15405,5 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
