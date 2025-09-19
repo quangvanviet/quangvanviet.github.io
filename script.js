@@ -15425,6 +15425,32 @@ class Pet {
     const bullet = new Bullet(this, target);
     bullets.push(bullet);
   }
+
+linkHpBar(barEl) {
+    this.hpBarEl = barEl;
+    this.updateHpBar();
+  }
+
+  updateHpBar() {
+    if (this.hpBarEl) {
+      let percent = Math.max(0, (this.hp / this.stats.HP) * 100);
+      this.hpBarEl.style.width = percent + "%";
+      if (percent > 50) {
+        this.hpBarEl.style.background = "linear-gradient(90deg, #0f0, #6f6)";
+      } else if (percent > 20) {
+        this.hpBarEl.style.background = "linear-gradient(90deg, #ff0, #cc0)";
+      } else {
+        this.hpBarEl.style.background = "linear-gradient(90deg, #f00, #900)";
+      }
+    }
+  }
+
+  takeDamage(dmg) {
+    this.hp -= dmg;
+    if (this.hp < 0) this.hp = 0;
+    this.updateHpBar();
+    console.log(`${this.team}${this.id} HP: ${this.hp}/${this.stats.HP}`);
+  }
 }
 
 
@@ -15477,12 +15503,13 @@ class Bullet {
     const enemies = this.team === "A" ? teamB : teamA;
     for (let enemy of enemies) {
       if (Math.abs(this.x - enemy.x) < 0.5 && Math.abs(this.y - enemy.y) < 0.5) {
-        enemy.hp -= this.owner.stats.ATK;
-        console.log(`${this.owner.team}${this.owner.id} bắn trúng ${enemy.team}${enemy.id}, HP còn: ${enemy.hp}`);
-        this.destroy();
-        return false;
-      }
+          enemy.takeDamage(this.owner.stats.ATK);
+          this.destroy();
+          return false;
+        }
     }
+
+      
 
     // cập nhật DOM
     placeBullet(this);
@@ -15515,28 +15542,69 @@ let teamA = [];
 let teamB = [];
 let bullets = [];
 
+let petData = {
+  teamA: [
+    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, speedMove: 1.5 },
+    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, speedMove: 1.2 },
+    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, speedMove: 1.0 }
+  ],
+  teamB: [
+    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, speedMove: 1.3 },
+    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, speedMove: 1.4 },
+    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, speedMove: 1.1 }
+  ]
+};
+
+// function randomCreatePet() {
+//   teamA = [];
+//   teamB = [];
+//   bullets = [];
+
+//   const statsSample = () => ({
+//     ATK: 10, DEF: 5, AGI: Math.floor(Math.random() * 5 + 3),
+//     INT: 2, LUK: 2, HP: 50, speedMove: Math.random() * 2 + 1
+//   });
+
+//   for (let i = 0; i < 3; i++) {
+//     let petB = new Pet("B", i+1, statsSample(), 2, i*2+2);
+//     teamB.push(petB);
+//     mapData[petB.y][petB.x].occupied = true;
+//     petB.createElement();
+
+//     let petA = new Pet("A", i+1, statsSample(), 12, i*2+2);
+//     teamA.push(petA);
+//     mapData[petA.y][petA.x].occupied = true;
+//     petA.createElement();
+//   }
+// }
+
 function createTeams() {
-let teamA = [];
-let teamB = [];
-let bullets = [];
+  teamA = [];
+  teamB = [];
+  bullets = [];
+
+  const teamBbars = document.querySelectorAll("#teamB-box .hp-fill");
+  const teamAbars = document.querySelectorAll("#teamA-box .hp-fill");
+
+  // Nếu có petData thì load
+    petData.teamB.forEach((stats, i) => {
+      let petB = new Pet("B", stats.id, stats, 2, i * 2 + 2);
+      teamB.push(petB);
+      mapData[petB.y][petB.x].occupied = true;
+      petB.createElement();
+      petB.linkHpBar(teamBbars[i]);
+    });
     
-  const statsSample = () => ({
-    ATK: 10, DEF: 5, AGI: Math.floor(Math.random()*5+3), 
-    INT: 2, LUK: 2, HP: 50, speedMove: Math.random()*2+1
-  });
-
-  for (let i = 0; i < 3; i++) {
-    let petB = new Pet("B", i+1, statsSample(), 2, i*2+2);
-    teamB.push(petB);
-    mapData[petB.y][petB.x].occupied = true;
-    petB.createElement();
-
-    let petA = new Pet("A", i+1, statsSample(), 12, i*2+2);
-    teamA.push(petA);
-    mapData[petA.y][petA.x].occupied = true;
-    petA.createElement();
-  }
+    // Load Team A
+    petData.teamA.forEach((stats, i) => {
+      let petA = new Pet("A", stats.id, stats, 12, i * 2 + 2);
+      teamA.push(petA);
+      mapData[petA.y][petA.x].occupied = true;
+      petA.createElement();
+      petA.linkHpBar(teamAbars[i]);
+    });
 }
+
 
 //Khởi tạo game loop
 ///////////////////////
@@ -15632,6 +15700,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
