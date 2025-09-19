@@ -15631,7 +15631,6 @@ function updateBullets() {
 /////////////////////
 let teamA = [];
 let teamB = [];
-let bullets = [];
 
 let petData = {
   teamA: [
@@ -15831,6 +15830,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
