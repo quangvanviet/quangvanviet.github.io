@@ -15528,7 +15528,7 @@ const SkillBook = {
 //Bullet viên đạn
 ///////////////////
 // ========== Đạn ==========
-const bullets = new Set();
+let bullets = new Set();
 
 class Bullet {
   constructor(owner, target) {
@@ -15672,7 +15672,6 @@ let petData = {
 function createTeams() {
   teamA = [];
   teamB = [];
-  bullets = [];
 
   const teamBbars = document.querySelectorAll("#teamB-box .hp-fill");
   const teamAbars = document.querySelectorAll("#teamA-box .hp-fill");
@@ -15735,48 +15734,41 @@ function gameLoop() {
   const now = Date.now();
 
   for (let pet of [...teamA, ...teamB]) {
-  if (pet.isDead) continue;
-      const enemies = pet.team === "A" ? teamB : teamA;
-      const target = enemies[0]; // chọn 1 mục tiêu
+    if (pet.isDead) continue;
+    const enemies = pet.team === "A" ? teamB : teamA;
+    const target = enemies[0];
     
-      pet.tryShoot(now, target);   // bắn thường
-      pet.trySkill(now, target);   // skill
-    }
+    pet.tryShoot(now, target);   // bắn thường
+    pet.trySkill(now, target);   // skill
+  }
 
-  bullets = bullets.filter(b => b.update());
+  updateBullets(); // ✅ dùng hàm duyệt Set
 
-  updateHpBars(); // 🔥 cập nhật máu liên tục
+  updateHpBars();
 
   requestAnimationFrame(gameLoop);
 }
 
 
+
 //Khởi tạo game từ đầu
 //////////////////////////////
-
 function resetBattle() {
-  // Xóa tất cả pet trong map (DOM)
   [...teamA, ...teamB].forEach(pet => {
-    if (pet.element && pet.element.parentNode) {
-      pet.element.parentNode.removeChild(pet.element);
-    }
+    if (pet.element?.parentNode) pet.element.parentNode.removeChild(pet.element);
   });
 
-  // Xóa tất cả bullet trong map (DOM)
   bullets.forEach(bullet => {
-    if (bullet.element && bullet.element.parentNode) {
-      bullet.element.parentNode.removeChild(bullet.element);
-    }
+    if (bullet.element?.parentNode) bullet.element.parentNode.removeChild(bullet.element);
   });
+  bullets.clear(); // ✅ xóa tất cả khỏi Set mà không đổi kiểu
 
-  // Reset mảng
   teamA = [];
   teamB = [];
-  bullets = [];
 
-  // Xây lại map từ đầu
   buildBattleMap();
 }
+
 
 // gọi khi loadgame - start game
 buildBattleMap();
@@ -15830,6 +15822,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
