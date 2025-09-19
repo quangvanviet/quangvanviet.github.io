@@ -15433,60 +15433,81 @@ class Pet {
 class Bullet {
   constructor(owner, target) {
     this.owner = owner;
-    this.target = target;
+    this.team = owner.team;
     this.x = owner.x;
     this.y = owner.y;
+
+    // Tính vector hướng bắn tại thời điểm bắn
+    let dx = target.x - owner.x;
+    let dy = target.y - owner.y;
+
+    // Chuẩn hóa vector (để không bị bay lệch quá nhanh)
+    const len = Math.sqrt(dx*dx + dy*dy);
+    this.vx = dx / len;  
+    this.vy = dy / len;  
+
+    // tốc độ bay (càng nhỏ càng chậm)
+    this.speed = 0.02; // mỗi frame đi 0.2 ô
+
     this.element = document.createElement("div");
     this.element.className = "bullet";
     this.element.style.width = "6px";
     this.element.style.height = "6px";
     this.element.style.background = "red";
     this.element.style.borderRadius = "50%";
-    getCellElement(this.x, this.y).appendChild(this.element);
+    this.element.style.position = "absolute";
+    this.element.style.zIndex = "10";
+
+    // đặt vị trí ban đầu
+    placeBullet(this);
   }
 
   update() {
-    // vector hướng về target
-    const dx = this.target.x - this.x;
-    const dy = this.target.y - this.y;
-    if (dx === 0 && dy === 0) {
-      this.hit();
-      return false;
-    }
+    // di chuyển
+    this.x += this.vx * this.speed;
+    this.y += this.vy * this.speed;
 
-    // di chuyển 1 bước
-    this.x += Math.sign(dx);
-    this.y += Math.sign(dy);
-
-    // kiểm tra biên
+    // kiểm tra map boundary
     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
       this.destroy();
       return false;
     }
 
-    // kiểm tra trúng địch
-    if (this.x === this.target.x && this.y === this.target.y) {
-      this.hit();
-      return false;
+    // kiểm tra va chạm với pet đối thủ
+    const enemies = this.team === "A" ? teamB : teamA;
+    for (let enemy of enemies) {
+      if (Math.abs(this.x - enemy.x) < 0.5 && Math.abs(this.y - enemy.y) < 0.5) {
+        enemy.hp -= this.owner.stats.ATK;
+        console.log(`${this.owner.team}${this.owner.id} bắn trúng ${enemy.team}${enemy.id}, HP còn: ${enemy.hp}`);
+        this.destroy();
+        return false;
+      }
     }
 
-    // update vị trí DOM
-    if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
-    getCellElement(this.x, this.y).appendChild(this.element);
-
+    // cập nhật DOM
+    placeBullet(this);
     return true;
   }
 
-  hit() {
-    this.target.hp -= this.owner.stats.ATK; // damage = ATK
-    console.log(`${this.owner.team}${this.owner.id} bắn trúng ${this.target.team}${this.target.id}, HP còn: ${this.target.hp}`);
-    this.destroy();
-  }
-
   destroy() {
-    if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
+    if (this.element && this.element.parentNode) {
+      this.element.parentNode.removeChild(this.element);
+    }
   }
 }
+
+function placeBullet(bullet) {
+  const mapArea = document.getElementById("mapArea");
+  const cellSize = 20; // đúng bằng cell map
+
+  bullet.element.style.left = (bullet.x * cellSize + 5) + "px";
+  bullet.element.style.top  = (bullet.y * cellSize + 5) + "px";
+
+  if (!bullet.element.parentNode) {
+    mapArea.appendChild(bullet.element);
+  }
+}
+
 
 //Khởi tạo 2 team
 /////////////////////
@@ -15611,6 +15632,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
