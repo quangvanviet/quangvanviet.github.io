@@ -15327,7 +15327,7 @@ function getScaleLevelUp(power) {
 
 let mapData = []; // chứa thông tin ô
 
-function buildBattleMap(cols = 15, rows = 15) {
+function buildBattleMap(cols = 15, rows = 12) {
   const mapArea = document.getElementById("mapArea");
   mapArea.innerHTML = "";
   mapData = []; // reset
@@ -15405,5 +15405,6 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
