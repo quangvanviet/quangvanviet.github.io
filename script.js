@@ -15373,6 +15373,11 @@ class Pet {
     this.element = null; // DOM element trên map
     this.lastMove = 0;
     this.lastShot = 0;
+    this.skills = [];
+    this.skillTimers = {}; // { Frozen: 0, Burn: 0 }
+    for (let name of skills) {
+      this.skillTimers[name] = 0;
+    }
   }
 
   createElement() {
@@ -15421,6 +15426,25 @@ class Pet {
     }
   }
 
+    trySkill(now, target) {
+        if (this.isDead) return;
+        if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
+          return;
+        }
+    
+        for (let skillName of this.skills) {
+          const skill = SkillBook[skillName];
+          if (!skill) continue;
+    
+          const lastCast = this.skillTimers[skillName] || 0;
+          if (now - lastCast >= skill.cooldown) {
+            skill.effect(this, target);
+            this.skillTimers[skillName] = now;
+          }
+        }
+      }
+    
+    
       tryShoot(now) {
           if (this.isDead) return; // <--- không bắn nếu đã chết
           // nếu có status bất lợi thì không bắn
@@ -15479,6 +15503,27 @@ class Pet {
 
 }
 
+//Skill
+////////////////////////
+const SkillBook = {
+  Frozen: {
+    cooldown: 5000,
+    effect: (caster, target) => {
+      if (!target) return;
+      target.stt.push("frozen");
+      console.log(`${caster.id} đóng băng ${target.id}`);
+    }
+  },
+  Burn: {
+    cooldown: 7000,
+    effect: (caster, target) => {
+      if (!target) return;
+      target.stt.push("burn");
+      target.takeDamage(20);
+      console.log(`${caster.id} thiêu đốt ${target.id}`);
+    }
+  }
+};
 
 //Bullet viên đạn
 ///////////////////
@@ -15590,16 +15635,17 @@ let bullets = [];
 
 let petData = {
   teamA: [
-    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, speedMove: 1.5 },
-    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, speedMove: 1.2 },
-    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, speedMove: 1.0 }
+    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, speedMove: 1.5, skills: ["Frozen"] },
+    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, speedMove: 1.2, skills: ["Burn", "Stun"] },
+    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, speedMove: 1.0, skills: [] }
   ],
   teamB: [
-    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, speedMove: 1.3 },
-    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, speedMove: 1.4 },
-    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, speedMove: 1.1 }
+    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, speedMove: 1.3, skills: ["Frozen"] },
+    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, speedMove: 1.4, skills: ["Stun"] },
+    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, speedMove: 1.1, skills: ["Burn", "Frozen"] }
   ]
 };
+
 
 // function randomCreatePet() {
 //   teamA = [];
@@ -15689,10 +15735,14 @@ function updateHpBars() {
 function gameLoop() {
   const now = Date.now();
 
-  [...teamA, ...teamB].forEach(pet => {
-    pet.moveRandom(now);
-    pet.tryShoot(now);
-  });
+  for (let pet of [...teamA, ...teamB]) {
+  if (pet.isDead) continue;
+      const enemies = pet.team === "A" ? teamB : teamA;
+      const target = enemies[0]; // chọn 1 mục tiêu
+    
+      pet.tryShoot(now, target);   // bắn thường
+      pet.trySkill(now, target);   // skill
+    }
 
   bullets = bullets.filter(b => b.update());
 
@@ -15781,6 +15831,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
