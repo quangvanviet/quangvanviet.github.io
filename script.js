@@ -15414,29 +15414,23 @@ class Pet {
   }
 
       tryShoot(now) {
-      const AGImin = 10, AGImax = 500;
-      const maxCooldown = 2000, minCooldown = 400;
-      
-      let agi = this.stats.AGI;
-      agi = Math.min(Math.max(agi, AGImin), AGImax); // ép AGI nằm trong khoảng [10, 500]
-      
-      // scale AGI → cooldown (2000ms → 400ms)
-      const cooldown = maxCooldown - (agi - AGImin) * (maxCooldown - minCooldown) / (AGImax - AGImin);
-      
-      // kiểm tra nếu chưa đủ thời gian hồi
-      if (now - this.lastShot < cooldown) return;
-    
-      // đã bắn được
-      this.lastShot = now;
-    
-      // chọn mục tiêu ngẫu nhiên
-      const enemyTeam = this.team === "A" ? teamB : teamA;
-      const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
-      if (!target) return;
-    
-      const bullet = new Bullet(this, target);
-      bullets.push(bullet);
-    }
+          const A = 3900;
+          const B = -0.292;
+        
+          const agi = this.stats.AGI;
+          const cooldown = A * Math.pow(agi, B);
+        
+          if (now - this.lastShot < cooldown) return;
+          this.lastShot = now;
+        
+          const enemyTeam = this.team === "A" ? teamB : teamA;
+          const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
+          if (!target) return;
+        
+          const bullet = new Bullet(this, target);
+          bullets.push(bullet);
+        }
+
 
     
     takeDamage(dmg) {
@@ -15737,6 +15731,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
