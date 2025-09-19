@@ -26,23 +26,29 @@
         justify-content: center;
         align-items: center;">
         
-        <div id="battleMap" style="display: flex; justify-content: space-around; gap: 20px;">
+        <div id="battleMap" style="display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            position: absolute;
+            z-index: 20;
+            flex-direction: column;">
+            
           <!--  Khu vực map 15x15 -->
           <div id="mapArea"></div>
         
           <!--  Khu vực thông tin -->
           <div id="infoArea">
             <!-- Team B - Mình -->
-            <div class="team-box">
-              <h3>Team B (Mình)</h3>
+            <div class="team-box" style="width: 50%;">
+              <h3 style="display: flex; justify-content: flex-start;">Team B (Mình)</h3>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
             </div>
         
             <!-- Team A - Địch -->
-            <div class="team-box">
-              <h3>Team A (Địch)</h3>
+            <div class="team-box" style="width: 50%;">
+              <h3 style="display: flex; justify-content: flex-end;" >Team A (Địch)</h3>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
               <div class="hp-bar"><div class="hp-fill" style="width: 100%"></div></div>
@@ -3042,4 +3048,5 @@
 </body>
 
 </html>
+
 
