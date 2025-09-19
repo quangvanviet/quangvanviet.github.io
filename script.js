@@ -15413,18 +15413,31 @@ class Pet {
     }
   }
 
-  tryShoot(now) {
-    if (now - this.lastShot < 2000 / this.stats.AGI) return; // AGI càng cao bắn càng nhanh
-    this.lastShot = now;
+      tryShoot(now) {
+      const AGImin = 10, AGImax = 500;
+      const maxCooldown = 2000, minCooldown = 400;
+      
+      let agi = this.stats.AGI;
+      agi = Math.min(Math.max(agi, AGImin), AGImax); // ép AGI nằm trong khoảng [10, 500]
+      
+      // scale AGI → cooldown (2000ms → 400ms)
+      const cooldown = maxCooldown - (agi - AGImin) * (maxCooldown - minCooldown) / (AGImax - AGImin);
+      
+      // kiểm tra nếu chưa đủ thời gian hồi
+      if (now - this.lastShot < cooldown) return;
+    
+      // đã bắn được
+      this.lastShot = now;
+    
+      // chọn mục tiêu ngẫu nhiên
+      const enemyTeam = this.team === "A" ? teamB : teamA;
+      const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
+      if (!target) return;
+    
+      const bullet = new Bullet(this, target);
+      bullets.push(bullet);
+    }
 
-    // chọn mục tiêu ngẫu nhiên bên đối thủ
-    const enemyTeam = this.team === "A" ? teamB : teamA;
-    const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
-    if (!target) return;
-
-    const bullet = new Bullet(this, target);
-    bullets.push(bullet);
-  }
     
     takeDamage(dmg) {
       this.hp -= dmg;
@@ -15462,7 +15475,7 @@ class Bullet {
     this.vx = dx / len;
     this.vy = dy / len;
 
-    this.speed = 0.1; // ô / frame
+    this.speed = 0.05; // ô / frame
 
     this.element = document.createElement("div");
     this.element.className = "bullet";
@@ -15724,6 +15737,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
