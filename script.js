@@ -15495,6 +15495,10 @@ let teamB = [];
 let bullets = [];
 
 function createTeams() {
+let teamA = [];
+let teamB = [];
+let bullets = [];
+    
   const statsSample = () => ({
     ATK: 10, DEF: 5, AGI: Math.floor(Math.random()*5+3), 
     INT: 2, LUK: 2, HP: 50, speedMove: Math.random()*2+1
@@ -15528,12 +15532,37 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
+//Khởi tạo game từ đầu
+//////////////////////////////
+
+function resetBattle() {
+  // Xóa tất cả pet trong map (DOM)
+  [...teamA, ...teamB].forEach(pet => {
+    if (pet.element && pet.element.parentNode) {
+      pet.element.parentNode.removeChild(pet.element);
+    }
+  });
+
+  // Xóa tất cả bullet trong map (DOM)
+  bullets.forEach(bullet => {
+    if (bullet.element && bullet.element.parentNode) {
+      bullet.element.parentNode.removeChild(bullet.element);
+    }
+  });
+
+  // Reset mảng
+  teamA = [];
+  teamB = [];
+  bullets = [];
+
+  // Xây lại map từ đầu
+  buildBattleMap();
+}
 
 // gọi khi loadgame - start game
 buildBattleMap();
 createTeams();
 gameLoop();
-
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -15582,6 +15611,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
