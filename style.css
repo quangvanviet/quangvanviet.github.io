@@ -84,7 +84,7 @@ body {
   justify-content: center;
 }
 .bullet {
-  z-index: 21;
+  z-index: 19;
 }
 
 
@@ -2255,6 +2255,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
