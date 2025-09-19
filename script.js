@@ -15354,9 +15354,186 @@ function buildBattleMap(cols = 15, rows = 12) {
   }
 }
 
+function getCellElement(x, y) {
+  return document.querySelector(`#mapArea .cell[data-x="${x}"][data-y="${y}"]`);
+}
 
-// gọi khi load
+//Class pet
+//////////////
+class Pet {
+  constructor(team, id, stats, x, y) {
+    this.team = team; // "A" hoặc "B"
+    this.id = id;
+    this.stats = stats;
+    this.x = x;
+    this.y = y;
+    this.hp = stats.HP;
+    this.element = null; // DOM element trên map
+    this.lastMove = 0;
+    this.lastShot = 0;
+  }
+
+  createElement() {
+    const el = document.createElement("div");
+    el.className = "pet";
+    el.style.background = this.team === "A" ? "blue" : "green";
+    el.style.width = "18px";
+    el.style.height = "18px";
+    el.style.borderRadius = "50%";
+    el.style.position = "relative";
+    el.style.zIndex = "5";
+    el.innerText = this.id;
+    el.style.fontSize = "10px";
+    el.style.color = "white";
+    this.element = el;
+    const cell = getCellElement(this.x, this.y);
+    cell.appendChild(el);
+  }
+
+  moveRandom(now) {
+    if (now - this.lastMove < 1000 / this.stats.speedMove) return; // tốc độ di chuyển
+    this.lastMove = now;
+
+    const dirs = [
+      [0, -1], [0, 1], [-1, 0], [1, 0]
+    ];
+    const [dx, dy] = dirs[Math.floor(Math.random() * dirs.length)];
+    const nx = this.x + dx;
+    const ny = this.y + dy;
+
+    if (nx >= 0 && nx < 15 && ny >= 0 && ny < 12 && !mapData[ny][nx].occupied) {
+      // clear chỗ cũ
+      mapData[this.y][this.x].occupied = false;
+      if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
+
+      this.x = nx;
+      this.y = ny;
+      mapData[this.y][this.x].occupied = true;
+      getCellElement(this.x, this.y).appendChild(this.element);
+    }
+  }
+
+  tryShoot(now) {
+    if (now - this.lastShot < 2000 / this.stats.AGI) return; // AGI càng cao bắn càng nhanh
+    this.lastShot = now;
+
+    // chọn mục tiêu ngẫu nhiên bên đối thủ
+    const enemyTeam = this.team === "A" ? teamB : teamA;
+    const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
+    if (!target) return;
+
+    const bullet = new Bullet(this, target);
+    bullets.push(bullet);
+  }
+}
+
+
+//Bullet viên đạn
+///////////////////
+class Bullet {
+  constructor(owner, target) {
+    this.owner = owner;
+    this.target = target;
+    this.x = owner.x;
+    this.y = owner.y;
+    this.element = document.createElement("div");
+    this.element.className = "bullet";
+    this.element.style.width = "6px";
+    this.element.style.height = "6px";
+    this.element.style.background = "red";
+    this.element.style.borderRadius = "50%";
+    getCellElement(this.x, this.y).appendChild(this.element);
+  }
+
+  update() {
+    // vector hướng về target
+    const dx = this.target.x - this.x;
+    const dy = this.target.y - this.y;
+    if (dx === 0 && dy === 0) {
+      this.hit();
+      return false;
+    }
+
+    // di chuyển 1 bước
+    this.x += Math.sign(dx);
+    this.y += Math.sign(dy);
+
+    // kiểm tra biên
+    if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
+      this.destroy();
+      return false;
+    }
+
+    // kiểm tra trúng địch
+    if (this.x === this.target.x && this.y === this.target.y) {
+      this.hit();
+      return false;
+    }
+
+    // update vị trí DOM
+    if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
+    getCellElement(this.x, this.y).appendChild(this.element);
+
+    return true;
+  }
+
+  hit() {
+    this.target.hp -= this.owner.stats.ATK; // damage = ATK
+    console.log(`${this.owner.team}${this.owner.id} bắn trúng ${this.target.team}${this.target.id}, HP còn: ${this.target.hp}`);
+    this.destroy();
+  }
+
+  destroy() {
+    if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
+  }
+}
+
+//Khởi tạo 2 team
+/////////////////////
+let teamA = [];
+let teamB = [];
+let bullets = [];
+
+function createTeams() {
+  const statsSample = () => ({
+    ATK: 10, DEF: 5, AGI: Math.floor(Math.random()*5+3), 
+    INT: 2, LUK: 2, HP: 50, speedMove: Math.random()*2+1
+  });
+
+  for (let i = 0; i < 3; i++) {
+    let petB = new Pet("B", i+1, statsSample(), 2, i*2+2);
+    teamB.push(petB);
+    mapData[petB.y][petB.x].occupied = true;
+    petB.createElement();
+
+    let petA = new Pet("A", i+1, statsSample(), 12, i*2+2);
+    teamA.push(petA);
+    mapData[petA.y][petA.x].occupied = true;
+    petA.createElement();
+  }
+}
+
+//Khởi tạo game loop
+///////////////////////
+function gameLoop() {
+  const now = Date.now();
+
+  [...teamA, ...teamB].forEach(pet => {
+    pet.moveRandom(now);
+    pet.tryShoot(now);
+  });
+
+  bullets = bullets.filter(b => b.update());
+
+  requestAnimationFrame(gameLoop);
+}
+
+
+// gọi khi loadgame - start game
 buildBattleMap();
+createTeams();
+gameLoop();
+
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -15405,6 +15582,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
