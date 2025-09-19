@@ -15482,24 +15482,28 @@ class Pet {
 
 //Bullet viên đạn
 ///////////////////
+// ========== Đạn ==========
+const bullets = new Set();
+
 class Bullet {
   constructor(owner, target) {
     this.owner = owner;
     this.team = owner.team;
 
-    // spawn từ giữa ô pet
+    // Spawn từ giữa ô pet
     this.x = owner.x + 0.5;
     this.y = owner.y + 0.5;
 
-    // hướng bay về tâm đối thủ
+    // Hướng bay về tâm đối thủ
     let dx = (target.x + 0.5) - this.x;
     let dy = (target.y + 0.5) - this.y;
 
-    const len = Math.sqrt(dx*dx + dy*dy);
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
     this.vx = dx / len;
     this.vy = dy / len;
 
     this.speed = 0.05; // ô / frame
+    this.radius = 0.2; // bán kính viên đạn
 
     this.element = document.createElement("div");
     this.element.className = "bullet";
@@ -15510,6 +15514,7 @@ class Bullet {
     this.element.style.position = "absolute";
     this.element.style.zIndex = "10";
 
+    bullets.add(this);
     placeBullet(this);
   }
 
@@ -15517,20 +15522,24 @@ class Bullet {
     this.x += this.vx * this.speed;
     this.y += this.vy * this.speed;
 
-    // ra ngoài map thì xóa
+    // Ra ngoài map thì xóa
     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
       this.destroy();
       return false;
     }
 
-    // check va chạm
+    // Check va chạm
     const enemies = this.team === "A" ? teamB : teamA;
     for (let enemy of enemies) {
-      let dist = Math.sqrt(
+      if (!enemy.alive) continue;
+
+      const dist = Math.sqrt(
         (this.x - (enemy.x + 0.5)) ** 2 +
         (this.y - (enemy.y + 0.5)) ** 2
       );
-      if (dist < 0.4) { // bán kính 0.4 ô
+
+      // Pet radius = 0.5, bullet radius = 0.2
+      if (dist < 0.5 + this.radius) {
         enemy.takeDamage(this.owner.stats.ATK);
         this.destroy();
         return false;
@@ -15545,20 +15554,31 @@ class Bullet {
     if (this.element?.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
+    bullets.delete(this);
   }
 }
 
-
+// Cập nhật vị trí bullet trên DOM
 function placeBullet(bullet) {
   const mapArea = document.getElementById("mapArea");
   const cellSize = 20;
-  bullet.element.style.left = (bullet.x * cellSize) + "px";
-  bullet.element.style.top  = (bullet.y * cellSize) + "px";
+
+  // canh giữa viên đạn (6px → offset 3px)
+  bullet.element.style.left = (bullet.x * cellSize - 3) + "px";
+  bullet.element.style.top  = (bullet.y * cellSize - 3) + "px";
 
   if (!bullet.element.parentNode) {
     mapArea.appendChild(bullet.element);
   }
 }
+
+// Hàm update tất cả bullet
+function updateBullets() {
+  for (const b of [...bullets]) {
+    b.update();
+  }
+}
+
 
 
 
@@ -15761,6 +15781,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
