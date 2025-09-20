@@ -15427,22 +15427,37 @@ class Pet {
   }
 
     trySkill(now, target) {
-        if (this.isDead) return;
-        if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
-          return;
-        }
-    
-        for (let skillName of this.skills) {
-          const skill = SkillBook[skillName];
-          if (!skill) continue;
-    
-          const lastCast = this.skillTimers[skillName] || 0;
-          if (now - lastCast >= skill.cooldown) {
-            skill.effect(this, target);
-            this.skillTimers[skillName] = now;
-          }
-        }
-      }
+  if (this.isDead) return;
+  if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
+    return;
+  }
+
+  for (let skillName of this.skills) {
+    const skill = SkillBook[skillName];
+    if (!skill) continue;
+
+    const lastCast = this.skillTimers[skillName] || 0;
+
+    // cooldown gốc
+    const baseCD = skill.cooldown;
+
+    // giảm cooldown từ chỉ số pet
+    const flatReduce = this.stats.COOLDOWN[0] || 0;
+
+    // giảm % cooldown từ hiệu ứng khác
+    const percentReduce = this.stats.COOLDOWN[1] || 0; // ví dụ 0.2 = giảm 20%
+
+    // cooldown thực tế
+    let finalCD = baseCD - flatReduce - baseCD * percentReduce;
+    if (finalCD < 150) finalCD = 150; // tối thiểu 0.5s để tránh cast liên tục
+
+    if (now - lastCast >= finalCD) {
+      skill.effect(this, target);
+      this.skillTimers[skillName] = now;
+    }
+  }
+}
+
     
     
       tryShoot(now) {
@@ -15509,17 +15524,21 @@ const SkillBook = {
     cooldown: 5000,
     effect: (caster, target) => {
       if (!target) return;
-      target.stt.push("frozen");
-      console.log(`${caster.id} đóng băng ${target.id}`);
+      // Damage = caster.ATK * 1.2 ví dụ
+      const damage = caster.stats.ATK * 1.2;
+      new IceBullet(caster, target, damage);
+      console.log(`${caster.id} đóng băng ${target.id} gây ${damage} damage`);
     }
   },
   Burn: {
     cooldown: 7000,
     effect: (caster, target) => {
       if (!target) return;
+      const damage = caster.stats.ATK * 0.8 + 20; // cộng thêm 20 base
       target.stt.push("burn");
-      target.takeDamage(20);
-      console.log(`${caster.id} thiêu đốt ${target.id}`);
+      target.takeDamage(damage);
+      console.log(`${caster.id} thiêu đốt ${target.id} gây ${damage} damage`);
+      caster.createBullet(target, "fire");
     }
   }
 };
@@ -15529,98 +15548,199 @@ const SkillBook = {
 // ========== Đạn ==========
 let bullets = new Set();
 
-class Bullet {
-  constructor(owner, target) {
-    this.owner = owner;
-    this.team = owner.team;
+function updateBullets() {
+  for (const b of [...bullets]) b.update();
+}
 
-    // Spawn từ giữa ô pet
-    this.x = owner.x + 0.5;
-    this.y = owner.y + 0.5;
+function resetBullets() {
+  for (const b of [...bullets]) b.destroy();
+  bullets.clear();
+}
 
-    // Hướng bay về tâm đối thủ
-    let dx = (target.x + 0.5) - this.x;
-    let dy = (target.y + 0.5) - this.y;
-
-    const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    this.vx = dx / len;
-    this.vy = dy / len;
-
-    this.speed = 0.05; // ô / frame
-    this.radius = 0.2; // bán kính viên đạn
+class BaseBullet {
+  constructor(x, y, vx, vy, speed, radius, color) {
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.speed = speed;
+    this.radius = radius;
 
     this.element = document.createElement("div");
-    this.element.className = "bullet";
     this.element.style.width = "6px";
     this.element.style.height = "6px";
-    this.element.style.background = "red";
+    this.element.style.background = color;
     this.element.style.borderRadius = "50%";
     this.element.style.position = "absolute";
-    this.element.style.zIndex = "10";
 
-    bullets.add(this);
-    placeBullet(this);
+    document.getElementById("mapArea").appendChild(this.element);
+
+    bullets.add(this); // thêm vào Set chung
   }
 
   update() {
     this.x += this.vx * this.speed;
     this.y += this.vy * this.speed;
+    this.place();
+  }
 
-    // Ra ngoài map thì xóa
-    if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
-      this.destroy();
-      return false;
-    }
-
-    // Check va chạm
-    const enemies = this.team === "A" ? teamB : teamA;
-    for (let enemy of enemies) {
-      if (!enemy.alive) continue;
-
-      const dist = Math.sqrt(
-        (this.x - (enemy.x + 0.5)) ** 2 +
-        (this.y - (enemy.y + 0.5)) ** 2
-      );
-
-      // Pet radius = 0.5, bullet radius = 0.2
-      if (dist < 0.5 + this.radius) {
-        enemy.takeDamage(this.owner.stats.ATK);
-        this.destroy();
-        return false;
-      }
-    }
-
-    placeBullet(this);
-    return true;
+  place() {
+    this.element.style.left = (this.x * 20 - 3) + "px";
+    this.element.style.top  = (this.y * 20 - 3) + "px";
   }
 
   destroy() {
-    if (this.element?.parentNode) {
-      this.element.parentNode.removeChild(this.element);
-    }
+    if (this.element?.parentNode) this.element.parentNode.removeChild(this.element);
     bullets.delete(this);
   }
 }
 
-// Cập nhật vị trí bullet trên DOM
-function placeBullet(bullet) {
-  const mapArea = document.getElementById("mapArea");
-  const cellSize = 20;
+class Bullet extends BaseBullet {
+  constructor(caster, target) {
+    let dx = (target.x + 0.5) - (caster.x + 0.5);
+    let dy = (target.y + 0.5) - (caster.y + 0.5);
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    dx /= len; dy /= len;
 
-    bullet.element.style.left = (bullet.x * cellSize - bullet.element.offsetWidth / 2) + "px";
-    bullet.element.style.top  = (bullet.y * cellSize - bullet.element.offsetHeight / 2) + "px";
+    super(caster.x + 0.5, caster.y + 0.5, dx, dy, 0.05, 0.2, "red");
+    this.caster = caster;
+    this.target = target;
+  }
 
-  if (!bullet.element.parentNode) {
-    mapArea.appendChild(bullet.element);
+  update() {
+    super.update();
+    // check va chạm với target
+    const dist = Math.sqrt(
+      (this.x - (this.target.x + 0.5))**2 +
+      (this.y - (this.target.y + 0.5))**2
+    );
+    if (dist < 0.5 + this.radius) {
+      this.target.takeDamage(this.caster.stats.ATK);
+      this.destroy();
+    }
   }
 }
 
-// Hàm update tất cả bullet
-function updateBullets() {
-  for (const b of [...bullets]) {
-    b.update();
+class IceBullet extends BaseBullet {
+  constructor(caster, target, damage) {
+    let dx = (target.x + 0.5) - (caster.x + 0.5);
+    let dy = (target.y + 0.5) - (caster.y + 0.5);
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    dx /= len; dy /= len;
+
+    super(caster.x + 0.5, caster.y + 0.5, dx, dy, 0.04, 0.25, "cyan");
+    this.caster = caster;
+    this.target = target;
+    this.damage = damage;
+  }
+
+  update() {
+    super.update();
+    const dist = Math.sqrt(
+      (this.x - (this.target.x + 0.5))**2 +
+      (this.y - (this.target.y + 0.5))**2
+    );
+    if (dist < 0.5 + this.radius) {
+      this.target.takeDamage(this.damage);
+      this.target.stt.push("frozen");
+      this.destroy();
+    }
   }
 }
+
+
+// class Bullet {
+//   constructor(owner, target) {
+//     this.owner = owner;
+//     this.team = owner.team;
+
+//     // Spawn từ giữa ô pet
+//     this.x = owner.x + 0.5;
+//     this.y = owner.y + 0.5;
+
+//     // Hướng bay về tâm đối thủ
+//     let dx = (target.x + 0.5) - this.x;
+//     let dy = (target.y + 0.5) - this.y;
+
+//     const len = Math.sqrt(dx * dx + dy * dy) || 1;
+//     this.vx = dx / len;
+//     this.vy = dy / len;
+
+//     this.speed = 0.05; // ô / frame
+//     this.radius = 0.2; // bán kính viên đạn
+
+//     this.element = document.createElement("div");
+//     this.element.className = "bullet";
+//     this.element.style.width = "6px";
+//     this.element.style.height = "6px";
+//     this.element.style.background = "red";
+//     this.element.style.borderRadius = "50%";
+//     this.element.style.position = "absolute";
+//     this.element.style.zIndex = "10";
+
+//     bullets.add(this);
+//     placeBullet(this);
+//   }
+
+//   update() {
+//     this.x += this.vx * this.speed;
+//     this.y += this.vy * this.speed;
+
+//     // Ra ngoài map thì xóa
+//     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
+//       this.destroy();
+//       return false;
+//     }
+
+//     // Check va chạm
+//     const enemies = this.team === "A" ? teamB : teamA;
+//     for (let enemy of enemies) {
+//       if (!enemy.alive) continue;
+
+//       const dist = Math.sqrt(
+//         (this.x - (enemy.x + 0.5)) ** 2 +
+//         (this.y - (enemy.y + 0.5)) ** 2
+//       );
+
+//       // Pet radius = 0.5, bullet radius = 0.2
+//       if (dist < 0.5 + this.radius) {
+//         enemy.takeDamage(this.owner.stats.ATK);
+//         this.destroy();
+//         return false;
+//       }
+//     }
+
+//     placeBullet(this);
+//     return true;
+//   }
+
+//   destroy() {
+//     if (this.element?.parentNode) {
+//       this.element.parentNode.removeChild(this.element);
+//     }
+//     bullets.delete(this);
+//   }
+// }
+
+// // Cập nhật vị trí bullet trên DOM
+// function placeBullet(bullet) {
+//   const mapArea = document.getElementById("mapArea");
+//   const cellSize = 20;
+
+//     bullet.element.style.left = (bullet.x * cellSize - bullet.element.offsetWidth / 2) + "px";
+//     bullet.element.style.top  = (bullet.y * cellSize - bullet.element.offsetHeight / 2) + "px";
+
+//   if (!bullet.element.parentNode) {
+//     mapArea.appendChild(bullet.element);
+//   }
+// }
+
+// // Hàm update tất cả bullet
+// function updateBullets() {
+//   for (const b of [...bullets]) {
+//     b.update();
+//   }
+// }
 
 //Khởi tạo 2 team
 /////////////////////
@@ -15629,14 +15749,14 @@ let teamB = [];
 
 let petData = {
   teamA: [
-    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, speedMove: 1.5, skills: ["Frozen"] },
-    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, speedMove: 1.2, skills: ["Burn", "Stun"] },
-    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, speedMove: 1.0, skills: [] }
+    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, COOLDOWN: [0,0], speedMove: 1.5, skills: ["Frozen"] },
+    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, COOLDOWN: [0,0], speedMove: 1.2, skills: ["Burn", "Stun"] },
+    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, COOLDOWN: [0,0], speedMove: 1.0, skills: [] }
   ],
   teamB: [
-    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, speedMove: 1.3, skills: ["Frozen"] },
-    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, speedMove: 1.4, skills: ["Stun"] },
-    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, speedMove: 1.1, skills: ["Burn", "Frozen"] }
+    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, COOLDOWN: [0,0], speedMove: 1.3, skills: ["Frozen"] },
+    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, COOLDOWN: [0,0], speedMove: 1.4, skills: ["Stun"] },
+    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, COOLDOWN: [0,0], speedMove: 1.1, skills: ["Burn", "Frozen"] }
   ]
 };
 
@@ -15836,6 +15956,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
