@@ -15730,7 +15730,8 @@ function gameLoop() {
 
   for (let pet of [...teamA, ...teamB]) {
     if (pet.isDead) continue;
-
+    pet.moveRandom(now);
+      
     // Chọn đối thủ gần nhất
     const enemies = pet.team === "A" ? teamB : teamA;
     let nearest = null;
@@ -15835,6 +15836,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
