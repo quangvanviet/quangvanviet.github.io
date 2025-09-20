@@ -15511,6 +15511,7 @@ class Pet {
 const SkillBook = {
   Frozen: {
     cooldown: 5000,
+    effectTime: 500, //Choáng mấy giây (0.5s)
     effect: (caster, target) => {
       if (!target) return;
       // Damage = caster.ATK * 1.2 ví dụ
@@ -15604,7 +15605,7 @@ class Bullet extends BaseBullet {
     }
 }
 
-class IceBullet extends BaseBullet {
+class IceBullet extends BulletBase {
   constructor(caster, target, damage) {
     let dx = (target.x + 0.5) - (caster.x + 0.5);
     let dy = (target.y + 0.5) - (caster.y + 0.5);
@@ -15618,26 +15619,30 @@ class IceBullet extends BaseBullet {
   }
 
   update() {
-      super.update();
-    
-      // Tính khoảng cách giữa tâm đạn và tâm target
-      const tx = this.target.x + 0.5;
-      const ty = this.target.y + 0.5;
-      const dist = Math.sqrt((this.x - tx) ** 2 + (this.y - ty) ** 2);
-    
-      // Nếu đạn chạm vào target
-      if (dist <= this.radius + 0.5) {
-        this.target.takeDamage(this.damage);
+    super.update();
+
+    if (!this.target || this.target.isDead) return;
+
+    // Dùng hàm checkBulletHit thay vì tự tính lại
+    if (checkBulletHit(this, this.target)) {
+      this.target.takeDamage(this.damage);
+
+      if (!this.target.isDead) {
         this.target.stt.push("frozen");
-        this.destroy();
+
+        const effectTime = SkillBook.Frozen.effectTime || 3000;
+        setTimeout(() => {
+          const idx = this.target.stt.indexOf("frozen");
+          if (idx !== -1) this.target.stt.splice(idx, 1);
+          console.log(`${this.target.name} hết đóng băng`);
+        }, effectTime);
       }
-    
-      // Nếu đạn bay ra ngoài bản đồ thì tự hủy
-      if (this.x < 0 || this.x > 15 || this.y < 0 || this.y > 12) {
-        this.destroy();
-      }
+
+      this.destroy();
     }
+  }
 }
+
 
 class BulletBase {
   constructor(shooter, enemies) {
@@ -15972,4 +15977,5 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
