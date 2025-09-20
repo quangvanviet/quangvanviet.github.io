@@ -15479,8 +15479,8 @@ class Pet {
           const enemyTeam = this.team === "A" ? teamB : teamA;
           const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
           if (!target) return;
-        
-          const bullet = new Bullet(this, target);
+
+          const bullet = new BulletBase(this, target);
         }
 
 
@@ -15650,99 +15650,99 @@ class IceBullet extends BaseBullet {
     }
 }
 
+class BulletBase {
+  constructor(shooter, enemies) {
+    if (!shooter || !enemies || enemies.length === 0) return;
+    if (shooter.frozen) return;
 
-// class Bullet {
-//   constructor(owner, target) {
-//     this.owner = owner;
-//     this.team = owner.team;
+    const now = performance.now();
+    if (now - shooter.lastShot < cooldownMs(shooter.stats.AGI)) return;
+    shooter.lastShot = now;
 
-//     // Spawn từ giữa ô pet
-//     this.x = owner.x + 0.5;
-//     this.y = owner.y + 0.5;
+    // 1. Tìm mục tiêu gần nhất
+    let closestTarget = null;
+    let smallestDistanceSquared = Infinity;
 
-//     // Hướng bay về tâm đối thủ
-//     let dx = (target.x + 0.5) - this.x;
-//     let dy = (target.y + 0.5) - this.y;
+    for (const enemy of enemies) {
+      if (!enemy.alive) continue;
 
-//     const len = Math.sqrt(dx * dx + dy * dy) || 1;
-//     this.vx = dx / len;
-//     this.vy = dy / len;
+      const deltaX = enemy.x - shooter.x;
+      const deltaY = enemy.y - shooter.y;
+      const distanceSquared = deltaX * deltaX + deltaY * deltaY;
 
-//     this.speed = 0.05; // ô / frame
-//     this.radius = 0.2; // bán kính viên đạn
+      if (distanceSquared < smallestDistanceSquared) {
+        smallestDistanceSquared = distanceSquared;
+        closestTarget = enemy;
+      }
+    }
+    if (!closestTarget) return;
 
-//     this.element = document.createElement("div");
-//     this.element.className = "bullet";
-//     this.element.style.width = "6px";
-//     this.element.style.height = "6px";
-//     this.element.style.background = "red";
-//     this.element.style.borderRadius = "50%";
-//     this.element.style.position = "absolute";
-//     this.element.style.zIndex = "10";
+    // 2. Tính tọa độ tâm
+    this.shooterCenterX = shooter.x + 0.5;
+    this.shooterCenterY = shooter.y + 0.5;
+    const targetCenterX = closestTarget.x + 0.5;
+    const targetCenterY = closestTarget.y + 0.5;
 
-//     bullets.add(this);
-//     placeBullet(this);
-//   }
+    // 3. Vector hướng
+    let directionX = targetCenterX - this.shooterCenterX;
+    let directionY = targetCenterY - this.shooterCenterY;
+    let distance = Math.hypot(directionX, directionY);
 
-//   update() {
-//     this.x += this.vx * this.speed;
-//     this.y += this.vy * this.speed;
+    if (distance === 0) {
+      const randomAngle = Math.random() * Math.PI * 2;
+      directionX = Math.cos(randomAngle);
+      directionY = Math.sin(randomAngle);
+      distance = 1;
+    }
 
-//     // Ra ngoài map thì xóa
-//     if (this.x < 0 || this.x >= 15 || this.y < 0 || this.y >= 12) {
-//       this.destroy();
-//       return false;
-//     }
+    this.directionX = directionX / distance;
+    this.directionY = directionY / distance;
 
-//     // Check va chạm
-//     const enemies = this.team === "A" ? teamB : teamA;
-//     for (let enemy of enemies) {
-//       if (!enemy.alive) continue;
+    // 4. Tạo element
+    this.element = document.createElement("div");
+    this.element.className = `bullet ${shooter.color}`;
+    this.element.textContent = "•";
+    arena.appendChild(this.element);
 
-//       const dist = Math.sqrt(
-//         (this.x - (enemy.x + 0.5)) ** 2 +
-//         (this.y - (enemy.y + 0.5)) ** 2
-//       );
+    // 5. Thuộc tính viên đạn
+    this.color = shooter.color;
+    this.positionX = this.shooterCenterX;
+    this.positionY = this.shooterCenterY;
+    this.owner = shooter;
+    this.speed = BULLET_SPEED;
+    this.skillType = null;
 
-//       // Pet radius = 0.5, bullet radius = 0.2
-//       if (dist < 0.5 + this.radius) {
-//         enemy.takeDamage(this.owner.stats.ATK);
-//         this.destroy();
-//         return false;
-//       }
-//     }
+    bullets.add(this);
 
-//     placeBullet(this);
-//     return true;
-//   }
+    // spawn ở giữa ô
+    const offset = (CELL * 0.6) / 2;
+    this.element.style.transform =
+      `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-//   destroy() {
-//     if (this.element?.parentNode) {
-//       this.element.parentNode.removeChild(this.element);
-//     }
-//     bullets.delete(this);
-//   }
-// }
+    // trạng thái né đòn
+    shooter.evadingUntil = now + EVADE_MS;
+    log(`${shooter.name} bắn`);
+  }
 
-// // Cập nhật vị trí bullet trên DOM
-// function placeBullet(bullet) {
-//   const mapArea = document.getElementById("mapArea");
-//   const cellSize = 20;
+  // Hàm cập nhật vị trí đạn mỗi frame
+  update() {
+    this.positionX += this.directionX * this.speed;
+    this.positionY += this.directionY * this.speed;
 
-//     bullet.element.style.left = (bullet.x * cellSize - bullet.element.offsetWidth / 2) + "px";
-//     bullet.element.style.top  = (bullet.y * cellSize - bullet.element.offsetHeight / 2) + "px";
+    const offset = (CELL * 0.6) / 2;
+    this.element.style.transform =
+      `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-//   if (!bullet.element.parentNode) {
-//     mapArea.appendChild(bullet.element);
-//   }
-// }
+    // TODO: thêm check va chạm target ở đây
+  }
 
-// // Hàm update tất cả bullet
-// function updateBullets() {
-//   for (const b of [...bullets]) {
-//     b.update();
-//   }
-// }
+  // Xóa viên đạn
+  destroy() {
+    if (this.element) this.element.remove();
+    bullets.delete(this);
+  }
+}
+
 
 //Khởi tạo 2 team
 /////////////////////
@@ -15958,6 +15958,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
