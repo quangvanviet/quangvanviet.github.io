@@ -15735,11 +15735,29 @@ function gameLoop() {
 
   for (let pet of [...teamA, ...teamB]) {
     if (pet.isDead) continue;
+
+    // Chọn đối thủ gần nhất
     const enemies = pet.team === "A" ? teamB : teamA;
-    const target = enemies[0];
-    
-    pet.tryShoot(now, target);   // bắn thường
-    pet.trySkill(now, target);   // skill
+    let nearest = null;
+    let minDist = Infinity;
+
+    for (let enemy of enemies) {
+      if (enemy.isDead) continue;
+      const dx = enemy.x - pet.x;
+      const dy = enemy.y - pet.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = enemy;
+      }
+    }
+
+    if (!nearest) continue; // không còn đối thủ sống
+
+    // Thực hiện hành động
+    pet.tryShoot(now, nearest);
+    pet.trySkill(now, nearest);
   }
 
   updateBullets(); // ✅ dùng hàm duyệt Set
@@ -15822,6 +15840,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
