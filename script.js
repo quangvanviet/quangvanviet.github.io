@@ -15373,7 +15373,7 @@ class Pet {
     this.element = null; // DOM element trên map
     this.lastMove = 0;
     this.lastShot = 0;
-    this.skills = [];
+    this.skills = stats.skills;
     this.skillTimers = {}; // { Frozen: 0, Burn: 0 }
     for (let name of skills) {
       this.skillTimers[name] = 0;
@@ -15822,6 +15822,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
