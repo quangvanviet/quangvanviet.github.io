@@ -45,29 +45,50 @@
                 onclick="">x</button>
             
           <!--  Khu vực map 15x12 -->
-          <div id="mapArea"></div>
+        <div class="wrap">
+            <div id="arena"></div>
+            <aside>
+              <div class="panel">
+                <div class="row">
+                  <div>HP Đỏ</div>
+                  <div id="hpRedLabel1">0/0</div>
+                </div>
+                <div class="bar"><span id="hpRedBar1" style="width:100%"></span></div>
+                <div class="row">
+                  <div>HP Đỏ</div>
+                  <div id="hpRedLabel2">0/0</div>
+                </div>
+                <div class="bar"><span id="hpRedBar2" style="width:100%"></span></div>
+                <div class="row">
+                  <div>HP Đỏ</div>
+                  <div id="hpRedLabel3">0/0</div>
+                </div>
+                <div class="bar"><span id="hpRedBar3" style="width:100%"></span></div>
         
-          <!--  Khu vực thông tin -->
-            <div id="infoArea">
-              <!-- Team B - Mình -->
-              <div id="teamB-box" class="team-box" style="width: 50%;">
-                <h3 style="display: flex; justify-content: flex-start;">Team B (Mình)</h3>
-                <div id="petB1HpBar" class="hp-bar"><div class="hp-fill"></div></div>
-                <div id="petB2HpBar" class="hp-bar"><div class="hp-fill"></div></div>
-                <div id="petB3HpBar" class="hp-bar"><div class="hp-fill"></div></div>
+                <div style="height:8px"></div>
+                <div class="row">
+                  <div>HP Xanh</div>
+                  <div id="hpBlueLabel1">0/0</div>
+                </div>
+                <div class="bar"><span id="hpBlueBar1" style="width:100%"></span></div>
+                <div class="row">
+                  <div>HP Xanh</div>
+                  <div id="hpBlueLabel2">0/0</div>
+                </div>
+                <div class="bar"><span id="hpBlueBar2" style="width:100%"></span></div>
+                <div class="row">
+                  <div>HP Xanh</div>
+                  <div id="hpBlueLabel3">0/0</div>
+                </div>
+                <div class="bar"><span id="hpBlueBar3" style="width:100%"></span></div>
               </div>
-            
-              <!-- Team A - Địch -->
-              <div id="teamA-box" class="team-box" style="width: 50%;">
-                <h3 style="display: flex; justify-content: flex-end;">Team A (Địch)</h3>
-                <div id="petA1HpBar" class="hp-bar"><div class="hp-fill"></div></div>
-                <div id="petA2HpBar" class="hp-bar"><div class="hp-fill"></div></div>
-                <div id="petA3HpBar" class="hp-bar"><div class="hp-fill"></div></div>
+              <div class="panel stats" id="stats"></div>
+              <div class="panel">
+                <div style="margin-bottom:6px">Nhật ký trận đấu</div>
+                <div class="log" id="log"></div>
               </div>
-            </div>
-
-        </div>
-
+            </aside>
+          </div>
         
         <div id="ScreenBattle">
             <div id="welcomePage"
@@ -3060,6 +3081,7 @@
 </body>
 
 </html>
+
 
 
 
