@@ -15666,37 +15666,37 @@ class BulletBase {
     for (const enemy of enemies) {
       if (!enemy.alive) continue;
 
-      const deltaX = enemy.x - shooter.x;
-      const deltaY = enemy.y - shooter.y;
-      const distanceSquared = deltaX * deltaX + deltaY * deltaY;
+      const dx = enemy.x - shooter.x;
+      const dy = enemy.y - shooter.y;
+      const dist2 = dx * dx + dy * dy;
 
-      if (distanceSquared < smallestDistanceSquared) {
-        smallestDistanceSquared = distanceSquared;
+      if (dist2 < smallestDistanceSquared) {
+        smallestDistanceSquared = dist2;
         closestTarget = enemy;
       }
     }
     if (!closestTarget) return;
 
     // 2. Tính tọa độ tâm
-    this.shooterCenterX = shooter.x + 0.5;
-    this.shooterCenterY = shooter.y + 0.5;
-    const targetCenterX = closestTarget.x + 0.5;
-    const targetCenterY = closestTarget.y + 0.5;
+    this.startX = shooter.x + 0.5;
+    this.startY = shooter.y + 0.5;
+    const tx = closestTarget.x + 0.5;
+    const ty = closestTarget.y + 0.5;
 
     // 3. Vector hướng
-    let directionX = targetCenterX - this.shooterCenterX;
-    let directionY = targetCenterY - this.shooterCenterY;
-    let distance = Math.hypot(directionX, directionY);
+    let dirX = tx - this.startX;
+    let dirY = ty - this.startY;
+    let dist = Math.hypot(dirX, dirY);
 
-    if (distance === 0) {
+    if (dist === 0) {
       const randomAngle = Math.random() * Math.PI * 2;
-      directionX = Math.cos(randomAngle);
-      directionY = Math.sin(randomAngle);
-      distance = 1;
+      dirX = Math.cos(randomAngle);
+      dirY = Math.sin(randomAngle);
+      dist = 1;
     }
 
-    this.directionX = directionX / distance;
-    this.directionY = directionY / distance;
+    this.directionX = dirX / dist;
+    this.directionY = dirY / dist;
 
     // 4. Tạo element
     this.element = document.createElement("div");
@@ -15704,13 +15704,12 @@ class BulletBase {
     this.element.textContent = "•";
     arena.appendChild(this.element);
 
-    // 5. Thuộc tính viên đạn
-    this.color = shooter.color;
-    this.positionX = this.shooterCenterX;
-    this.positionY = this.shooterCenterY;
+    // 5. Thuộc tính
     this.owner = shooter;
+    this.enemies = enemies;   // giữ danh sách kẻ địch
+    this.positionX = this.startX;
+    this.positionY = this.startY;
     this.speed = BULLET_SPEED;
-    this.skillType = null;
 
     bullets.add(this);
 
@@ -15719,29 +15718,78 @@ class BulletBase {
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-    // trạng thái né đòn
     shooter.evadingUntil = now + EVADE_MS;
     log(`${shooter.name} bắn`);
   }
 
-  // Hàm cập nhật vị trí đạn mỗi frame
-  update() {
-    this.positionX += this.directionX * this.speed;
-    this.positionY += this.directionY * this.speed;
+  // Hàm cập nhật mỗi frame
+  update(dt) {
+    const step = (this.speed * dt) / 1000;
+    this.positionX += this.directionX * step;
+    this.positionY += this.directionY * step;
 
     const offset = (CELL * 0.6) / 2;
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-    // TODO: thêm check va chạm target ở đây
+    // 1. Ra ngoài map thì hủy
+    if (
+      this.positionX < -1 ||
+      this.positionX > COLS + 1 ||
+      this.positionY < -1 ||
+      this.positionY > ROWS + 1
+    ) {
+      this.destroy();
+      return;
+    }
+
+    // 2. Kiểm tra va chạm với bất kỳ enemy nào
+    for (const enemy of this.enemies) {
+      if (!enemy.alive) continue;
+      if (checkBulletHit(this, enemy)) {
+        applyBulletEffect(this, enemy);
+        this.destroy(); // đạn biến mất sau khi trúng
+        return;
+      }
+    }
   }
 
-  // Xóa viên đạn
   destroy() {
     if (this.element) this.element.remove();
     bullets.delete(this);
   }
 }
+
+function applyBulletEffect(bullet, target) {
+  if (!target.alive) return;
+
+  // Sát thương cơ bản theo ATK của chủ
+  const dmg = bullet.owner.stats.ATK;
+
+  target.hp -= dmg;
+  log(`${bullet.owner.name} bắn trúng ${target.name}, gây ${dmg} dame`);
+
+  if (target.hp <= 0) {
+    target.alive = false;
+    target.el.classList.add("dead");
+    log(`${target.name} đã bị hạ gục!`);
+  }
+}
+
+function checkBulletHit(bullet, target) {
+  // Tính tâm target
+  const tx = target.x + 0.5;
+  const ty = target.y + 0.5;
+
+  // Khoảng cách bullet-target
+  const dx = bullet.positionX - tx;
+  const dy = bullet.positionY - ty;
+  const dist2 = dx * dx + dy * dy;
+
+  // Nếu nhỏ hơn bán kính chạm (vd: 0.4 ô) thì coi là trúng
+  return dist2 < 0.4 * 0.4;
+}
+
 
 
 //Khởi tạo 2 team
@@ -15958,6 +16006,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
