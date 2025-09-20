@@ -15728,7 +15728,8 @@ class BulletBase {
     for (const enemy of this.enemies) {
       if (enemy.isDead) continue;
       if (checkBulletHit(this, enemy)) {
-        applyBulletEffect(this, enemy);
+        const dmg = Math.max(this.owner.stats.ATK - enemy.stats.DEF, 1);
+        enemy.takeDamage(dmg);
         this.destroy();
         return;
       }
@@ -15741,27 +15742,10 @@ class BulletBase {
   }
 }
 
-
-function applyBulletEffect(bullet, target) {
-  if (!target.alive) return;
-
-  // Sát thương cơ bản theo ATK của chủ
-  const dmg = bullet.owner.stats.ATK;
-
-  target.hp -= dmg;
-  log(`${bullet.owner.name} bắn trúng ${target.name}, gây ${dmg} dame`);
-
-  if (target.hp <= 0) {
-    target.alive = false;
-    target.el.classList.add("dead");
-    log(`${target.name} đã bị hạ gục!`);
-  }
-}
-
 function checkBulletHit(bullet, target) {
   // Tính tâm target
-  const tx = target.x + 0.5;
-  const ty = target.y + 0.5;
+  const tx = target.x;
+  const ty = target.y;
 
   // Khoảng cách bullet-target
   const dx = bullet.positionX - tx;
@@ -15988,3 +15972,4 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
