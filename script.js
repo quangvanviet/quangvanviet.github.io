@@ -15688,9 +15688,12 @@ class BulletBase {
 
     // 4. Tạo element
     this.element = document.createElement("div");
-    this.element.className = `bullet ${shooter.color}`;
-    this.element.textContent = "•";
-    arena.appendChild(this.element);
+    this.element.style.width = "6px";
+    this.element.style.height = "6px";
+    this.element.style.background = "red";
+    this.element.style.borderRadius = "50%";
+    this.element.style.position = "absolute";
+    document.getElementById("mapArea").appendChild(this.element);
 
     // 5. Thuộc tính
     this.owner = shooter;
@@ -15702,7 +15705,7 @@ class BulletBase {
     bullets.add(this);
 
     // spawn ở giữa ô
-    const offset = (CELL * 0.6) / 2;
+    const offset = 3;
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
@@ -15749,8 +15752,8 @@ class BulletBase {
 
 function checkBulletHit(bullet, target) {
   // Tính tâm target
-  const tx = target.x;
-  const ty = target.y;
+  const tx = target.x + 0.5;
+  const ty = target.y + 0.5;
 
   // Khoảng cách bullet-target
   const dx = bullet.positionX - tx;
@@ -15977,5 +15980,6 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
