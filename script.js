@@ -15466,7 +15466,6 @@ class Pet {
           if (!target) return;
         
           const bullet = new Bullet(this, target);
-          bullets.push(bullet);
         }
 
 
@@ -15623,9 +15622,6 @@ function updateBullets() {
     b.update();
   }
 }
-
-
-
 
 //Khởi tạo 2 team
 /////////////////////
@@ -15840,6 +15836,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
