@@ -36,56 +36,259 @@ body {
 
 /* battleMap Area */
 /* Map 15x12 */
-#mapArea {
-  display: grid;
-  grid-template-columns: repeat(15, 20px);
-  grid-template-rows: repeat(12, 20px);
-  gap: 1px;
-  padding: 5px;
-}
-#mapArea .cell {
-  width: 20px;
-  height: 20px;
-  background: #2f0a0a;
-  border: 2px solid #984141;
-}
+    :root {
+      --cell: 25px;
+      --cols: 15;
+      --rows: 15;
+    }
 
-/* Info */
-#infoArea {
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+    }
+
+    header {
+      padding: 12px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid #1f2937;
+      position: sticky;
+      top: 0;
+      background: #0f172a;
+      z-index: 10
+    }
+
+    button {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #374151;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #0003;
+    }
+
+    button:hover {
+      background: #1f2937;
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    #arena {
+      position: relative;
+      width: calc(var(--cols) * var(--cell));
+      height: calc(var(--rows) * var(--cell));
+      background: #0b1220;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px #0007, 0 8px 40px #0006;
+    }
+
+    #arena::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(#13203a 1px, transparent 1px) 0 0 / 100% var(--cell),
+        linear-gradient(90deg, #13203a 1px, transparent 1px) 0 0 / var(--cell) 100%;
+      pointer-events: none;
+      opacity: .6;
+    }
+
+    .pet {
+    position: absolute;
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px #000;
+  }
+
+  .flip-wrap {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s;
+  }
+
+  .flip-wrap.flipped {
+    transform: scaleX(-1);
+  }
+
+  .image-pet {
+    width: 90%;
+    height: 90%;
     display: flex;
-    flex-direction: row;
-    gap: 10px;
-    min-width: 200px;
-    font-family: sans-serif;
-    color: #fff;
     align-items: center;
-    justify-content: space-between;
-}
-.team-box h3 {
-  margin: 0 0 5px 0;
-  font-size: 12px;
-  color: black;
-}
-.hp-bar {
-  width: 100%;
-  height: 12px;
-  background: #555;
-  border: 1px solid #333;
-  margin: 5px 0;
-}
-.hp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0f0, #6f6);
+    justify-content: center;
+    animation: breathing 1.5s ease-in-out infinite;
+    transition: transform 0.2s;
+    border-radius: 6px;
+  }
+
+  @keyframes breathing {
+    0%   { transform: scale(0.9); }
+    50%  { transform: scale(1.1); }
+    100% { transform: scale(0.9); }
+  }
+
+
+    .red {
+      /* background: #ef4444; */
+      box-shadow: 0 0 0 2px #7f1d1d inset, 0 0 18px #ef444433;
+    }
+
+    .blue {
+      /* background: #3b82f6; */
+      box-shadow: 0 0 0 2px #1e3a8a inset, 0 0 18px #3b82f633;
+    }
+
+    .bullet {
+      position: absolute;
+      width: calc(var(--cell) * .6);
+      height: calc(var(--cell) * .6);
+      border-radius: 4px;
+      box-shadow: 0 0 10px #fff8;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      pointer-events: none;
+    }
+
+    .bullet.red {
+      background: #fecaca;
+      color: #7f1d1d;
+    }
+
+    .bullet.blue {
+      background: #bfdbfe;
+      color: #1e3a8a;
+    }
+
+    /* freeze bullet style */
+    .bullet.freeze {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e6f7ff 0%, #8fd3ff 50%, #48a9ff 100%);
+      box-shadow: 0 0 8px #8fd3ff;
+      display: block;
+      text-indent: -9999px;
+    }
+
+    /* Thanh kiếm xoay */
+    .bullet.sword {
+      width: 30px;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg,#f59e0b,#fde68a);
+      box-shadow: 0 0 10px #f59e0b88;
+      position: absolute;
+      transform-origin: 8px 2px; /* quay quanh tâm lưỡi kiếm */
+    }
+
+    .bullet.lightning {
+  width: 20px;
+  height: 4px;
+  background: yellow;
+  box-shadow: 0 0 8px 2px #ff0, 0 0 15px 5px #fff;
+  border-radius: 2px;
 }
 
-.pet {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.bullet {
-  z-index: 19;
-}
+
+    aside {
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel {
+      background: #0b1220;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 40px #0006;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 10px;
+      background: #111827;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #1f2937;
+    }
+
+    .bar>span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #84cc16);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .card {
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .tag {
+      font-size: 12px;
+      opacity: .85;
+    }
+
+    .log {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      height: 220px;
+      overflow: auto;
+      background: #0b1220;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      opacity: .8
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      display: inline-block;
+    }
 
 
 /* Toàn màn hình chiến đấu */
@@ -2255,6 +2458,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
