@@ -15493,27 +15493,21 @@ class Pet {
       console.log(`${this.team}${this.id} HP: ${this.hp}/${this.stats.HP}`);
     
       if (this.hp === 0) {
-        // xử lý pet chết nếu muốn
-        if (this.element && this.element.parentNode) {
-          this.element.parentNode.removeChild(this.element);
-        }
+        this.die();
       }
     }
     die() {
-          this.isDead = true;
-        
-          // ❌ không remove khỏi teamA / teamB nữa
-        
-          // xóa element và hpBar trên DOM
-          if (this.element?.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          if (this.hpBar?.parentNode) {
-            this.hpBar.parentNode.removeChild(this.hpBar);
-          }
-        
-          console.log(`${this.team}${this.id} đã chết`);
-        }
+      this.isDead = true;
+      // xóa element và hpBar trên DOM
+      if (this.element?.parentNode) {
+        this.element.parentNode.removeChild(this.element);
+      }
+      if (this.hpBar?.parentNode) {
+        this.hpBar.parentNode.removeChild(this.hpBar);
+      }
+    
+      console.log(`${this.team}${this.id} đã chết`);
+    }
 
 }
 
@@ -16006,6 +16000,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
