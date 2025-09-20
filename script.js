@@ -15607,9 +15607,8 @@ function placeBullet(bullet) {
   const mapArea = document.getElementById("mapArea");
   const cellSize = 20;
 
-  // canh giữa viên đạn (6px → offset 3px)
-  bullet.element.style.left = (bullet.x * cellSize - 3) + "px";
-  bullet.element.style.top  = (bullet.y * cellSize - 3) + "px";
+    bullet.element.style.left = (bullet.x * cellSize - bullet.element.offsetWidth / 2) + "px";
+    bullet.element.style.top  = (bullet.y * cellSize - bullet.element.offsetHeight / 2) + "px";
 
   if (!bullet.element.parentNode) {
     mapArea.appendChild(bullet.element);
@@ -15836,6 +15835,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
