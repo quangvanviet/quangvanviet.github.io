@@ -15650,7 +15650,12 @@ class BulletBase {
     if (shooter.frozen) return;
 
     const now = performance.now();
-    if (now - shooter.lastShot < cooldownMs(shooter.stats.AGI)) return;
+    const A = 3900;
+    const B = -0.292;
+    const cooldown = A * Math.pow(shooter.stats.AGI, B);
+
+    if (now - shooter.lastShot < cooldown) return;
+      
     shooter.lastShot = now;
 
     // 1. Tìm mục tiêu gần nhất
@@ -16000,6 +16005,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
