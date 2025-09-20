@@ -15530,17 +15530,6 @@ const SkillBook = {
       console.log(`${caster.id} đóng băng ${target.id} gây ${damage} damage`);
     }
   },
-  Burn: {
-    cooldown: 7000,
-    effect: (caster, target) => {
-      if (!target) return;
-      const damage = caster.stats.ATK * 0.8 + 20; // cộng thêm 20 base
-      target.stt.push("burn");
-      target.takeDamage(damage);
-      console.log(`${caster.id} thiêu đốt ${target.id} gây ${damage} damage`);
-      caster.createBullet(target, "fire");
-    }
-  }
 };
 
 //Bullet viên đạn
@@ -15969,6 +15958,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
