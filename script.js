@@ -15717,16 +15717,16 @@ class BulletBase {
     this.positionX += this.directionX * step;
     this.positionY += this.directionY * step;
 
-    const offset = (CELL * 0.6) / 2;
+    const offset = 3;
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
     // Ra ngoài map thì hủy
     if (
       this.positionX < -1 ||
-      this.positionX > COLS + 1 ||
+      this.positionX > 15 + 1 ||
       this.positionY < -1 ||
-      this.positionY > ROWS + 1
+      this.positionY > 12 + 1
     ) {
       this.destroy();
       return;
@@ -15980,6 +15980,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
