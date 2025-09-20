@@ -15459,32 +15459,27 @@ class Pet {
 }
 
     
+    tryShoot(now) {
+      if (this.isDead) return; 
+      if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
+        return;
+      }
     
-      tryShoot(now) {
-          if (this.isDead) return; // <--- không bắn nếu đã chết
-          // nếu có status bất lợi thì không bắn
-          if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
-            return;
-          }
-          
-          const A = 3900;
-          const B = -0.292;
-        
-          const agi = this.stats.AGI;
-          const cooldown = A * Math.pow(agi, B);
-        
-          if (now - this.lastShot < cooldown) return;
-          this.lastShot = now;
-        
-          const enemyTeam = this.team === "A" ? teamB : teamA;
-          const target = enemyTeam[Math.floor(Math.random() * enemyTeam.length)];
-          if (!target) return;
-
-          const bullet = new BulletBase(this, target);
-        }
-
-
+      const A = 3900;
+      const B = -0.292;
+      const agi = this.stats.AGI;
+      const cooldown = A * Math.pow(agi, B);
     
+      if (now - this.lastShot < cooldown) return;
+      this.lastShot = now;
+    
+      const enemyTeam = this.team === "A" ? teamB : teamA;
+      if (!enemyTeam.length) return;
+    
+      // Chuyển cả mảng enemies vào BulletBase
+      new BulletBase(this, enemyTeam);
+    }
+
     takeDamage(dmg) {
       if (this.isDead) return; // chết rồi thì bỏ qua
       this.hp -= dmg;
@@ -15649,26 +15644,15 @@ class BulletBase {
     if (!shooter || !enemies || enemies.length === 0) return;
     if (shooter.frozen) return;
 
-    const now = performance.now();
-    const A = 3900;
-    const B = -0.292;
-    const cooldown = A * Math.pow(shooter.stats.AGI, B);
-
-    if (now - shooter.lastShot < cooldown) return;
-      
-    shooter.lastShot = now;
-
     // 1. Tìm mục tiêu gần nhất
     let closestTarget = null;
     let smallestDistanceSquared = Infinity;
 
     for (const enemy of enemies) {
-      if (!enemy.alive) continue;
-
+      if (enemy.isDead) continue;
       const dx = enemy.x - shooter.x;
       const dy = enemy.y - shooter.y;
       const dist2 = dx * dx + dy * dy;
-
       if (dist2 < smallestDistanceSquared) {
         smallestDistanceSquared = dist2;
         closestTarget = enemy;
@@ -15705,7 +15689,7 @@ class BulletBase {
 
     // 5. Thuộc tính
     this.owner = shooter;
-    this.enemies = enemies;   // giữ danh sách kẻ địch
+    this.enemies = enemies;
     this.positionX = this.startX;
     this.positionY = this.startY;
     this.speed = BULLET_SPEED;
@@ -15717,11 +15701,9 @@ class BulletBase {
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-    shooter.evadingUntil = now + EVADE_MS;
     log(`${shooter.name} bắn`);
   }
 
-  // Hàm cập nhật mỗi frame
   update(dt) {
     const step = (this.speed * dt) / 1000;
     this.positionX += this.directionX * step;
@@ -15731,7 +15713,7 @@ class BulletBase {
     this.element.style.transform =
       `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
 
-    // 1. Ra ngoài map thì hủy
+    // Ra ngoài map thì hủy
     if (
       this.positionX < -1 ||
       this.positionX > COLS + 1 ||
@@ -15742,12 +15724,12 @@ class BulletBase {
       return;
     }
 
-    // 2. Kiểm tra va chạm với bất kỳ enemy nào
+    // Check va chạm
     for (const enemy of this.enemies) {
-      if (!enemy.alive) continue;
+      if (enemy.isDead) continue;
       if (checkBulletHit(this, enemy)) {
         applyBulletEffect(this, enemy);
-        this.destroy(); // đạn biến mất sau khi trúng
+        this.destroy();
         return;
       }
     }
@@ -15758,6 +15740,7 @@ class BulletBase {
     bullets.delete(this);
   }
 }
+
 
 function applyBulletEffect(bullet, target) {
   if (!target.alive) return;
@@ -16005,33 +15988,3 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
