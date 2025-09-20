@@ -15324,614 +15324,721 @@ function getScaleLevelUp(power) {
 
 // BattleMap Area
 ///////////////////////////////////
+  // ========== Cấu hình ==========
+  const COLS = 15, ROWS = 15, CELL = 25;
+  const BULLET_SPEED = 10; // ô/giây mặc định
+  const EVADE_MS = 100;   // thời gian evading sau khi bắn
 
-let mapData = []; // chứa thông tin ô
+  // ========== Tiện ích ==========
+  const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const posToPx = (x) => x * CELL;
+  const id = (s) => document.getElementById(s);
+  const logEl = id('log');
+  const arena = id('mapArea');
 
-function buildBattleMap(cols = 15, rows = 12) {
-  const mapArea = document.getElementById("mapArea");
-  mapArea.innerHTML = "";
-  mapData = []; // reset
+  function log(msg) {
+    const time = new Date().toLocaleTimeString();
+    const line = document.createElement('div');
+    line.textContent = `[${time}] ${msg}`;
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
 
-  for (let y = 0; y < rows; y++) {
-    const row = [];
-    for (let x = 0; x < cols; x++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      cell.dataset.x = x;
-      cell.dataset.y = y;
+  // ========== Tạo Pet ==========
+  function makePet(name, color, x, y) {
+    const ATK = randInt(10, 50);
+    const DEF = randInt(10, 50);
+    const AGI = randInt(1, 20);
+    const HP = randInt(80, 200);
+    const LUK = randInt(10, 20);
+    const MOVE = randInt(400, 1400); // ms/bước
 
-      // push vào mảng trạng thái
-      row.push({
-        x: x,
-        y: y,
-        occupied: false, // mặc định trống
-        pet: null        // pet nào đang đứng, nếu có
-      });
+    // tạo div pet
+    const el = document.createElement('div');
+    el.className = `pet`;
 
-      mapArea.appendChild(cell);
+    // tạo div con để làm ảnh / flip
+    const imgEl = document.createElement('div');
+    imgEl.className = `image-pet ${color}`;
+    imgEl.textContent = name[0]; // tạm hiển thị chữ cái đầu, sau này thay hình
+    el.appendChild(imgEl);
+
+    arena.appendChild(el);
+
+    const pet = {
+      name, color, el, imgEl,
+      x, y,
+      stats: { ATK, DEF, AGI, HP, HP_MAX: HP, LUK, MOVE },
+      lastShot: 0,
+      evadingUntil: 0,
+      lastMove: 0,
+      alive: true,
+      frozen: false,
+      lastSkill: 0,
+      skillCooldown: randInt(50, 200) * 100 / Math.max(1, AGI) // ms
+    };
+    positionElement(el, x, y);
+    return pet;
+  }
+
+  function positionElement(el, x, y) {
+    el.style.transform = `translate(${posToPx(x)}px, ${posToPx(y)}px)`;
+  }
+
+  function updateHPBars() {
+    for (let i = 0; i < pets.red.length; i++) {
+      const r = pets.red[i].stats;
+      id(`hpRedLabel${i+1}`).textContent = `${r.HP}/${r.HP_MAX}`;
+      id(`hpRedBar${i+1}`).style.width = `${Math.max(0, (r.HP / r.HP_MAX) * 100)}%`;
     }
-    mapData.push(row);
-  }
-}
-
-function getCellElement(x, y) {
-  return document.querySelector(`#mapArea .cell[data-x="${x}"][data-y="${y}"]`);
-}
-
-//Class pet
-//////////////
-class Pet {
-  constructor(team, id, stats, x, y) {
-    this.team = team; // "A" hoặc "B"
-    this.id = id;
-    this.stats = stats;
-    this.x = x;
-    this.y = y;
-    this.isDead = false;   // <--- thêm flag
-    this.stt = [];
-    this.hp = stats.HP;
-    this.element = null; // DOM element trên map
-    this.lastMove = 0;
-    this.lastShot = 0;
-    this.skills = stats.skills;
-    this.skillTimers = {}; // { Frozen: 0, Burn: 0 }
-    for (let name of this.skills) {
-      this.skillTimers[name] = 0;
-    }
-  }
-
-  createElement() {
-    const el = document.createElement("div");
-    el.className = "pet";
-    el.style.background = this.team === "A" ? "blue" : "green";
-    el.style.width = "18px";
-    el.style.height = "18px";
-    el.style.borderRadius = "50%";
-    el.style.position = "relative";
-    el.style.zIndex = "5";
-    el.innerText = this.id;
-    el.style.fontSize = "10px";
-    el.style.color = "white";
-    this.element = el;
-    const cell = getCellElement(this.x, this.y);
-    cell.appendChild(el);
-  }
-
-  moveRandom(now) {
-      if (this.isDead) return; // <--- nếu đã chết không di chuyển
-      // nếu có status bất lợi thì không di chuyển
-      if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
-        return;
-      }
-      
-    if (now - this.lastMove < 1000 / this.stats.speedMove) return; // tốc độ di chuyển
-    this.lastMove = now;
-
-    const dirs = [
-      [0, -1], [0, 1], [-1, 0], [1, 0]
-    ];
-    const [dx, dy] = dirs[Math.floor(Math.random() * dirs.length)];
-    const nx = this.x + dx;
-    const ny = this.y + dy;
-
-    if (nx >= 0 && nx < 15 && ny >= 0 && ny < 12 && !mapData[ny][nx].occupied) {
-      // clear chỗ cũ
-      mapData[this.y][this.x].occupied = false;
-      if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
-
-      this.x = nx;
-      this.y = ny;
-      mapData[this.y][this.x].occupied = true;
-      getCellElement(this.x, this.y).appendChild(this.element);
+    for (let i = 0; i < pets.blue.length; i++) {
+      const b = pets.blue[i].stats;
+      id(`hpBlueLabel${i+1}`).textContent = `${b.HP}/${b.HP_MAX}`;
+      id(`hpBlueBar${i+1}`).style.width = `${Math.max(0, (b.HP / b.HP_MAX) * 100)}%`;
     }
   }
 
-    trySkill(now, target) {
-  if (this.isDead) return;
-  if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
-    return;
+  function cooldownMs(agi) {
+    // AGI càng cao thì cooldown ô/đòn càng thấp. Minimum 500ms.
+    return Math.max(500, 2500 - agi * 100);
   }
 
-  for (let skillName of this.skills) {
-    const skill = SkillBook[skillName];
-    if (!skill) continue;
+  function renderStats() {
+    const S = id('stats');
+    const card = (pet) => `<div class="card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px">
+          <div style="display:flex; align-items:center; gap:6px">
+            <span class="dot" style="background:${pet.color==='red'?'#ef4444':'#3b82f6'}"></span>
+            <strong>${pet.name}</strong>
+          </div>
+          <span class="tag">AGI→CD: ${(cooldownMs(pet.stats.AGI)/1000).toFixed(2)}s</span>
+        </div>
+        <div class="tag">ATK: ${pet.stats.ATK} • DEF: ${pet.stats.DEF} • AGI: ${pet.stats.AGI} • HP: ${pet.stats.HP_MAX} • LUK: ${pet.stats.LUK} • MOVE: ${pet.stats.MOVE}ms</div>
+      </div>`;
 
-    const lastCast = this.skillTimers[skillName] || 0;
+    S.innerHTML =
+      pets.red.map(p => card(p)).join('') +
+      pets.blue.map(p => card(p)).join('');
+  }
 
-    // cooldown gốc
-    const baseCD = skill.cooldown;
+  // ========== Đạn ==========
+  const bullets = new Set();
 
-    // giảm cooldown từ chỉ số pet
-    const flatReduce = this.stats.COOLDOWN[0] || 0;
+function shoot(shooter, enemies) {
+  if (!shooter || !enemies || enemies.length === 0) return;
+  if (shooter.frozen) return;
+  const now = performance.now();
+  if (now - shooter.lastShot < cooldownMs(shooter.stats.AGI)) return;
+  shooter.lastShot = now;
 
-    // giảm % cooldown từ hiệu ứng khác
-    const percentReduce = this.stats.COOLDOWN[1] || 0; // ví dụ 0.2 = giảm 20%
-
-    // cooldown thực tế
-    let finalCD = baseCD - flatReduce - baseCD * percentReduce;
-    if (finalCD < 150) finalCD = 150; // tối thiểu 0.5s để tránh cast liên tục
-
-    if (now - lastCast >= finalCD) {
-      skill.effect(this, target);
-      this.skillTimers[skillName] = now;
+  // Chọn mục tiêu gần nhất
+  let target = null;
+  let minDist = Infinity;
+  for (const e of enemies) {
+    if (!e.alive) continue;
+    const dx = e.x - shooter.x;
+    const dy = e.y - shooter.y;
+    const d = dx * dx + dy * dy;
+    if (d < minDist) {
+      minDist = d;
+      target = e;
     }
   }
-}
+  if (!target) return;
 
-    
-    tryShoot(now) {
-      if (this.isDead) return; 
-      if (this.stt && (this.stt.includes("frozen") || this.stt.includes("sleep") || this.stt.includes("stun"))) {
-        return;
-      }
-    
-      const A = 3900;
-      const B = -0.292;
-      const agi = this.stats.AGI;
-      const cooldown = A * Math.pow(agi, B);
-    
-      if (now - this.lastShot < cooldown) return;
-      this.lastShot = now;
-    
-      const enemyTeam = this.team === "A" ? teamB : teamA;
-      if (!enemyTeam.length) return;
-    
-      // Chuyển cả mảng enemies vào BulletBase
-      new BulletBase(this, enemyTeam);
-    }
-
-    takeDamage(dmg) {
-      if (this.isDead) return; // chết rồi thì bỏ qua
-      this.hp -= dmg;
-      if (this.hp < 0) this.hp = 0;
-    
-      console.log(`${this.team}${this.id} HP: ${this.hp}/${this.stats.HP}`);
-    
-      if (this.hp === 0) {
-        this.die();
-      }
-    }
-    die() {
-      this.isDead = true;
-      // xóa element và hpBar trên DOM
-      if (this.element?.parentNode) {
-        this.element.parentNode.removeChild(this.element);
-      }
-      if (this.hpBar?.parentNode) {
-        this.hpBar.parentNode.removeChild(this.hpBar);
-      }
-    
-      console.log(`${this.team}${this.id} đã chết`);
-    }
-
-}
-
-//Skill
-////////////////////////
-const SkillBook = {
-  Frozen: {
-    cooldown: 5000,
-    effectTime: 500, //Choáng mấy giây (0.5s)
-    effect: (caster, target) => {
-      if (!target) return;
-      // Damage = caster.ATK * 1.2 ví dụ
-      const damage = caster.stats.ATK * 1.2;
-      new IceBullet(caster, target, damage);
-      console.log(`${caster.id} đóng băng ${target.id} gây ${damage} damage`);
-    }
-  },
-};
-
-//Bullet viên đạn
-///////////////////
-// ========== Đạn ==========
-let bullets = new Set();
-
-function updateBullets() {
-  for (const b of [...bullets]) b.update();
-}
-
-function resetBullets() {
-  for (const b of [...bullets]) b.destroy();
-  bullets.clear();
-}
-
-class BaseBullet {
-  constructor(x, y, vx, vy, speed, radius, color) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
-    this.vy = vy;
-    this.speed = speed;
-    this.radius = radius;
-
-    this.element = document.createElement("div");
-    this.element.style.width = "6px";
-    this.element.style.height = "6px";
-    this.element.style.background = color;
-    this.element.style.borderRadius = "50%";
-    this.element.style.position = "absolute";
-
-    document.getElementById("mapArea").appendChild(this.element);
-
-    bullets.add(this); // thêm vào Set chung
-  }
-
-  update() {
-    this.x += this.vx * this.speed;
-    this.y += this.vy * this.speed;
-    this.place();
-  }
-
-  place() {
-    this.element.style.left = (this.x * 20 - 3) + "px";
-    this.element.style.top  = (this.y * 20 - 3) + "px";
-  }
-
-  destroy() {
-    if (this.element?.parentNode) this.element.parentNode.removeChild(this.element);
-    bullets.delete(this);
-  }
-}
-
-class Bullet extends BaseBullet {
-  constructor(caster, target) {
-    let dx = (target.x + 0.5) - (caster.x + 0.5);
-    let dy = (target.y + 0.5) - (caster.y + 0.5);
-    const len = Math.sqrt(dx*dx + dy*dy) || 1;
-    dx /= len; dy /= len;
-
-    super(caster.x + 0.5, caster.y + 0.5, dx, dy, 0.05, 0.2, "red");
-    this.caster = caster;
-    this.target = target;
-  }
-
-  update() {
-      super.update();
-      // Khoảng cách giữa tâm đạn và tâm pet
-      const tx = this.target.x + 0.5;
-      const ty = this.target.y + 0.5;
-      const dist = Math.sqrt((this.x - tx) ** 2 + (this.y - ty) ** 2);
-    
-      if (dist <= this.radius + 0.5) {
-        this.target.takeDamage(this.caster.stats.ATK);
-        this.destroy();
-      }
-    
-      // Nếu đạn bay ra ngoài map thì hủy luôn
-      if (this.x < 0 || this.x > 15 || this.y < 0 || this.y > 12) {
-        this.destroy();
-      }
-    }
-}
-
-class IceBullet extends BulletBase {
-  constructor(caster, target, damage) {
-    let dx = (target.x + 0.5) - (caster.x + 0.5);
-    let dy = (target.y + 0.5) - (caster.y + 0.5);
-    const len = Math.sqrt(dx*dx + dy*dy) || 1;
-    dx /= len; dy /= len;
-
-    super(caster.x + 0.5, caster.y + 0.5, dx, dy, 0.04, 0.25, "cyan");
-    this.caster = caster;
-    this.target = target;
-    this.damage = damage;
-  }
-
-  update() {
-    super.update();
-
-    if (!this.target || this.target.isDead) return;
-
-    // Dùng hàm checkBulletHit thay vì tự tính lại
-    if (checkBulletHit(this, this.target)) {
-      this.target.takeDamage(this.damage);
-
-      if (!this.target.isDead) {
-        this.target.stt.push("frozen");
-
-        const effectTime = SkillBook.Frozen.effectTime || 3000;
-        setTimeout(() => {
-          const idx = this.target.stt.indexOf("frozen");
-          if (idx !== -1) this.target.stt.splice(idx, 1);
-          console.log(`${this.target.name} hết đóng băng`);
-        }, effectTime);
-      }
-
-      this.destroy();
-    }
-  }
-}
-
-
-class BulletBase {
-  constructor(shooter, enemies) {
-    if (!shooter || !enemies || enemies.length === 0) return;
-    if (shooter.frozen) return;
-
-    // 1. Tìm mục tiêu gần nhất
-    let closestTarget = null;
-    let smallestDistanceSquared = Infinity;
-
-    for (const enemy of enemies) {
-      if (enemy.isDead) continue;
-      const dx = enemy.x - shooter.x;
-      const dy = enemy.y - shooter.y;
-      const dist2 = dx * dx + dy * dy;
-      if (dist2 < smallestDistanceSquared) {
-        smallestDistanceSquared = dist2;
-        closestTarget = enemy;
-      }
-    }
-    if (!closestTarget) return;
-
-    // 2. Tính tọa độ tâm
-    this.startX = shooter.x + 0.5;
-    this.startY = shooter.y + 0.5;
-    const tx = closestTarget.x + 0.5;
-    const ty = closestTarget.y + 0.5;
-
-    // 3. Vector hướng
-    let dirX = tx - this.startX;
-    let dirY = ty - this.startY;
-    let dist = Math.hypot(dirX, dirY);
-
-    if (dist === 0) {
-      const randomAngle = Math.random() * Math.PI * 2;
-      dirX = Math.cos(randomAngle);
-      dirY = Math.sin(randomAngle);
-      dist = 1;
-    }
-
-    this.directionX = dirX / dist;
-    this.directionY = dirY / dist;
-
-    // 4. Tạo element
-    this.element = document.createElement("div");
-    this.element.style.width = "6px";
-    this.element.style.height = "6px";
-    this.element.style.background = "red";
-    this.element.style.borderRadius = "50%";
-    this.element.style.position = "absolute";
-    document.getElementById("mapArea").appendChild(this.element);
-
-    // 5. Thuộc tính
-    this.owner = shooter;
-    this.enemies = enemies;
-    this.positionX = this.startX;
-    this.positionY = this.startY;
-    this.speed = BULLET_SPEED;
-
-    bullets.add(this);
-
-    // spawn ở giữa ô
-    const offset = 3;
-    this.element.style.transform =
-      `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
-
-    log(`${shooter.name} bắn`);
-  }
-
-  update(dt) {
-    const step = (this.speed * dt) / 1000;
-    this.positionX += this.directionX * step;
-    this.positionY += this.directionY * step;
-
-    const offset = 3;
-    this.element.style.transform =
-      `translate(${posToPx(this.positionX) - offset}px, ${posToPx(this.positionY) - offset}px)`;
-
-    // Ra ngoài map thì hủy
-    if (
-      this.positionX < -1 ||
-      this.positionX > 15 + 1 ||
-      this.positionY < -1 ||
-      this.positionY > 12 + 1
-    ) {
-      this.destroy();
-      return;
-    }
-
-    // Check va chạm
-    for (const enemy of this.enemies) {
-      if (enemy.isDead) continue;
-      if (checkBulletHit(this, enemy)) {
-        const dmg = Math.max(this.owner.stats.ATK - enemy.stats.DEF, 1);
-        enemy.takeDamage(dmg);
-        this.destroy();
-        return;
-      }
-    }
-  }
-
-  destroy() {
-    if (this.element) this.element.remove();
-    bullets.delete(this);
-  }
-}
-
-function checkBulletHit(bullet, target) {
-  // Tính tâm target
+  const sx = shooter.x + 0.5;
+  const sy = shooter.y + 0.5;
   const tx = target.x + 0.5;
   const ty = target.y + 0.5;
+  let dx = tx - sx;
+  let dy = ty - sy;
+  let dist = Math.hypot(dx, dy);
+  if (dist === 0) {
+    const ang = Math.random() * Math.PI * 2;
+    dx = Math.cos(ang);
+    dy = Math.sin(ang);
+    dist = 1;
+  }
+  const vx = dx / dist;
+  const vy = dy / dist;
 
-  // Khoảng cách bullet-target
-  const dx = bullet.positionX - tx;
-  const dy = bullet.positionY - ty;
-  const dist2 = dx * dx + dy * dy;
+  const el = document.createElement('div');
+  el.className = `bullet ${shooter.color}`;
+  el.textContent = '•';
+  arena.appendChild(el);
 
-  // Nếu nhỏ hơn bán kính chạm (vd: 0.4 ô) thì coi là trúng
-  return dist2 < 0.4 * 0.4;
+  const bullet = {
+    el,
+    color: shooter.color,
+    x: sx,
+    y: sy,
+    vx,
+    vy,
+    owner: shooter,
+    speed: BULLET_SPEED,
+    skill: null
+  };
+  bullets.add(bullet);
+
+  shooter.evadingUntil = now + EVADE_MS;
+  const offset = (CELL * 0.6) / 2;
+  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
+  log(`${shooter.name} bắn`);
 }
 
 
-
-//Khởi tạo 2 team
-/////////////////////
-let teamA = [];
-let teamB = [];
-
-let petData = {
-  teamA: [
-    { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, COOLDOWN: [0,0], speedMove: 1.5, skills: ["Frozen"] },
-    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, COOLDOWN: [0,0], speedMove: 1.2, skills: [""] },
-    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, COOLDOWN: [0,0], speedMove: 1.0, skills: [""] }
-  ],
-  teamB: [
-    { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, COOLDOWN: [0,0], speedMove: 1.3, skills: ["Frozen"] },
-    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, COOLDOWN: [0,0], speedMove: 1.4, skills: [""] },
-    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, COOLDOWN: [0,0], speedMove: 1.1, skills: [""] }
-  ]
-};
-
-
-// function randomCreatePet() {
-//   teamA = [];
-//   teamB = [];
-//   bullets = [];
-
-//   const statsSample = () => ({
-//     ATK: 10, DEF: 5, AGI: Math.floor(Math.random() * 5 + 3),
-//     INT: 2, LUK: 2, HP: 50, speedMove: Math.random() * 2 + 1
-//   });
-
-//   for (let i = 0; i < 3; i++) {
-//     let petB = new Pet("B", i+1, statsSample(), 2, i*2+2);
-//     teamB.push(petB);
-//     mapData[petB.y][petB.x].occupied = true;
-//     petB.createElement();
-
-//     let petA = new Pet("A", i+1, statsSample(), 12, i*2+2);
-//     teamA.push(petA);
-//     mapData[petA.y][petA.x].occupied = true;
-//     petA.createElement();
-//   }
-// }
-
-function createTeams() {
-  teamA = [];
-  teamB = [];
-
-  const teamBbars = document.querySelectorAll("#teamB-box .hp-fill");
-  const teamAbars = document.querySelectorAll("#teamA-box .hp-fill");
-
-  // Nếu có petData thì load
-    petData.teamB.forEach((stats, i) => {
-      let petB = new Pet("B", stats.id, stats, 2, i * 2 + 2);
-      teamB.push(petB);
-      mapData[petB.y][petB.x].occupied = true;
-      petB.createElement();
-    });
-    
-    // Load Team A
-    petData.teamA.forEach((stats, i) => {
-      let petA = new Pet("A", stats.id, stats, 12, i * 2 + 2);
-      teamA.push(petA);
-      mapData[petA.y][petA.x].occupied = true;
-      petA.createElement();
-    });
+function removeBullet(b) {
+  if (b && b.el) b.el.remove();
+  bullets.delete(b);
 }
 
-//Tính HPBar pet
-function updateHpBars() {
-  teamA.forEach((pet, i) => {
-    const bar = document.querySelector(`#petA${i+1}HpBar .hp-fill`);
-    if (bar) {
-      let percent = Math.max(0, (pet.hp / pet.stats.HP) * 100);
-      bar.style.width = percent + "%";
-      if (percent > 50) {
-        bar.style.background = "linear-gradient(90deg, #0f0, #6f6)";
-      } else if (percent > 20) {
-        bar.style.background = "linear-gradient(90deg, #ff0, #cc0)";
-      } else {
-        bar.style.background = "linear-gradient(90deg, #f00, #900)";
-      }
+
+  // ==== Skill Freeze ====
+function castSkillFreeze(caster, enemies) {
+  if (caster.frozen || !caster.alive) return;
+  const now = performance.now();
+  if (now - caster.lastSkill < caster.skillCooldown) return; 
+
+  // Chọn 1 mục tiêu ngẫu nhiên còn sống trong enemies
+  const aliveEnemies = enemies.filter(e => e.alive);
+  if (aliveEnemies.length === 0) return;
+  const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
+
+  const sx = caster.x + 0.5;
+  const sy = caster.y + 0.5;
+  const tx = target.x + 0.5;
+  const ty = target.y + 0.5;
+  let dx = tx - sx;
+  let dy = ty - sy;
+  let dist = Math.hypot(dx, dy);
+  if (dist === 0) { 
+    const ang = Math.random() * Math.PI*2; 
+    dx = Math.cos(ang); 
+    dy = Math.sin(ang); 
+    dist = 1; 
+  }
+  const vx = dx / dist;
+  const vy = dy / dist;
+
+  const el = document.createElement('div');
+  el.className = 'bullet freeze';
+  arena.appendChild(el);
+
+  const bullet = { 
+    el, 
+    color: 'freeze', 
+    x: sx, 
+    y: sy, 
+    vx, 
+    vy, 
+    owner: caster, 
+    speed: BULLET_SPEED, // bay nhanh bằng đạn thường
+    skill: 'freeze' 
+  };
+  bullets.add(bullet);
+  caster.lastSkill = now;
+  log(`${caster.name} dùng kỹ năng Đóng băng!`);
+
+  const offset = (CELL * 0.6) / 2;
+  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
+}
+
+function applyBulletEffect(bullet, pet) {
+  if (!pet.alive) return;
+
+  if (bullet.skill === 'freeze') {
+    if (!pet.frozen) {
+      pet.frozen = true;
+      pet.el.style.filter = 'grayscale(100%)';
+      log(`${pet.name} bị đóng băng !`);
+      setTimeout(() => {
+        if (pet.alive) {
+          pet.frozen = false;
+          pet.el.style.filter = '';
+          log(`${pet.name} hết đóng băng.`);
+        }
+      }, 2000);
     }
+  } else {
+    const atk = bullet.owner.stats.ATK;
+    const def = pet.stats.DEF;
+    const raw = atk - def;
+    const minDmg = Math.ceil(atk * 0.10);
+    const dmg = Math.max(minDmg, raw);
+    pet.stats.HP = Math.max(0, pet.stats.HP - dmg);
+    updateHPBars();
+    log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.stats.HP})`);
+    if (pet.stats.HP <= 0) {
+      pet.alive = false;
+      pet.el.style.opacity = 0.4;
+      pet.el.style.display = "none";
+      log(`${pet.name} đã gục!`);
+      checkEndGame();
+    }
+  }
+}
+
+// ============== CAST SKILL: bắn viên sét đầu tiên ==============
+function castSkillLightningChain(
+  caster,
+  enemies,
+  {
+    maxChains = 3,       // số lần nảy thêm (không tính viên đầu)
+    damage = caster.stats?.ATK ?? 0,
+    decay = 0.8,         // % giảm damage mỗi lần nảy
+    rangeCells = 6,      // phạm vi nảy tính theo số ô
+    speed = BULLET_SPEED * 1.2
+  } = {}
+) {
+  if (caster.frozen || !caster.alive) return;
+  const now = performance.now();
+  if (now - caster.lastSkill < caster.skillCooldown) return;
+
+  const aliveEnemies = enemies.filter(e => e && e.alive && e.hp > 0);
+  if (aliveEnemies.length === 0) return;
+
+  const firstTarget = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
+
+  // visited: để tránh nảy lại mục tiêu đã dính
+  const visited = new Set([caster]);
+
+  spawnLightningBullet(caster, firstTarget, {
+    enemies,
+    chainsLeft: maxChains,
+    damage,
+    decay,
+    rangeCells,
+    speed,
+    visited
   });
 
-  teamB.forEach((pet, i) => {
-    const bar = document.querySelector(`#petB${i+1}HpBar .hp-fill`);
-    if (bar) {
-      let percent = Math.max(0, (pet.hp / pet.stats.HP) * 100);
-      bar.style.width = percent + "%";
-      if (percent > 50) {
-        bar.style.background = "linear-gradient(90deg, #0f0, #6f6)";
-      } else if (percent > 20) {
-        bar.style.background = "linear-gradient(90deg, #ff0, #cc0)";
-      } else {
-        bar.style.background = "linear-gradient(90deg, #f00, #900)";
-      }
-    }
-  });
+  caster.lastSkill = now;
+  log(`${caster.name} dùng kỹ năng Sét lan!`);
 }
 
+// ============== SPAWN 1 VIÊN SÉT TỪ A -> B ==============
+function spawnLightningBullet(fromUnit, toUnit, meta) {
+  // meta giữ nguyên qua các lần nảy
+  const { speed } = meta;
 
+  const sx = fromUnit.x + 0.5;
+  const sy = fromUnit.y + 0.5;
+  const tx = toUnit.x + 0.5;
+  const ty = toUnit.y + 0.5;
 
-//Khởi tạo game loop
-///////////////////////
-function gameLoop() {
-  const now = Date.now();
+  let dx = tx - sx;
+  let dy = ty - sy;
+  let dist = Math.hypot(dx, dy);
+  if (dist === 0) {
+    const ang = Math.random() * Math.PI * 2;
+    dx = Math.cos(ang);
+    dy = Math.sin(ang);
+    dist = 1;
+  }
+  const vx = dx / dist;
+  const vy = dy / dist;
 
-  for (let pet of [...teamA, ...teamB]) {
-    if (pet.isDead) continue;
-    pet.moveRandom(now);
-      
-    // Chọn đối thủ gần nhất
-    const enemies = pet.team === "A" ? teamB : teamA;
-    let nearest = null;
-    let minDist = Infinity;
+  const el = document.createElement('div');
+  el.className = 'bullet lightning';
+  arena.appendChild(el);
 
-    for (let enemy of enemies) {
-      if (enemy.isDead) continue;
-      const dx = enemy.x - pet.x;
-      const dy = enemy.y - pet.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
+  const bullet = {
+    el,
+    x: sx,
+    y: sy,
+    vx,
+    vy,
+    speed,
+    owner: fromUnit,
+    target: toUnit,
+    skill: 'lightning',
+    // META để checkBulletHit xử lý nảy:
+    enemies: meta.enemies,
+    chainsLeft: meta.chainsLeft,
+    damage: meta.damage,
+    decay: meta.decay,
+    rangeCells: meta.rangeCells,
+    visited: meta.visited
+  };
 
-      if (dist < minDist) {
-        minDist = dist;
-        nearest = enemy;
+  bullets.add(bullet);
+
+  const offset = (CELL * 0.6) / 2;
+  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
+}
+
+// ============== HÀM PHỤ: tìm mục tiêu gần nhất để nảy ==============
+function findNextLightningTarget(from, enemies, visited, rangeCells) {
+  let best = null;
+  let bestDist = Infinity;
+  for (const e of enemies) {
+    if (!e || !e.alive || e.hp <= 0) continue;
+    if (visited.has(e) || e === from) continue;
+    const dx = e.x - from.x;
+    const dy = e.y - from.y;
+    const d = Math.hypot(dx, dy); // đơn vị ô
+    if (d <= rangeCells && d < bestDist) {
+      bestDist = d;
+      best = e;
+    }
+  }
+  return best;
+}
+
+// ============== THAY checkBulletHit: xử lý va chạm + nảy ==============
+function checkBulletHit(bullet, pet) {
+  // kiểm tra khoảng cách va chạm giống bạn
+  const bx = bullet.x, by = bullet.y;
+  const px = pet.x + 0.5;
+  const py = pet.y + 0.5;
+  const dist = Math.hypot(bx - px, by - py);
+  const hit = dist < 0.6;
+
+  if (!hit) return false;
+
+  // ---- ĐẠN SÉT: gây dame + nảy tiếp ngay tại đây ----
+  if (bullet.skill === 'lightning') {
+    // gây damage
+    const def = (pet.stats && pet.stats.DEF) ? pet.stats.DEF : 0;
+    const dealt = Math.max(1, Math.floor(bullet.damage - def));
+    pet.hp -= dealt;
+    if (pet.hp < 0) pet.hp = 0;
+    log(`${bullet.owner.name} ⚡ gây ${dealt} dmg lên ${pet.name} (HP còn ${pet.hp})`);
+
+    // đánh dấu đã trúng để không nảy lại
+    bullet.visited.add(pet);
+
+    // nếu còn lượt nảy, tìm mục tiêu kế
+    if (bullet.chainsLeft > 0) {
+      const next = findNextLightningTarget(pet, bullet.enemies, bullet.visited, bullet.rangeCells);
+      if (next) {
+        spawnLightningBullet(pet, next, {
+          enemies: bullet.enemies,
+          chainsLeft: bullet.chainsLeft - 1,
+          damage: bullet.damage * bullet.decay,
+          decay: bullet.decay,
+          rangeCells: bullet.rangeCells,
+          speed: bullet.speed,
+          visited: bullet.visited
+        });
       }
     }
 
-    if (!nearest) continue; // không còn đối thủ sống
-
-    // Thực hiện hành động
-    pet.tryShoot(now, nearest);
-    pet.trySkill(now, nearest);
+    // Viên hiện tại phải biến mất khi trúng
+    if (bullets.has(bullet)) {
+      bullet.el.remove();
+      bullets.delete(bullet);
+    }
+    return true;
   }
 
-  updateBullets(); // ✅ dùng hàm duyệt Set
-
-  updateHpBars();
-
-  requestAnimationFrame(gameLoop);
+  // ---- Đạn loại khác: giữ nguyên hành vi cũ ----
+  return true;
 }
 
 
 
-//Khởi tạo game từ đầu
-//////////////////////////////
-function resetBattle() {
-  [...teamA, ...teamB].forEach(pet => {
-    if (pet.element?.parentNode) pet.element.parentNode.removeChild(pet.element);
-  });
 
-  bullets.forEach(bullet => {
-    if (bullet.element?.parentNode) bullet.element.parentNode.removeChild(bullet.element);
-  });
-  bullets.clear(); // ✅ xóa tất cả khỏi Set mà không đổi kiểu
+function castSkillCharge(caster, enemies) {
+  if (caster.frozen || !caster.alive || caster.charging) return;
+  const now = performance.now();
+  if (now - caster.lastSkill < caster.skillCooldown) return;
 
-  teamA = [];
-  teamB = [];
+  // Chọn mục tiêu còn sống ngẫu nhiên
+  const aliveEnemies = enemies.filter(e => e.alive && e.stats.HP > 0);
+  if (aliveEnemies.length === 0) return;
+  const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
 
-  buildBattleMap();
+  // Lưu vị trí gốc để sau khi đánh xong quay lại
+  const originalX = caster.x;
+  const originalY = caster.y;
+
+  caster.charging = true;
+  caster.el.style.transition = 'transform 0.4s linear';
+  log(`${caster.name} lao vào ${target.name}!`);
+
+  // 1) Lao tới vị trí của target
+  caster.x = target.x;
+  caster.y = target.y;
+  positionElement(caster.el, caster.x, caster.y);
+
+  // Sau khi "lao tới" xong, gây sát thương
+  setTimeout(() => {
+    if (target.alive && target.stats.HP > 0) {
+      const atk = caster.stats.ATK;
+      const def = target.stats.DEF;
+      const raw = atk - def;
+      const minDmg = Math.ceil(atk * 0.10);
+      const dmg = Math.max(minDmg, raw);
+      target.stats.HP = Math.max(0, target.stats.HP - dmg);
+      log(`${caster.name} gây ${dmg} sát thương lên ${target.name}! (${target.stats.HP})`);
+      updateHPBars();
+
+      if (target.stats.HP <= 0) {
+        target.alive = false;
+        target.el.style.opacity = 0; // tuỳ bạn muốn ẩn luôn khi chết
+      }
+    }
+
+    // 2) Phi về chỗ cũ
+    caster.el.style.transition = 'transform 0.4s linear';
+    caster.x = originalX;
+    caster.y = originalY;
+    positionElement(caster.el, caster.x, caster.y);
+
+    // Hoàn tất charge sau khi về
+    setTimeout(() => {
+      caster.el.style.transition = ''; // reset
+      caster.charging = false;
+      caster.lastSkill = now;
+      checkEndGame && checkEndGame();
+    }, 400);
+
+  }, 400);
+}
+
+function castSkillOrbit(caster, enemies) {
+  if (caster.frozen || !caster.alive) return;
+  const now = performance.now();
+  if (now - caster.lastSkill < caster.skillCooldown) return;
+
+  const duration = 6000;   // ms tồn tại
+  const radius   = 1.5;    // bán kính quỹ đạo (đơn vị = ô)
+  const angVel   = Math.PI; // rad/s (≈ 180°/s)
+
+  for (let i = 0; i < 3; i++) {
+    const el = document.createElement('div');
+    el.className = 'bullet sword';
+    arena.appendChild(el);
+
+    const bullet = {
+      el,
+      color: 'sword',
+      owner: caster,
+      x: caster.x + 0.5,
+      y: caster.y + 0.5,
+      angle: (i * 2 * Math.PI) / 3, // 0°, 120°, 240°
+      angVel,
+      radius,
+      skill: 'orbit',
+      expireAt: now + duration,
+      lastHit: new Map() // chống “dính” nhiều hit trong 1 lúc
+    };
+    bullets.add(bullet);
+  }
+
+  caster.lastSkill = now;
+  log(`${caster.name} tạo 3 thanh kiếm xoay!`);
 }
 
 
-// gọi khi loadgame - start game
-buildBattleMap();
-createTeams();
-gameLoop();
+// ==== Quyết định dùng kỹ năng ====
+function skills(caster, enemies) {
+  if (!caster.alive || caster.charging) return;
+  const now = performance.now();
+  if (now - caster.lastSkill >= caster.skillCooldown) {
+    const chance = 0.12 + (caster.stats.AGI / 200);
+    if (Math.random() < chance) {
+      const roll = Math.random();
+      if (roll < 0) {
+        castSkillFreeze(caster, enemies);
+      } else if (roll < 0) {
+        castSkillCharge && castSkillCharge(caster, enemies);
+      } else if (roll < 0) {
+        castSkillOrbit(caster, enemies);
+      } else {
+        castSkillLightningChain(caster, enemies)
+      }
+    }
+  }
+}
+
+  // ========== Logic di chuyển ==========
+  function moveToward(pet, target, now) {
+    if (pet.frozen || pet.charging) return;
+    if (now - pet.lastMove < pet.stats.MOVE) return;
+    pet.lastMove = now;
+
+    const dir = randInt(0, 4);
+    const dx = [1,-1,0,0,0][dir];
+    const dy = [0,0,1,-1,0][dir];
+    pet.x = clamp(pet.x + dx, 0, COLS-1);
+    pet.y = clamp(pet.y + dy, 0, ROWS-1);
+
+    // flip theo hướng
+    if (dx !== 0) {
+      const imageEl = pet.el.querySelector(".image-pet");
+      if (imageEl) {
+        imageEl.style.transform = dx > 0 ? "scaleX(1)" : "scaleX(-1)";
+      }
+    }
+}
+
+
+
+  // ========== Cập nhật đạn mỗi frame ==========
+  function stepBullets(dt) {
+  const now = performance.now();
+
+  for (const b of Array.from(bullets)) {
+    // --- Đạn kỹ năng: kiếm xoay quanh chủ ---
+    if (b.skill === 'orbit') {
+      if (!b.owner || !b.owner.alive || now > b.expireAt) { removeBullet(b); continue; }
+
+      // Cập nhật góc quay
+      b.angle += b.angVel * (dt / 1000);
+
+      // Vị trí theo chủ sở hữu
+      const cx = b.owner.x + 0.5;
+      const cy = b.owner.y + 0.5;
+      b.x = cx + b.radius * Math.cos(b.angle);
+      b.y = cy + b.radius * Math.sin(b.angle);
+
+      // Translate + rotate để nhìn giống lưỡi kiếm quay
+      const offset = (CELL * 0.6) / 2;
+      b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px) rotate(${b.angle}rad)`;
+
+      // Va chạm: kiểm tra từng đối thủ
+      const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
+      for (const enemy of enemyTeam) {
+        if (!enemy.alive) continue;
+        if (checkBulletHit(b, enemy)) {
+          // Mỗi mục tiêu có i-frames 300ms với 1 lưỡi kiếm
+          const last = b.lastHit.get(enemy) || 0;
+          if (now - last < 300) continue;
+          b.lastHit.set(enemy, now);
+
+          applyBulletEffect(b, enemy);
+          // Lưu ý: kiếm không biến mất khi trúng, nên KHÔNG removeBullet(b)
+        }
+      }
+      continue; // xử lý xong đạn orbit
+    }
+
+    // --- Đạn thường (giữ nguyên) ---
+    const speed = (b.speed !== undefined) ? b.speed : BULLET_SPEED;
+    const step = (speed * dt) / 1000;
+    b.x += b.vx * step;
+    b.y += b.vy * step;
+
+    const offset = (CELL * 0.6) / 2;
+    b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px)`;
+
+    if (b.x < -1 || b.x > COLS + 1 || b.y < -1 || b.y > ROWS + 1) { removeBullet(b); continue; }
+
+    const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
+    for (const enemy of enemyTeam) {
+      if (!enemy.alive) continue;
+      if (checkBulletHit(b, enemy)) {
+        applyBulletEffect(b, enemy);
+        removeBullet(b);
+        break;
+      }
+    }
+  }
+}
+
+
+
+  // ========== Khởi tạo & game loop ==========
+  let pets = { red: [], blue: [] };
+  let running = false;
+  let lastFrame = 0;
+  let loopHandle = null;
+
+  function setup() {
+    arena.innerHTML = '';
+    logEl.innerHTML = '';
+
+    // Tạo 3 pet đội đỏ
+    pets.red = [
+      makePet('Đỏ1', 'red', 4, 2),
+      makePet('Đỏ2', 'red', 8, 2),
+      makePet('Đỏ3', 'red', 12, 2),
+    ];
+
+    // Tạo 3 pet đội xanh
+    pets.blue = [
+      makePet('Xanh1', 'blue', COLS - 12, ROWS - 3),
+      makePet('Xanh2', 'blue', COLS - 8, ROWS - 3),
+      makePet('Xanh3', 'blue', COLS - 4, ROWS - 3),
+    ];
+
+    renderStats();
+    updateHPBars();
+
+    // Cập nhật lại vị trí hiển thị
+    [...pets.red, ...pets.blue].forEach(p => {
+      positionElement(p.el, p.x, p.y);
+    });
+  }
+
+  function gameTick(now) {
+  if (!running) return;
+  const dt = Math.min(48, now - lastFrame);
+  lastFrame = now;
+
+  // Đội đỏ di chuyển, bắn, dùng skill
+  for (const p of pets.red) {
+    if (!p.alive) continue;
+    moveToward(p, pets.blue, now);
+    if (!p.frozen) shoot(p, pets.blue);
+    skills(p, pets.blue);
+    positionElement(p.el, p.x, p.y);
+  }
+
+  // Đội xanh di chuyển, bắn, dùng skill
+  for (const p of pets.blue) {
+    if (!p.alive) continue;
+    moveToward(p, pets.red, now);
+    if (!p.frozen) shoot(p, pets.red);
+    skills(p, pets.red);
+    positionElement(p.el, p.x, p.y);
+  }
+
+  stepBullets(dt);
+  loopHandle = requestAnimationFrame(gameTick);
+}
+
+  function startGame() {
+    if (running) return;
+    running = true;
+    lastFrame = performance.now();
+    loopHandle = requestAnimationFrame(gameTick);
+    log('Bắt đầu trận đấu!');
+  }
+
+  function checkEndGame() {
+  // Lọc pet còn sống dựa trên HP
+  const redAlive = pets.red.filter(p => p.stats.HP > 0 && p.alive).length;
+  const blueAlive = pets.blue.filter(p => p.stats.HP > 0 && p.alive).length;
+
+  if (redAlive === 0 && blueAlive === 0) {
+    endGame("Hòa"); // cả 2 bên đều chết hết
+    return true;
+  } else if (redAlive === 0) {
+    endGame("Blue"); // team Red chết hết → Blue win
+    return true;
+  } else if (blueAlive === 0) {
+    endGame("Red"); // team Blue chết hết → Red win
+    return true;
+  }
+
+  return false; // còn pet sống → game tiếp tục
+}
+
+  function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log('Tạm dừng.'); }
+  function endGame(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log(msg); }
+  function resetGame() { for (const b of Array.from(bullets)) removeBullet(b); setup(); log('Trận mới.'); }
+
+  id('btnStart').addEventListener('click', startGame);
+  id('btnPause').addEventListener('click', pauseGame);
+  id('btnReset').addEventListener('click', resetGame);
+
+  // Khởi tạo ban đầu
+  setup();
+  log('Sinh pet ngẫu nhiên (ATK/DEF/AGI/HP/LUK/MOVE). AGI càng cao → bắn nhanh, MOVE càng nhỏ → chạy nhanh.');
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -15980,6 +16087,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
