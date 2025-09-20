@@ -15608,17 +15608,22 @@ class Bullet extends BaseBullet {
   }
 
   update() {
-    super.update();
-    // check va chạm với target
-    const dist = Math.sqrt(
-      (this.x - (this.target.x + 0.5))**2 +
-      (this.y - (this.target.y + 0.5))**2
-    );
-    if (dist < 0.5 + this.radius) {
-      this.target.takeDamage(this.caster.stats.ATK);
-      this.destroy();
+      super.update();
+      // Khoảng cách giữa tâm đạn và tâm pet
+      const tx = this.target.x + 0.5;
+      const ty = this.target.y + 0.5;
+      const dist = Math.sqrt((this.x - tx) ** 2 + (this.y - ty) ** 2);
+    
+      if (dist <= this.radius + 0.5) {
+        this.target.takeDamage(this.caster.stats.ATK);
+        this.destroy();
+      }
+    
+      // Nếu đạn bay ra ngoài map thì hủy luôn
+      if (this.x < 0 || this.x > 15 || this.y < 0 || this.y > 12) {
+        this.destroy();
+      }
     }
-  }
 }
 
 class IceBullet extends BaseBullet {
@@ -15635,17 +15640,25 @@ class IceBullet extends BaseBullet {
   }
 
   update() {
-    super.update();
-    const dist = Math.sqrt(
-      (this.x - (this.target.x + 0.5))**2 +
-      (this.y - (this.target.y + 0.5))**2
-    );
-    if (dist < 0.5 + this.radius) {
-      this.target.takeDamage(this.damage);
-      this.target.stt.push("frozen");
-      this.destroy();
+      super.update();
+    
+      // Tính khoảng cách giữa tâm đạn và tâm target
+      const tx = this.target.x + 0.5;
+      const ty = this.target.y + 0.5;
+      const dist = Math.sqrt((this.x - tx) ** 2 + (this.y - ty) ** 2);
+    
+      // Nếu đạn chạm vào target
+      if (dist <= this.radius + 0.5) {
+        this.target.takeDamage(this.damage);
+        this.target.stt.push("frozen");
+        this.destroy();
+      }
+    
+      // Nếu đạn bay ra ngoài bản đồ thì tự hủy
+      if (this.x < 0 || this.x > 15 || this.y < 0 || this.y > 12) {
+        this.destroy();
+      }
     }
-  }
 }
 
 
@@ -15750,13 +15763,13 @@ let teamB = [];
 let petData = {
   teamA: [
     { id: 1, ATK: 12, DEF: 6, AGI: 5, INT: 3, LUK: 2, HP: 60, COOLDOWN: [0,0], speedMove: 1.5, skills: ["Frozen"] },
-    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, COOLDOWN: [0,0], speedMove: 1.2, skills: ["Burn", "Stun"] },
-    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, COOLDOWN: [0,0], speedMove: 1.0, skills: [] }
+    { id: 2, ATK: 14, DEF: 4, AGI: 7, INT: 4, LUK: 3, HP: 55, COOLDOWN: [0,0], speedMove: 1.2, skills: [""] },
+    { id: 3, ATK: 10, DEF: 8, AGI: 4, INT: 2, LUK: 1, HP: 70, COOLDOWN: [0,0], speedMove: 1.0, skills: [""] }
   ],
   teamB: [
     { id: 4, ATK: 11, DEF: 5, AGI: 6, INT: 2, LUK: 2, HP: 65, COOLDOWN: [0,0], speedMove: 1.3, skills: ["Frozen"] },
-    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, COOLDOWN: [0,0], speedMove: 1.4, skills: ["Stun"] },
-    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, COOLDOWN: [0,0], speedMove: 1.1, skills: ["Burn", "Frozen"] }
+    { id: 5, ATK: 13, DEF: 7, AGI: 5, INT: 3, LUK: 2, HP: 58, COOLDOWN: [0,0], speedMove: 1.4, skills: [""] },
+    { id: 6, ATK: 9,  DEF: 6, AGI: 8, INT: 2, LUK: 3, HP: 62, COOLDOWN: [0,0], speedMove: 1.1, skills: [""] }
   ]
 };
 
@@ -15956,6 +15969,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
