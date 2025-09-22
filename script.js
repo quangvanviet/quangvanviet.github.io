@@ -15395,24 +15395,6 @@ function getScaleLevelUp(power) {
     return Math.max(500, 2500 - agi * 100);
   }
 
-  function renderStats() {
-    const S = id('stats');
-    const card = (pet) => `<div class="card">
-        <div style="display:flex; justify-content:space-between; margin-bottom:6px">
-          <div style="display:flex; align-items:center; gap:6px">
-            <span class="dot" style="background:${pet.color==='red'?'#ef4444':'#3b82f6'}"></span>
-            <strong>${pet.name}</strong>
-          </div>
-          <span class="tag">AGI→CD: ${(cooldownMs(pet.stats.AGI)/1000).toFixed(2)}s</span>
-        </div>
-        <div class="tag">ATK: ${pet.stats.ATK} • DEF: ${pet.stats.DEF} • AGI: ${pet.stats.AGI} • HP: ${pet.stats.HP_MAX} • LUK: ${pet.stats.LUK} • MOVE: ${pet.stats.MOVE}ms</div>
-      </div>`;
-
-    S.innerHTML =
-      pets.red.map(p => card(p)).join('') +
-      pets.blue.map(p => card(p)).join('');
-  }
-
   // ========== Đạn ==========
   const bullets = new Set();
 
@@ -16076,6 +16058,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
