@@ -448,111 +448,111 @@ function loadAllComp() {
     function updatePowerScale(allPets, objectsToUpdate) {
         // Duyệt qua từng object trong mảng objectsToUpdate
         for (const obj of objectsToUpdate) {
-                const item = obj;
-                // console.log("item", item)
-                // console.log("item.ID", item.ID)
-                const matchedPet = allPets.find(pet => pet.ID === item.ID);
+            const item = obj;
+            // console.log("item", item)
+            // console.log("item.ID", item.ID)
+            const matchedPet = allPets.find(pet => pet.ID === item.ID);
 
-                if (matchedPet) {
-                    console.log("Vào đây matchedPet", matchedPet)
-                    // Gán lại POWER.SCALE theo allPets
-                    if (!item.POWER) item.POWER = {};
-                    item.POWER.SCALE = matchedPet.POWER.SCALE;
+            if (matchedPet) {
+                console.log("Vào đây matchedPet", matchedPet)
+                // Gán lại POWER.SCALE theo allPets
+                if (!item.POWER) item.POWER = {};
+                item.POWER.SCALE = matchedPet.POWER.SCALE;
 
-                    item.PRICE = matchedPet.PRICE
+                item.PRICE = matchedPet.PRICE
 
-                    //Gắn lại EFFECT 
-                    item.EFFECT = matchedPet.EFFECT
-                    item.SELLUP = matchedPet.SELLUP
-                    item.INTERNAL = matchedPet.INTERNAL
-                    item.TYPE = matchedPet.TYPE
+                //Gắn lại EFFECT 
+                item.EFFECT = matchedPet.EFFECT
+                item.SELLUP = matchedPet.SELLUP
+                item.INTERNAL = matchedPet.INTERNAL
+                item.TYPE = matchedPet.TYPE
 
-                    let powerINT = scalePower5Mon(item.POWER.INT);
+                let powerINT = scalePower5Mon(item.POWER.INT);
 
-                    if (item.EFFECT.includes("Attacking")) {
-                        item.DAME[0] = Math.round(powerINT.dame * item.POWER.SCALE)
-                    } else {
-                        item.DAME[0] = 0
-                    }
-
-                    if (item.EFFECT.includes("Healing")) {
-                        item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
-                    } else {
-                        item.HEAL[0] = 0
-                    }
-
-                    if (item.EFFECT.includes("Shield")) {
-                        item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
-                    } else {
-                        item.SHIELD[0] = 0
-                    }
-
-                    if (item.EFFECT.includes("Burn")) {
-                        item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
-                    } else {
-                        item.BURN[0] = 0
-                    }
-
-                    if (item.EFFECT.includes("Poison")) {
-                        item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
-                    } else {
-                        item.POISON[0] = 0
-                    }
-
-                    //Tính cooldown
-                    let agi = item.POWER.AGI;
-                    let minC = 8;
-                    let maxC = 20;
-
-                    let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
-
-                    let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
-
-                    //tính crit
-                    let luk = item.POWER.LUK;
-                    let maxCrit = 60;
-                    let scaleCrit = 1500; // tùy chỉnh
-                    let valueCrit = maxCrit * luk / (luk + scaleCrit);
-                    valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
-                    valueCrit = Math.round(valueCrit * item.POWER.SCALE); 
-
-                    //tính def
-                    let def = item.POWER.DEF;
-                    let maxDef = 90;
-                    let scaleDef = 475; // tùy chỉnh
-                    let valueDef = maxDef * def / (def + scaleDef);
-                    valueDef = Math.min(maxDef, Math.max(0, valueDef));
-                    valueDef = Math.round(valueDef * item.POWER.SCALE);
-
-                    item.DEF[0] = valueDef
-                    item.CRIT[0] = valueCrit
-                    item.COOLDOWN[0] = Math.ceil(valueC)
-                    item.URLimg = matchedPet.URLimg
+                if (item.EFFECT.includes("Attacking")) {
+                    item.DAME[0] = Math.round(powerINT.dame * item.POWER.SCALE)
+                } else {
+                    item.DAME[0] = 0
                 }
+
+                if (item.EFFECT.includes("Healing")) {
+                    item.HEAL[0] = Math.round(powerINT.heal * item.POWER.SCALE)
+                } else {
+                    item.HEAL[0] = 0
+                }
+
+                if (item.EFFECT.includes("Shield")) {
+                    item.SHIELD[0] = Math.round(powerINT.shield * item.POWER.SCALE)
+                } else {
+                    item.SHIELD[0] = 0
+                }
+
+                if (item.EFFECT.includes("Burn")) {
+                    item.BURN[0] = Math.round(powerINT.burn * item.POWER.SCALE)
+                } else {
+                    item.BURN[0] = 0
+                }
+
+                if (item.EFFECT.includes("Poison")) {
+                    item.POISON[0] = Math.round(powerINT.poison * item.POWER.SCALE)
+                } else {
+                    item.POISON[0] = 0
+                }
+
+                //Tính cooldown
+                let agi = item.POWER.AGI;
+                let minC = 8;
+                let maxC = 20;
+
+                let scaleC = Math.max(5, 170 - Math.floor((agi - 200) / 9)); // giảm dần, min là 5
+
+                let valueC = ((maxC - minC) / (1 + agi / scaleC) * 1000) * (2 - item.POWER.SCALE);
+
+                //tính crit
+                let luk = item.POWER.LUK;
+                let maxCrit = 60;
+                let scaleCrit = 1500; // tùy chỉnh
+                let valueCrit = maxCrit * luk / (luk + scaleCrit);
+                valueCrit = Math.min(maxCrit, Math.max(0, valueCrit));
+                valueCrit = Math.round(valueCrit * item.POWER.SCALE);
+
+                //tính def
+                let def = item.POWER.DEF;
+                let maxDef = 90;
+                let scaleDef = 475; // tùy chỉnh
+                let valueDef = maxDef * def / (def + scaleDef);
+                valueDef = Math.min(maxDef, Math.max(0, valueDef));
+                valueDef = Math.round(valueDef * item.POWER.SCALE);
+
+                item.DEF[0] = valueDef
+                item.CRIT[0] = valueCrit
+                item.COOLDOWN[0] = Math.ceil(valueC)
+                item.URLimg = matchedPet.URLimg
+            }
         }
     }
-    
+
     const compUpdateRef = ref(db, `allCompsRound`);
 
     get(compUpdateRef).then((snapshot) => {
         const allCompsRound = snapshot.val() || {};
-        
+
         for (const roundKey in allCompsRound) {
             const compInRound = allCompsRound[roundKey];
-    
+
             // Bỏ qua nếu compInRound không phải object
             if (typeof compInRound !== 'object' || compInRound === null) continue;
-    
+
             for (const compKey in compInRound) {
                 const comp = compInRound[compKey];
-    
+
                 if (!comp || typeof comp.slotSkillComp !== 'object') continue;
-    
+
                 const skillKeys = Object.keys(comp.slotSkillComp);
                 const skillObjects = skillKeys.map(key => comp.slotSkillComp[key]);
-    
+
                 updatePowerScale(allPets, skillObjects);
-    
+
                 const updatedSlotSkillComp = {};
                 skillKeys.forEach((key, index) => {
                     updatedSlotSkillComp[key] = skillObjects[index];
@@ -560,11 +560,11 @@ function loadAllComp() {
                 comp.slotSkillComp = updatedSlotSkillComp;
             }
         }
-    
+
         return set(compUpdateRef, allCompsRound);
     })
-    .then(() => console.log("✅ Cập nhật allCompsByRound thành công"))
-    .catch(err => console.error("❌ Lỗi cập nhật allCompsByRound:", err));
+        .then(() => console.log("✅ Cập nhật allCompsByRound thành công"))
+        .catch(err => console.error("❌ Lỗi cập nhật allCompsByRound:", err));
 
 }
 
@@ -632,16 +632,16 @@ var nowPoisonBattleComp = 0;
 
 let isLogin = false;
 var defaultSTT5Mon = {
-    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: { Lv1: "", Lv2: "", Lv3: "", Lv4: "" },
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0, 0],
-    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0], 
+    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0],
     CRIT: [0, 0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0, 0], PRICE: 0,
 };
 
 var defaultSTT5MonInBattle = {
-    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: {Lv1: "", Lv2: "", Lv3: "", Lv4: ""},
+    ID: "", NAME: "", TYPE: [""], SELLUP: [""], INTERNAL: [""], EFFECT: [""], URLimg: { Lv1: "", Lv2: "", Lv3: "", Lv4: "" },
     LEVEL: 0, POWER: { ATK: 0, DEF: 0, AGI: 0, INT: 0, LUK: 0, HP: 0, SCALE: 0 }, DAME: [0, 0, 0, 0, 0, 0], DEF: [0, 0, 0, 0, 0, 0],
-    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0], 
+    HEAL: [0, 0, 0, 0, 0, 0], SHIELD: [0, 0, 0, 0, 0, 0], BURN: [0, 0, 0, 0, 0, 0], POISON: [0, 0, 0, 0, 0, 0],
     CRIT: [0, 0, 0, 0, 0, 0], COOLDOWN: [0, 0, 0, 0, 0, 0], PRICE: 0, PRICESELL: 0,
 };
 
@@ -808,7 +808,7 @@ function loadDataForUser() {
             if (characterUser) {
                 document.getElementById("playerHunter").src = allCharacter[characterUser].urlIMG
             }
-        
+
             allCharacterUser = data.allCharacterUser;
             onGame = data.onGame;
             idSkillRND = data.idSkillRND;
@@ -3714,7 +3714,7 @@ function createInfo5mon() {
                         for (let p = 1; p <= 4; p++) {
                             document.getElementById(`popupSTT5MonInBattleLV${p}`).style.background = "firebrick";
                         }
-                        
+
                         el.style.background = "rebeccapurple";
 
                     };
@@ -4318,23 +4318,23 @@ function loadEventSlotBattle() {
                         typeGameConquest.selectSkillShop += 1
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
                     } else if (
-                        (typeGameConquest.battlePetInShop[skill.parentElement.id].ID === typeGameConquest.skillBattle[slot.id].ID 
-                        && Number(typeGameConquest.battlePetInShop[skill.parentElement.id].LEVEL) === Number(typeGameConquest.skillBattle[slot.id].LEVEL) 
-                        && Number(typeGameConquest.skillBattle[slot.id].LEVEL) < 4)
+                        (typeGameConquest.battlePetInShop[skill.parentElement.id].ID === typeGameConquest.skillBattle[slot.id].ID
+                            && Number(typeGameConquest.battlePetInShop[skill.parentElement.id].LEVEL) === Number(typeGameConquest.skillBattle[slot.id].LEVEL)
+                            && Number(typeGameConquest.skillBattle[slot.id].LEVEL) < 4)
                         ||
                         typeGameConquest.battlePetInShop[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
+                    ) {
 
                         //Nâng cấp
                         typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL += 1
-                        
+
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.STR += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.STR)
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.DEF += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.DEF)
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.INT += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.INT)
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.AGI += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.AGI)
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.LUK += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.LUK)
                         typeGameConquest.battlePetUseSlotRound[slot.id].POWER.HP += Math.round(50 * typeGameConquest.battlePetUseSlotRound[slot.id].LEVEL * typeGameConquest.battlePetUseSlotRound[slot.id].LVUPSCALE.HP)
-                        
+
                         let power5MonUpdate = update5MonBattle(typeGameConquest.battlePetUseSlotRound[slot.id])
 
                         typeGameConquest.battlePetUseSlotRound[slot.id].DAME[0] = power5MonUpdate.dame
@@ -4416,7 +4416,7 @@ function loadEventSlotBattle() {
                         typeGameConquest.starUser -= typeGameConquest.battlePetInShop[skill.parentElement.id].PRICE
                         typeGameConquest.battlePetUseSlotRound[slot.id] = typeGameConquest.battlePetInShop[skill.parentElement.id];
                         typeGameConquest.battlePetUseSlotRound[slot.id].PRICE = 0
-                        
+
                         typeGameConquest.skillBattle[slot.id] = typeGameConquest.battlePetUseSlotRound[slot.id]
 
                         typeGameConquest.battlePetInShop[skill.parentElement.id] = defaultSTT5Mon;
@@ -4472,12 +4472,12 @@ function loadEventSlotBattle() {
                         updateSttForSkillAffter();
                         checkUpdateLevel();
                     } else if (
-                        (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID === typeGameConquest.skillBattle[slot.id].ID && 
-                        Number(typeGameConquest.battlePetInInventory[skill.parentElement.id].LEVEL) === Number(typeGameConquest.skillBattle[slot.id].LEVEL) && 
-                        Number(typeGameConquest.skillBattle[slot.id].LEVEL) < 4)
+                        (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID === typeGameConquest.skillBattle[slot.id].ID &&
+                            Number(typeGameConquest.battlePetInInventory[skill.parentElement.id].LEVEL) === Number(typeGameConquest.skillBattle[slot.id].LEVEL) &&
+                            Number(typeGameConquest.skillBattle[slot.id].LEVEL) < 4)
                         ||
                         typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
+                    ) {
                         console.log("Kéo từ tủ đồ 2 - nâng cấp")
 
                         //Nâng cấp
@@ -4584,7 +4584,7 @@ function loadEventSlotBattle() {
                         //Kiểm tra xem có phải đá nâng cấp không
                         return;
                     }
-                    
+
                     console.log("Kéo từ tủ đồ 4")
                     // Lấy ID của pet chuẩn bị thêm vào
                     const newPetID = typeGameConquest.battlePetInInventory[skill.parentElement.id].ID;
@@ -4840,11 +4840,11 @@ function loadEventSlotBattle() {
                         document.getElementById("starUser").innerText = typeGameConquest.starUser;
 
                     } else if (
-                        (typeGameConquest.battlePetInShop[skill.parentElement.id].ID == typeGameConquest.battlePetInInventory[slot.id].ID && 
-                        Number(typeGameConquest.battlePetInShop[skill.parentElement.id].LEVEL) === Number(typeGameConquest.battlePetInInventory[slot.id].LEVEL))
+                        (typeGameConquest.battlePetInShop[skill.parentElement.id].ID == typeGameConquest.battlePetInInventory[slot.id].ID &&
+                            Number(typeGameConquest.battlePetInShop[skill.parentElement.id].LEVEL) === Number(typeGameConquest.battlePetInInventory[slot.id].LEVEL))
                         ||
                         typeGameConquest.battlePetInShop[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
+                    ) {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
@@ -4954,10 +4954,10 @@ function loadEventSlotBattle() {
                         checkUpdateLevel();
 
                     } else if (
-                        (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID == typeGameConquest.battlePetInInventory[slot.id].ID && 
-                        Number(typeGameConquest.battlePetInInventory[skill.parentElement.id].LEVEL) === Number(typeGameConquest.battlePetInInventory[slot.id].LEVEL))
+                        (typeGameConquest.battlePetInInventory[skill.parentElement.id].ID == typeGameConquest.battlePetInInventory[slot.id].ID &&
+                            Number(typeGameConquest.battlePetInInventory[skill.parentElement.id].LEVEL) === Number(typeGameConquest.battlePetInInventory[slot.id].LEVEL))
                         || typeGameConquest.battlePetInInventory[skill.parentElement.id].EFFECT.includes("stoneUpLevel")
-                        ) {
+                    ) {
 
                         //Nâng cấp
                         typeGameConquest.battlePetInInventory[slot.id].LEVEL += 1
@@ -5215,10 +5215,10 @@ function loadEventSlotBattle() {
                 Object.keys(typeGameConquest.battlePetUseSlotRound).forEach((key) => {
                     if (typeGameConquest.battlePetUseSlotRound[key].INTERNAL.includes("sellUpPrice")) {
                         typeGameConquest.battlePetUseSlotRound[key].PRICESELL += 1;
-                        typeGameConquest.skillBattle[key].PRICESELL = typeGameConquest.battlePetUseSlotRound[key].PRICESELL;      
+                        typeGameConquest.skillBattle[key].PRICESELL = typeGameConquest.battlePetUseSlotRound[key].PRICESELL;
                     }
                 });
-                
+
                 Object.keys(typeGameConquest.battlePetInInventory).forEach((key) => {
                     if (typeGameConquest.battlePetInInventory[key].INTERNAL.includes("sellUpPrice")) {
                         typeGameConquest.battlePetInInventory[key].PRICESELL += 1;
@@ -5240,7 +5240,7 @@ function loadEventSlotBattle() {
         highlightSkillLevel();
         // resetMaxHpBattle();
         updateSttForSkillAffter();
-        checkUpdateLevel(); 
+        checkUpdateLevel();
         internalUp();
         resetHp5Mon();
         updateHpAndRageBar5Mon();
@@ -7030,8 +7030,8 @@ function openGameRank() {
                     typeGameConquest.slowA = selectedComp.slowA;
                     typeGameConquest.upCooldownA = selectedComp.upCooldownA;
                     typeGameConquest.maxHpBattleComp = selectedComp.maxHpBattleComp;
-                    
-                    document.getElementById("textNameComp").innerText = typeGameConquest.nameComp;  
+
+                    document.getElementById("textNameComp").innerText = typeGameConquest.nameComp;
                     // Gán thông tin kỹ năng của đối thủ vào typeGameConquest.skillBattle
                     for (let i = 1; i <= 9; i++) {
                         const skillKey = `skill${i}A`;
@@ -7045,8 +7045,8 @@ function openGameRank() {
                                 sLvUpAGI = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.AGI);
                                 sLvUpLUK = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.LUK);
                                 sLvUpHP = getScaleLevelUp(selectedComp.slotSkillComp[skillKey].POWER.HP);
-                                
-                                selectedComp.slotSkillComp[skillKey].LVUPSCALE = {STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP}
+
+                                selectedComp.slotSkillComp[skillKey].LVUPSCALE = { STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP }
                             }
 
                             typeGameConquest.skillBattle[skillKey] = { ...selectedComp.slotSkillComp[skillKey] };
@@ -7075,7 +7075,7 @@ function openGameRank() {
                 buttonNextStep.onclick = () => nextStepGame1();
                 buttonNextStep.innerText = "Tiếp tục"
 
-                
+
             });
         } else {
             //Trường hợp round của người chơi > 0
@@ -7407,7 +7407,7 @@ function endBattle(whoWin, pointsThisRound) {
     const bonusStars = Math.floor(typeGameConquest.starUser / 5);
     typeGameConquest.starUser += infoStartGame.roundGame + 1 + bonusStars;
     document.getElementById("starUser").innerText = typeGameConquest.starUser;
-    
+
     //Tăng round
     infoStartGame.roundGame += 1 //Tăng round sau khi endBattle
     //Reset Battle time
@@ -7565,7 +7565,7 @@ function endBattle(whoWin, pointsThisRound) {
     const roundCompRef = ref(db, `allCompsRound/round${infoStartGame.roundGame}`);
     get(roundCompRef).then(snapshot => {
         let candidates = (snapshot.val() || []).filter(comp => comp !== null);
-        
+
         console.log("Các đối thủ có thể random", candidates);
         if (candidates.length > 0) {
             // Random một đối thủ từ danh sách đã lọc
@@ -7889,15 +7889,15 @@ function randomSkillinShop() {
         sLvUpAGI = getScaleLevelUp(selectedSkill.POWER.AGI);
         sLvUpLUK = getScaleLevelUp(selectedSkill.POWER.LUK);
         sLvUpHP = getScaleLevelUp(selectedSkill.POWER.HP);
-        
-        selectedSkill.LVUPSCALE = {STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP}
+
+        selectedSkill.LVUPSCALE = { STR: sLvUpSTR, DEF: sLvUpDEF, INT: sLvUpINT, AGI: sLvUpAGI, LUK: sLvUpLUK, HP: sLvUpHP }
         console.log("selectedSkill", selectedSkill)
         // Đặt vào UI
         const shopSlot = `battleShop${i + 1}`;
         const shopDiv = document.querySelector(`#${shopSlot}`);
 
         let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg['Lv1'];
-        
+
         if (shopDiv) {
             shopDiv.innerHTML = `
             <div 
@@ -7942,7 +7942,7 @@ function randomSkillinShop() {
                 } else {
                     levelSkillColor = "#531515"
                 }
-                
+
                 dameSkillDiv.innerHTML = `
                 <div class="levelSkillColor" style="position: absolute;font-size: 16px;font-weight: bold;color: ${levelSkillColor};text-shadow: 0px 1px 2px #0000008a;top: -8px;right: -8px;">
                 <i class="fa-solid fa-diamond"></i>
@@ -8090,7 +8090,7 @@ function randomSkillinShop1() {
         const shopDiv = document.querySelector(`#${shopSlot}`);
 
         let URLimg = selectedSkill.URLimg[`Lv${selectedSkill.LEVEL}`] || selectedSkill.URLimg['Lv1'];
-        
+
         if (shopDiv) {
             shopDiv.innerHTML = `
   <div 
@@ -8137,7 +8137,7 @@ function randomSkillinShop1() {
             } else {
                 levelSkillColor = "#531515"
             }
-            
+
             // Gắn nội dung vào dameSkillDiv
             dameSkillDiv.innerHTML =
                 `
@@ -8199,8 +8199,8 @@ function createSkill(slotDiv) {
         const skillCompSlot = slotDiv === "shop" ? `battleShop${i + 1}` : slotDiv === "skillComp" ? `skill${i + 1}A` : slotDiv === "inventory" ? `battleInv${i + 1}` : slotDiv === "slotSkillFn" ? `skill${i + 1}Bfn` : `skill${i + 1}B`;
 
         let skillCompDiv = document.querySelector(`#${skillCompSlot}`);
-        let URLimg = skillItem[skillCompSlot].URLimg[`Lv${skillItem[skillCompSlot].LEVEL}`] || skillItem[skillCompSlot].URLimg['Lv1']; 
-        
+        let URLimg = skillItem[skillCompSlot].URLimg[`Lv${skillItem[skillCompSlot].LEVEL}`] || skillItem[skillCompSlot].URLimg['Lv1'];
+
         if ((skillCompDiv && skillItem[skillCompSlot] && skillItem[skillCompSlot].ID)) {
             console.log("Vào đây 2")
             skillCompDiv.innerHTML += `
@@ -9631,7 +9631,7 @@ function createNewComp(isWin) {
                 };
                 compList.push(newComp);
                 console.log("Đã thêm comp mới:", newComp);
-                
+
 
                 return set(firebaseCompRef, compList);
             });
@@ -10073,10 +10073,10 @@ function openPopupSelectCharacter(newAccount) {
         allCharacterLoad = allCharacterUser
             .map(id => allCharacter[id])
             .filter(char => char); // bỏ qua undefined nếu id không tồn tại
-    
+
         indexCharacterSelect = allCharacterLoad.findIndex(char => char.id === characterUser);
         if (indexCharacterSelect === -1) indexCharacterSelect = 0;
-    
+
         characterSelect = allCharacterLoad[indexCharacterSelect];
     }
 
@@ -10097,14 +10097,14 @@ function nextShowCharacterSelect() {
     characterSelect = allCharacterLoad[indexCharacterSelect];
     showDescCharacterSelect(characterSelect);
 }
-    
+
 function showDescCharacterSelect(characterSelect) {
     document.getElementById("imgCharacterSelect").src = characterSelect.urlIMG
     document.getElementById("nameCharacter").innerText = characterSelect.name
-    
+
     let sttCharacter = ""
     if (characterSelect.hpMax > 0) {
-        sttCharacter +=  `<span>Tăng <a style="color:green">${characterSelect.hpMax} sinh mệnh tối đa</a> cho nhân vật sau mỗi vòng đấu</span>`;
+        sttCharacter += `<span>Tăng <a style="color:green">${characterSelect.hpMax} sinh mệnh tối đa</a> cho nhân vật sau mỗi vòng đấu</span>`;
     }
     if (characterSelect.upDame > 0) {
         sttCharacter += `<span>Tăng <a style="color:red">${characterSelect.upDame} sát thương</a> cho tất cả 5mon sau mỗi vòng đấu</span>`;
@@ -10130,7 +10130,7 @@ function showDescCharacterSelect(characterSelect) {
     if (characterSelect.dameCrit > 0) {
         sttCharacter += `<span>Tăng <a style="color:red">${characterSelect.dameCrit}% sát thương chí mạng</a> sau mỗi vòng đấu (hiện tại: ${typeGameConquest.dameCritB}%)</span>`;
     }
-    
+
     document.getElementById("descCharacterSelect").innerHTML = `
     <div>
         ${characterSelect.desc}
@@ -10145,7 +10145,7 @@ function showDescCharacterSelect(characterSelect) {
 
 function selectCharacterForUser() {
     characterUser = characterSelect.id
-    document.getElementById("playerHunter").src= characterSelect.urlIMG
+    document.getElementById("playerHunter").src = characterSelect.urlIMG
     document.getElementById("popupSelectCharacter").style.display = "none";
 }
 
@@ -10258,7 +10258,7 @@ function loadItemBagLeft(sort) {
             this.style.transform = "scale(1)";
         };
         let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
-        
+
         skillDiv.style.backgroundImage = `url(${URLimg})`; // Đặt URL hình ảnh
         skillDiv.draggable = true; // Đặt thuộc tính draggable
         skillDiv.dataset.id = item.ID; // Gắn dữ liệu ID
@@ -10442,12 +10442,12 @@ function loadItemBagLeft(sort) {
                     for (let k = 1; k <= 4; k++) {
                         document.getElementById(`popupSTT5MonLV${k}`).style.background = "firebrick";
                     }
-                    
+
                     el.style.background = "rebeccapurple";
 
                 };
             }
-            
+
             // Thêm vào skillDiv
             skillDiv.appendChild(popup);
         });
@@ -10690,12 +10690,12 @@ function loadItemBagRight(sort) {
                     for (let k = 1; k <= 4; k++) {
                         document.getElementById(`popupSTT5MonLV${k}`).style.background = "firebrick";
                     }
-                    
+
                     el.style.background = "rebeccapurple";
 
                 };
             }
-        
+
             // Thêm vào skillDiv
             skillDiv.appendChild(popup);
         });
@@ -10726,8 +10726,8 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
             } else if (level === -2) {
                 powerBonus = -lv4 - lv3
             } else if (level === -3) {
-                powerBonus = -lv4 -lv3 -lv2
-            } 
+                powerBonus = -lv4 - lv3 - lv2
+            }
         } else if (skill.LEVEL === 3) {
             if (level === 1) {
                 powerBonus = lv4
@@ -10759,21 +10759,21 @@ function updateStatWhenLevelUp(skill, level, power, isInBattle) {
                 powerBonus = 0
             }
         }
- 
+
     } else {
         let sLvUPPower
 
-        if (power==='str') {
+        if (power === 'str') {
             sLvUPPower = getScaleLevelUp(skill.POWER.STR);
-        } else if (power==='def') {
+        } else if (power === 'def') {
             sLvUPPower = getScaleLevelUp(skill.POWER.DEF);
-        } else if (power==='int') {
+        } else if (power === 'int') {
             sLvUPPower = getScaleLevelUp(skill.POWER.INT);
-        } else if (power==='agi') {
+        } else if (power === 'agi') {
             sLvUPPower = getScaleLevelUp(skill.POWER.AGI);
-        } else if (power==='luk') {
+        } else if (power === 'luk') {
             sLvUPPower = getScaleLevelUp(skill.POWER.LUK);
-        } else if (power==='hp') {
+        } else if (power === 'hp') {
             sLvUPPower = getScaleLevelUp(skill.POWER.HP);
         }
 
@@ -10806,7 +10806,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     const overlay = document.getElementById("popupOverlay");
 
     let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
-    
+
     let colorLevel = "#531515";
     if (level === 2) {
         colorLevel = "#8c0b0b"
@@ -10817,7 +10817,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     } else {
         colorLevel = "#531515"
     }
-    
+
     const powerStatsSTR = updateStatWhenLevelUp(item, level, 'str');
     const powerStatsDEF = updateStatWhenLevelUp(item, level, 'def');
     const powerStatsINT = updateStatWhenLevelUp(item, level, 'int');
@@ -10833,7 +10833,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     luk = Math.round(item.POWER.LUK + powerStatsLUK)
     hp = Math.round(item.POWER.HP + powerStatsHP)
     allStat = str + def + int + agi + luk + hp
-    
+
     let powerINT = scalePower5Mon(int);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
@@ -10879,7 +10879,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
     let crit = Math.round(valueCrit + item.CRIT[1] + item.CRIT[2] + item.CRIT[3]);
     let defFn = Math.round(valueDef * 100) / 100;
     let cooldown = Math.ceil(valueC);
-    
+
     document.getElementById("imgPopupSTT5Mon").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5Mon").textContent = item.NAME;
     document.getElementById("allStats5Mon").textContent = `⚔️: ${allStat}`;
@@ -10947,17 +10947,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-        
-                descInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
+
+                descInfo += dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison);
             }
         });
 
@@ -10966,7 +10966,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
             if (effectsSkill[effect]) {
                 // Lấy chuỗi mô tả ban đầu
                 let rawDesc = effectsSkill[effect].descriptionSkill;
-        
+
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
                     .replace(/skill\.POWER\.STR/g, 'str')
@@ -10974,18 +10974,18 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-        
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-        
+
                 // Truyền các giá trị vào hàm
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison)}</span>`;
                 countDescInfo += 1;
             }
         });
@@ -11006,17 +11006,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-                
-                internalInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
+
+                internalInfo += dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison);
             }
         });
     } else {
@@ -11032,17 +11032,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-                
-                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
+
+                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison)}</span>`;
                 countInternalInfo += 1;
             }
         });
@@ -11065,7 +11065,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
         const safeStat = Math.min(stat || 0, maxStat);
         return multiplier * Math.sqrt(maxStat - safeStat);
     }
-    
+
     let rageGain = Math.floor(
         getScaledRage(str, 0.1) +
         getScaledRage(def, 0.3) +
@@ -11075,7 +11075,7 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
         getScaledRage(hp, 0.3)
     );
     rageGain = parseFloat(rageGain.toFixed(2));
-    
+
     if (descInfo !== "") {
         descTextItem +=
             `<span style="font-weight: bold; margin-top: 5px;">[Kỹ năng chủ động][+Nộ: ${rageGain}][Liên kích: x${Math.max(item.COOLDOWN[1] + item.COOLDOWN[2] + item.COOLDOWN[3], 1)}]</span>
@@ -11108,17 +11108,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
 
-                sellUpInfo += dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
+                sellUpInfo += dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison);
             }
         });
     } else {
@@ -11133,17 +11133,17 @@ function setupClickPopupInfo5MonBag(item, prefix, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-                
-                sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(item,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
+
+                sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${dynamicDescription(item, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison)}</span>`;
                 countSellUpInfo += 1;
             }
         });
@@ -11479,7 +11479,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
     document.getElementById(`popupSTT5MonInBattleLV${skillInfo.LEVEL}`).style.background = "rebeccapurple";
 
     let URLimg = skillInfo.URLimg[`Lv${skillInfo.LEVEL}`] || skillInfo.URLimg['Lv1'];
-    
+
     let colorLevel = "#531515";
     if (level === 2) {
         colorLevel = "#8c0b0b"
@@ -11491,7 +11491,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
         colorLevel = "#531515"
     }
 
-        //Xét level hiện tại so với level
+    //Xét level hiện tại so với level
     let levelSum = level - skillInfo.LEVEL
     console.log("levelSum", levelSum)
     const powerStatsSTR = updateStatWhenLevelUp(skillInfo, levelSum, 'str', true)
@@ -11510,7 +11510,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
     hp = Math.round(skillInfo.POWER.HP + powerStatsHP)
 
     allStat = str + def + int + agi + luk + hp
-    
+
     let powerINT = scalePower5Mon(int);
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0;
@@ -11605,7 +11605,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
         </span>
     </span>
     </span>
-    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${cooldown  / 1000 || ''} giây][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
+    <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ${cooldown / 1000 || ''} giây][Liên kích: x${Math.max(skillInfo.COOLDOWN[1] + skillInfo.COOLDOWN[2] + skillInfo.COOLDOWN[3], 1)}]</span>
     <span>Gây <a style="color: red; font-weight: bold">${baseDame} sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
     `
 
@@ -11624,17 +11624,17 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-        
-                descInfo += dynamicDescription(skillInfo,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
+
+                descInfo += dynamicDescription(skillInfo, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison);
             }
         });
 
@@ -11643,7 +11643,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
             if (effectsSkill[effect]) {
                 // Lấy chuỗi mô tả ban đầu
                 let rawDesc = effectsSkill[effect].descriptionSkill;
-        
+
                 // Thay thế skill.POWER.X thành viết thường tương ứng
                 rawDesc = rawDesc
                     .replace(/skill\.POWER\.STR/g, 'str')
@@ -11651,18 +11651,18 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-        
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-        
+
                 // Truyền các giá trị vào hàm
-                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(skillInfo,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
+                descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${dynamicDescription(skillInfo, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison)}</span>`;
                 countDescInfo += 1;
             }
         });
@@ -11684,17 +11684,17 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-                
-                internalInfo += dynamicDescription(skillInfo,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison);
+
+                internalInfo += dynamicDescription(skillInfo, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison);
             }
         });
     } else {
@@ -11710,17 +11710,17 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
                     .replace(/skill\.POWER\.INT/g, 'int')
                     .replace(/skill\.POWER\.AGI/g, 'agi')
                     .replace(/skill\.POWER\.LUK/g, 'luk')
-                    .replace(/skill\.POWER\.HP/g,  'hp')
+                    .replace(/skill\.POWER\.HP/g, 'hp')
                     .replace(/skill\.DAME\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'dame')
                     .replace(/skill\.HEAL\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'heal')
                     .replace(/skill\.SHIELD\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'shield')
                     .replace(/skill\.BURN\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'burn')
                     .replace(/skill\.POISON\.reduce\(\(a, b\) => a \+ b, 0\)/g, 'poison');
-                
+
                 // Tạo hàm từ chuỗi đã xử lý
                 const dynamicDescription = new Function("skill", "str", "def", "int", "agi", "luk", "hp", "dame", "heal", "shield", "burn", "poison", `return \`${rawDesc}\`;`);
-                
-                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(skillInfo,str,def,int,agi,luk,hp,dame,heal,shield,burn,poison)}</span>`;
+
+                internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${dynamicDescription(skillInfo, str, def, int, agi, luk, hp, dame, heal, shield, burn, poison)}</span>`;
                 countInternalInfo += 1;
             }
         });
@@ -11745,7 +11745,7 @@ function setupPopupInfo5MonInBattle(skillInfo, level) {
         const safeStat = Math.min(stat || 0, maxStat);
         return multiplier * Math.sqrt(maxStat - safeStat);
     }
-    
+
     let rageGain = Math.floor(
         getScaledRage(str, 0.1) +
         getScaledRage(def, 0.3) +
@@ -12214,14 +12214,14 @@ function gacha5Mon(isX5) {
         return;
     }
 
-    let weightNeed = isX5?5:1
+    let weightNeed = isX5 ? 5 : 1
     if (Object.values(userPet).length + weightNeed > weightBagUser) {
         messageOpen('Tủ đồ đã đầy');
         return;
     }
 
     //Kiểm tra đủ vàng để gacha không
-    let goldNeed = isX5?15:5
+    let goldNeed = isX5 ? 15 : 5
     if (goldUser < goldNeed) {
         messageOpen(`Không đủ ${goldNeed} vàng`);
         return;
@@ -12246,7 +12246,7 @@ function gacha5Mon(isX5) {
         skill5S: defaultSTT5Mon,
     };
 
-    let lengthRDPet = isX5?5:1;
+    let lengthRDPet = isX5 ? 5 : 1;
     for (let i = 1; i <= 5; i++) {
         document.getElementById(`skill${i}S`).innerHTML = "?";
         document.getElementById(`skill${i}S`).classList.remove("comp");
@@ -12259,7 +12259,7 @@ function gacha5Mon(isX5) {
     for (let o = 0; o < lengthRDPet; o++) {
         // Chọn pet trước khi quay
         const pet = getRandom5mon();
-        randomPet[`skill${o+1}S`] = pet;
+        randomPet[`skill${o + 1}S`] = pet;
 
         let slotKey = `skill${o + 1}S`
         let slotElement = document.getElementById(slotKey);
@@ -12327,7 +12327,7 @@ function gacha5Mon(isX5) {
         document.getElementById("gachax1").style.background = "#d9534f";
         document.getElementById("gachax5").disabled = false;
         document.getElementById("gachax5").style.background = "#d9534f";
-    }, stopTimes[lengthRDPet-1] + 500)
+    }, stopTimes[lengthRDPet - 1] + 500)
 
 
 }
@@ -12588,7 +12588,7 @@ function createSkillGacha(i) {
 
             document.getElementById(`popupSTT5MonLV${randomPet[skillCompSlot].LEVEL}`).style.background = "rebeccapurple";
 
-            setupClickPopupInfo5MonBag(randomPet[skillCompSlot], "skillGacha", randomPet[skillCompSlot].LEVEL) 
+            setupClickPopupInfo5MonBag(randomPet[skillCompSlot], "skillGacha", randomPet[skillCompSlot].LEVEL)
 
 
             for (let s = 1; s <= 4; s++) {
@@ -12599,7 +12599,7 @@ function createSkillGacha(i) {
                     for (let p = 1; p <= 4; p++) {
                         document.getElementById(`popupSTT5MonLV${p}`).style.background = "firebrick";
                     }
-                    
+
                     el.style.background = "rebeccapurple";
 
                 };
@@ -12608,7 +12608,7 @@ function createSkillGacha(i) {
 
         });
     }
-    
+
 }
 
 //Exchange Page => Đổi thẻ lấy pet
@@ -12761,7 +12761,7 @@ function setupPopupEventsExchangePage(itemList) {
         itemDiv.addEventListener("click", () => {
 
             let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
-            
+
             document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
             document.getElementById("popupNameExchange").textContent = item.NAME;
             document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
@@ -12776,7 +12776,7 @@ function setupPopupEventsExchangePage(itemList) {
                 const el = document.getElementById(`popupImgExchangeLV${s}`);
                 if (!el) continue;
                 el.onclick = () => {
-                    
+
                     let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
 
                     document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
@@ -12784,7 +12784,7 @@ function setupPopupEventsExchangePage(itemList) {
                     for (let k = 1; k <= 4; k++) {
                         document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
                     }
-                    
+
                     el.style.background = "rebeccapurple";
 
                 };
@@ -13047,7 +13047,7 @@ function buyItemExchange(itemID, itemName, ticketsPrice) {
         (total > pointMax || total < pointMin) &&
         attempts < 1000
     );
-    
+
     // const { min: minSTT, max: maxSTT } = rareStats[rare];
 
     // let str, def, int, agi, luk, hp, total;
@@ -13625,7 +13625,7 @@ function openSelectHunt() {
             let rdIndex = Math.floor(Math.random() * allPetsLv1.length);
             random5MonByLocalMap.push(allPetsLv1[rdIndex].ID);
         }
-        
+
         // Nếu tìm thấy, gán danh sách petMeets vào list5MonMeet
         list5MonMeet = [];
         if (random5MonByLocalMap) {
@@ -13635,7 +13635,7 @@ function openSelectHunt() {
             list5MonMeet = [];
             console.warn("Không tìm thấy list5MonMeet", list5MonMeet);
         }
-        
+
         return;
     } else {
         loadSelect5MonHunt();
@@ -13700,8 +13700,8 @@ function loadSelect5MonHunt() {
             `;
             skillDiv.appendChild(ownedOverlay);
         }
-        
-        boardSelectHunt.appendChild(skillDiv); 
+
+        boardSelectHunt.appendChild(skillDiv);
         setupPopupEventsSelectHunt(item);
     });
 }
@@ -13714,45 +13714,45 @@ function setupPopupEventsSelectHunt(item) {
 
     if (!itemDiv.dataset.clickBound) {
         itemDiv.addEventListener("click", () => {
-    
+
             let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
-            
+
             document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
             document.getElementById("popupNameExchange").textContent = item.NAME;
             document.getElementById("priceTextItemPopupExchange").textContent = item.PRICE;
-    
+
             for (let k = 1; k <= 4; k++) {
                 document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
             }
-    
+
             document.getElementById(`popupImgExchangeLV${item.LEVEL}`).style.background = "rebeccapurple";
-    
+
             for (let s = 1; s <= 4; s++) {
                 const el = document.getElementById(`popupImgExchangeLV${s}`);
                 if (!el) continue;
                 el.onclick = () => {
-                    
+
                     let URLimg = item.URLimg[`Lv${item.LEVEL}`] || item.URLimg['Lv1'];
-    
+
                     document.getElementById("popupImgExchange").style.backgroundImage = "url('" + URLimg + "')";
-    
+
                     for (let k = 1; k <= 4; k++) {
                         document.getElementById(`popupImgExchangeLV${k}`).style.background = "firebrick";
                     }
-                    
+
                     el.style.background = "rebeccapurple";
-    
+
                 };
             }
-    
-    
+
+
             let descTextItem = "";
             // Type
             let typeInfo = "";
             item.TYPE.forEach(type => {
                 typeInfo += `<a style=" background: rebeccapurple; padding: 2px 4px; border-radius: 4px; color: #ffffff;">${type}</a>`
             });
-    
+
             // Cập nhật thông tin trong popup
             descTextItem += `
             <div style="display: flex; justify-content: space-between; flex-direction: row; align-items: center; width: 100%">
@@ -13765,7 +13765,7 @@ function setupPopupEventsSelectHunt(item) {
                     <span style="background: #cd9161; font-weight: bold; font-size: 12px; padding: 2px 4px; border-radius: 4px; color: #ffffff; text-shadow: 1px 1px 1px #4f290c;"><i class="fa-solid fa-heart"></i>: ??</span>
                 </div>
             </div>`
-    
+
             // Cập nhật thông tin trong popup
             descTextItem += `
             <span style="display: flex;font-weight: bold;font-size: 12px;padding: 2px 0px;color: black;gap: 5px;flex-direction: row;align-content: center;
@@ -13782,7 +13782,7 @@ function setupPopupEventsSelectHunt(item) {
             <span style="font-weight: bold;margin-top: 5px;">[Đánh thường][Tốc độ: ??? giây][Liên kích: ???]</span>
             <span>Gây <a style="color: red; font-weight: bold">??? sát thương </a> cho 5Mon đối thủ (ưu tiên 5Mon đối diện)</span>
             `
-    
+
             let descInfo = "";
             let countDescInfo = 1;
             if (item.EFFECT.length === 1) {
@@ -13791,16 +13791,16 @@ function setupPopupEventsSelectHunt(item) {
                         // Tạo hàm từ chuỗi động và thực thi với `skill` làm tham số
                         const dynamicDescription = new Function("skill", `return \`${effectsSkill[effect].descriptionSkill}\`;`);
                         let rawDescription = dynamicDescription(item);
-    
+
                         // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
                         let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
-    
+
                         // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
                         hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
-    
+
                         // Thay thế "mon" bằng "5mon" nếu có
                         hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-    
+
                         // Bây giờ hiddenDescription đã được cập nhật với các thay thế
                         descInfo += hiddenDescription
                     }
@@ -13813,21 +13813,21 @@ function setupPopupEventsSelectHunt(item) {
                         let rawDescription = dynamicDescription(item);
                         // Thay thế mọi sự xuất hiện của -Infinity bằng dấu ?
                         let hiddenDescription = rawDescription.replace(/-Infinity/g, '?');
-    
+
                         // Tiếp tục thay thế các số (bao gồm cả số thập phân) thành dấu ?
                         hiddenDescription = hiddenDescription.replace(/\d+(\.\d+)?/g, '?');
-    
+
                         // Thay thế "mon" bằng "5mon" nếu có
                         hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-    
+
                         // Bây giờ hiddenDescription đã được cập nhật với các thay thế
-    
+
                         descInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countDescInfo})</span> ${hiddenDescription}</span>`;
                         countDescInfo += 1;
                     }
                 });
             }
-    
+
             let internalInfo = "";
             let countInternalInfo = 1;
             if (item.INTERNAL.length === 1) {
@@ -13851,16 +13851,16 @@ function setupPopupEventsSelectHunt(item) {
                         // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
                         let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
                         hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-    
+
                         internalInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countInternalInfo})</span> ${hiddenDescription}</span>`;
                         countInternalInfo += 1;
                     }
                 });
             }
-    
+
             //Chí mạng info
             let critInfo = `[Tỷ lệ chí mạng: <span style="color: red; font-weight: bold">???</span>]`;
-    
+
             // Gán nội dung vào phần tử HTML
             if (descInfo !== "") {
                 descTextItem +=
@@ -13870,7 +13870,7 @@ function setupPopupEventsSelectHunt(item) {
             } else {
                 descTextItem += "";
             }
-    
+
             if (internalInfo !== "") {
                 descTextItem +=
                     `<span style="font-weight: bold;margin-top: 5px;">[Kỹ năng bị động]</span>
@@ -13878,7 +13878,7 @@ function setupPopupEventsSelectHunt(item) {
             } else {
                 descTextItem += "";
             }
-    
+
             //Sellup info
             let sellUpInfo = "";
             let countSellUpInfo = 1;
@@ -13891,7 +13891,7 @@ function setupPopupEventsSelectHunt(item) {
                         // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
                         let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
                         hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-    
+
                         sellUpInfo += hiddenDescription
                     }
                 });
@@ -13904,27 +13904,27 @@ function setupPopupEventsSelectHunt(item) {
                         // Thay mọi số (bao gồm cả số thập phân) thành dấu ?
                         let hiddenDescription = rawDescription.replace(/\d+(\.\d+)?/g, '?');
                         hiddenDescription = hiddenDescription.replace(/\?mon/gi, '5mon');
-    
+
                         sellUpInfo += `<span style="display: flex;flex-direction: row; gap: 3px;"><span style="font-weight: bold">(${countSellUpInfo})</span> ${hiddenDescription}</span>`;
                         countSellUpInfo += 1;
                     }
                 });
             }
-    
+
             if (sellUpInfo !== "") {
                 descTextItem += `<span style="font-weight: bold;margin-top: 5px;">[Thả đi nhận được]</span>
                 <span style="display: flex;flex-direction: column; gap: 3px;">${sellUpInfo.trim()}</span>`;
             } else {
                 descTextItem += "";
             }
-    
+
             document.getElementById("popupDescExchange").innerHTML = descTextItem;
-    
-    
+
+
             document.getElementById("popupPriceExchange").textContent = `!@$#%@^%$^#`;
             // Kiểm tra nếu pet đã select chưa
             const hasEquipped = select5MonInSelectHunt.includes(item.ID);
-    
+
             if (hasEquipped) {
                 buttonBuy.innerHTML = "Bỏ lựa chọn";
                 buttonBuy.style.background = "gray";
@@ -13942,7 +13942,7 @@ function setupPopupEventsSelectHunt(item) {
                 buttonBuy.style.cursor = "pointer";
                 buttonBuy.disabled = false;
                 buttonBuy.onclick = () => {
-                    for (let x = 1; x <=5 ; x++) {
+                    for (let x = 1; x <= 5; x++) {
                         select5MonInSelectHunt.push(item.ID);
                         popup.style.display = "none";
                         overlay.style.display = "none";
@@ -13950,7 +13950,7 @@ function setupPopupEventsSelectHunt(item) {
                     }
                 };
             }
-    
+
             popup.style.display = "block";
             overlay.style.display = "block";
         });
@@ -14495,14 +14495,14 @@ function catch5Mon() {
 
     // Hiển thị popup
     let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg['Lv1'];
-    
+
     document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
     document.getElementById("namePopupSTT5MonMeet").textContent = is5MonMeet.NAME;
     document.getElementById("allStats5MonMeet").textContent = `⚔️: ${is5MonMeet.POWER.STR + is5MonMeet.POWER.DEF + is5MonMeet.POWER.INT + is5MonMeet.POWER.AGI + is5MonMeet.POWER.LUK + is5MonMeet.POWER.HP}`;
     document.getElementById("rareTextPopupSTT5MonMeet").textContent = `${is5MonMeet.RARE}`;
     document.getElementById("rareTextPopupSTT5MonMeet").textContent = `${is5MonMeet.RARE}`;
     document.getElementById("priceTextPopupMeet5Mon").textContent = `${is5MonMeet.PRICE}`;
-    
+
     for (let k = 1; k <= 4; k++) {
         document.getElementById(`popupMeet5MonLV${k}`).style.background = "firebrick";
     }
@@ -14513,7 +14513,7 @@ function catch5Mon() {
         const el = document.getElementById(`popupMeet5MonLV${s}`);
         if (!el) continue;
         el.onclick = () => {
-            
+
             let URLimg = is5MonMeet.URLimg[`Lv${is5MonMeet.LEVEL}`] || is5MonMeet.URLimg['Lv1'];
 
             document.getElementById("imgPopupSTT5MonMeet").style.backgroundImage = "url('" + URLimg + "')";
@@ -14521,7 +14521,7 @@ function catch5Mon() {
             for (let k = 1; k <= 4; k++) {
                 document.getElementById(`popupMeet5MonLV${k}`).style.background = "firebrick";
             }
-            
+
             el.style.background = "rebeccapurple";
 
 
@@ -14531,7 +14531,7 @@ function catch5Mon() {
             const powerStatsAGI = updateStatWhenLevelUp(is5MonMeet, s, 'agi');
             const powerStatsLUK = updateStatWhenLevelUp(is5MonMeet, s, 'luk');
             const powerStatsHP = updateStatWhenLevelUp(is5MonMeet, s, 'hp');
-            
+
             let strA, defA, intA, agiA, lukA, hpA, allStat;
             strA = Math.round(str + powerStatsSTR)
             defA = Math.round(def + powerStatsDEF)
@@ -14546,7 +14546,7 @@ function catch5Mon() {
         };
     }
 
-    
+
     let descTextItem = "";
     // Type
     let typeInfo = "";
@@ -15104,7 +15104,7 @@ function movePetSmoothly(pet, mapWidth, mapHeight) {
 function scalePower5Mon(INT) {
     const baseScale = 1;
     const scaleINT = baseScale * Math.log10(INT);
-    let valuePower = (1 + INT / scaleINT)/Math.log10(INT*2)
+    let valuePower = (1 + INT / scaleINT) / Math.log10(INT * 2)
 
     let dame = 0, heal = 0, shield = 0, burn = 0, poison = 0
 
@@ -15324,128 +15324,236 @@ function getScaleLevelUp(power) {
 
 // BattleMap Area
 ///////////////////////////////////
-  // ========== Cấu hình ==========
-  const COLS = 15, ROWS = 15, CELL = 20;
-  const BULLET_SPEED = 10; // ô/giây mặc định
-  const EVADE_MS = 100;   // thời gian evading sau khi bắn
+// ========== Cấu hình ==========
+const COLS = 15, ROWS = 15, CELL = 20;
+const BULLET_SPEED = 10; // ô/giây mặc định
+const EVADE_MS = 100;   // thời gian evading sau khi bắn
 
-  // ========== Tiện ích ==========
-  const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const posToPx = (x) => x * CELL;
-  const id = (s) => document.getElementById(s);
-  const arena = id('mapArea');
+// ========== Tiện ích ==========
+const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const posToPx = (x) => x * CELL;
+const id = (s) => document.getElementById(s);
+const arena = id('mapArea');
 
-  // ========== Tạo Pet ==========
+// ========== Tạo Pet ==========
 //[Base,+rare,skill+thêm, skill-đi,kích hệ/type+, Nội tại + thêm (từ pet mình), nội tại - đi (từ pet địch)] = 7
 const petTeamA = [
-  { 
-    name: 'Đỏ1', rare: "C", type: ["Gió", "Thú"], 
-    URLimg: {
-      Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    },
-    stats: { 
-      STR: [30,0,0,0,0,0,0], 
-      INT: [30,0,0,0,0,0,0], 
-      DEF: [30,0,0,0,0,0,0], 
-      AGI: [30,0,0,0,0,0,0], 
-      HP: [30,0,0,0,0,0,0], 
-      LUK: [30,0,0,0,0,0,0], 
-      MOVE: [800,0,0,0,0,0,0], 
-      SCALE: 1 
-    }, 
-    INTERNAL: [],
-    adEffects: [],    
-    skills: {
-      Freeze: { icon:"", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Charge: { icon:"", baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Orbit: { icon:"", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    {
+        name: 'Đỏ1', rare: "C", type: ["Gió", "Thú"],
+        URLimg: {
+            Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+        },
+        stats: {
+            STR: [1, 0, 0, 0, 0, 0, 0],
+            INT: [30, 0, 0, 0, 0, 0, 0],
+            DEF: [30, 0, 0, 0, 0, 0, 0],
+            AGI: [100, 0, 0, 0, 0, 0, 0],
+            HP: [3000, 0, 0, 0, 0, 0, 0],
+            LUK: [30, 0, 0, 0, 0, 0, 0],
+            MOVE: [800, 0, 0, 0, 0, 0, 0],
+            SCALE: 1
+        },
+        INTERNAL: [],
+        adEffects: [],
+        skills: {
+            Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+            Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+            Orbit: { icon: "", baseDame: 30, cooldown: 1000, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
 
+        },
     },
-  },
+    // {
+    //     name: 'Đỏ2', rare: "C", type: ["Gió", "Thú"],
+    //     URLimg: {
+    //         Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //     },
+    //     stats: {
+    //         STR: [1, 0, 0, 0, 0, 0, 0],
+    //         INT: [30, 0, 0, 0, 0, 0, 0],
+    //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         AGI: [100, 0, 0, 0, 0, 0, 0],
+    //         HP: [3000, 0, 0, 0, 0, 0, 0],
+    //         LUK: [30, 0, 0, 0, 0, 0, 0],
+    //         MOVE: [800, 0, 0, 0, 0, 0, 0],
+    //         SCALE: 1
+    //     },
+    //     INTERNAL: [],
+    //     adEffects: [],
+    //     skills: {
+    //         Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    //         Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+    //         Orbit: { icon: "", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
+    //     },
+    // },
+    // {
+    //     name: 'Đỏ3', rare: "C", type: ["Gió", "Thú"],
+    //     URLimg: {
+    //         Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //     },
+    //     stats: {
+    //         STR: [1, 0, 0, 0, 0, 0, 0],
+    //         INT: [30, 0, 0, 0, 0, 0, 0],
+    //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         AGI: [500, 0, 0, 0, 0, 0, 0],
+    //         HP: [3000, 0, 0, 0, 0, 0, 0],
+    //         LUK: [30, 0, 0, 0, 0, 0, 0],
+    //         MOVE: [800, 0, 0, 0, 0, 0, 0],
+    //         SCALE: 1
+    //     },
+    //     INTERNAL: [],
+    //     adEffects: [],
+    //     skills: {
+    //         Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    //         Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+    //         Orbit: { icon: "", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
+    //     },
+    // },
 ];
 
 
 const petTeamB = [
-  { 
-    name: 'Xanh1', rare: "C", type: ["Gió", "Thú"], 
-    URLimg: {
-      Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-      Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    },
-    stats: { 
-      STR: [30,0,0,0,0,0,0], 
-      INT: [30,0,0,0,0,0,0], 
-      DEF: [30,0,0,0,0,0,0], 
-      AGI: [30,0,0,0,0,0,0], 
-      HP: [30,0,0,0,0,0,0], 
-      LUK: [30,0,0,0,0,0,0], 
-      MOVE: [800,0,0,0,0,0,0], 
-      SCALE: 1 
-    }, 
-    INTERNAL: [],
-    adEffects: [],    
-    skills: {
-      Freeze: { icon:"", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Charge: { icon:"", baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Orbit: { icon:"", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    {
+        name: 'Xanh1', rare: "C", type: ["Gió", "Thú"],
+        URLimg: {
+            Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+            Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+        },
+        stats: {
+            STR: [1, 0, 0, 0, 0, 0, 0],
+            INT: [30, 0, 0, 0, 0, 0, 0],
+            DEF: [30, 0, 0, 0, 0, 0, 0],
+            AGI: [100, 0, 0, 0, 0, 0, 0],
+            HP: [3000, 0, 0, 0, 0, 0, 0],
+            LUK: [30, 0, 0, 0, 0, 0, 0],
+            MOVE: [800, 0, 0, 0, 0, 0, 0],
+            SCALE: 1
+        },
+        INTERNAL: [],
+        adEffects: [],
+        skills: {
+            Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+            Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+            Orbit: { icon: "", baseDame: 30, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
 
+        },
     },
-  },
+    // {
+    //     name: 'Xanh2', rare: "C", type: ["Gió", "Thú"],
+    //     URLimg: {
+    //         Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //     },
+    //     stats: {
+    //         STR: [1, 0, 0, 0, 0, 0, 0],
+    //         INT: [30, 0, 0, 0, 0, 0, 0],
+    //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         AGI: [100, 0, 0, 0, 0, 0, 0],
+    //         HP: [3000, 0, 0, 0, 0, 0, 0],
+    //         LUK: [30, 0, 0, 0, 0, 0, 0],
+    //         MOVE: [800, 0, 0, 0, 0, 0, 0],
+    //         SCALE: 1
+    //     },
+    //     INTERNAL: [],
+    //     adEffects: [],
+    //     skills: {
+    //         Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    //         Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+    //         Orbit: { icon: "", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
+    //     },
+    // },
+    // {
+    //     name: 'Xanh3', rare: "C", type: ["Gió", "Thú"],
+    //     URLimg: {
+    //         Lv1: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv2: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv3: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //         Lv4: { base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin: "" },
+    //     },
+    //     stats: {
+    //         STR: [1, 0, 0, 0, 0, 0, 0],
+    //         INT: [30, 0, 0, 0, 0, 0, 0],
+    //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         AGI: [500, 0, 0, 0, 0, 0, 0],
+    //         HP: [3000, 0, 0, 0, 0, 0, 0],
+    //         LUK: [30, 0, 0, 0, 0, 0, 0],
+    //         MOVE: [800, 0, 0, 0, 0, 0, 0],
+    //         SCALE: 1
+    //     },
+    //     INTERNAL: [],
+    //     adEffects: [],
+    //     skills: {
+    //         Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    //         Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+    //         Orbit: { icon: "", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
+    //     },
+    // },
 ];
 
 
 function makePetFromData(petInfo, color, x, y) {
-  const el = document.createElement('div');
-  el.className = `pet`;
+    const el = document.createElement('div');
+    el.className = `pet`;
 
-  const imgEl = document.createElement('div');
-  imgEl.className = `image-pet ${color}`;
-  imgEl.textContent = petInfo.name[0]; // chữ cái đầu tên
-  el.appendChild(imgEl);
+    const imgEl = document.createElement('div');
+    imgEl.className = `image-pet ${color}`;
+    imgEl.textContent = petInfo.name[0]; // chữ cái đầu tên
+    el.appendChild(imgEl);
 
-  arena.appendChild(el);
+    arena.appendChild(el);
 
-  // Tính tổng HP từ mảng stats.HP
-  const maxHP = petInfo.stats.HP.reduce((a, b) => a + b, 0);
+    // Tính tổng HP từ mảng stats.HP
+    const maxHP = petInfo.stats.HP.reduce((a, b) => a + b, 0);
 
-  const pet = {
-    name: petInfo.name,
-    rare: petInfo.rare,
-    type: petInfo.type,
-    URLimg: petInfo.URLimg,
-    stats: petInfo.stats,
-    skills: structuredClone(petInfo.skills), // clone để mỗi pet có rage riêng
-    INTERNAL: petInfo.INTERNAL,
-    adEffects: petInfo.adEffects,
-    color,
-    el,
-    imgEl,
-    x,
-    y,
-    hpNow: maxHP,       // máu hiện tại
-    maxHP: maxHP,    // máu tối đa
-    lastShot: 0,
-    evadingUntil: 0,
-    lastMove: 0,
-    alive: true,
-    frozen: false,
-    lastSkill: 0,
-  };
+    const pet = {
+        name: petInfo.name,
+        rare: petInfo.rare,
+        type: petInfo.type,
+        URLimg: petInfo.URLimg,
+        stats: petInfo.stats,
+        skills: structuredClone(petInfo.skills), // clone để mỗi pet có rage riêng
+        INTERNAL: petInfo.INTERNAL,
+        adEffects: petInfo.adEffects,
+        color,
+        el,
+        imgEl,
+        x,
+        y,
+        hpNow: maxHP,       // máu hiện tại
+        maxHP: maxHP,    // máu tối đa
+        lastShot: 0,
+        evadingUntil: 0,
+        lastMove: 0,
+        alive: true,
+        frozen: false,
+        lastSkill: 0,
+    };
 
-  positionElement(el, x, y);
-  return pet;
+    positionElement(el, x, y);
+    return pet;
 }
 
 
 
 
-  function makePet(name, color, x, y) {
+function makePet(name, color, x, y) {
     const ATK = randInt(10, 50);
     const DEF = randInt(10, 50);
     const AGI = randInt(1, 20);
@@ -15466,638 +15574,705 @@ function makePetFromData(petInfo, color, x, y) {
     arena.appendChild(el);
 
     const pet = {
-      name, color, el, imgEl,
-      x, y,
-      stats: { ATK, DEF, AGI, HP, HP_MAX: HP, LUK, MOVE },
-      lastShot: 0,
-      evadingUntil: 0,
-      lastMove: 0,
-      alive: true,
-      frozen: false,
-      lastSkill: 0,
-      skillCooldown: randInt(50, 200) * 100 / Math.max(1, AGI) // ms
+        name, color, el, imgEl,
+        x, y,
+        stats: { ATK, DEF, AGI, HP, HP_MAX: HP, LUK, MOVE },
+        lastShot: 0,
+        evadingUntil: 0,
+        lastMove: 0,
+        alive: true,
+        frozen: false,
+        lastSkill: 0,
+        skillCooldown: randInt(50, 200) * 100 / Math.max(1, AGI) // ms
     };
     positionElement(el, x, y);
     return pet;
-  }
+}
 
-  function positionElement(el, x, y) {
+function positionElement(el, x, y) {
     el.style.transform = `translate(${posToPx(x)}px, ${posToPx(y)}px)`;
-  }
+}
 
-  function cooldownMs(agi) {
-    // AGI càng cao thì cooldown ô/đòn càng thấp. Minimum 500ms.
-    return Math.max(500, 2500 - agi * 100);
-  }
+function cooldownMs(agi) {
+    // AGI 10 → 2000ms, AGI 500 → 300ms
+    return Math.round(2000 - (agi - 10) * (1700 / 490));
+}
 
-  // ========== Đạn ==========
-  const bullets = new Set();
+// ========== Đạn ==========
+const bullets = new Set();
 
 function shoot(shooter, enemies) {
-  if (!shooter || !enemies || enemies.length === 0) return;
-  if (shooter.frozen) return;
-  const now = performance.now();
-  const agi = Array.isArray(shooter.stats.AGI) 
-              ? shooter.stats.AGI.reduce((a, b) => a + b, 0) 
-              : shooter.stats.AGI;
+    if (!shooter || !enemies || enemies.length === 0) return;
+    if (shooter.frozen) return;
+    const now = performance.now();
+    const agi = Array.isArray(shooter.stats.AGI)
+        ? shooter.stats.AGI.reduce((a, b) => a + b, 0)
+        : shooter.stats.AGI;
 
- if (now - shooter.lastShot < cooldownMs(agi)) return;
+    if (now - shooter.lastShot < cooldownMs(agi)) return;
 
-  shooter.lastShot = now;
+    shooter.lastShot = now;
 
-  // Chọn mục tiêu gần nhất
-  let target = null;
-  let minDist = Infinity;
-  for (const e of enemies) {
-    if (!e.alive) continue;
-    const dx = e.x - shooter.x;
-    const dy = e.y - shooter.y;
-    const d = dx * dx + dy * dy;
-    if (d < minDist) {
-      minDist = d;
-      target = e;
+    // Chọn mục tiêu gần nhất
+    let target = null;
+    let minDist = Infinity;
+    for (const e of enemies) {
+        if (!e.alive) continue;
+        const dx = e.x - shooter.x;
+        const dy = e.y - shooter.y;
+        const d = dx * dx + dy * dy;
+        if (d < minDist) {
+            minDist = d;
+            target = e;
+        }
     }
-  }
-  if (!target) return;
+    if (!target) return;
 
-  const sx = shooter.x + 0.5;
-  const sy = shooter.y + 0.5;
-  const tx = target.x + 0.5;
-  const ty = target.y + 0.5;
-  let dx = tx - sx;
-  let dy = ty - sy;
-  let dist = Math.hypot(dx, dy);
-  if (dist === 0) {
-    const ang = Math.random() * Math.PI * 2;
-    dx = Math.cos(ang);
-    dy = Math.sin(ang);
-    dist = 1;
-  }
-  const vx = dx / dist;
-  const vy = dy / dist;
+    const sx = shooter.x + 0.5;
+    const sy = shooter.y + 0.5;
+    const tx = target.x + 0.5;
+    const ty = target.y + 0.5;
+    let dx = tx - sx;
+    let dy = ty - sy;
+    let dist = Math.hypot(dx, dy);
+    if (dist === 0) {
+        const ang = Math.random() * Math.PI * 2;
+        dx = Math.cos(ang);
+        dy = Math.sin(ang);
+        dist = 1;
+    }
+    const vx = dx / dist;
+    const vy = dy / dist;
 
-  const el = document.createElement('div');
-  el.className = `bullet ${shooter.color}`;
-  el.textContent = '•';
-  arena.appendChild(el);
+    const el = document.createElement('div');
+    el.className = `bullet ${shooter.color}`;
+    el.textContent = '•';
+    arena.appendChild(el);
 
-  const bullet = {
-    el,
-    color: shooter.color,
-    x: sx,
-    y: sy,
-    vx,
-    vy,
-    owner: shooter,
-    speed: BULLET_SPEED,
-    skill: null
-  };
-  bullets.add(bullet);
+    const bullet = {
+        el,
+        color: shooter.color,
+        x: sx,
+        y: sy,
+        vx,
+        vy,
+        owner: shooter,
+        speed: BULLET_SPEED,
+        skill: null
+    };
+    bullets.add(bullet);
 
-  shooter.evadingUntil = now + EVADE_MS;
-  const offset = (CELL * 0.6) / 2;
-  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
-  console.log(`${shooter.name} bắn`);
+    shooter.evadingUntil = now + EVADE_MS;
+    const offset = (CELL * 0.6) / 2;
+    el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
 }
 
 
 function removeBullet(b) {
-  if (b && b.el) b.el.remove();
-  bullets.delete(b);
+    if (b && b.el) b.el.remove();
+    bullets.delete(b);
 }
 
 function checkBulletHit(bullet, pet) {
-  // kiểm tra khoảng cách va chạm giống bạn
-  const bx = bullet.x, by = bullet.y;
-  const px = pet.x + 0.5;
-  const py = pet.y + 0.5;
-  const dist = Math.hypot(bx - px, by - py);
-  const hit = dist < 0.6;
+    // kiểm tra khoảng cách va chạm giống bạn
+    const bx = bullet.x, by = bullet.y;
+    const px = pet.x + 0.5;
+    const py = pet.y + 0.5;
+    const dist = Math.hypot(bx - px, by - py);
+    const hit = dist < 0.6;
 
-  if (!hit) return false;
-  return true;
+    if (!hit) return false;
+    return true;
 }
 
-  // ==== Skill Freeze ====
+// ==== Skill Freeze ====
 function castSkillFreeze(caster, enemies) {
-  if (caster.frozen || !caster.alive) return;
-  const now = performance.now();
-  if (now - caster.lastSkill < caster.skillCooldown) return; 
+    if (caster.frozen || !caster.alive) return;
+    const now = performance.now();
+    if (now - caster.lastSkill < caster.skillCooldown) return;
 
-  // Chọn 1 mục tiêu ngẫu nhiên còn sống trong enemies
-  const aliveEnemies = enemies.filter(e => e.alive);
-  if (aliveEnemies.length === 0) return;
-  const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
+    // Chọn 1 mục tiêu ngẫu nhiên còn sống trong enemies
+    const aliveEnemies = enemies.filter(e => e.alive);
+    if (aliveEnemies.length === 0) return;
+    const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
 
-  const sx = caster.x + 0.5;
-  const sy = caster.y + 0.5;
-  const tx = target.x + 0.5;
-  const ty = target.y + 0.5;
-  let dx = tx - sx;
-  let dy = ty - sy;
-  let dist = Math.hypot(dx, dy);
-  if (dist === 0) { 
-    const ang = Math.random() * Math.PI*2; 
-    dx = Math.cos(ang); 
-    dy = Math.sin(ang); 
-    dist = 1; 
-  }
-  const vx = dx / dist;
-  const vy = dy / dist;
-
-  const el = document.createElement('div');
-  el.className = 'bullet freeze';
-  arena.appendChild(el);
-
-  const bullet = { 
-    el, 
-    color: 'freeze', 
-    x: sx, 
-    y: sy, 
-    vx, 
-    vy, 
-    owner: caster, 
-    speed: BULLET_SPEED, // bay nhanh bằng đạn thường
-    skill: 'freeze' 
-  };
-  bullets.add(bullet);
-  caster.lastSkill = now;
-  console.log(`${caster.name} dùng kỹ năng Đóng băng!`);
-
-  const offset = (CELL * 0.6) / 2;
-  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
-}
-
-function applyBulletEffect(bullet, pet) {
-  if (!pet.alive) return;
-
-  if (bullet.skill === 'freeze') {
-    if (!pet.frozen) {
-      pet.frozen = true;
-      pet.el.style.filter = 'grayscale(100%)';
-      console.log(`${pet.name} bị đóng băng !`);
-      setTimeout(() => {
-        if (pet.alive) {
-          pet.frozen = false;
-          pet.el.style.filter = '';
-          console.log(`${pet.name} hết đóng băng.`);
-        }
-      }, 2000);
+    const sx = caster.x + 0.5;
+    const sy = caster.y + 0.5;
+    const tx = target.x + 0.5;
+    const ty = target.y + 0.5;
+    let dx = tx - sx;
+    let dy = ty - sy;
+    let dist = Math.hypot(dx, dy);
+    if (dist === 0) {
+        const ang = Math.random() * Math.PI * 2;
+        dx = Math.cos(ang);
+        dy = Math.sin(ang);
+        dist = 1;
     }
-  } else {
-    // ==== Lấy ATK / DEF tổng ====
-    const atk = bullet.owner.stats.STR.reduce((a, b) => a + b, 0);
-    const def = pet.stats.DEF.reduce((a, b) => a + b, 0);
+    const vx = dx / dist;
+    const vy = dy / dist;
 
-    // ==== Tính dame ====
-    const raw = atk - def;
-    const minDmg = Math.ceil(atk * 0.10);
-    const dmg = Math.max(minDmg, raw);
-
-    // ==== Trừ máu ====
-    pet.hpNow = Math.max(0, pet.hpNow - dmg);
-
-    console.log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.hpNow}/${pet.maxHP})`);
-
-    if (pet.hpNow <= 0) {
-      pet.alive = false;
-      pet.el.style.opacity = 0.4;
-      pet.el.style.display = "none";
-      console.log(`${pet.name} đã gục!`);
-      checkEndGame();
-    }
-  }
-}
-
-function castSkillCharge(caster, enemies) {
-  if (caster.frozen || !caster.alive || caster.charging) return;
-  const now = performance.now();
-  if (now - caster.lastSkill < caster.skillCooldown) return;
-
-  // Chọn mục tiêu còn sống ngẫu nhiên
-  const aliveEnemies = enemies.filter(e => e.alive && e.stats.HP > 0);
-  if (aliveEnemies.length === 0) return;
-  const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
-
-  // Lưu vị trí gốc để sau khi đánh xong quay lại
-  const originalX = caster.x;
-  const originalY = caster.y;
-
-  caster.charging = true;
-  caster.el.style.transition = 'transform 0.4s linear';
-  console.log(`${caster.name} lao vào ${target.name}!`);
-
-  // 1) Lao tới vị trí của target
-  caster.x = target.x;
-  caster.y = target.y;
-  positionElement(caster.el, caster.x, caster.y);
-
-  // Sau khi "lao tới" xong, gây sát thương
-  setTimeout(() => {
-    if (target.alive && target.stats.HP > 0) {
-      const atk = caster.stats.ATK;
-      const def = target.stats.DEF;
-      const raw = atk - def;
-      const minDmg = Math.ceil(atk * 0.10);
-      const dmg = Math.max(minDmg, raw);
-      target.stats.HP = Math.max(0, target.stats.HP - dmg);
-      console.log(`${caster.name} gây ${dmg} sát thương lên ${target.name}! (${target.stats.HP})`);
-      if (target.stats.HP <= 0) {
-        target.alive = false;
-        target.el.style.opacity = 0; // tuỳ bạn muốn ẩn luôn khi chết
-      }
-    }
-
-    // 2) Phi về chỗ cũ
-    caster.el.style.transition = 'transform 0.4s linear';
-    caster.x = originalX;
-    caster.y = originalY;
-    positionElement(caster.el, caster.x, caster.y);
-
-    // Hoàn tất charge sau khi về
-    setTimeout(() => {
-      caster.el.style.transition = ''; // reset
-      caster.charging = false;
-      caster.lastSkill = now;
-      checkEndGame && checkEndGame();
-    }, 400);
-
-  }, 400);
-}
-
-function castSkillOrbit(caster, enemies) {
-  if (caster.frozen || !caster.alive) return;
-  const now = performance.now();
-  if (now - caster.lastSkill < caster.skillCooldown) return;
-
-  const duration = 6000;   // ms tồn tại
-  const radius   = 1.5;    // bán kính quỹ đạo (đơn vị = ô)
-  const angVel   = Math.PI; // rad/s (≈ 180°/s)
-
-  for (let i = 0; i < 3; i++) {
     const el = document.createElement('div');
-    el.className = 'bullet sword';
+    el.className = 'bullet freeze';
     arena.appendChild(el);
 
     const bullet = {
-      el,
-      color: 'sword',
-      owner: caster,
-      x: caster.x + 0.5,
-      y: caster.y + 0.5,
-      angle: (i * 2 * Math.PI) / 3, // 0°, 120°, 240°
-      angVel,
-      radius,
-      skill: 'orbit',
-      expireAt: now + duration,
-      lastHit: new Map() // chống “dính” nhiều hit trong 1 lúc
+        el,
+        color: 'freeze',
+        x: sx,
+        y: sy,
+        vx,
+        vy,
+        owner: caster,
+        speed: BULLET_SPEED, // bay nhanh bằng đạn thường
+        skill: 'freeze'
     };
     bullets.add(bullet);
-  }
+    caster.lastSkill = now;
+    console.log(`${caster.name} dùng kỹ năng Đóng băng!`);
 
-  caster.lastSkill = now;
-  console.log(`${caster.name} tạo 3 thanh kiếm xoay!`);
+    const offset = (CELL * 0.6) / 2;
+    el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
+}
+
+function applyBulletEffect(bullet, pet) {
+    if (!pet.alive) return;
+
+    if (bullet.skill === 'freeze') {
+        if (!pet.frozen) {
+            pet.frozen = true;
+            pet.el.style.filter = 'grayscale(100%)';
+            console.log(`${pet.name} bị đóng băng !`);
+            setTimeout(() => {
+                if (pet.alive) {
+                    pet.frozen = false;
+                    pet.el.style.filter = '';
+                    console.log(`${pet.name} hết đóng băng.`);
+                }
+            }, 2000);
+        }
+    } else {
+        // ==== Lấy ATK / DEF tổng ====
+        const atk = bullet.owner.stats.STR.reduce((a, b) => a + b, 0);
+        const def = pet.stats.DEF.reduce((a, b) => a + b, 0);
+
+        // ==== Tính dame ====
+        const raw = atk - def;
+        const minDmg = Math.ceil(atk * 0.10);
+        const dmg = Math.max(minDmg, raw);
+
+        // ==== Trừ máu ====
+        pet.hpNow = Math.max(0, pet.hpNow - dmg);
+
+        if (pet.hpNow <= 0) {
+            pet.alive = false;
+            pet.el.style.opacity = 0.4;
+            pet.el.style.display = "none";
+            console.log(`${pet.name} đã gục!`);
+            checkEndGame();
+        }
+    }
+}
+
+function getStatTotal(stat) {
+    if (Array.isArray(stat)) {
+        return stat.reduce((a, b) => a + b, 0);
+    }
+    return stat || 0;
+}
+
+function castSkillCharge(caster, enemies) {
+    if (caster.frozen || !caster.alive || caster.charging) return;
+    const now = performance.now();
+    if (now - (caster.lastSkill || 0) < (caster.skillCooldown || 0)) return;
+
+    const aliveEnemies = enemies.filter(e => e.alive && getStatTotal(e.stats.HP) > 0);
+    if (aliveEnemies.length === 0) return;
+    const target = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
+    const originalX = caster.x;
+    const originalY = caster.y;
+
+    caster.charging = true;
+    caster.lastSkill = now;
+
+    const duration = 400; // tổng thời gian lao tới mục tiêu (ms)
+    const frames = Math.ceil(duration / 16); // ~60FPS
+    let frame = 0;
+
+    const startX = caster.x;
+    const startY = caster.y;
+    const deltaX = (target.x - startX) / frames;
+    const deltaY = (target.y - startY) / frames;
+
+    const moveInterval = setInterval(() => {
+        if (!caster.alive) {
+            clearInterval(moveInterval);
+            caster.charging = false;
+            return;
+        }
+
+        caster.x += deltaX;
+        caster.y += deltaY;
+        positionElement(caster.el, caster.x, caster.y);
+
+        frame++;
+
+        if (frame >= frames) {
+            clearInterval(moveInterval);
+
+            // Khi tới đích: gây sát thương
+            if (target.alive && getStatTotal(target.stats.HP) > 0) {
+                const atk = getStatTotal(caster.stats.ATK || caster.stats.STR);
+                const def = getStatTotal(target.stats.DEF);
+                const raw = atk - def;
+                const minDmg = Math.ceil(atk * 0.10);
+                const dmg = Math.max(minDmg, raw);
+
+                if (Array.isArray(target.stats.HP)) {
+                    target.stats.HP[0] = Math.max(0, target.stats.HP[0] - dmg);
+                } else {
+                    target.stats.HP = Math.max(0, target.stats.HP - dmg);
+                }
+
+                if (getStatTotal(target.stats.HP) <= 0) {
+                    target.alive = false;
+                    if (target.el) target.el.style.opacity = 0;
+                }
+            }
+
+            // Phi về chỗ cũ
+            chargeReturn(caster, originalX, originalY, 400);
+        }
+    }, 16);
+}
+
+// Hàm phi về chỗ cũ
+function chargeReturn(caster, targetX, targetY, duration) {
+    const frames = Math.ceil(duration / 16);
+    let frame = 0;
+    const startX = caster.x;
+    const startY = caster.y;
+    const deltaX = (targetX - startX) / frames;
+    const deltaY = (targetY - startY) / frames;
+
+    const moveBack = setInterval(() => {
+        if (!caster.alive) {
+            clearInterval(moveBack);
+            caster.charging = false;
+            return;
+        }
+
+        caster.x += deltaX;
+        caster.y += deltaY;
+        positionElement(caster.el, caster.x, caster.y);
+
+        frame++;
+        if (frame >= frames) {
+            clearInterval(moveBack);
+            caster.charging = false;
+        }
+    }, 16);
+}
+
+
+// spawn orbit bám theo pet
+function castSkillOrbit(caster, enemies) {
+    if (caster.frozen || !caster.alive) return;
+    const now = performance.now();
+    if (now - (caster.lastSkill || 0) < (caster.skillCooldown || 0)) return;
+
+    const duration = 6000;
+    const radius = 1.5;
+    const angVel = Math.PI;
+
+    for (let i = 0; i < 3; i++) {
+        const el = document.createElement('div');
+        el.className = 'bullet sword';
+        arena.appendChild(el);
+
+        const bullet = {
+            el,
+            color: 'sword',
+            owner: caster,       // lưu owner
+            angle: (i * 2 * Math.PI) / 3,
+            angVel,
+            radius,
+            skill: 'orbit',
+            expireAt: now + duration,
+            lastHit: new Map()
+        };
+        bullets.add(bullet);
+    }
+
+    caster.lastSkill = now;
+    console.log(`${caster.name} tạo 3 thanh kiếm xoay!`);
 }
 
 
 // ==== Quyết định dùng kỹ năng ====
 function tryUseSkill(caster, enemies, dt) {
-  if (!caster.alive || caster.frozen) return;
+    if (!caster.alive || caster.frozen) return;
 
-  for (const [skillName, skill] of Object.entries(caster.skills)) {
-    // tăng nộ theo thời gian trôi (dt từ gameTick)
-    skill.rage += dt;
+    for (const [skillName, skill] of Object.entries(caster.skills)) {
+        // tăng nộ theo thời gian trôi (dt từ gameTick)
+        skill.rage += dt;
 
-    // nếu nộ >= cooldown thì cast
-    if (skill.rage >= skill.cooldown) {
-      skill.rage = 0; // reset nộ
+        // nếu nộ >= cooldown thì cast
+        if (skill.rage >= skill.cooldown) {
+            skill.rage = 0; // reset nộ
 
-      switch (skillName) {
-        case "Freeze": castSkillFreeze(caster, enemies); break;
-        case "Charge": castSkillCharge(caster, enemies); break;
-        case "Orbit": castSkillOrbit(caster, enemies); break;
-      }
+            switch (skillName) {
+                case "Freeze": castSkillFreeze(caster, enemies); break;
+                case "Charge": castSkillCharge(caster, enemies); break;
+                case "Orbit": castSkillOrbit(caster, enemies); break;
+            }
 
-      console.log(`${caster.name} tung chiêu ${skillName}`);
+            console.log(`${caster.name} tung chiêu ${skillName}`);
+        }
     }
-  }
 }
 
 function skills(caster, enemies) {
-  if (!caster.alive || caster.charging) return;
-  const now = performance.now();
-  if (now - caster.lastSkill >= caster.skillCooldown) {
-    const chance = 0.12 + (caster.stats.AGI / 200);
-    if (Math.random() < chance) {
-      const roll = Math.random();
-      if (roll < 0) {
-        castSkillFreeze(caster, enemies);
-        console.log('sử dụng skill castSkillFreeze')
-      } else if (roll < 0) {
-        castSkillCharge(caster, enemies);
-        console.log('sử dụng skill castSkillCharge')
-      } else if (roll < 0) {
-        castSkillOrbit(caster, enemies);
-          console.log('sử dụng skill castSkillOrbit')
-      } else {
+    if (!caster.alive || caster.charging) return;
+    const now = performance.now();
+    if (now - caster.lastSkill >= caster.skillCooldown) {
+        const chance = 0.12 + (caster.stats.AGI / 200);
+        if (Math.random() < chance) {
+            const roll = Math.random();
+            if (roll < 0) {
+                castSkillFreeze(caster, enemies);
+                console.log('sử dụng skill castSkillFreeze')
+            } else if (roll < 0) {
+                castSkillCharge(caster, enemies);
+                console.log('sử dụng skill castSkillCharge')
+            } else if (roll < 0) {
+                castSkillOrbit(caster, enemies);
+                console.log('sử dụng skill castSkillOrbit')
+            } else {
 
-      }
+            }
+        }
     }
-  }
 }
 
-  // ========== Logic di chuyển ==========
-  function moveToward(pet, target, now) {
+// ========== Logic di chuyển ==========
+function moveToward(pet, target, now) {
     if (pet.frozen || pet.charging) return;
-    const moveDelay = Array.isArray(pet.stats.MOVE) 
-                        ? pet.stats.MOVE.reduce((a, b) => a + b, 0) 
-                        : pet.stats.MOVE;
-    
+    const moveDelay = Array.isArray(pet.stats.MOVE)
+        ? pet.stats.MOVE.reduce((a, b) => a + b, 0)
+        : pet.stats.MOVE;
+
     if (now - pet.lastMove < moveDelay) return;
 
     pet.lastMove = now;
 
     const dir = randInt(0, 4);
-    const dx = [1,-1,0,0,0][dir];
-    const dy = [0,0,1,-1,0][dir];
-    pet.x = clamp(pet.x + dx, 0, COLS-1);
-    pet.y = clamp(pet.y + dy, 0, ROWS-1);
+    const dx = [1, -1, 0, 0, 0][dir];
+    const dy = [0, 0, 1, -1, 0][dir];
+    pet.x = clamp(pet.x + dx, 0, COLS - 1);
+    pet.y = clamp(pet.y + dy, 0, ROWS - 1);
 
     // flip theo hướng
     if (dx !== 0) {
-      const imageEl = pet.el.querySelector(".image-pet");
-      if (imageEl) {
-        imageEl.style.transform = dx > 0 ? "scaleX(1)" : "scaleX(-1)";
-      }
+        const imageEl = pet.el.querySelector(".image-pet");
+        if (imageEl) {
+            imageEl.style.transform = dx > 0 ? "scaleX(1)" : "scaleX(-1)";
+        }
     }
 }
 
 
 
-  // ========== Cập nhật đạn mỗi frame ==========
-  function stepBullets(dt) {
-  const now = performance.now();
+// ========== Cập nhật đạn mỗi frame ==========
+function stepBullets(dt) {
+    const now = performance.now();
 
-  for (const b of Array.from(bullets)) {
-    // --- Đạn kỹ năng: kiếm xoay quanh chủ ---
-    if (b.skill === 'orbit') {
-      if (!b.owner || !b.owner.alive || now > b.expireAt) { removeBullet(b); continue; }
+    for (const b of Array.from(bullets)) {
+        // --- Đạn kỹ năng: kiếm xoay quanh chủ ---
+        if (b.skill === 'orbit') {
+            if (!b.owner || !b.owner.alive || now > b.expireAt) { removeBullet(b); continue; }
 
-      // Cập nhật góc quay
-      b.angle += b.angVel * (dt / 1000);
+            // Cập nhật góc quay
+            b.angle += b.angVel * (dt / 1000);
 
-      // Vị trí theo chủ sở hữu
-      const cx = b.owner.x + 0.5;
-      const cy = b.owner.y + 0.5;
-      b.x = cx + b.radius * Math.cos(b.angle);
-      b.y = cy + b.radius * Math.sin(b.angle);
+            // Vị trí theo chủ sở hữu
+            const cx = b.owner.x + 0.5;
+            const cy = b.owner.y + 0.5;
+            b.x = cx + b.radius * Math.cos(b.angle);
+            b.y = cy + b.radius * Math.sin(b.angle);
 
-      // Translate + rotate để nhìn giống lưỡi kiếm quay
-      const offset = (CELL * 0.6) / 2;
-      b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px) rotate(${b.angle}rad)`;
+            // Translate + rotate để nhìn giống lưỡi kiếm quay
+            const offset = (CELL * 0.6) / 2;
+            b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px) rotate(${b.angle}rad)`;
 
-      // Va chạm: kiểm tra từng đối thủ
-      const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
-      for (const enemy of enemyTeam) {
-        if (!enemy.alive) continue;
-        if (checkBulletHit(b, enemy)) {
-          // Mỗi mục tiêu có i-frames 300ms với 1 lưỡi kiếm
-          const last = b.lastHit.get(enemy) || 0;
-          if (now - last < 300) continue;
-          b.lastHit.set(enemy, now);
+            // Va chạm: kiểm tra từng đối thủ
+            const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
+            for (const enemy of enemyTeam) {
+                if (!enemy.alive) continue;
+                if (checkBulletHit(b, enemy)) {
+                    // Mỗi mục tiêu có i-frames 300ms với 1 lưỡi kiếm
+                    const last = b.lastHit.get(enemy) || 0;
+                    if (now - last < 300) continue;
+                    b.lastHit.set(enemy, now);
 
-          applyBulletEffect(b, enemy);
-          // Lưu ý: kiếm không biến mất khi trúng, nên KHÔNG removeBullet(b)
+                    applyBulletEffect(b, enemy);
+                    // Lưu ý: kiếm không biến mất khi trúng, nên KHÔNG removeBullet(b)
+                }
+            }
+            continue; // xử lý xong đạn orbit
         }
-      }
-      continue; // xử lý xong đạn orbit
+
+        // --- Đạn thường (giữ nguyên) ---
+        const speed = (b.speed !== undefined) ? b.speed : BULLET_SPEED;
+        const step = (speed * dt) / 1000;
+        b.x += b.vx * step;
+        b.y += b.vy * step;
+
+        const offset = (CELL * 0.6) / 2;
+        b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px)`;
+
+        if (b.x < -1 || b.x > COLS + 1 || b.y < -1 || b.y > ROWS + 1) { removeBullet(b); continue; }
+
+        const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
+        for (const enemy of enemyTeam) {
+            if (!enemy.alive) continue;
+            if (checkBulletHit(b, enemy)) {
+                applyBulletEffect(b, enemy);
+                removeBullet(b);
+                break;
+            }
+        }
     }
-
-    // --- Đạn thường (giữ nguyên) ---
-    const speed = (b.speed !== undefined) ? b.speed : BULLET_SPEED;
-    const step = (speed * dt) / 1000;
-    b.x += b.vx * step;
-    b.y += b.vy * step;
-
-    const offset = (CELL * 0.6) / 2;
-    b.el.style.transform = `translate(${posToPx(b.x) - offset}px, ${posToPx(b.y) - offset}px)`;
-
-    if (b.x < -1 || b.x > COLS + 1 || b.y < -1 || b.y > ROWS + 1) { removeBullet(b); continue; }
-
-    const enemyTeam = (pets.red.includes(b.owner)) ? pets.blue : pets.red;
-    for (const enemy of enemyTeam) {
-      if (!enemy.alive) continue;
-      if (checkBulletHit(b, enemy)) {
-        applyBulletEffect(b, enemy);
-        removeBullet(b);
-        break;
-      }
-    }
-  }
 }
 
 
 
-  // ========== Khởi tạo & game loop ==========
-  let pets = { red: [], blue: [] };
-  let running = false;
-  let lastFrame = 0;
-  let loopHandle = null;
-  const bluePanel = document.getElementById("teamBluePanel");
-  const redPanel = document.getElementById("teamRedPanel");
+// ========== Khởi tạo & game loop ==========
+let pets = { red: [], blue: [] };
+let running = false;
+let lastFrame = 0;
+let loopHandle = null;
 
-    function loadPetUI(team, teamId) {
-  team.forEach((pet, index) => {
-    const petIndex = index + 1;
+function loadPetUI(team, teamId) {
+    for (let i = 0; i < 3; i++) {
+        const petIndex = i + 1;
+        const pet = team[i];
 
-    // avatar
-    const img = document.getElementById(`imgPet${teamId}${petIndex}`);
-    if (img) {
-      img.src = pet.URLimg?.Lv1?.base || "";
-      img.alt = pet.name;
-    }
+        const img = document.getElementById(`imgPet${teamId}${petIndex}`);
+        const hpBar = document.getElementById(`hpBar${teamId}${petIndex}`);
+        const hpLabel = document.getElementById(`hpLabel${teamId}${petIndex}`);
+        const skillContainer = document.getElementById(`skillBox${teamId}${petIndex}`);
+        const effectBox = document.getElementById(`effectBox${teamId}${petIndex}`);
 
-    // HP
-    const hpBar = document.getElementById(`hpBar${teamId}${petIndex}`);
-    const hpLabel = document.getElementById(`hpLabel${teamId}${petIndex}`);
-    if (hpBar && hpLabel) {
-      const maxHP = Array.isArray(pet.stats.HP)
-        ? pet.stats.HP.reduce((a, b) => a + b, 0)
-        : pet.stats.HP;
-      hpBar.style.width = "100%";
-      hpLabel.textContent = `${maxHP}/${maxHP}`;
-    }
-
-    // ====== Skills (tạo skillBox bằng JS) ======
-    const skillContainer = document.getElementById(`skillBox${teamId}${petIndex}`);
-    if (skillContainer) {
-      skillContainer.innerHTML = ""; // clear cũ nếu có
-
-      const skillKeys = Object.keys(pet.skills);
-
-      // tạo tối đa 4 slot
-      for (let s = 1; s <= 4; s++) {
-        const skillDiv = document.createElement("div");
-        skillDiv.className = "skillBox";
-        skillDiv.id = `skillBox${teamId}${petIndex}S${s}`;
-
-        const iconDiv = document.createElement("div");
-        iconDiv.className = "skillIcon";
-
-        const rageDiv = document.createElement("div");
-        rageDiv.className = "rageFill";
-        rageDiv.id = `rageFill${teamId}${petIndex}S${s}`;
-
-        if (skillKeys[s - 1]) {
-          const skillName = skillKeys[s - 1];
-          const skill = pet.skills[skillName];
-          iconDiv.textContent =
-            skill.icon && skill.icon !== "" ? skill.icon : skillName[0];
-          rageDiv.style.height = "0%";
-          skillDiv.style.visibility = "visible";
-        } else {
-          // slot trống
-          iconDiv.textContent = "";
-          rageDiv.style.height = "0%";
-          skillDiv.style.visibility = "hidden";
+        if (!pet) {
+            // ❌ Không có pet -> ẩn toàn bộ slot
+            if (img) img.style.display = "none";
+            if (hpBar) hpBar.parentElement.style.display = "none";
+            if (hpLabel) hpLabel.style.display = "none";
+            if (skillContainer) skillContainer.style.display = "none";
+            if (effectBox) effectBox.style.display = "none";
+            continue;
         }
 
-        skillDiv.appendChild(iconDiv);
-        skillDiv.appendChild(rageDiv);
-        skillContainer.appendChild(skillDiv);
-      }
+        // ✅ Có pet -> hiển thị lại slot
+        if (img) {
+            img.style.display = "";
+            img.src = pet.URLimg?.Lv1?.base || "";
+            img.alt = pet.name || "";
+        }
+
+        if (hpBar && hpLabel) {
+            hpBar.parentElement.style.display = "";
+            hpLabel.style.display = "";
+
+            const maxHP = Array.isArray(pet.stats?.HP)
+                ? pet.stats.HP.reduce((a, b) => a + b, 0)
+                : (pet.stats?.HP ?? 0);
+            hpBar.style.width = "100%";
+            hpLabel.textContent = `${maxHP}/${maxHP}`;
+        }
+
+        if (effectBox) {
+            effectBox.style.display = "";
+            effectBox.textContent = pet.currentEffect || "";
+        }
+
+        // ====== Skills ======
+        if (skillContainer) {
+            skillContainer.style.display = "";
+            skillContainer.innerHTML = "";
+
+            const skillKeys = Object.keys(pet.skills || {});
+            for (let s = 1; s <= 4; s++) {
+                const skillDiv = document.createElement("div");
+                skillDiv.className = "skillBox";
+                skillDiv.id = `skillBox${teamId}${petIndex}S${s}`;
+
+                const iconDiv = document.createElement("div");
+                iconDiv.className = "skillIcon";
+
+                const rageDiv = document.createElement("div");
+                rageDiv.className = "rageFill";
+                rageDiv.id = `rageFill${teamId}${petIndex}S${s}`;
+                rageDiv.style.height = "0%";
+
+                if (skillKeys[s - 1]) {
+                    const skillName = skillKeys[s - 1];
+                    const skill = pet.skills[skillName];
+                    iconDiv.textContent = skill?.icon || skillName[0] || "?";
+                    skillDiv.style.visibility = "visible";
+                } else {
+                    iconDiv.textContent = "";
+                    skillDiv.style.visibility = "hidden";
+                }
+
+                skillDiv.appendChild(iconDiv);
+                skillDiv.appendChild(rageDiv);
+                skillContainer.appendChild(skillDiv);
+            }
+        }
     }
-  });
 }
 
 function updatePetUI(pet, teamId, index) {
-  // HP
-  const hpLabel = document.getElementById(`hpLabel${teamId}${index}`);
-  const hpBar = document.getElementById(`hpBar${teamId}${index}`);
-  if (hpLabel && hpBar) {
-    hpLabel.textContent = `${pet.hpNow}/${pet.maxHP}`;
-    hpBar.style.width = `${Math.max(0, (pet.hpNow / pet.maxHP) * 100)}%`;
-  }
+    const petIndex = index + 1; // 1-based index cho ID
+    const isTeam = teamId === "B" ? "B" : "A";
 
-  // Hiệu ứng
-  const effBox = document.getElementById(`effectBox${teamId}${index}`);
-  if (effBox) {
-    effBox.textContent = pet.currentEffect || "";
-  }
-
-  // Rage skill (theo slot S1..S4)
-  const skillKeys = Object.keys(pet.skills);
-  skillKeys.forEach((skillName, sIndex) => {
-    const rageEl = document.getElementById(
-      `rageFill${teamId}${index}S${sIndex + 1}`
-    );
-    if (rageEl) {
-      const skill = pet.skills[skillName];
-      const pct = Math.min(100, (skill.rage / skill.cooldown) * 100);
-      rageEl.style.height = pct + "%";
+    // HP
+    const hpLabel = document.getElementById(`hpLabel${isTeam}${petIndex}`);
+    const hpBar = document.getElementById(`hpBar${isTeam}${petIndex}`);
+    if (hpLabel && hpBar) {
+        const hpNow = pet?.hpNow ?? 0;
+        const maxHP = pet?.maxHP ?? 1;
+        hpLabel.textContent = `${hpNow}/${maxHP}`;
+        hpBar.style.width = `${Math.max(0, (hpNow / maxHP) * 100)}%`;
     }
-  });
+
+    // Hiệu ứng
+    const effBox = document.getElementById(`effectBox${isTeam}${petIndex}`);
+    if (effBox) {
+        effBox.textContent = pet?.currentEffect || "";
+    }
+
+    // Rage skill
+    const skillKeys = Object.keys(pet?.skills || {});
+    skillKeys.forEach((skillName, sIndex) => {
+        const rageEl = document.getElementById(
+            `rageFill${isTeam}${petIndex}S${sIndex + 1}`
+        );
+        if (rageEl) {
+            const skill = pet.skills[skillName];
+            const rage = skill?.rage ?? 0;
+            const cd = skill?.cooldown ?? 1;
+            const pct = Math.min(100, (rage / cd) * 100);
+            rageEl.style.height = pct + "%";
+        }
+    });
 }
 
-  function setup() {
+
+function setup() {
     arena.innerHTML = '';
-    
+
     loadPetUI(petTeamA, "A"); // load team A (đỏ)
     loadPetUI(petTeamB, "B"); // load team B (xanh)
-      
+
     // gán đội hình từ list có sẵn
     // Đội A (đỏ)
-      pets.red = petTeamA.map((p, i) => {
+    pets.red = petTeamA.map((p, i) => {
         const x = 4 + i * 4; // cách nhau 4 ô
         const y = 2;
         return makePetFromData(p, 'red', x, y);
-      });
-    
-      // Đội B (xanh)
-      pets.blue = petTeamB.map((p, i) => {
+    });
+
+    // Đội B (xanh)
+    pets.blue = petTeamB.map((p, i) => {
         const x = COLS - 12 + i * 4;
         const y = ROWS - 3;
         return makePetFromData(p, 'blue', x, y);
-      });
+    });
 
     // Cập nhật lại vị trí hiển thị
     [...pets.red, ...pets.blue].forEach(p => {
-      positionElement(p.el, p.x, p.y);
+        positionElement(p.el, p.x, p.y);
     });
-  }
+}
 
-  function gameTick(now) {
-      if (!running) return;
-      const dt = Math.min(48, now - lastFrame);
-      lastFrame = now;
-    
-      // Đội đỏ di chuyển, bắn, dùng skill
-      for (const p of pets.red) {
+function gameTick(now) {
+    if (!running) return;
+    const dt = Math.min(48, now - lastFrame);
+    lastFrame = now;
+
+    // Đội đỏ di chuyển, bắn, dùng skill
+    for (const p of pets.red) {
         if (!p.alive) continue;
         moveToward(p, pets.blue, now);
         if (!p.frozen) shoot(p, pets.blue);
         tryUseSkill(p, pets.blue, dt);
         positionElement(p.el, p.x, p.y);
-      }
-    
-      // Đội xanh di chuyển, bắn, dùng skill
-      for (const p of pets.blue) {
+    }
+
+    // Đội xanh di chuyển, bắn, dùng skill
+    for (const p of pets.blue) {
         if (!p.alive) continue;
         moveToward(p, pets.red, now);
         if (!p.frozen) shoot(p, pets.red);
         tryUseSkill(p, pets.red, dt);
         positionElement(p.el, p.x, p.y);
-      }
-
-        for (let i = 0; i < pets.red.length; i++) {
-          updatePetUI(pets.red[i], "teamRedPanel", i);
-        }
-        for (let i = 0; i < pets.blue.length; i++) {
-          updatePetUI(pets.blue[i], "teamBluePanel", i);
-        }
-      
-      stepBullets(dt);
-      
-      loopHandle = requestAnimationFrame(gameTick);
     }
 
-  function startGameNew() {
+    for (let i = 0; i < pets.red.length; i++) {
+        updatePetUI(pets.red[i], "A", i);
+    }
+    for (let i = 0; i < pets.blue.length; i++) {
+        updatePetUI(pets.blue[i], "B", i);
+    }
+
+    stepBullets(dt);
+    checkEndGame();
+
+    loopHandle = requestAnimationFrame(gameTick);
+}
+
+function startGameNew() {
     if (running) return;
     running = true;
     lastFrame = performance.now();
     loopHandle = requestAnimationFrame(gameTick);
     console.log('Bắt đầu trận đấu!');
-  }
-
-  function checkEndGame() {
-  // Lọc pet còn sống dựa trên HP
-  const redAlive = pets.red.filter(p => p.stats.HP > 0 && p.alive).length;
-  const blueAlive = pets.blue.filter(p => p.stats.HP > 0 && p.alive).length;
-
-  if (redAlive === 0 && blueAlive === 0) {
-    endGameNew("Hòa"); // cả 2 bên đều chết hết
-    return true;
-  } else if (redAlive === 0) {
-    endGameNew("Blue"); // team Red chết hết → Blue win
-    return true;
-  } else if (blueAlive === 0) {
-    endGameNew("Red"); // team Blue chết hết → Red win
-    return true;
-  }
-
-  return false; // còn pet sống → game tiếp tục
 }
 
-  function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log('Tạm dừng.'); }
-  function endGameNew(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log(msg); }
-  function resetGameNew() { for (const b of Array.from(bullets)) removeBullet(b); setup(); console.log('Trận mới.'); }
 
-  id('btnStart').addEventListener('click', startGameNew);
-  id('btnPause').addEventListener('click', pauseGame);
-  id('btnReset').addEventListener('click', resetGameNew);
+function checkEndGame() {
+    // Lọc pet còn sống dựa trên HP
+    const redAlive = pets.red.filter(p => p.alive && getStatTotal(p.stats.HP) > 0).length;
+    const blueAlive = pets.blue.filter(p => p.alive && getStatTotal(p.stats.HP) > 0).length;
 
-  // Khởi tạo ban đầu
-  setup();
+    if (redAlive === 0 && blueAlive === 0) {
+        endGameNew("Hòa"); // cả 2 bên đều chết hết
+        return true;
+    } else if (redAlive === 0) {
+        endGameNew("Blue"); // team Red chết hết → Blue win
+        return true;
+    } else if (blueAlive === 0) {
+        endGameNew("Red"); // team Blue chết hết → Red win
+        return true;
+    }
+
+    return false; // còn pet sống → game tiếp tục
+}
+
+
+function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log('Tạm dừng.'); }
+function endGameNew(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log(msg); }
+function resetGameNew() { for (const b of Array.from(bullets)) removeBullet(b); setup(); console.log('Trận mới.'); }
+
+id('btnStart').addEventListener('click', startGameNew);
+id('btnPause').addEventListener('click', pauseGame);
+id('btnReset').addEventListener('click', resetGameNew);
+
+// Khởi tạo ban đầu
+setup();
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -16146,23 +16321,3 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
