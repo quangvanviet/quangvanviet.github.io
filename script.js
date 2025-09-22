@@ -15325,7 +15325,7 @@ function getScaleLevelUp(power) {
 // BattleMap Area
 ///////////////////////////////////
   // ========== Cấu hình ==========
-  const COLS = 15, ROWS = 12, CELL = 20;
+  const COLS = 15, ROWS = 15, CELL = 20;
   const BULLET_SPEED = 10; // ô/giây mặc định
   const EVADE_MS = 100;   // thời gian evading sau khi bắn
 
@@ -15360,9 +15360,9 @@ const petTeamA = [
     INTERNAL: [],
     adEffects: [],    
     skills: {
-      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Freeze: { icon:"", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Charge: { icon:"", baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Orbit: { icon:"", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
 
     },
   },
@@ -15391,9 +15391,9 @@ const petTeamB = [
     INTERNAL: [],
     adEffects: [],    
     skills: {
-      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Freeze: { icon:"", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Charge: { icon:"", baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Orbit: { icon:"", baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
 
     },
   },
@@ -15898,67 +15898,79 @@ function skills(caster, enemies) {
   let loopHandle = null;
   const bluePanel = document.getElementById("teamBluePanel");
   const redPanel = document.getElementById("teamRedPanel");
-    
-function createPetUI(pet, teamPanel, index) {
-  const wrap = document.createElement("div");
-  wrap.className = "petPanel";
 
-  // Avatar
-  const avatar = document.createElement("img");
-  avatar.src = pet.URLimg.Lv1.base;
-  avatar.className = "petAvatar";
-  wrap.appendChild(avatar);
+    function loadPetUI(team, teamId) {
+  team.forEach((pet, index) => {
+    const petIndex = index + 1;
 
-  // Info
-  const info = document.createElement("div");
-  info.className = "petInfo";
+    // avatar
+    const img = document.getElementById(`imgPet${teamId}${petIndex}`);
+    if (img) {
+      img.src = pet.URLimg?.Lv1?.base || "";
+      img.alt = pet.name;
+    }
 
-  // Tên + hiệu ứng
-  const topRow = document.createElement("div");
-  topRow.className = "petTopRow";
-  topRow.innerHTML = `
-    <span class="petName">${pet.name}</span>
-    <div id="effectBox${teamPanel.id}${index}" class="effectBox"> </div>
-  `;
-  info.appendChild(topRow);
+    // HP
+    const hpBar = document.getElementById(`hpBar${teamId}${petIndex}`);
+    const hpLabel = document.getElementById(`hpLabel${teamId}${petIndex}`);
+    if (hpBar && hpLabel) {
+      const maxHP = Array.isArray(pet.stats.HP)
+        ? pet.stats.HP.reduce((a, b) => a + b, 0)
+        : pet.stats.HP;
+      hpBar.style.width = "100%";
+      hpLabel.textContent = `${maxHP}/${maxHP}`;
+    }
 
-  // Thanh máu
-  const hpRow = document.createElement("div");
-  hpRow.className = "hpRow";
-  hpRow.innerHTML = `
-    <div class="hpBar">
-      <span id="hpBar${teamPanel.id}${index}" style="width:100%"></span>
-    </div>
-    <span id="hpLabel${teamPanel.id}${index}" class="hpLabel">${pet.stats.HP[0]}/${pet.stats.HP[0]}</span>
-  `;
-  info.appendChild(hpRow);
+    // ====== Skills (tạo skillBox bằng JS) ======
+    const skillContainer = document.getElementById(`skillBox${teamId}${petIndex}`);
+    if (skillContainer) {
+      skillContainer.innerHTML = ""; // clear cũ nếu có
 
-  // Hàng skill
-  const skillRow = document.createElement("div");
-  skillRow.className = "skillRow";
+      const skillKeys = Object.keys(pet.skills);
 
-  for (const [skillName, skill] of Object.entries(pet.skills)) {
-    const skillBox = document.createElement("div");
-    skillBox.className = "skillBox";
-    skillBox.id = `skillBox${teamPanel.id}${index}_${skillName}`;
-    skillBox.innerHTML = `
-      <div class="skillIcon">${skill.icon || skillName}</div>
-      <div class="rageFill" id="rageFill${teamPanel.id}${index}_${skillName}"></div>
-    `;
-    skillRow.appendChild(skillBox);
-  }
-  info.appendChild(skillRow);
+      // tạo tối đa 4 slot
+      for (let s = 1; s <= 4; s++) {
+        const skillDiv = document.createElement("div");
+        skillDiv.className = "skillBox";
+        skillDiv.id = `skillBox${teamId}${petIndex}S${s}`;
 
-  wrap.appendChild(info);
-  teamPanel.appendChild(wrap);
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "skillIcon";
+
+        const rageDiv = document.createElement("div");
+        rageDiv.className = "rageFill";
+        rageDiv.id = `rageFill${teamId}${petIndex}S${s}`;
+
+        if (skillKeys[s - 1]) {
+          const skillName = skillKeys[s - 1];
+          const skill = pet.skills[skillName];
+          iconDiv.textContent =
+            skill.icon && skill.icon !== "" ? skill.icon : skillName[0];
+          rageDiv.style.height = "0%";
+          skillDiv.style.visibility = "visible";
+        } else {
+          // slot trống
+          iconDiv.textContent = "";
+          rageDiv.style.height = "0%";
+          skillDiv.style.visibility = "hidden";
+        }
+
+        skillDiv.appendChild(iconDiv);
+        skillDiv.appendChild(rageDiv);
+        skillContainer.appendChild(skillDiv);
+      }
+    }
+  });
 }
 
 function updatePetUI(pet, teamId, index) {
   // HP
   const hpLabel = document.getElementById(`hpLabel${teamId}${index}`);
   const hpBar = document.getElementById(`hpBar${teamId}${index}`);
-  hpLabel.textContent = `${pet.hpNow}/${pet.maxHP}`;
-  hpBar.style.width = `${Math.max(0, (pet.hpNow / pet.maxHP) * 100)}%`;
+  if (hpLabel && hpBar) {
+    hpLabel.textContent = `${pet.hpNow}/${pet.maxHP}`;
+    hpBar.style.width = `${Math.max(0, (pet.hpNow / pet.maxHP) * 100)}%`;
+  }
 
   // Hiệu ứng
   const effBox = document.getElementById(`effectBox${teamId}${index}`);
@@ -15966,30 +15978,25 @@ function updatePetUI(pet, teamId, index) {
     effBox.textContent = pet.currentEffect || "";
   }
 
-  // Rage skill
-  for (const [skillName, skill] of Object.entries(pet.skills)) {
-    const rageEl = document.getElementById(`rageFill${teamId}${index}_${skillName}`);
+  // Rage skill (theo slot S1..S4)
+  const skillKeys = Object.keys(pet.skills);
+  skillKeys.forEach((skillName, sIndex) => {
+    const rageEl = document.getElementById(
+      `rageFill${teamId}${index}S${sIndex + 1}`
+    );
     if (rageEl) {
+      const skill = pet.skills[skillName];
       const pct = Math.min(100, (skill.rage / skill.cooldown) * 100);
       rageEl.style.height = pct + "%";
     }
-  }
+  });
 }
-
-
 
   function setup() {
     arena.innerHTML = '';
-      
-  // Tạo UI cho team Blue
-  petTeamB.forEach((petInfo, i) => {
-    createPetUI(petInfo, bluePanel, i);
-  });
     
-  // Tạo UI cho team Red
-  petTeamA.forEach((petInfo, i) => {
-    createPetUI(petInfo, redPanel, i);
-  });
+    loadPetUI(petTeamA, "A"); // load team A (đỏ)
+    loadPetUI(petTeamB, "B"); // load team B (xanh)
       
     // gán đội hình từ list có sẵn
     // Đội A (đỏ)
@@ -16132,6 +16139,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
