@@ -15892,59 +15892,79 @@ function createPetUI(pet, teamPanel, index) {
   const wrap = document.createElement("div");
   wrap.className = "petPanel";
 
-  // Header (ảnh + tên)
-  const head = document.createElement("div");
-  head.className = "petHeader";
-  head.innerHTML = `
-    <img src="${pet.URLimg.Lv1.base}" class="petAvatar">
+  // Avatar
+  const avatar = document.createElement("img");
+  avatar.src = pet.URLimg.Lv1.base;
+  avatar.className = "petAvatar";
+  wrap.appendChild(avatar);
+
+  // Info
+  const info = document.createElement("div");
+  info.className = "petInfo";
+
+  // Tên + hiệu ứng
+  const topRow = document.createElement("div");
+  topRow.className = "petTopRow";
+  topRow.innerHTML = `
     <span class="petName">${pet.name}</span>
+    <div id="effectBox${teamPanel.id}${index}" class="effectBox"> </div>
   `;
-  wrap.appendChild(head);
+  info.appendChild(topRow);
 
   // Thanh máu
   const hpRow = document.createElement("div");
-  hpRow.className = "rowHpBar";
-  hpRow.innerHTML = `<div>HP</div><div id="hpLabel${teamPanel.id}${index}">${pet.stats.HP[0]}/${pet.stats.HP[0]}</div>`;
-  wrap.appendChild(hpRow);
+  hpRow.className = "hpRow";
+  hpRow.innerHTML = `
+    <div class="hpBar">
+      <span id="hpBar${teamPanel.id}${index}" style="width:100%"></span>
+    </div>
+    <span id="hpLabel${teamPanel.id}${index}" class="hpLabel">${pet.stats.HP[0]}/${pet.stats.HP[0]}</span>
+  `;
+  info.appendChild(hpRow);
 
-  const hpBar = document.createElement("div");
-  hpBar.className = "barHp";
-  hpBar.innerHTML = `<span id="hpBar${teamPanel.id}${index}" style="width:100%"></span>`;
-  wrap.appendChild(hpBar);
+  // Hàng skill
+  const skillRow = document.createElement("div");
+  skillRow.className = "skillRow";
 
-  // Các skill (mỗi skill một thanh nộ)
-  const skillWrap = document.createElement("div");
-  skillWrap.className = "skillBars";
   for (const [skillName, skill] of Object.entries(pet.skills)) {
-    const skillRow = document.createElement("div");
-    skillRow.className = "rowSkillBar";
-    skillRow.innerHTML = `<div>${skillName}</div><div id="skillLabel${teamPanel.id}${index}_${skillName}">0/${skill.cooldown}</div>`;
-    skillWrap.appendChild(skillRow);
-
-    const rageBar = document.createElement("div");
-    rageBar.className = "barRage";
-    rageBar.innerHTML = `<span id="skillBar${teamPanel.id}${index}_${skillName}" style="width:0%"></span>`;
-    skillWrap.appendChild(rageBar);
+    const skillBox = document.createElement("div");
+    skillBox.className = "skillBox";
+    skillBox.id = `skillBox${teamPanel.id}${index}_${skillName}`;
+    skillBox.innerHTML = `
+      <div class="skillIcon">${skill.icon || skillName}</div>
+      <div class="rageFill" id="rageFill${teamPanel.id}${index}_${skillName}"></div>
+    `;
+    skillRow.appendChild(skillBox);
   }
-  wrap.appendChild(skillWrap);
+  info.appendChild(skillRow);
 
+  wrap.appendChild(info);
   teamPanel.appendChild(wrap);
 }
 
 function updatePetUI(pet, teamId, index) {
-     const hpLabel = document.getElementById(`hpLabel${teamId}${index}`);
+  // HP
+  const hpLabel = document.getElementById(`hpLabel${teamId}${index}`);
   const hpBar = document.getElementById(`hpBar${teamId}${index}`);
   hpLabel.textContent = `${pet.hpNow}/${pet.maxHP}`;
   hpBar.style.width = `${Math.max(0, (pet.hpNow / pet.maxHP) * 100)}%`;
 
-  // Skill rage
+  // Hiệu ứng
+  const effBox = document.getElementById(`effectBox${teamId}${index}`);
+  if (effBox) {
+    effBox.textContent = pet.currentEffect || "";
+  }
+
+  // Rage skill
   for (const [skillName, skill] of Object.entries(pet.skills)) {
-    const rageLabel = document.getElementById(`skillLabel${teamId}${index}_${skillName}`);
-    const rageBar = document.getElementById(`skillBar${teamId}${index}_${skillName}`);
-    rageLabel.textContent = `${Math.floor(skill.rage)}/${skill.cooldown}`;
-    rageBar.style.width = `${Math.min(100, (skill.rage / skill.cooldown) * 100)}%`;
+    const rageEl = document.getElementById(`rageFill${teamId}${index}_${skillName}`);
+    if (rageEl) {
+      const pct = Math.min(100, (skill.rage / skill.cooldown) * 100);
+      rageEl.style.height = pct + "%";
+    }
   }
 }
+
 
 
   function setup() {
@@ -16101,6 +16121,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
