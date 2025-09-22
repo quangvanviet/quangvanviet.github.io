@@ -15325,7 +15325,7 @@ function getScaleLevelUp(power) {
 // BattleMap Area
 ///////////////////////////////////
   // ========== Cấu hình ==========
-  const COLS = 15, ROWS = 15, CELL = 25;
+  const COLS = 15, ROWS = 12, CELL = 20;
   const BULLET_SPEED = 10; // ô/giây mặc định
   const EVADE_MS = 100;   // thời gian evading sau khi bắn
 
@@ -15926,15 +15926,15 @@ function skills(caster, enemies) {
     // Tạo 3 pet đội đỏ
     pets.red = [
       makePet('Đỏ1', 'red', 4, 2),
-      makePet('Đỏ2', 'red', 8, 2),
-      makePet('Đỏ3', 'red', 12, 2),
+      // makePet('Đỏ2', 'red', 8, 2),
+      // makePet('Đỏ3', 'red', 12, 2),
     ];
 
     // Tạo 3 pet đội xanh
     pets.blue = [
       makePet('Xanh1', 'blue', COLS - 12, ROWS - 3),
-      makePet('Xanh2', 'blue', COLS - 8, ROWS - 3),
-      makePet('Xanh3', 'blue', COLS - 4, ROWS - 3),
+      // makePet('Xanh2', 'blue', COLS - 8, ROWS - 3),
+      // makePet('Xanh3', 'blue', COLS - 4, ROWS - 3),
     ];
 
     updateHPBars();
@@ -15986,13 +15986,13 @@ function skills(caster, enemies) {
   const blueAlive = pets.blue.filter(p => p.stats.HP > 0 && p.alive).length;
 
   if (redAlive === 0 && blueAlive === 0) {
-    endGame("Hòa"); // cả 2 bên đều chết hết
+    endGameNew("Hòa"); // cả 2 bên đều chết hết
     return true;
   } else if (redAlive === 0) {
-    endGame("Blue"); // team Red chết hết → Blue win
+    endGameNew("Blue"); // team Red chết hết → Blue win
     return true;
   } else if (blueAlive === 0) {
-    endGame("Red"); // team Blue chết hết → Red win
+    endGameNew("Red"); // team Blue chết hết → Red win
     return true;
   }
 
@@ -16057,6 +16057,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
