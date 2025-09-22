@@ -16029,12 +16029,12 @@ function skills(caster, enemies) {
 }
 
   function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log('Tạm dừng.'); }
-  function endGame(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log(msg); }
-  function resetGame() { for (const b of Array.from(bullets)) removeBullet(b); setup(); log('Trận mới.'); }
+  function endGameNew(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log(msg); }
+  function resetGameNew() { for (const b of Array.from(bullets)) removeBullet(b); setup(); log('Trận mới.'); }
 
   id('btnStart').addEventListener('click', startGameNew);
   id('btnPause').addEventListener('click', pauseGame);
-  id('btnReset').addEventListener('click', resetGame);
+  id('btnReset').addEventListener('click', resetGameNew);
 
   // Khởi tạo ban đầu
   setup();
@@ -16087,6 +16087,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
