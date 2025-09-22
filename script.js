@@ -15937,7 +15937,6 @@ function skills(caster, enemies) {
       makePet('Xanh3', 'blue', COLS - 4, ROWS - 3),
     ];
 
-    renderStats();
     updateHPBars();
 
     // Cập nhật lại vị trí hiển thị
@@ -16058,6 +16057,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
