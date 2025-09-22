@@ -15411,6 +15411,9 @@ function makePetFromData(petInfo, color, x, y) {
 
   arena.appendChild(el);
 
+  // Tính tổng HP từ mảng stats.HP
+  const maxHP = petInfo.stats.HP.reduce((a, b) => a + b, 0);
+
   const pet = {
     name: petInfo.name,
     rare: petInfo.rare,
@@ -15425,6 +15428,8 @@ function makePetFromData(petInfo, color, x, y) {
     imgEl,
     x,
     y,
+    hpNow: maxHP,       // máu hiện tại
+    maxHP: maxHP,    // máu tối đa
     lastShot: 0,
     evadingUntil: 0,
     lastMove: 0,
@@ -15436,6 +15441,7 @@ function makePetFromData(petInfo, color, x, y) {
   positionElement(el, x, y);
   return pet;
 }
+
 
 
 
@@ -15477,19 +15483,6 @@ function makePetFromData(petInfo, color, x, y) {
 
   function positionElement(el, x, y) {
     el.style.transform = `translate(${posToPx(x)}px, ${posToPx(y)}px)`;
-  }
-
-  function updateHPBars() {
-    for (let i = 0; i < pets.red.length; i++) {
-      const r = pets.red[i].stats;
-      id(`hpRedLabel${i+1}`).textContent = `${r.HP}/${r.HP_MAX}`;
-      id(`hpRedBar${i+1}`).style.width = `${Math.max(0, (r.HP / r.HP_MAX) * 100)}%`;
-    }
-    for (let i = 0; i < pets.blue.length; i++) {
-      const b = pets.blue[i].stats;
-      id(`hpBlueLabel${i+1}`).textContent = `${b.HP}/${b.HP_MAX}`;
-      id(`hpBlueBar${i+1}`).style.width = `${Math.max(0, (b.HP / b.HP_MAX) * 100)}%`;
-    }
   }
 
   function cooldownMs(agi) {
@@ -15642,7 +15635,6 @@ function applyBulletEffect(bullet, pet) {
     const minDmg = Math.ceil(atk * 0.10);
     const dmg = Math.max(minDmg, raw);
     pet.stats.HP = Math.max(0, pet.stats.HP - dmg);
-    updateHPBars();
     console.log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.stats.HP})`);
     if (pet.stats.HP <= 0) {
       pet.alive = false;
@@ -15848,8 +15840,6 @@ function castSkillCharge(caster, enemies) {
       const dmg = Math.max(minDmg, raw);
       target.stats.HP = Math.max(0, target.stats.HP - dmg);
       console.log(`${caster.name} gây ${dmg} sát thương lên ${target.name}! (${target.stats.HP})`);
-      updateHPBars();
-
       if (target.stats.HP <= 0) {
         target.alive = false;
         target.el.style.opacity = 0; // tuỳ bạn muốn ẩn luôn khi chết
@@ -16048,11 +16038,81 @@ function skills(caster, enemies) {
   let running = false;
   let lastFrame = 0;
   let loopHandle = null;
+  const bluePanel = document.getElementById("teamBluePanel");
+  const redPanel = document.getElementById("teamRedPanel");
+    
+function createPetUI(pet, teamPanel, index) {
+  const wrap = document.createElement("div");
+  wrap.className = "petPanel";
+
+  // Header (ảnh + tên)
+  const head = document.createElement("div");
+  head.className = "petHeader";
+  head.innerHTML = `
+    <img src="${pet.URLimg.Lv1.base}" class="petAvatar">
+    <span class="petName">${pet.name}</span>
+  `;
+  wrap.appendChild(head);
+
+  // Thanh máu
+  const hpRow = document.createElement("div");
+  hpRow.className = "rowHpBar";
+  hpRow.innerHTML = `<div>HP</div><div id="hpLabel${teamPanel.id}${index}">${pet.stats.HP[0]}/${pet.stats.HP[0]}</div>`;
+  wrap.appendChild(hpRow);
+
+  const hpBar = document.createElement("div");
+  hpBar.className = "barHp";
+  hpBar.innerHTML = `<span id="hpBar${teamPanel.id}${index}" style="width:100%"></span>`;
+  wrap.appendChild(hpBar);
+
+  // Các skill (mỗi skill một thanh nộ)
+  const skillWrap = document.createElement("div");
+  skillWrap.className = "skillBars";
+  for (const [skillName, skill] of Object.entries(pet.skills)) {
+    const skillRow = document.createElement("div");
+    skillRow.className = "rowSkillBar";
+    skillRow.innerHTML = `<div>${skillName}</div><div id="skillLabel${teamPanel.id}${index}_${skillName}">0/${skill.cooldown}</div>`;
+    skillWrap.appendChild(skillRow);
+
+    const rageBar = document.createElement("div");
+    rageBar.className = "barRage";
+    rageBar.innerHTML = `<span id="skillBar${teamPanel.id}${index}_${skillName}" style="width:0%"></span>`;
+    skillWrap.appendChild(rageBar);
+  }
+  wrap.appendChild(skillWrap);
+
+  teamPanel.appendChild(wrap);
+}
+
+function updatePetUI(pet, teamId, index) {
+     const hpLabel = document.getElementById(`hpLabel${teamId}${index}`);
+  const hpBar = document.getElementById(`hpBar${teamId}${index}`);
+  hpLabel.textContent = `${pet.hpNow}/${pet.maxHP}`;
+  hpBar.style.width = `${Math.max(0, (pet.hpNow / pet.maxHP) * 100)}%`;
+
+  // Skill rage
+  for (const [skillName, skill] of Object.entries(pet.skills)) {
+    const rageLabel = document.getElementById(`skillLabel${teamId}${index}_${skillName}`);
+    const rageBar = document.getElementById(`skillBar${teamId}${index}_${skillName}`);
+    rageLabel.textContent = `${Math.floor(skill.rage)}/${skill.cooldown}`;
+    rageBar.style.width = `${Math.min(100, (skill.rage / skill.cooldown) * 100)}%`;
+  }
+}
 
 
   function setup() {
     arena.innerHTML = '';
-
+      
+  // Tạo UI cho team Blue
+  petTeamB.forEach((petInfo, i) => {
+    createPetUI(petInfo, bluePanel, i);
+  });
+    
+  // Tạo UI cho team Red
+  petTeamA.forEach((petInfo, i) => {
+    createPetUI(petInfo, redPanel, i);
+  });
+      
     // gán đội hình từ list có sẵn
     // Đội A (đỏ)
       pets.red = petTeamA.map((p, i) => {
@@ -16067,8 +16127,6 @@ function skills(caster, enemies) {
         const y = ROWS - 3;
         return makePetFromData(p, 'blue', x, y);
       });
-
-    updateHPBars();
 
     // Cập nhật lại vị trí hiển thị
     [...pets.red, ...pets.blue].forEach(p => {
@@ -16098,8 +16156,16 @@ function skills(caster, enemies) {
         tryUseSkill(p, pets.red, dt);
         positionElement(p.el, p.x, p.y);
       }
-    
+
+        for (let i = 0; i < pets.red.length; i++) {
+          updatePetUI(pets.red[i], "teamRedPanel", i);
+        }
+        for (let i = 0; i < pets.blue.length; i++) {
+          updatePetUI(pets.blue[i], "teamBluePanel", i);
+        }
+      
       stepBullets(dt);
+      
       loopHandle = requestAnimationFrame(gameTick);
     }
 
@@ -16188,6 +16254,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
