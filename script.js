@@ -16001,7 +16001,7 @@ function skills(caster, enemies) {
   loopHandle = requestAnimationFrame(gameTick);
 }
 
-  function startGame() {
+  function startGameNew() {
     if (running) return;
     running = true;
     lastFrame = performance.now();
@@ -16032,7 +16032,7 @@ function skills(caster, enemies) {
   function endGame(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log(msg); }
   function resetGame() { for (const b of Array.from(bullets)) removeBullet(b); setup(); log('Trận mới.'); }
 
-  id('btnStart').addEventListener('click', startGame);
+  id('btnStart').addEventListener('click', startGameNew);
   id('btnPause').addEventListener('click', pauseGame);
   id('btnReset').addEventListener('click', resetGame);
 
@@ -16087,6 +16087,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
