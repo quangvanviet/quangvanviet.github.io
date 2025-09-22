@@ -15363,7 +15363,7 @@ const petTeamA = [
       Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
     },
   },
 ];
@@ -15394,7 +15394,7 @@ const petTeamB = [
       Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+
     },
   },
 ];
@@ -15497,7 +15497,12 @@ function shoot(shooter, enemies) {
   if (!shooter || !enemies || enemies.length === 0) return;
   if (shooter.frozen) return;
   const now = performance.now();
-  if (now - shooter.lastShot < cooldownMs(shooter.stats.AGI)) return;
+  const agi = Array.isArray(shooter.stats.AGI) 
+              ? shooter.stats.AGI.reduce((a, b) => a + b, 0) 
+              : shooter.stats.AGI;
+
+ if (now - shooter.lastShot < cooldownMs(agi)) return;
+
   shooter.lastShot = now;
 
   // Chọn mục tiêu gần nhất
@@ -15646,167 +15651,6 @@ function applyBulletEffect(bullet, pet) {
   }
 }
 
-// ============== CAST SKILL: bắn viên sét đầu tiên ==============
-function castSkillLightningChain(
-  caster,
-  enemies,
-  {
-    maxChains = 3,       // số lần nảy thêm (không tính viên đầu)
-    damage = caster.stats?.ATK ?? 0,
-    decay = 0.8,         // % giảm damage mỗi lần nảy
-    rangeCells = 6,      // phạm vi nảy tính theo số ô
-    speed = BULLET_SPEED * 1.2
-  } = {}
-) {
-  if (caster.frozen || !caster.alive) return;
-  const now = performance.now();
-  if (now - caster.lastSkill < caster.skillCooldown) return;
-
-  const aliveEnemies = enemies.filter(e => e && e.alive && e.hp > 0);
-  if (aliveEnemies.length === 0) return;
-
-  const firstTarget = aliveEnemies[randInt(0, aliveEnemies.length - 1)];
-
-  // visited: để tránh nảy lại mục tiêu đã dính
-  const visited = new Set([caster]);
-
-  spawnLightningBullet(caster, firstTarget, {
-    enemies,
-    chainsLeft: maxChains,
-    damage,
-    decay,
-    rangeCells,
-    speed,
-    visited
-  });
-
-  caster.lastSkill = now;
-  console.log(`${caster.name} dùng kỹ năng Sét lan!`);
-}
-
-// ============== SPAWN 1 VIÊN SÉT TỪ A -> B ==============
-function spawnLightningBullet(fromUnit, toUnit, meta) {
-  // meta giữ nguyên qua các lần nảy
-  const { speed } = meta;
-
-  const sx = fromUnit.x + 0.5;
-  const sy = fromUnit.y + 0.5;
-  const tx = toUnit.x + 0.5;
-  const ty = toUnit.y + 0.5;
-
-  let dx = tx - sx;
-  let dy = ty - sy;
-  let dist = Math.hypot(dx, dy);
-  if (dist === 0) {
-    const ang = Math.random() * Math.PI * 2;
-    dx = Math.cos(ang);
-    dy = Math.sin(ang);
-    dist = 1;
-  }
-  const vx = dx / dist;
-  const vy = dy / dist;
-
-  const el = document.createElement('div');
-  el.className = 'bullet lightning';
-  arena.appendChild(el);
-
-  const bullet = {
-    el,
-    x: sx,
-    y: sy,
-    vx,
-    vy,
-    speed,
-    owner: fromUnit,
-    target: toUnit,
-    skill: 'lightning',
-    // META để checkBulletHit xử lý nảy:
-    enemies: meta.enemies,
-    chainsLeft: meta.chainsLeft,
-    damage: meta.damage,
-    decay: meta.decay,
-    rangeCells: meta.rangeCells,
-    visited: meta.visited
-  };
-
-  bullets.add(bullet);
-
-  const offset = (CELL * 0.6) / 2;
-  el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
-}
-
-// ============== HÀM PHỤ: tìm mục tiêu gần nhất để nảy ==============
-function findNextLightningTarget(from, enemies, visited, rangeCells) {
-  let best = null;
-  let bestDist = Infinity;
-  for (const e of enemies) {
-    if (!e || !e.alive || e.hp <= 0) continue;
-    if (visited.has(e) || e === from) continue;
-    const dx = e.x - from.x;
-    const dy = e.y - from.y;
-    const d = Math.hypot(dx, dy); // đơn vị ô
-    if (d <= rangeCells && d < bestDist) {
-      bestDist = d;
-      best = e;
-    }
-  }
-  return best;
-}
-
-// ============== THAY checkBulletHit: xử lý va chạm + nảy ==============
-function checkBulletHit(bullet, pet) {
-  // kiểm tra khoảng cách va chạm giống bạn
-  const bx = bullet.x, by = bullet.y;
-  const px = pet.x + 0.5;
-  const py = pet.y + 0.5;
-  const dist = Math.hypot(bx - px, by - py);
-  const hit = dist < 0.6;
-
-  if (!hit) return false;
-
-  // ---- ĐẠN SÉT: gây dame + nảy tiếp ngay tại đây ----
-  if (bullet.skill === 'lightning') {
-    // gây damage
-    const def = (pet.stats && pet.stats.DEF) ? pet.stats.DEF : 0;
-    const dealt = Math.max(1, Math.floor(bullet.damage - def));
-    pet.hp -= dealt;
-    if (pet.hp < 0) pet.hp = 0;
-    console.log(`${bullet.owner.name} ⚡ gây ${dealt} dmg lên ${pet.name} (HP còn ${pet.hp})`);
-
-    // đánh dấu đã trúng để không nảy lại
-    bullet.visited.add(pet);
-
-    // nếu còn lượt nảy, tìm mục tiêu kế
-    if (bullet.chainsLeft > 0) {
-      const next = findNextLightningTarget(pet, bullet.enemies, bullet.visited, bullet.rangeCells);
-      if (next) {
-        spawnLightningBullet(pet, next, {
-          enemies: bullet.enemies,
-          chainsLeft: bullet.chainsLeft - 1,
-          damage: bullet.damage * bullet.decay,
-          decay: bullet.decay,
-          rangeCells: bullet.rangeCells,
-          speed: bullet.speed,
-          visited: bullet.visited
-        });
-      }
-    }
-
-    // Viên hiện tại phải biến mất khi trúng
-    if (bullets.has(bullet)) {
-      bullet.el.remove();
-      bullets.delete(bullet);
-    }
-    return true;
-  }
-
-  // ---- Đạn loại khác: giữ nguyên hành vi cũ ----
-  return true;
-}
-
-
-
-
 function castSkillCharge(caster, enemies) {
   if (caster.frozen || !caster.alive || caster.charging) return;
   const now = performance.now();
@@ -15914,7 +15758,6 @@ function tryUseSkill(caster, enemies, dt) {
         case "Freeze": castSkillFreeze(caster, enemies); break;
         case "Charge": castSkillCharge(caster, enemies); break;
         case "Orbit": castSkillOrbit(caster, enemies); break;
-        case "LightningChain": castSkillLightningChain(caster, enemies); break;
       }
 
       console.log(`${caster.name} tung chiêu ${skillName}`);
@@ -15939,8 +15782,7 @@ function skills(caster, enemies) {
         castSkillOrbit(caster, enemies);
           console.log('sử dụng skill castSkillOrbit')
       } else {
-        castSkillLightningChain(caster, enemies)
-        console.log('sử dụng skill castSkillLightningChain')
+
       }
     }
   }
@@ -15949,7 +15791,12 @@ function skills(caster, enemies) {
   // ========== Logic di chuyển ==========
   function moveToward(pet, target, now) {
     if (pet.frozen || pet.charging) return;
-    if (now - pet.lastMove < pet.stats.MOVE) return;
+    const moveDelay = Array.isArray(pet.stats.MOVE) 
+                        ? pet.stats.MOVE.reduce((a, b) => a + b, 0) 
+                        : pet.stats.MOVE;
+    
+    if (now - pet.lastMove < moveDelay) return;
+
     pet.lastMove = now;
 
     const dir = randInt(0, 4);
@@ -16254,6 +16101,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
