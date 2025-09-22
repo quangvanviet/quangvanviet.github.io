@@ -117,15 +117,20 @@ body {
     }
 
     .bullet {
-      position: absolute;
-      width: calc(var(--cell) * .6);
-      height: calc(var(--cell) * .6);
-      border-radius: 4px;
-      box-shadow: 0 0 10px #fff8;
-      display: grid;
-      place-items: center;
-      font-size: 30px;
-      pointer-events: none;
+        position: absolute;
+        width: calc(var(--cell) * .6);
+        height: calc(var(--cell) * .6);
+        border-radius: 4px;
+        box-shadow: 0 0 10px #fff8;
+        display: flex;
+        place-items: center;
+        font-size: 30px;
+        pointer-events: none;
+        justify-content: center;
+        align-items: center;
+        justify-items: start;
+        flex-direction: row;
+        align-content: center;
     }
 
     .bullet.red {
@@ -2398,6 +2403,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
