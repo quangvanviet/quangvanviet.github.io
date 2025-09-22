@@ -46,7 +46,7 @@ body {
       box-sizing: border-box;
     }
 
-    #arena {
+    #mapArea {
       position: relative;
       width: calc(var(--cols) * var(--cell));
       height: calc(var(--rows) * var(--cell));
@@ -55,7 +55,7 @@ body {
       overflow: hidden;
     }
 
-    #arena::before {
+    #mapArea::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -2400,6 +2400,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
