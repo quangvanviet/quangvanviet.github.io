@@ -15566,6 +15566,17 @@ function removeBullet(b) {
   bullets.delete(b);
 }
 
+function checkBulletHit(bullet, pet) {
+  // kiểm tra khoảng cách va chạm giống bạn
+  const bx = bullet.x, by = bullet.y;
+  const px = pet.x + 0.5;
+  const py = pet.y + 0.5;
+  const dist = Math.hypot(bx - px, by - py);
+  const hit = dist < 0.6;
+
+  if (!hit) return false;
+  return true;
+}
 
   // ==== Skill Freeze ====
 function castSkillFreeze(caster, enemies) {
@@ -16121,6 +16132,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
