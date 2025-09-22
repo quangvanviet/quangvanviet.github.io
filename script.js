@@ -15341,28 +15341,30 @@ function getScaleLevelUp(power) {
 const petTeamA = [
   { 
     name: 'Đỏ1', rare: "C", type: ["Gió", "Thú"], 
-    URLimg: {Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
-    stats: { STR: [30,0,0,0,0,0,0], INT: [30,0,0,0,0,0,0], DEF: [30,0,0,0,0,0,0], AGI: [30,0,0,0,0,0,0], 
-            HP: [30,0,0,0,0,0,0], LUK: [30,0,0,0,0,0,0], MOVE: [800,0,0,0,0,0,0], SCALE: 1}, 
+    URLimg: {
+      Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    },
+    stats: { 
+      STR: [30,0,0,0,0,0,0], 
+      INT: [30,0,0,0,0,0,0], 
+      DEF: [30,0,0,0,0,0,0], 
+      AGI: [30,0,0,0,0,0,0], 
+      HP: [30,0,0,0,0,0,0], 
+      LUK: [30,0,0,0,0,0,0], 
+      MOVE: [800,0,0,0,0,0,0], 
+      SCALE: 1 
+    }, 
     INTERNAL: [],
     adEffects: [],    
     skills: {
-      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, 
-               effects: { stun: { timeEffect: 1000 }, },
-              },
-      Charge: { baseDame: 2, cooldown: 4000, rage: 0, 
-               effects: { stun: { timeEffect: 1000 }, }, 
-              },
-      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, 
-              effects: { stun: { timeEffect: 1000 }, }, 
-             },
-      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, 
-                       effects: { stun: { timeEffect: 1000 }, }, 
-                      },
-    }
+      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    },
   },
 ];
 
@@ -15393,7 +15395,7 @@ const petTeamB = [
       Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
       LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-    }
+    },
   },
 ];
 
@@ -16186,6 +16188,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
