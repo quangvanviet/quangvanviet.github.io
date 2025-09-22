@@ -167,8 +167,7 @@ body {
 .petPanel {
   display: flex;
   align-items: flex-start;
-  margin: 10px 0;
-  padding: 6px;
+  padding: 5px;
   border: 1px solid #555;
   background: #f5f5f5;
   border-radius: 6px;
@@ -176,8 +175,8 @@ body {
 
 /* Avatar */
 .petAvatar {
-  width: 80px;
-  height: 80px;
+  width: 30px;
+  height: 30px;
   border: 1px solid #333;
   object-fit: cover;
   margin-right: 10px;
@@ -199,7 +198,7 @@ body {
 
 .petName {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 10px;
 }
 
 .effectBox {
@@ -213,9 +212,10 @@ body {
 
 /* HP bar */
 .hpRow {
-  display: flex;
-  align-items: center;
-  margin: 4px 0;
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+    justify-content: center;
 }
 
 .hpBar {
@@ -235,9 +235,10 @@ body {
 }
 
 .hpLabel {
-  font-size: 12px;
-  min-width: 60px;
-  text-align: right;
+    position: absolute;
+    font-size: 12px;
+    min-width: 60px;
+    text-align: center;
 }
 
 /* Skill row */
@@ -250,7 +251,8 @@ body {
 .skillBox {
   position: relative;
   flex: 1;
-  height: 60px;
+  height: 20px;
+  width: 20px;
   border: 1px solid #333;
   margin: 0 3px;
   background: #ccc;
@@ -2461,6 +2463,7 @@ body {
     box-shadow: 0px 0px 7px 2px rgb(0, 221, 255);
     animation: glow-move 2s infinite ease-in-out;
 }
+
 
 
 
