@@ -15337,6 +15337,48 @@ function getScaleLevelUp(power) {
   const arena = id('mapArea');
 
   // ========== Tạo Pet ==========
+const petTeamA = [
+  { name: 'Đỏ1', stats: { ATK: 30, DEF: 20, AGI: 10, HP: 150, HP_MAX: 150, LUK: 15, MOVE: 800, skillCooldown: 1200 } },
+  { name: 'Đỏ2', stats: { ATK: 40, DEF: 25, AGI: 12, HP: 180, HP_MAX: 180, LUK: 14, MOVE: 900, skillCooldown: 1000 } }
+];
+
+const petTeamB = [
+  { name: 'Xanh1', stats: { ATK: 28, DEF: 18, AGI: 9, HP: 140, HP_MAX: 140, LUK: 16, MOVE: 1000, skillCooldown: 1500 } },
+  { name: 'Xanh2', stats: { ATK: 35, DEF: 22, AGI: 11, HP: 160, HP_MAX: 160, LUK: 12, MOVE: 950, skillCooldown: 1100 } }
+];
+
+
+
+function makePetFromData(data, color, x, y) {
+  const { name, stats } = data;
+
+  const el = document.createElement('div');
+  el.className = `pet`;
+
+  const imgEl = document.createElement('div');
+  imgEl.className = `image-pet ${color}`;
+  imgEl.textContent = name[0];
+  el.appendChild(imgEl);
+
+  arena.appendChild(el);
+
+  const pet = {
+    name, color, el, imgEl,
+    x, y,
+    stats,
+    lastShot: 0,
+    evadingUntil: 0,
+    lastMove: 0,
+    alive: true,
+    frozen: false,
+    lastSkill: 0,
+  };
+
+  positionElement(el, x, y);
+  return pet;
+}
+
+
   function makePet(name, color, x, y) {
     const ATK = randInt(10, 50);
     const DEF = randInt(10, 50);
@@ -15920,22 +15962,24 @@ function skills(caster, enemies) {
   let lastFrame = 0;
   let loopHandle = null;
 
+
   function setup() {
     arena.innerHTML = '';
 
-    // Tạo 3 pet đội đỏ
-    pets.red = [
-      makePet('Đỏ1', 'red', 4, 2),
-      // makePet('Đỏ2', 'red', 8, 2),
-      // makePet('Đỏ3', 'red', 12, 2),
-    ];
-
-    // Tạo 3 pet đội xanh
-    pets.blue = [
-      makePet('Xanh1', 'blue', COLS - 12, ROWS - 3),
-      // makePet('Xanh2', 'blue', COLS - 8, ROWS - 3),
-      // makePet('Xanh3', 'blue', COLS - 4, ROWS - 3),
-    ];
+    // gán đội hình từ list có sẵn
+    // Đội A (đỏ)
+      pets.red = petTeamA.map((p, i) => {
+        const x = 4 + i * 4; // cách nhau 4 ô
+        const y = 2;
+        return makePetFromData(p, 'red', x, y);
+      });
+    
+      // Đội B (xanh)
+      pets.blue = petTeamB.map((p, i) => {
+        const x = COLS - 12 + i * 4;
+        const y = ROWS - 3;
+        return makePetFromData(p, 'blue', x, y);
+      });
 
     updateHPBars();
 
@@ -16057,6 +16101,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
