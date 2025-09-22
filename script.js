@@ -15337,35 +15337,92 @@ function getScaleLevelUp(power) {
   const arena = id('mapArea');
 
   // ========== Tạo Pet ==========
+//[Base,+rare,skill+thêm, skill-đi,kích hệ/type+, Nội tại + thêm (từ pet mình), nội tại - đi (từ pet địch)] = 7
 const petTeamA = [
-  { name: 'Đỏ1', stats: { ATK: 30, DEF: 20, AGI: 10, HP: 150, HP_MAX: 150, LUK: 15, MOVE: 800, skillCooldown: 1200 } },
-  { name: 'Đỏ2', stats: { ATK: 40, DEF: 25, AGI: 12, HP: 180, HP_MAX: 180, LUK: 14, MOVE: 900, skillCooldown: 1000 } }
+  { 
+    name: 'Đỏ1', rare: "C", type: ["Gió", "Thú"], 
+    URLimg: {Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    stats: { STR: [30,0,0,0,0,0,0], INT: [30,0,0,0,0,0,0], DEF: [30,0,0,0,0,0,0], AGI: [30,0,0,0,0,0,0], 
+            HP: [30,0,0,0,0,0,0], LUK: [30,0,0,0,0,0,0], MOVE: [800,0,0,0,0,0,0], SCALE: 1}, 
+    INTERNAL: [],
+    adEffects: [],    
+    skills: {
+      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, 
+               effects: { stun: { timeEffect: 1000 }, },
+              },
+      Charge: { baseDame: 2, cooldown: 4000, rage: 0, 
+               effects: { stun: { timeEffect: 1000 }, }, 
+              },
+      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, 
+              effects: { stun: { timeEffect: 1000 }, }, 
+             },
+      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, 
+                       effects: { stun: { timeEffect: 1000 }, }, 
+                      },
+    }
+  },
 ];
+
 
 const petTeamB = [
-  { name: 'Xanh1', stats: { ATK: 28, DEF: 18, AGI: 9, HP: 140, HP_MAX: 140, LUK: 16, MOVE: 1000, skillCooldown: 1500 } },
-  { name: 'Xanh2', stats: { ATK: 35, DEF: 22, AGI: 11, HP: 160, HP_MAX: 160, LUK: 12, MOVE: 950, skillCooldown: 1100 } }
+  { 
+    name: 'Xanh1', rare: "C", type: ["Gió", "Thú"], 
+    URLimg: {
+      Lv1: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv2: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv3: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+      Lv4: {base: "https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png", skin:""},
+    },
+    stats: { 
+      STR: [30,0,0,0,0,0,0], 
+      INT: [30,0,0,0,0,0,0], 
+      DEF: [30,0,0,0,0,0,0], 
+      AGI: [30,0,0,0,0,0,0], 
+      HP: [30,0,0,0,0,0,0], 
+      LUK: [30,0,0,0,0,0,0], 
+      MOVE: [800,0,0,0,0,0,0], 
+      SCALE: 1 
+    }, 
+    INTERNAL: [],
+    adEffects: [],    
+    skills: {
+      Freeze: { baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Charge: { baseDame: 2, cooldown: 4000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      Orbit: { baseDame: 3, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+      LightningChain: { baseDame: 4, cooldown: 7000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+    }
+  },
 ];
 
 
-
-function makePetFromData(data, color, x, y) {
-  const { name, stats } = data;
-
+function makePetFromData(petInfo, color, x, y) {
   const el = document.createElement('div');
   el.className = `pet`;
 
   const imgEl = document.createElement('div');
   imgEl.className = `image-pet ${color}`;
-  imgEl.textContent = name[0];
+  imgEl.textContent = petInfo.name[0]; // chữ cái đầu tên
   el.appendChild(imgEl);
 
   arena.appendChild(el);
 
   const pet = {
-    name, color, el, imgEl,
-    x, y,
-    stats,
+    name: petInfo.name,
+    rare: petInfo.rare,
+    type: petInfo.type,
+    URLimg: petInfo.URLimg,
+    stats: petInfo.stats,
+    skills: structuredClone(petInfo.skills), // clone để mỗi pet có rage riêng
+    INTERNAL: petInfo.INTERNAL,
+    adEffects: petInfo.adEffects,
+    color,
+    el,
+    imgEl,
+    x,
+    y,
     lastShot: 0,
     evadingUntil: 0,
     lastMove: 0,
@@ -15377,6 +15434,7 @@ function makePetFromData(data, color, x, y) {
   positionElement(el, x, y);
   return pet;
 }
+
 
 
   function makePet(name, color, x, y) {
@@ -15849,6 +15907,29 @@ function castSkillOrbit(caster, enemies) {
 
 
 // ==== Quyết định dùng kỹ năng ====
+function tryUseSkill(caster, enemies, dt) {
+  if (!caster.alive || caster.frozen) return;
+
+  for (const [skillName, skill] of Object.entries(caster.skills)) {
+    // tăng nộ theo thời gian trôi (dt từ gameTick)
+    skill.rage += dt;
+
+    // nếu nộ >= cooldown thì cast
+    if (skill.rage >= skill.cooldown) {
+      skill.rage = 0; // reset nộ
+
+      switch (skillName) {
+        case "Freeze": castSkillFreeze(caster, enemies); break;
+        case "Charge": castSkillCharge(caster, enemies); break;
+        case "Orbit": castSkillOrbit(caster, enemies); break;
+        case "LightningChain": castSkillLightningChain(caster, enemies); break;
+      }
+
+      console.log(`${caster.name} tung chiêu ${skillName}`);
+    }
+  }
+}
+
 function skills(caster, enemies) {
   if (!caster.alive || caster.charging) return;
   const now = performance.now();
@@ -15858,12 +15939,16 @@ function skills(caster, enemies) {
       const roll = Math.random();
       if (roll < 0) {
         castSkillFreeze(caster, enemies);
+        console.log('sử dụng skill castSkillFreeze')
       } else if (roll < 0) {
-        castSkillCharge && castSkillCharge(caster, enemies);
+        castSkillCharge(caster, enemies);
+        console.log('sử dụng skill castSkillCharge')
       } else if (roll < 0) {
         castSkillOrbit(caster, enemies);
+          console.log('sử dụng skill castSkillOrbit')
       } else {
         castSkillLightningChain(caster, enemies)
+        console.log('sử dụng skill castSkillLightningChain')
       }
     }
   }
@@ -15990,31 +16075,31 @@ function skills(caster, enemies) {
   }
 
   function gameTick(now) {
-  if (!running) return;
-  const dt = Math.min(48, now - lastFrame);
-  lastFrame = now;
-
-  // Đội đỏ di chuyển, bắn, dùng skill
-  for (const p of pets.red) {
-    if (!p.alive) continue;
-    moveToward(p, pets.blue, now);
-    if (!p.frozen) shoot(p, pets.blue);
-    skills(p, pets.blue);
-    positionElement(p.el, p.x, p.y);
-  }
-
-  // Đội xanh di chuyển, bắn, dùng skill
-  for (const p of pets.blue) {
-    if (!p.alive) continue;
-    moveToward(p, pets.red, now);
-    if (!p.frozen) shoot(p, pets.red);
-    skills(p, pets.red);
-    positionElement(p.el, p.x, p.y);
-  }
-
-  stepBullets(dt);
-  loopHandle = requestAnimationFrame(gameTick);
-}
+      if (!running) return;
+      const dt = Math.min(48, now - lastFrame);
+      lastFrame = now;
+    
+      // Đội đỏ di chuyển, bắn, dùng skill
+      for (const p of pets.red) {
+        if (!p.alive) continue;
+        moveToward(p, pets.blue, now);
+        if (!p.frozen) shoot(p, pets.blue);
+        tryUseSkill(p, pets.blue, dt);
+        positionElement(p.el, p.x, p.y);
+      }
+    
+      // Đội xanh di chuyển, bắn, dùng skill
+      for (const p of pets.blue) {
+        if (!p.alive) continue;
+        moveToward(p, pets.red, now);
+        if (!p.frozen) shoot(p, pets.red);
+        tryUseSkill(p, pets.red, dt);
+        positionElement(p.el, p.x, p.y);
+      }
+    
+      stepBullets(dt);
+      loopHandle = requestAnimationFrame(gameTick);
+    }
 
   function startGameNew() {
     if (running) return;
@@ -16101,6 +16186,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
