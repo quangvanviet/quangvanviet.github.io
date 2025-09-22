@@ -15334,16 +15334,7 @@ function getScaleLevelUp(power) {
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const posToPx = (x) => x * CELL;
   const id = (s) => document.getElementById(s);
-  const logEl = id('log');
   const arena = id('mapArea');
-
-  function log(msg) {
-    const time = new Date().toLocaleTimeString();
-    const line = document.createElement('div');
-    line.textContent = `[${time}] ${msg}`;
-    logEl.appendChild(line);
-    logEl.scrollTop = logEl.scrollHeight;
-  }
 
   // ========== Tạo Pet ==========
   function makePet(name, color, x, y) {
@@ -15484,7 +15475,7 @@ function shoot(shooter, enemies) {
   shooter.evadingUntil = now + EVADE_MS;
   const offset = (CELL * 0.6) / 2;
   el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
-  log(`${shooter.name} bắn`);
+  console.log(`${shooter.name} bắn`);
 }
 
 
@@ -15538,7 +15529,7 @@ function castSkillFreeze(caster, enemies) {
   };
   bullets.add(bullet);
   caster.lastSkill = now;
-  log(`${caster.name} dùng kỹ năng Đóng băng!`);
+  console.log(`${caster.name} dùng kỹ năng Đóng băng!`);
 
   const offset = (CELL * 0.6) / 2;
   el.style.transform = `translate(${posToPx(bullet.x) - offset}px, ${posToPx(bullet.y) - offset}px)`;
@@ -15551,12 +15542,12 @@ function applyBulletEffect(bullet, pet) {
     if (!pet.frozen) {
       pet.frozen = true;
       pet.el.style.filter = 'grayscale(100%)';
-      log(`${pet.name} bị đóng băng !`);
+      console.log(`${pet.name} bị đóng băng !`);
       setTimeout(() => {
         if (pet.alive) {
           pet.frozen = false;
           pet.el.style.filter = '';
-          log(`${pet.name} hết đóng băng.`);
+          console.log(`${pet.name} hết đóng băng.`);
         }
       }, 2000);
     }
@@ -15568,12 +15559,12 @@ function applyBulletEffect(bullet, pet) {
     const dmg = Math.max(minDmg, raw);
     pet.stats.HP = Math.max(0, pet.stats.HP - dmg);
     updateHPBars();
-    log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.stats.HP})`);
+    console.log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.stats.HP})`);
     if (pet.stats.HP <= 0) {
       pet.alive = false;
       pet.el.style.opacity = 0.4;
       pet.el.style.display = "none";
-      log(`${pet.name} đã gục!`);
+      console.log(`${pet.name} đã gục!`);
       checkEndGame();
     }
   }
@@ -15614,7 +15605,7 @@ function castSkillLightningChain(
   });
 
   caster.lastSkill = now;
-  log(`${caster.name} dùng kỹ năng Sét lan!`);
+  console.log(`${caster.name} dùng kỹ năng Sét lan!`);
 }
 
 // ============== SPAWN 1 VIÊN SÉT TỪ A -> B ==============
@@ -15704,7 +15695,7 @@ function checkBulletHit(bullet, pet) {
     const dealt = Math.max(1, Math.floor(bullet.damage - def));
     pet.hp -= dealt;
     if (pet.hp < 0) pet.hp = 0;
-    log(`${bullet.owner.name} ⚡ gây ${dealt} dmg lên ${pet.name} (HP còn ${pet.hp})`);
+    console.log(`${bullet.owner.name} ⚡ gây ${dealt} dmg lên ${pet.name} (HP còn ${pet.hp})`);
 
     // đánh dấu đã trúng để không nảy lại
     bullet.visited.add(pet);
@@ -15756,7 +15747,7 @@ function castSkillCharge(caster, enemies) {
 
   caster.charging = true;
   caster.el.style.transition = 'transform 0.4s linear';
-  log(`${caster.name} lao vào ${target.name}!`);
+  console.log(`${caster.name} lao vào ${target.name}!`);
 
   // 1) Lao tới vị trí của target
   caster.x = target.x;
@@ -15772,7 +15763,7 @@ function castSkillCharge(caster, enemies) {
       const minDmg = Math.ceil(atk * 0.10);
       const dmg = Math.max(minDmg, raw);
       target.stats.HP = Math.max(0, target.stats.HP - dmg);
-      log(`${caster.name} gây ${dmg} sát thương lên ${target.name}! (${target.stats.HP})`);
+      console.log(`${caster.name} gây ${dmg} sát thương lên ${target.name}! (${target.stats.HP})`);
       updateHPBars();
 
       if (target.stats.HP <= 0) {
@@ -15829,7 +15820,7 @@ function castSkillOrbit(caster, enemies) {
   }
 
   caster.lastSkill = now;
-  log(`${caster.name} tạo 3 thanh kiếm xoay!`);
+  console.log(`${caster.name} tạo 3 thanh kiếm xoay!`);
 }
 
 
@@ -15949,7 +15940,6 @@ function skills(caster, enemies) {
 
   function setup() {
     arena.innerHTML = '';
-    logEl.innerHTML = '';
 
     // Tạo 3 pet đội đỏ
     pets.red = [
@@ -16006,7 +15996,7 @@ function skills(caster, enemies) {
     running = true;
     lastFrame = performance.now();
     loopHandle = requestAnimationFrame(gameTick);
-    log('Bắt đầu trận đấu!');
+    console.log('Bắt đầu trận đấu!');
   }
 
   function checkEndGame() {
@@ -16028,9 +16018,9 @@ function skills(caster, enemies) {
   return false; // còn pet sống → game tiếp tục
 }
 
-  function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log('Tạm dừng.'); }
-  function endGameNew(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); log(msg); }
-  function resetGameNew() { for (const b of Array.from(bullets)) removeBullet(b); setup(); log('Trận mới.'); }
+  function pauseGame() { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log('Tạm dừng.'); }
+  function endGameNew(msg) { running = false; if (loopHandle) cancelAnimationFrame(loopHandle); console.log(msg); }
+  function resetGameNew() { for (const b of Array.from(bullets)) removeBullet(b); setup(); console.log('Trận mới.'); }
 
   id('btnStart').addEventListener('click', startGameNew);
   id('btnPause').addEventListener('click', pauseGame);
@@ -16038,7 +16028,6 @@ function skills(caster, enemies) {
 
   // Khởi tạo ban đầu
   setup();
-  log('Sinh pet ngẫu nhiên (ATK/DEF/AGI/HP/LUK/MOVE). AGI càng cao → bắn nhanh, MOVE càng nhỏ → chạy nhanh.');
 
 // Gán các hàm vào window
 window.switchTabWelcomPage = switchTabWelcomPage;
@@ -16087,6 +16076,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
