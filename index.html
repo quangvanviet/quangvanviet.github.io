@@ -37,32 +37,168 @@
             border-radius: 10px;
             box-shadow: 1px 1px 1px 2px rgb(0 0 0 / 39%);">
 
+            <!-- Nút đóng -->
             <button style="position: absolute; margin: 5px; border-radius: 42px; cursor: pointer; font-size: 15px; 
                 top: -20px; right: -20px; padding: 3px 8px; border: 2px solid wheat; box-shadow: rgb(188, 119, 45) 0px 2px 1px 1px; 
                 background: rgb(234, 62, 62); color: white; font-weight: bold; transform: scale(1.05); z-index: 6;"
                 onmouseover="this.style.background='#ea3e3e'; this.style.transform='scale(1.05)';"
                 onmouseout="this.style.background='rgb(145 16 134)'; this.style.transform='scale(1)';"
                 onclick="">x</button>
-            <!--  Nút pause -->
+        
+            <!-- Nút điều khiển -->
             <div style="display: flex;flex-direction: row;align-content: center;align-items: center;
                 justify-content: center;gap: 5px;">
-                <button id="btnStart" style="">Bắt đầu</button>
+                <button id="btnStart">Bắt đầu</button>
                 <button id="btnPause">Tạm dừng</button>
                 <button id="btnReset">Chơi lại</button>
             </div>
             
-          <!--  Khu vực map 15x12 -->
-        <div style="display: flex;flex-direction: column;align-items: center;gap: 5px;">
-            <div id="mapArea">
-              </div>
-                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;flex-direction: row;
-                    justify-content: space-between;align-items: center; color: black;">
-                <!-- Ta -->
-                    <div id="teamBluePanel" style="width:50%"></div>
-                <!-- Địch -->
-                    <div id="teamRedPanel" style="width:50%"></div>
+            <!-- Khu vực map + team -->
+            <div style="display: flex;flex-direction: row;align-items: center;gap: 5px;">
+        
+                <!-- Team ta -->
+                <div id="teamBluePanel" style="display:flex; flex-direction:column; gap:5px;">
+                    <!-- Pet 1 -->
+                    <div id="tableInfoPetB1" style="display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetB1" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarB1" style="width:100%"></span>
+                                <span id="hpLabelB1" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <!-- skill -->
+                        <div id="skillBoxB1" style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="skillBox" id="skillBoxB1S1">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB1S1"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB1S2">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB1S2"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB1S3">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB1S3"></div>
+                            </div>
+                        </div> 
+                        <!-- effect box -->
+                        <div id="effectBoxB1" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+        
+                    <!-- Pet 2 -->
+                    <div id="tableInfoPetB2" style="display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetB2" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarB2" style="width:100%"></span>
+                                <span id="hpLabelB2" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <div id="skillBoxB2" style="display: flex; flex-direction: column;">
+                            <div class="skillBox" id="skillBoxB2S1">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB2S1"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB2S2">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB2S2"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB2S3">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB2S3"></div>
+                            </div>
+                        </div> 
+                        <div id="effectBoxB2" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+        
+                    <!-- Pet 3 -->
+                    <div id="tableInfoPetB3" style="display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetB3" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarB3" style="width:100%"></span>
+                                <span id="hpLabelB3" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <div id="skillBoxB3" style="display: flex; flex-direction: column;">
+                            <div class="skillBox" id="skillBoxB3S1">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB3S1"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB3S2">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB3S2"></div>
+                            </div>
+                            <div class="skillBox" id="skillBoxB3S3">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillB3S3"></div>
+                            </div>
+                        </div> 
+                        <div id="effectBoxB3" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+                </div>
+        
+                <!-- Map area -->
+                <div id="mapArea"></div>
+        
+                <!-- Team địch -->
+                <div id="teamRedPanel" style="display:flex; flex-direction:column; gap:5px;">
+                    <!-- Pet 1 -->
+                    <div id="tableInfoPetA1" style="display: flex; flex-direction: row; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetA1" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarA1" style="width:100%"></span>
+                                <span id="hpLabelA1" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <div id="skillBoxA1" style="display: flex; flex-direction: column;">
+                            <div class="skillBox">
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillA1"></div>
+                            </div>
+                        </div> 
+                        <div id="effectBoxA1" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+        
+                    <!-- Pet 2 -->
+                    <div id="tableInfoPetA2" style="display: flex; flex-direction: row; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetA2" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarA2" style="width:100%"></span>
+                                <span id="hpLabelA2" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <div id="skillBoxA2" style="display: flex; flex-direction: column;">
+                            <div class="skillBox" >
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillA2"></div>
+                            </div>
+                        </div> 
+                        <div id="effectBoxA2" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+        
+                    <!-- Pet 3 -->
+                    <div id="tableInfoPetA3" style="display: flex; flex-direction: row; align-items: flex-start; gap: 5px;">
+                        <div style="display: flex; flex-direction: column; position: relative; justify-content: flex-end;">
+                            <img id="imgPetA3" src="https://res.cloudinary.com/dxgawkr4g/image/upload/v1730652466/0001.png" class="petAvatar">
+                            <div class="hpBar">
+                                <span id="hpBarA3" style="width:100%"></span>
+                                <span id="hpLabelA3" class="hpLabel">100/100</span>
+                            </div>
+                        </div>
+                        <div id="skillBoxA3" style="display: flex; flex-direction: column;">
+                            <div class="skillBox" >
+                                <div class="skillIcon">🔥</div>
+                                <div class="rageFill" id="rageFillA3"></div>
+                            </div>
+                        </div> 
+                        <div id="effectBoxA3" class="effectBox" style="display: flex; flex-direction: column;"></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
         
         <div id="ScreenBattle">
@@ -3056,6 +3192,7 @@
 </body>
 
 </html>
+
 
 
 
