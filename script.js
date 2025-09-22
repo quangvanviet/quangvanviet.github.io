@@ -15645,14 +15645,21 @@ function applyBulletEffect(bullet, pet) {
       }, 2000);
     }
   } else {
-    const atk = bullet.owner.stats.ATK;
-    const def = pet.stats.DEF;
+    // ==== Lấy ATK / DEF tổng ====
+    const atk = bullet.owner.stats.STR.reduce((a, b) => a + b, 0);
+    const def = pet.stats.DEF.reduce((a, b) => a + b, 0);
+
+    // ==== Tính dame ====
     const raw = atk - def;
     const minDmg = Math.ceil(atk * 0.10);
     const dmg = Math.max(minDmg, raw);
-    pet.stats.HP = Math.max(0, pet.stats.HP - dmg);
-    console.log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.stats.HP})`);
-    if (pet.stats.HP <= 0) {
+
+    // ==== Trừ máu ====
+    pet.hpNow = Math.max(0, pet.hpNow - dmg);
+
+    console.log(`${bullet.owner.name} gây ${dmg} sát thương! (${pet.name} còn ${pet.hpNow}/${pet.maxHP})`);
+
+    if (pet.hpNow <= 0) {
       pet.alive = false;
       pet.el.style.opacity = 0.4;
       pet.el.style.display = "none";
@@ -16139,6 +16146,7 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
 
