@@ -15351,6 +15351,7 @@ const petTeamA = [
             STR: [1, 0, 0, 0, 0, 0, 0],
             INT: [30, 0, 0, 0, 0, 0, 0],
             DEF: [30, 0, 0, 0, 0, 0, 0],
+            SDEF: [30, 0, 0, 0, 0, 0, 0],
             AGI: [100, 0, 0, 0, 0, 0, 0],
             HP: [3000, 0, 0, 0, 0, 0, 0],
             LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15378,6 +15379,7 @@ const petTeamA = [
     //         STR: [1, 0, 0, 0, 0, 0, 0],
     //         INT: [30, 0, 0, 0, 0, 0, 0],
     //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         SDEF: [30, 0, 0, 0, 0, 0, 0],
     //         AGI: [100, 0, 0, 0, 0, 0, 0],
     //         HP: [3000, 0, 0, 0, 0, 0, 0],
     //         LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15405,6 +15407,7 @@ const petTeamA = [
     //         STR: [1, 0, 0, 0, 0, 0, 0],
     //         INT: [30, 0, 0, 0, 0, 0, 0],
     //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         SDEF: [30, 0, 0, 0, 0, 0, 0],
     //         AGI: [500, 0, 0, 0, 0, 0, 0],
     //         HP: [3000, 0, 0, 0, 0, 0, 0],
     //         LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15436,6 +15439,7 @@ const petTeamB = [
             STR: [1, 0, 0, 0, 0, 0, 0],
             INT: [30, 0, 0, 0, 0, 0, 0],
             DEF: [30, 0, 0, 0, 0, 0, 0],
+            SDEF: [30, 0, 0, 0, 0, 0, 0],
             AGI: [100, 0, 0, 0, 0, 0, 0],
             HP: [3000, 0, 0, 0, 0, 0, 0],
             LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15463,6 +15467,7 @@ const petTeamB = [
     //         STR: [1, 0, 0, 0, 0, 0, 0],
     //         INT: [30, 0, 0, 0, 0, 0, 0],
     //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         SDEF: [30, 0, 0, 0, 0, 0, 0],
     //         AGI: [100, 0, 0, 0, 0, 0, 0],
     //         HP: [3000, 0, 0, 0, 0, 0, 0],
     //         LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15490,6 +15495,7 @@ const petTeamB = [
     //         STR: [1, 0, 0, 0, 0, 0, 0],
     //         INT: [30, 0, 0, 0, 0, 0, 0],
     //         DEF: [30, 0, 0, 0, 0, 0, 0],
+    //         SDEF: [30, 0, 0, 0, 0, 0, 0],
     //         AGI: [500, 0, 0, 0, 0, 0, 0],
     //         HP: [3000, 0, 0, 0, 0, 0, 0],
     //         LUK: [30, 0, 0, 0, 0, 0, 0],
@@ -15739,6 +15745,21 @@ function applyBulletEffect(bullet, pet) {
     if (!pet.alive) return;
 
     if (bullet.skill === 'freeze') {
+        // ==== Lấy int / sdef tổng ====
+        const int = bullet.owner.stats.INT.reduce((a, b) => a + b, 0);
+        const baseDame = bullet.owner.skills.Freeze.baseDame
+        const sdef = pet.stats.SDEF.reduce((a, b) => a + b, 0);
+        const timeEffect = bullet.owner.skills.Freeze.effects.stun.timeEffect;
+
+        // ==== Tính dame ====
+        const raw = int + baseDame - sdef;
+        const minDmg = Math.ceil(int * 0.10);
+        const dmg = Math.max(minDmg, raw);
+
+        // ==== Trừ máu ====
+        pet.hpNow = Math.max(0, pet.hpNow - dmg);
+
+        //Hiệu ứng
         if (!pet.frozen) {
             pet.frozen = true;
             pet.el.style.filter = 'grayscale(100%)';
@@ -15749,7 +15770,7 @@ function applyBulletEffect(bullet, pet) {
                     pet.el.style.filter = '';
                     console.log(`${pet.name} hết đóng băng.`);
                 }
-            }, 2000);
+            }, timeEffect);
         }
     } else {
         // ==== Lấy ATK / DEF tổng ====
@@ -15763,14 +15784,14 @@ function applyBulletEffect(bullet, pet) {
 
         // ==== Trừ máu ====
         pet.hpNow = Math.max(0, pet.hpNow - dmg);
+    }
 
-        if (pet.hpNow <= 0) {
-            pet.alive = false;
-            pet.el.style.opacity = 0.4;
-            pet.el.style.display = "none";
-            console.log(`${pet.name} đã gục!`);
-            checkEndGame();
-        }
+    if (pet.hpNow <= 0) {
+        pet.alive = false;
+        pet.el.style.opacity = 0.4;
+        pet.el.style.display = "none";
+        console.log(`${pet.name} đã gục!`);
+        checkEndGame();
     }
 }
 
@@ -16321,5 +16342,6 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
 
