@@ -15360,8 +15360,8 @@ const petTeamA = [
         INTERNAL: [],
         adEffects: [],
         skills: {
-            Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-            Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+            Freeze: { icon: "", baseDame: 100, cooldown: 3000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+            Charge: { icon: "", baseDame: 2, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
             Orbit: { icon: "", baseDame: 30, cooldown: 1000, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
 
         },
@@ -15445,8 +15445,8 @@ const petTeamB = [
         INTERNAL: [],
         adEffects: [],
         skills: {
-            Freeze: { icon: "", baseDame: 1, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
-            Charge: { icon: "", baseDame: 2, cooldown: 500, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
+            Freeze: { icon: "", baseDame: 100, cooldown: 3000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
+            Charge: { icon: "", baseDame: 2, cooldown: 5000, rage: 0, effects: { stun: { timeEffect: 0 }, }, },
             Orbit: { icon: "", baseDame: 30, cooldown: 6000, rage: 0, effects: { stun: { timeEffect: 1000 }, }, },
 
         },
@@ -16321,3 +16321,4 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
