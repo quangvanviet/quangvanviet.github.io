@@ -15795,7 +15795,7 @@ function castSkillCharge(caster, enemies) {
     caster.charging = true;
     caster.lastSkill = now;
 
-    const duration = 400; // tổng thời gian lao tới mục tiêu (ms)
+    const duration = 100; // tổng thời gian lao tới mục tiêu (ms)
     const frames = Math.ceil(duration / 16); // ~60FPS
     let frame = 0;
 
@@ -15841,7 +15841,7 @@ function castSkillCharge(caster, enemies) {
             }
 
             // Phi về chỗ cũ
-            chargeReturn(caster, originalX, originalY, 400);
+            chargeReturn(caster, originalX, originalY, 100);
         }
     }, 16);
 }
@@ -16321,4 +16321,5 @@ window.selectButtonSettingMain = selectButtonSettingMain;
 window.switchTabShop = switchTabShop;
 window.checkGiftQuest = checkGiftQuest;
 window.lock5MonShop = lock5MonShop;
+
 
